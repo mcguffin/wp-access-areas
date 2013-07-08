@@ -1,0 +1,131 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: UndisclosedContent v0.2.1b\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2012-09-10 15:19:57+0200\n"
+"Last-Translator: joern <joern@flyingletters.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: disclosed-content.php:265
+#@ disclosure
+msgid "Disclosure"
+msgstr "Zugangsbeschränkung"
+
+#: disclosed-content.php:230
+#@ disclosure
+msgid "Groups for Disclosure"
+msgstr "Gruppen"
+
+#: disclosed-content.php:233
+#@ disclosure
+msgid "Add group"
+msgstr "Neue Gruppe"
+
+#: disclosed-content.php:234
+#@ disclosure
+msgid "Add"
+msgstr "Erstellen"
+
+#: disclosed-content.php:236
+#@ disclosure
+msgid "Enable groups"
+msgstr "Gruppen zuweisen"
+
+#: disclosed-content.php:285
+#@ disclosure
+msgid "Visible to:"
+msgstr "Sichtbar für:"
+
+#: disclosed-content.php:158
+#: disclosed-content.php:287
+#@ disclosure
+msgid "Everybody"
+msgstr "Alle"
+
+#: disclosed-content.php:158
+#: disclosed-content.php:288
+#@ disclosure
+msgid "Logged in Users"
+msgstr "Eingeloggte Benutzer"
+
+#: disclosed-content.php:290
+#@ disclosure
+msgid "WordPress roles"
+msgstr "WordPress Rollen"
+
+#: disclosed-content.php:299
+#@ disclosure
+msgid "User Groups"
+msgstr "Benutzergruppen"
+
+#: disclosed-content.php:168
+#@ disclosure
+msgid "Visible to"
+msgstr "Sichtbar für"
+
+#: disclosed-content.php:110
+#@ default
+msgid "You are not allowed to edit this item."
+msgstr ""
+
+#: disclosed-content.php:326
+#@ disclosure
+msgid "You don‘t have permission to apply this type of content disclosure."
+msgstr "Du hast nicht die nötige Berechtigung, um so eine Zugangsbeschränkung einzustellen."
+
+#: disclosed-content.php:177
+#@ disclosure
+msgid "Groups"
+msgstr "Gruppen"
+
+#: disclosed-content.php:118
+#: disclosed-content.php:129
+#@ disclosure
+#@ default
+msgid "Disclosed Content"
+msgstr "Zugangsbeschränkungen"
+
+#: disclosed-content.php:118
+#@ disclosure
+msgid "Disclosure Setting"
+msgstr "Zugangsbeschr. Einstellungen"
+
+#: disclosed-content.php:123
+#@ disclosure
+msgid "Main Settings"
+msgstr "Generell"
+
+#: disclosed-content.php:124
+#@ disclosure
+msgid "Show login message instead of 404"
+msgstr "Login-Meldung anzeigen statt 404 anzeigen."
+
+#: disclosed-content.php:135
+#@ default
+msgid "Save Changes"
+msgstr ""
+
+#: disclosed-content.php:341
+#, php-format
+#@ disclosure
+msgid "Please <a href=\"%s\">log in</a> to see this content!"
+msgstr "Bitte <a href=\"%s\">einloggen</a> um diese Seite anzusehen."
+
+#: disclosed-content.php:147
+#@ disclosure
+msgid "When somebody without authorization tries to navigate a protected URL directly, WordPress will show a 404 message.<br />Check this, if you want it to show a please-login-message instead."
+msgstr "Wenn jemand ohne Autorisierung zu einer zugangsbeschränkten Seite navigiert, zeigt WordPress eine 404-Meldung. <br />Machen Sie hier einen Haken, wenn stattdessen ein Login-Link angezeigt werden soll."
+
