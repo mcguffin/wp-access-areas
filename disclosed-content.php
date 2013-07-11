@@ -2,11 +2,11 @@
 /**
 * @package UndisclosedContent
 * @version 0.2.2b
-*/
+*/ 
 
 /*
 Plugin Name: UndisclosedContent
-Plugin URI: http://flyingletters.com/undisclosed-content/
+Plugin URI: https://github.com/mcguffin/wp-undisclosed-content
 Description: Adds the ability to make WPs posts and pages only visible to logged in users. For all the others these items simply do not appear. Supports custom post types.
 Author: Joern Lund
 Version: 0.2.2b
@@ -21,11 +21,14 @@ Changelog:
 
 ToDo:
 	- store groupnames in table
-	- add editing capabilities to posts
+	- Permissions are: read, edit, comment
+	- store content-permissions in extra columns
+
 	- register_activation_hook -> creates table
-	- register_deactivation_hook -> drops table
+	- register_deactivation_hook -> drops table, extra-columns, updates user capabilities
 	- predefine network-wide groups
 	- add group editing interface
+	- split functionalities
 
 */
 
