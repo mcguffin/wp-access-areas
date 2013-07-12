@@ -1,12 +1,12 @@
 <?php
 /**
-* @package UndisclosedContent
+* @package WPUndisclosed
 * @version 0.2.2b
 */ 
 
 /*
-Plugin Name: UndisclosedContent
-Plugin URI: https://github.com/mcguffin/wp-undisclosed-content
+Plugin Name: WordPress Undiclosed
+Plugin URI: https://github.com/mcguffin/wp-undisclosed
 Description: Adds the ability to make WPs posts and pages only visible to logged in users. For all the others these items simply do not appear. Supports custom post types.
 Author: Joern Lund
 Version: 0.2.2b
@@ -33,8 +33,8 @@ ToDo:
 */
 
 
-if ( !class_exists( 'DisclosedContent' ) ) :
-class DisclosedContent {
+if ( !class_exists( 'WPIUndisclosed' ) ) :
+class WPIUndisclosed {
 
 	// --------------------------------------------------
 	// adding hooks
@@ -392,7 +392,6 @@ class DisclosedContent {
 	}
 	static function get_adjacent_post_where( $where , $in_same_cat, $excluded_categories ) {
 		return self::_get_where($where);
-
 	}
 
 
@@ -436,7 +435,7 @@ class DisclosedContent {
 	}
 }
 
-DisclosedContent::init();
+WPIUndisclosed::init();
 endif;
 
 
