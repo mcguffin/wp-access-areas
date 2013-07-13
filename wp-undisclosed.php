@@ -1,16 +1,16 @@
 <?php
 /**
 * @package WPUndisclosed
-* @version 0.2.2b
+* @version 0.9b
 */ 
 
 /*
-Plugin Name: WordPress Undiclosed
+Plugin Name: WordPress Undisclosed
 Plugin URI: https://github.com/mcguffin/wp-undisclosed
 Description: Adds the ability to make WPs posts and pages only visible to logged in users. For all the others these items simply do not appear. Supports custom post types.
 Author: Joern Lund
-Version: 0.2.2b
-Author URI: http://flyingletters.com
+Version: 0.9b
+Author URI: https://github.com/mcguffin/
 */
 
 /*
@@ -29,18 +29,48 @@ ToDo:
 	- predefine network-wide groups
 	- add group editing interface
 	- split functionalities
+		Parts:
+			√ core: load textdomain
+			√ install: create / drop tables, columns
+			- cap editing.
+			- user editing
+			- post editing
+			- post viewing and retrieving
+			
+			- backend options, edit screens, ...
+			
 
 */
 
+// table name for userlabels
+define( 'WPUND_USERLABEL_TABLE' , "disclosure_userlabels");
+define( 'WPUND_USERLABEL_PREFIX' , "userlabel_");
 
-if ( !class_exists( 'WPIUndisclosed' ) ) :
-class WPIUndisclosed {
+
+require_once( dirname(__FILE__). '/inc/class-undisclosedcore.php' );
+require_once( dirname(__FILE__). '/inc/class-undisclosedinstall.php' );
+require_once( dirname(__FILE__). '/inc/class-undisclosedcaps.php' );
+require_once( dirname(__FILE__). '/inc/class-undiscloseduserlabel.php' );
+require_once( dirname(__FILE__). '/inc/class-userlabel_list_table.php' );
+require_once( dirname(__FILE__). '/inc/class-undisclosedusers.php' );
+require_once( dirname(__FILE__). '/inc/class-undisclosededitpost.php' );
+require_once( dirname(__FILE__). '/inc/class-undisclosedposts.php' );
+
+register_activation_hook( __FILE__ , array( 'UndisclosedInstall' , 'activate' ) );
+register_deactivation_hook( __FILE__ , array( 'UndisclosedInstall' , 'deactivate' ) );
+register_uninstall_hook( __FILE__ , array( 'UndisclosedInstall' , 'uninstall' ) );
+
+// include the other stuff.
+
+
+/*
+if ( !class_exists( 'WPUndisclosed' ) ) :
+class WPUndisclosed {
 
 	// --------------------------------------------------
 	// adding hooks
 	// --------------------------------------------------
 	static function init() {
-		add_action( 'plugins_loaded' , array( __CLASS__, 'plugin_loaded' ) );
 
 		add_option( 'disclosure_groups' , array() , '' , 'yes' );
 		add_option( 'disclosure_settings' , array('show_404'=>true) , '' , 'yes' );
@@ -91,9 +121,6 @@ class WPIUndisclosed {
 		add_filter( "get_previous_post_where" , array( __CLASS__ , "get_adjacent_post_where" ) , 10, 3 );
 		
 		// more post links to filter:
-		/*
-			get_edit_post_link
-		*/
 		
 	}
 
@@ -101,9 +128,6 @@ class WPIUndisclosed {
 	// --------------------------------------------------
 	// general actions
 	// --------------------------------------------------
-	static function plugin_loaded() {
-		load_plugin_textdomain( 'disclosure' , false, dirname( plugin_basename( __FILE__ )) . '/lang');
-	}
 	
 	static function admin_init() {
 		if ( current_user_can( 'promote_users' ) ) {
@@ -269,11 +293,6 @@ class WPIUndisclosed {
 	static function add_meta_boxes() {
 		global $wp_post_types;
 		foreach ( array_keys($wp_post_types) as $post_type ) {
-			/*
-			add_filter('manage_posts_columns' , array(__CLASS__ , 'add_disclosure_column'));
-			add_filter('manage_pages_columns' , array(__CLASS__ , 'add_disclosure_column'));
-			add_filter('manage_posts_custom_column' , array(__CLASS__ , 'manage_disclosure_column') , 10 ,2 );
-			add_filter('manage_pages_custom_column' , array(__CLASS__ , 'manage_disclosure_column') , 10 ,2 );*/
 			add_meta_box( 'post-disclosure' , __('Disclosure','disclosure') , array(__CLASS__,'disclosure_box_info') , $post_type , 'side' , 'high' );
 		}
 	}
@@ -330,8 +349,7 @@ class WPIUndisclosed {
 		// check if user can set this
 		$roles = new WP_Roles();
 		
-		if ( /* !isset( $_POST['_disclosure'] ) || */
-			!(self::_user_can_role( $_POST['_disclosure'] , $roles->get_role(wp_get_current_user()->roles[0])->capabilities) 
+		if ( !(self::_user_can_role( $_POST['_disclosure'] , $roles->get_role(wp_get_current_user()->roles[0])->capabilities) 
 				|| current_user_can( $_POST['_disclosure'] )) )
 			
 			wp_die( __('You don‘t have permission to apply this type of content disclosure.' , 'disclosure') ); // deny!
@@ -353,8 +371,6 @@ class WPIUndisclosed {
 	}
 	
 	static function skip_undisclosed_items( $items ) {
-		/*
-		*/
 		// everything's fine - return.
 		if ( current_user_can( 'administrator' ) )
 			return $items;
@@ -435,9 +451,9 @@ class WPIUndisclosed {
 	}
 }
 
-WPIUndisclosed::init();
+WPUndisclosed::init();
 endif;
-
+*/
 
 
 ?>
