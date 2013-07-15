@@ -62,17 +62,11 @@ class UndisclosedPosts {
 		return $ret;
 	}
 	
-	static function get_posts_join( $join , &$wp_query ) {
-		global $wpdb;
-		if ( $wp_query->is_single() )
-			return $join;
-			
-		return self::_get_join($join,$wpdb->posts);
-	}
 	static function get_posts_where( $where , &$wp_query ) {
 		if ( $wp_query->is_single()  )
 			return $where;
-		$where = self::_get_where($where);
+		global $wpdb;
+		$where = self::_get_where( $where , $wpdb->posts );
 		return $where;
 	}
 	
@@ -81,22 +75,20 @@ class UndisclosedPosts {
 	}
 
 
-	private static function _get_where($where) {
+	private static function _get_where( $where , $table_name = 'p' ) {
 		if ( current_user_can( 'administrator' ) )
 			return $where;
-		var_dump($where);
-		global $wpdb;
 		if ( is_user_logged_in() ) {
 			// get current user's groups
 			$roles = new WP_Roles();
-			$cond = array( "{$wpdb->posts}.post_view_cap = 'exist'");
-			foreach( array_keys( array_merge( get_option( 'disclosure_groups' ) , $roles->get_names() )) as $cap)
+			$cond = array( "$table_name.post_view_cap = 'exist'");
+			foreach( array_keys( array_merge( UndisclosedUserlabel::get_label_array( ) , $roles->get_names() )) as $cap)
 				if ( current_user_can($cap) )
-					$cond[] = "{$wpdb->posts}.post_view_cap = '$cap'";
+					$cond[] = "$table_name.post_view_cap = '$cap'";
 			
 			return $where . " AND (".implode( ' OR ' , $cond ) . ")";
 		}
-		$where .= " AND ({$wpdb->posts}.post_view_cap = 'exist') ";
+		$where .= " AND ($table_name.post_view_cap = 'exist') ";
 
 		return $where;
 	}
