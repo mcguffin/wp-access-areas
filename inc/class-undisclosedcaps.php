@@ -77,7 +77,7 @@ class UndisclosedCaps {
 					break;
 				case 'delete':
 					// delete and redirect
-					if ( false && isset( $_GET['id'] ) && UndisclosedUserlabel::get_userlabel( $_GET['id'] ) ) 
+					if ( isset( $_GET['id'] ) && $userlabel = UndisclosedUserlabel::get_userlabel( $_GET['id'] ) ) 
 						UndisclosedUserlabel::delete_userlabel( $_GET['id'] );
 					return wp_redirect( add_query_arg(array('page'=>'user_labels' , 'message'=>3 , 'deleted' => 1 ),$_SERVER['SCRIPT_NAME']) );
 				default:

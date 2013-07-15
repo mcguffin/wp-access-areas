@@ -24,5 +24,6 @@ v 1.0.0
 - Test in W 3.6 + Single environment, Single 3.6
 - Translate to german
 - Implement editing
+- New Wording instead of "Label": Access Area / Befugnis(se) / Zugangsbereich
 
 - Publish on wordpress.org
