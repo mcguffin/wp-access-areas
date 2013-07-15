@@ -81,8 +81,10 @@ class UndisclosedUsers {
 	}
 	
 	static function add_user_to_blog( $user_id , $role , $blog_id ) {
-		switch_to_blog( $label->blog_id );
+		switch_to_blog( $blog_id );
 		$label_IDs = get_user_meta($user_id, 'undisclosed_global_capabilities' , true );
+		if ( ! $label_IDs )
+			return;
 		$user = new WP_User( $user_id );
 		foreach ( $label_IDs as $label_id ) {
 			$label = UndisclosedUserLabel::get_userlabel( $label_id );

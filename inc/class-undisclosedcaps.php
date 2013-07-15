@@ -119,11 +119,6 @@ class UndisclosedCaps {
 			} else {
 				_e('Create User-Label','wpundisclosed');
 			}
-			if ( is_network_admin() )
-				$current_blog_id = 0;
-			else
-				$current_blog_id = get_current_blog_id();
-				
 		?></h2>
 		<?php self::_put_message( ) ?>
 		<?php
@@ -132,7 +127,6 @@ class UndisclosedCaps {
 			<?php if ( $userlabel_id ) { ?>
 				<input type="hidden" name="id" value="<?php echo $userlabel_id ?>" />
 			<?php } ?>
-			<input type="hidden" name="blog_id" value="<?php echo $current_blog_id ?>" />
 
 			<?php wp_nonce_field( 'userlabel-'.(  $userlabel_id  ? 'edit' : 'new' ) ) ?>
 				<table class="form-table">
@@ -188,7 +182,7 @@ class UndisclosedCaps {
 		?><div class="wrap"><?php
 		?><div id="icon-undisclosed-userlabel" class="icon32"><br></div><?php
 		?><h2><?php _e('Manage User-Labels','wpundisclosed') ?>
-			<a href="<?php echo add_query_arg(array('action'=>'new')) ?>" class="add-new-h2"><?php _ex('Add New','userlabel','wpundisclosed') ?></a>
+			<a href="<?php echo remove_query_arg('message',add_query_arg(array('action'=>'new'))) ?>" class="add-new-h2"><?php _ex('Add New','userlabel','wpundisclosed') ?></a>
 		</h2>
 		<?php self::_put_message( ) ?>
 		<?php

@@ -84,6 +84,7 @@ class UndisclosedPosts {
 	private static function _get_where($where) {
 		if ( current_user_can( 'administrator' ) )
 			return $where;
+		var_dump($where);
 		global $wpdb;
 		if ( is_user_logged_in() ) {
 			// get current user's groups
