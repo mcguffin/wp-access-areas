@@ -86,7 +86,7 @@ class UndisclosedUsers {
 		$user = new WP_User( $user_id );
 		foreach ( $label_IDs as $label_id ) {
 			$label = UndisclosedUserLabel::get_userlabel( $label_id );
-			self::_set_cap_for_user( $label->capability , &$user , true );
+			self::_set_cap_for_user( $label->capability , $user , true );
 		}
 		restore_current_blog();
 	}
