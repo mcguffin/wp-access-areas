@@ -81,6 +81,8 @@ class UndisclosedEditPost {
 		}
 		(2) don't show optgrous without options
 		*/
+		
+		
 		?><div class="disclosure-view-select misc-pub-section">
 			<label for="select-disclosure"><?php _e( 'Visible to:' , 'wpundisclosed') ?></label>
 			<select id="select-disclosure" name="post_view_cap">
@@ -89,7 +91,8 @@ class UndisclosedEditPost {
 			
 				<optgroup label="<?php _e( 'WordPress roles' , 'wpundisclosed') ?>">
 				<?php foreach ($rolenames as $role=>$rolename) {
-					if ( !current_user_can( $role ) )
+					global $_asssas;
+					if ( !self::_user_can_role( $role , $user_role_caps ) )
 						continue;
 					?>
 					<option value="<?php echo $role ?>" <?php selected($post->post_view_cap , $role) ?>><?php _ex( $rolename, 'User role' ) ?></option>
@@ -98,7 +101,7 @@ class UndisclosedEditPost {
 
 				<optgroup label="<?php _e( 'Users with label' , 'wpundisclosed') ?>">
 				<?php foreach ($groups as $group=>$groupname) { 
-					if ( !current_user_can($group) && !$is_admin )
+					if ( ! current_user_can($group) && ! $is_admin )
 						continue;
 					?>
 					<option value="<?php echo $group ?>" <?php selected($post->post_view_cap , $group) ?>><?php _e( $groupname , 'wpundisclosed' ) ?></option>
@@ -144,7 +147,7 @@ class UndisclosedEditPost {
 				<optgroup label="<?php _e( 'WordPress roles' , 'wpundisclosed') ?>">
 				<?php foreach ($rolenames as $role=>$rolename) {
 					var_dump($role);
-					if ( !current_user_can( $role ) )
+					if ( !self::_user_can_role( $role , $user_role_caps ) )
 						continue;
 					?>
 					<option value="<?php echo $role ?>" <?php selected($post->post_comment_cap , $role) ?>><?php _ex( $rolename, 'User role' ) ?></option>
@@ -162,6 +165,12 @@ class UndisclosedEditPost {
 			</select>
 		</div><?php
 //*/
+	}
+	static function _user_can_role( $role , $user_role_caps ) {
+		$roles = new WP_Roles();
+		if ($roles->is_role($role))
+			return 0 == count(array_diff_assoc(  $roles->get_role( $role )->capabilities , $user_role_caps));
+		return false;
 	}
 	
 	// --------------------------------------------------

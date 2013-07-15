@@ -30,10 +30,10 @@ class UserLabel_List_Table extends WP_List_Table {
     	$columns = array(
 			'cb'			=> '<input type="checkbox" />', //Render a checkbox instead of text
 			'cap_title'		=> __('Name','wpundisclosed'),
-//			'capability'	=> __('Capability','wpundisclosed'),
-			'blog'		=> __('Scope','wpundisclosed'),
-			'actions'	=> __('Actions'),
     	);
+    	if ( is_multisite() )
+    		$columns['blog'] =  __('Scope','wpundisclosed');
+    	$columns['actions'] = __('Actions');
     	return $columns;
     }
     function get_sortable_columns() {

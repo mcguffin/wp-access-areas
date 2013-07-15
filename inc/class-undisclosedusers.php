@@ -71,13 +71,16 @@ class UndisclosedUsers {
 				}
 				restore_current_blog();
 			} else { // blog only
-				switch_to_blog( $label->blog_id );
-				$user->for_blog( $label->blog_id );
+				if ( is_multisite() ) {
+					switch_to_blog( $label->blog_id );
+					$user->for_blog( $label->blog_id );
+				}
 				self::_set_cap_for_user( $label->capability , $user , $add );
 			}
 		}
 		update_user_meta($user_id, 'undisclosed_global_capabilities' , $global_label_data );
-		restore_current_blog();
+		if ( is_multisite() )
+			restore_current_blog();
 	}
 	
 	static function add_user_to_blog( $user_id , $role , $blog_id ) {
