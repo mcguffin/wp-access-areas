@@ -1,0 +1,76 @@
+.undisclosed-network th,
+.undisclosed-network td {
+	border-top:1px solid #f0f0f0;
+	border-bottom:1px solid #dfdfdf;
+}
+.undisclosed-local th,
+.undisclosed-local td {
+	border-top:1px solid #f0f0f0;
+	border-bottom:1px solid #dfdfdf;
+}
+
+#icon-undisclosed-network {
+	background-image:url('../images/undisclosed-icons-32.png');
+	background-position:-5px -5px;
+}
+#icon-undisclosed-userlabel {
+	background-image:url('../images/undisclosed-icons-32.png');
+	background-position:-50px -5px;
+}
+
+.icon-undisclosed-local.icon16,
+.icon-undisclosed-network.icon16 {
+	background-image:url('../images/undisclosed-icons-16.png');
+	display:inline-block;
+	float:left;
+	clear:none;
+	margin:0 0.5em 0 0.5em;
+	padding:0;
+}
+.icon-undisclosed-network.icon16 {
+	background-position:-5px -1px;
+}
+.icon-undisclosed-local.icon16 {
+	background-position:-26px -1px;
+}
+
+
+.disclosure-label-item {
+	display:inline-block;
+	width:12em;
+	border:1px solid #aaa;
+	padding:0.25em 0.25em 0.25em 1em;
+	background:#eeeeee;
+	margin:0.125em;
+	-webkit-border-top-left-radius: 2em;
+	-webkit-border-bottom-left-radius: 2em;
+	-moz-border-radius-topleft: 2em;
+	-moz-border-radius-bottomleft: 2em;
+	border-top-left-radius: 2em;
+	border-bottom-left-radius: 2em;
+	
+	-webkit-box-shadow: 3px 3px 10px #666;
+	-moz-box-shadow: 3px 3px 10px #666;
+	box-shadow: 3px 3px 10px #666;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=10, Direction=135, Color='#6666')";
+}
+.select-user-label-form {
+	display:inline-block;
+}
+.wp-list-table .column-labels {
+}
+.wp-list-table .disclosure-label-item {
+	font-size:0.75em;
+	float:left;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	-ms-filter: none;
+}
+
+.disclosure-label-item input[type='checkbox'] {
+}
+.disclosure-label-item label {
+	font-weight:bold;
+	color:333;
+}

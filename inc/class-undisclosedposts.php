@@ -45,7 +45,7 @@ class UndisclosedPosts {
 			return $content;
 		if ( self::_user_can( get_post()->post_view_cap ) )
 			return $content;
-		return sprintf(__('Please <a href="%s">log in</a> to see this content!' , 'disclosure'),wp_login_url( get_permalink() ));
+		return sprintf(__('Please <a href="%s">log in</a> to see this content!' , 'wpundisclosed'),wp_login_url( get_permalink() ));
 	}
 	
 	static function skip_undisclosed_items( $items ) {

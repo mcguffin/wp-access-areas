@@ -13,14 +13,14 @@ if ( ! class_exists('UndisclosedCaps' ) ) :
 class UndisclosedCaps {
 	
 	static function init( ) {
+		add_action( 'admin_init' , array( __CLASS__ , 'admin_init' ) );
 		if ( is_admin() ) {
-			add_action( 'admin_init' , array( __CLASS__ , 'admin_init' ) );
 			add_action( 'admin_menu', array( __CLASS__ , 'user_menu' ));
+			add_action( 'network_admin_menu', array( __CLASS__ , 'user_menu' ));
 		}
 	}
 
 	static function admin_init() {
-
 	}
 
 
@@ -28,13 +28,27 @@ class UndisclosedCaps {
 
 
 	static function user_menu() { // @ admin_menu
+		if ( (is_network_admin() && ! current_user_can( 'manage_network_users' )) || ( ! current_user_can( 'promote_users' ) ) )
+			return;
+
+		// 'users.php' or 'profile.php'
+		
+		// add_submenu_page( 'users.php' , __('Manage User-Labels','wpundisclosed'), __('User-Labels','wpundisclosed'), 'promote_users', 'user_labels', array(__CLASS__,'manage_userlabels_page') );
+		// add_users_page(              $page_title, $menu_title, $capability, $menu_slug, $function);
 		add_users_page(__('Manage User-Labels','wpundisclosed'), __('User-Labels','wpundisclosed'), 'promote_users', 'user_labels', array(__CLASS__,'manage_userlabels_page'));
 		add_action( 'load-users_page_user_labels' , array( __CLASS__ , 'do_userlabel_actions' ) );
+		add_action( 'load-users_page_user_labels' , array( __CLASS__ , 'load_style' ) );
 	}
+	static function load_style() {
+		wp_enqueue_style( 'disclosure-admin' );
+	}
+	
 	static function do_userlabel_actions() {
 		if ( ! current_user_can( 'promote_users' ) ) 
 			wp_die( __('You do not have permission to do this.' , 'wpundisclosed' ) );
-
+		$table = new UserLabel_List_Table();
+		$table->process_bulk_action();
+			
 		if (isset($_REQUEST['action'])) {
 			// do actions
 			$data = self::_sanitize_userlabel_data( $_POST );
@@ -50,17 +64,22 @@ class UndisclosedCaps {
 				case 'new':
 					// do create action
 					if ( ! empty( $_POST ) && $edit_id = UndisclosedUserlabel::create_userlabel( $data ) ) 
-						return wp_redirect( add_query_arg(array( 'action'=>'edit' , 'id' => $edit_id ) ) );
+						return wp_redirect(add_query_arg(array('page'=>'user_labels' , 'message' => 1 ),$_SERVER['SCRIPT_NAME']));
 					break;
 				case 'edit':
 					// update and redirect
 					if ( ! empty( $_POST ) && $edit_id = UndisclosedUserlabel::update_userlabel( $data ) ) 
-						wp_redirect( add_query_arg( array('id' => $edit_id ) ) );
+						return wp_redirect( add_query_arg( array('id' => $edit_id , 'message'=>2 ) ) );
 					
 					if ( ! isset( $_GET['id'] ) ) 
-						wp_redirect( remove_query_arg('action') );
+						return wp_redirect( add_query_arg(array('page'=>'user_labels' ),$_SERVER['SCRIPT_NAME']) );
 						
 					break;
+				case 'delete':
+					// delete and redirect
+					if ( false && isset( $_GET['id'] ) && UndisclosedUserlabel::get_userlabel( $_GET['id'] ) ) 
+						UndisclosedUserlabel::delete_userlabel( $_GET['id'] );
+					return wp_redirect( add_query_arg(array('page'=>'user_labels' , 'message'=>3 , 'deleted' => 1 ),$_SERVER['SCRIPT_NAME']) );
 				default:
 					wp_redirect( remove_query_arg('action') );
 			}
@@ -93,22 +112,28 @@ class UndisclosedCaps {
 			) ;
 		
 		?><div class="wrap"><?php
-		?><div id="icon-users" class="icon32"><br></div><?php
+		?><div id="icon-undisclosed-userlabel" class="icon32"><br></div><?php
 		?><h2><?php
 			if ( $userlabel_id ) { 
 				_e('Edit User-Label','wpundisclosed');
 			} else {
 				_e('Create User-Label','wpundisclosed');
 			}
-		 ?></h2>
+			if ( is_network_admin() )
+				$current_blog_id = 0;
+			else
+				$current_blog_id = get_current_blog_id();
+				
+		?></h2>
+		<?php self::_put_message( ) ?>
 		<?php
 			?><form id="create-user-label" method="post" action="<?php echo $_SERVER['REQUEST_URI'] ?>">
 				<!-- Now we can render the completed list table -->
 			<?php if ( $userlabel_id ) { ?>
-			<input type="hidden" name="id" value="<?php echo $userlabel_id ?>" />
+				<input type="hidden" name="id" value="<?php echo $userlabel_id ?>" />
 			<?php } ?>
-			
-			<input type="hidden" name="blog_id" value="<?php echo get_current_blog_id() ?>" />
+			<input type="hidden" name="blog_id" value="<?php echo $current_blog_id ?>" />
+
 			<?php wp_nonce_field( 'userlabel-'.(  $userlabel_id  ? 'edit' : 'new' ) ) ?>
 				<table class="form-table">
 					<tbody>
@@ -116,15 +141,6 @@ class UndisclosedCaps {
 							<th scope="row"><label for="title"><?php _e('User-Label','wpundisclosed') ?></label></th>
 							<td><input class="regular-text" maxlength="64" type="text" name="cap_title" value="<?php echo $userlabel->cap_title ?>" id="cap_title" placeholder="<?php _e('New User-Label','wpundisclosed') ?>" autocomplete="off" /></td>
 						</tr>
-					<?php if ( current_user_can('manage_network_users') ) { ?>
-						<tr>
-							<th scope="row"><?php _e('Availability','wpundisclosed') ?></th>
-							<td>
-								<input type="checkbox" name="blog_id" id="blog_id" value="0" <?php checked( $userlabel->blog_id , 0 ) ?> />
-								<label for="blog_id"><?php _e( 'Network wide available' , 'wpundisclosed' ) ?></label>
-							</td>
-						</tr>
-					<?php } ?>
 					</tbody>
 				</table>
 				
@@ -141,7 +157,28 @@ class UndisclosedCaps {
 		?></div><?php
 		
 	}
-	
+	private static function _put_message( ) {
+		if ( ! isset( $_REQUEST['message'] ) )
+			return;
+			
+		$message_wrap = '<div id="message" class="updated"><p>%s<p></div>';
+		switch( $_REQUEST['message'] ) {
+			case 1: // created
+				$message = __('User-label created.','wpundisclosed');
+				break;
+			case 2: // updated
+				$message = __('User-label updated.','wpundisclosed');
+				break;
+			case 3: // deleted
+				$message = sprintf(_n('User-label deleted.' , '%d User-labels deleted.' , $_REQUEST['deleted'] , 'wpundisclosed') , $_REQUEST['deleted'] );
+				break;
+			default:
+				$message = '';
+				break;
+		}
+		if ( $message )
+			printf( $message_wrap , $message );
+	}
 	
 	static function list_userlabels_screen() {
 		$listTable = new UserLabel_List_Table( array() );
@@ -149,10 +186,11 @@ class UndisclosedCaps {
 
 
 		?><div class="wrap"><?php
-		?><div id="icon-users" class="icon32"><br></div><?php
+		?><div id="icon-undisclosed-userlabel" class="icon32"><br></div><?php
 		?><h2><?php _e('Manage User-Labels','wpundisclosed') ?>
 			<a href="<?php echo add_query_arg(array('action'=>'new')) ?>" class="add-new-h2"><?php _ex('Add New','userlabel','wpundisclosed') ?></a>
 		</h2>
+		<?php self::_put_message( ) ?>
 		<?php
 
 			?><form id="camera-reservations-filter" method="get">
@@ -170,10 +208,10 @@ class UndisclosedCaps {
 		global $wpdb;
 		$data = wp_parse_args( $data , array(
 			'cap_title' => '',
-			'blog_id'	=> get_current_blog_id(),
+			'blog_id'	=> 0,
 		) );
 		$data['cap_title'] = trim(strip_tags( $data['cap_title'] ));
-		$data['blog_id'] = intval( $data['blog_id'] );
+		$data['blog_id'] = is_network_admin() ? 0 : get_current_blog_id();
 		return $data;
 	}
 	

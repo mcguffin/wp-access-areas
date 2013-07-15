@@ -34,14 +34,16 @@ class UndisclosedEditPost {
 	// --------------------------------------------------
 	static function add_meta_boxes() {
 		global $wp_post_types;
-		foreach ( array_keys($wp_post_types) as $post_type ) {
-			add_meta_box( 'post-disclosure' , __('Restrictions','wpundisclose') , array(__CLASS__,'disclosure_box_info') , $post_type , 'side' , 'high' );
-		}
+		foreach ( array_keys($wp_post_types) as $post_type )
+			add_meta_box( 'post-disclosure' , __('Restrictions','wpundisclosed') , array(__CLASS__,'disclosure_box_info') , $post_type , 'side' , 'high' );
 	}
 	// --------------------------------------------------
 	// saving post
 	// --------------------------------------------------
-	static function edit_post( $data, $postarr) {
+	static function edit_post( $data, $postarr ) {
+		if ( $data['post_status'] == 'auto-draft' )
+			return $data;
+
 		$data['post_view_cap']		= isset($postarr['post_view_cap']) ? $postarr['post_view_cap'] : 'exist';
 		/* // future use
 		$data['post_edit_cap']		= isset($postarr['post_edit_cap']) ? $postarr['post_edit_cap'] : 'exist';
@@ -51,6 +53,7 @@ class UndisclosedEditPost {
 			$data['comment_status'] = 'open';
 		else 
 			$data['comment_status'] = 'closed';
+		
 		return $data;
 		
 	}
@@ -79,12 +82,12 @@ class UndisclosedEditPost {
 		(2) don't show optgrous without options
 		*/
 		?><div class="disclosure-view-select misc-pub-section">
-			<label for="select-disclosure"><?php _e( 'Visible to:' , 'wpundisclose') ?></label>
+			<label for="select-disclosure"><?php _e( 'Visible to:' , 'wpundisclosed') ?></label>
 			<select id="select-disclosure" name="post_view_cap">
-				<option value="exist" <?php selected($post->post_view_cap , 'exist') ?>><?php _e( 'WordPress default' , 'wpundisclose' ) ?></option>
-				<option value="read" <?php selected($post->post_view_cap , 'read') ?>><?php _e( 'Blog users' , 'wpundisclose' ) ?></option>
+				<option value="exist" <?php selected($post->post_view_cap , 'exist') ?>><?php _e( 'WordPress default' , 'wpundisclosed' ) ?></option>
+				<option value="read" <?php selected($post->post_view_cap , 'read') ?>><?php _e( 'Blog users' , 'wpundisclosed' ) ?></option>
 			
-				<optgroup label="<?php _e( 'WordPress roles' , 'wpundisclose') ?>">
+				<optgroup label="<?php _e( 'WordPress roles' , 'wpundisclosed') ?>">
 				<?php foreach ($rolenames as $role=>$rolename) {
 					if ( !current_user_can( $role ) )
 						continue;
@@ -93,24 +96,24 @@ class UndisclosedEditPost {
 				<?php } ?>
 				</optgroup>
 
-				<optgroup label="<?php _e( 'Users with label' , 'wpundisclose') ?>">
+				<optgroup label="<?php _e( 'Users with label' , 'wpundisclosed') ?>">
 				<?php foreach ($groups as $group=>$groupname) { 
 					if ( !current_user_can($group) && !$is_admin )
 						continue;
 					?>
-					<option value="<?php echo $group ?>" <?php selected($post->post_view_cap , $group) ?>><?php _e( $groupname , 'wpundisclose' ) ?></option>
+					<option value="<?php echo $group ?>" <?php selected($post->post_view_cap , $group) ?>><?php _e( $groupname , 'wpundisclosed' ) ?></option>
 				<?php } ?>
 				</optgroup>
 			</select>
 		</div><?php
 /* // for future use
 		?><div class="disclosure-edit-select misc-pub-section">
-			<label for="select-disclosure"><?php _e( 'Editable for:' , 'wpundisclose') ?></label>
+			<label for="select-disclosure"><?php _e( 'Editable for:' , 'wpundisclosed') ?></label>
 			<select id="select-disclosure" name="post_edit_cap">
-				<option value="exist" <?php selected($post->post_edit_cap , 'exist') ?>><?php _e( 'WordPress default' , 'wpundisclose' ) ?></option>
-				<option value="read" <?php selected($post->post_edit_cap , 'read') ?>><?php _e( 'Blog users' , 'wpundisclose' ) ?></option>
+				<option value="exist" <?php selected($post->post_edit_cap , 'exist') ?>><?php _e( 'WordPress default' , 'wpundisclosed' ) ?></option>
+				<option value="read" <?php selected($post->post_edit_cap , 'read') ?>><?php _e( 'Blog users' , 'wpundisclosed' ) ?></option>
 			
-				<optgroup label="<?php _e( 'WordPress roles' , 'wpundisclose') ?>">
+				<optgroup label="<?php _e( 'WordPress roles' , 'wpundisclosed') ?>">
 				<?php foreach ($rolenames as $role=>$rolename) {
 					if ( !current_user_can( $role ) )
 						continue;
@@ -119,12 +122,12 @@ class UndisclosedEditPost {
 				<?php } ?>
 				</optgroup>
 
-				<optgroup label="<?php _e( 'Users with label' , 'wpundisclose') ?>">
+				<optgroup label="<?php _e( 'Users with label' , 'wpundisclosed') ?>">
 				<?php foreach ($groups as $group=>$groupname) { 
 					if ( !current_user_can($group) && !$is_admin )
 						continue;
 					?>
-					<option value="<?php echo $group ?>" <?php selected($post->post_edit_cap , $group) ?>><?php _e( $groupname , 'wpundisclose' ) ?></option>
+					<option value="<?php echo $group ?>" <?php selected($post->post_edit_cap , $group) ?>><?php _e( $groupname , 'wpundisclosed' ) ?></option>
 				<?php } ?>
 				</optgroup>
 			</select>
@@ -133,12 +136,12 @@ class UndisclosedEditPost {
 
 //* // for future use
 		?><div class="disclosure-comment-select misc-pub-section">
-			<label for="select-disclosure"><?php _e( 'Who can comment:' , 'wpundisclose') ?></label>
+			<label for="select-disclosure"><?php _e( 'Who can comment:' , 'wpundisclosed') ?></label>
 			<select id="select-disclosure" name="post_comment_cap">
-				<option value="exist" <?php selected($post->post_comment_cap , 'exist') ?>><?php _e( 'WordPress default' , 'wpundisclose' ) ?></option>
-				<option value="read" <?php selected($post->post_comment_cap , 'read') ?>><?php _e( 'Blog users' , 'wpundisclose' ) ?></option>
+				<option value="exist" <?php selected($post->post_comment_cap , 'exist') ?>><?php _e( 'WordPress default' , 'wpundisclosed' ) ?></option>
+				<option value="read" <?php selected($post->post_comment_cap , 'read') ?>><?php _e( 'Blog users' , 'wpundisclosed' ) ?></option>
 			
-				<optgroup label="<?php _e( 'WordPress roles' , 'wpundisclose') ?>">
+				<optgroup label="<?php _e( 'WordPress roles' , 'wpundisclosed') ?>">
 				<?php foreach ($rolenames as $role=>$rolename) {
 					var_dump($role);
 					if ( !current_user_can( $role ) )
@@ -148,12 +151,12 @@ class UndisclosedEditPost {
 				<?php } ?>
 				</optgroup>
 
-				<optgroup label="<?php _e( 'Users with label' , 'wpundisclose') ?>">
+				<optgroup label="<?php _e( 'Users with label' , 'wpundisclosed') ?>">
 				<?php foreach ($groups as $group=>$groupname) { 
 					if ( !current_user_can($group) && !$is_admin )
 						continue;
 					?>
-					<option value="<?php echo $group ?>" <?php selected($post->post_comment_cap , $group) ?>><?php _e( $groupname , 'wpundisclose' ) ?></option>
+					<option value="<?php echo $group ?>" <?php selected($post->post_comment_cap , $group) ?>><?php _e( $groupname , 'wpundisclosed' ) ?></option>
 				<?php } ?>
 				</optgroup>
 			</select>
@@ -169,7 +172,7 @@ class UndisclosedEditPost {
 		foreach ($columns as $k=>$v) {
 			$cols[$k] = $v;
 			if ($k=='author') 
-				$cols['disclosure'] = __('Visible to','wpundisclose');
+				$cols['disclosure'] = __('Visible to','wpundisclosed');
 		}
 		return $cols;
 	}
@@ -177,7 +180,7 @@ class UndisclosedEditPost {
 		if ( $column != 'disclosure')
 			return;
 		$roles = new WP_Roles();
-		$names = array_merge(array('exist' => __( 'Everybody' , 'wpundisclose' ), 'read' => __( 'Blog users' , 'wpundisclose' )) , UndisclosedUserlabel::get_label_array( ), $roles->get_names());
+		$names = array_merge(array('exist' => __( 'Everybody' , 'wpundisclosed' ), 'read' => __( 'Blog users' , 'wpundisclosed' )) , UndisclosedUserlabel::get_label_array( ), $roles->get_names());
 		$names[''] = $names['exist'];
 		$val = get_post($post_ID)->post_view_cap;
 		_e($names[$val]);

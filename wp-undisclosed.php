@@ -111,7 +111,7 @@ class WPUndisclosed {
 			add_filter('the_content' ,  array( __CLASS__ , "undisclosed_content" ) );
 
 
-//		add_filter( "posts_join" , array( __CLASS__ , "get_posts_join" ) , 10, 2 );
+		add_filter( "posts_join" , array( __CLASS__ , "get_posts_join" ) , 10, 2 );
 //		add_filter( "posts_where" , array( __CLASS__ , "get_posts_where" ) , 10, 2 );
 			
 		// used in previous_post_link() / next_post_link()

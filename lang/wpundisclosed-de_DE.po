@@ -1,0 +1,184 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WordPress Undisclosed v0.9b\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2013-07-13 10:18:28+0000\n"
+"Last-Translator: admin <joern@flyingletters.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: CSL v1.x\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: \n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: inc/class-undisclosedcaps.php:31
+#: inc/class-undisclosedcaps.php:153
+#@ wpundisclosed
+msgid "Manage User-Labels"
+msgstr "Benutzer-Label verwalten"
+
+#: inc/class-undisclosedcaps.php:31
+#: inc/class-undisclosedusers.php:81
+#@ wpundisclosed
+msgid "User-Labels"
+msgstr "Benutzer-Label"
+
+#: inc/class-undisclosedcaps.php:36
+#@ wpundisclosed
+msgid "You do not have permission to do this."
+msgstr "Sie haben nicht die erforderliche Berechtigung."
+
+#: inc/class-undisclosedcaps.php:44
+#@ wpundisclosed
+msgid "Please enter a Label."
+msgstr "Bitte geben Sie einen Labeltext ein."
+
+#: inc/class-undisclosedcaps.php:47
+#@ wpundisclosed
+msgid "You do not have permission to edit network wide user labels."
+msgstr "Sie haben ncht die erforderliche Berechtigung Netzwerkweite Benutzer-Labels zu bearbeiten."
+
+#: inc/class-undisclosedcaps.php:99
+#@ wpundisclosed
+msgid "Edit User-Label"
+msgstr "Benutzer-Label bearbeiten"
+
+#: inc/class-undisclosedcaps.php:101
+#: inc/class-undisclosedcaps.php:135
+#@ wpundisclosed
+msgid "Create User-Label"
+msgstr "Benutzer-Label erstellen"
+
+#: inc/class-undisclosedcaps.php:116
+#@ wpundisclosed
+msgid "User-Label"
+msgstr "Benutzer-Label"
+
+#: inc/class-undisclosedcaps.php:117
+#@ wpundisclosed
+msgid "New User-Label"
+msgstr "Neues Benutzer-Label"
+
+#: inc/class-undisclosedcaps.php:121
+#@ wpundisclosed
+msgid "Availability"
+msgstr "Verfügbarkeit"
+
+#: inc/class-undisclosedcaps.php:124
+#@ wpundisclosed
+msgid "Network wide available"
+msgstr "Netzwerk-weit verfügbar"
+
+#: inc/class-undisclosedcaps.php:133
+#@ wpundisclosed
+msgid "Save changes"
+msgstr "Änderungen sichern"
+
+#: inc/class-undisclosedcaps.php:154
+#@ wpundisclosed
+msgctxt "userlabel"
+msgid "Add New"
+msgstr "Erstellen"
+
+#: inc/class-undisclosededitpost.php:38
+#@ wpundisclosed
+msgid "Restrictions"
+msgstr "Beschränkungen"
+
+#: inc/class-undisclosededitpost.php:82
+#@ wpundisclosed
+msgid "Visible to:"
+msgstr "Sichtbar für:"
+
+#: inc/class-undisclosededitpost.php:84
+#: inc/class-undisclosededitpost.php:138
+#@ wpundisclosed
+msgid "WordPress default"
+msgstr "WordPress Standard"
+
+#: inc/class-undisclosededitpost.php:85
+#: inc/class-undisclosededitpost.php:139
+#: inc/class-undisclosededitpost.php:180
+#@ wpundisclosed
+msgid "Blog users"
+msgstr "Blog Benutzer"
+
+#: inc/class-undisclosededitpost.php:87
+#: inc/class-undisclosededitpost.php:141
+#@ wpundisclosed
+msgid "WordPress roles"
+msgstr "WordPress Rollen"
+
+#: inc/class-undisclosededitpost.php:96
+#: inc/class-undisclosededitpost.php:151
+#@ wpundisclosed
+msgid "Users with label"
+msgstr "Benutzer mit dem Label"
+
+#: inc/class-undisclosededitpost.php:136
+#@ wpundisclosed
+msgid "Who can comment:"
+msgstr "Wer darf kommentieren:"
+
+#: inc/class-undisclosededitpost.php:172
+#@ wpundisclosed
+msgid "Visible to"
+msgstr "Sichtbar für"
+
+#: inc/class-undisclosededitpost.php:180
+#@ wpundisclosed
+msgid "Everybody"
+msgstr "Jeden"
+
+#: inc/class-undisclosedposts.php:48
+#, php-format
+#@ wpundisclosed
+msgid "Please <a href=\"%s\">log in</a> to see this content!"
+msgstr "Bitte <a href=\"%s\">einloggen</a> um diese Seite zu sehen."
+
+#: inc/class-undiscloseduserlabel.php:25
+#: inc/class-undisclosedusers.php:91
+#: inc/class-userlabel_list_table.php:54
+#@ wpundisclosed
+msgid "(Network)"
+msgstr "(Netzwerk)"
+
+#: inc/class-undisclosedusers.php:84
+#@ wpundisclosed
+msgid "Set User-Labels"
+msgstr "Benutzer-Label einstellen"
+
+#: inc/class-undisclosedusers.php:123
+#@ wpundisclosed
+msgid "Labels"
+msgstr "Labels"
+
+#: inc/class-undisclosedusers.php:138
+#@ wpundisclosed
+msgid "(*)"
+msgstr "(*)"
+
+#: inc/class-userlabel_list_table.php:32
+#@ wpundisclosed
+msgid "Name"
+msgstr "Name"
+
+#: inc/class-userlabel_list_table.php:34
+#@ wpundisclosed
+msgid "Blog"
+msgstr "Blog"
+
+#: inc/class-userlabel_list_table.php:97
+#@ default
+msgid "Delete"
+msgstr ""
+

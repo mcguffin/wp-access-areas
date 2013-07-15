@@ -31,7 +31,8 @@ class UserLabel_List_Table extends WP_List_Table {
 			'cb'			=> '<input type="checkbox" />', //Render a checkbox instead of text
 			'cap_title'		=> __('Name','wpundisclosed'),
 //			'capability'	=> __('Capability','wpundisclosed'),
-			'blog'		=> __('Blog','wpundisclosed'),
+			'blog'		=> __('Scope','wpundisclosed'),
+			'actions'	=> __('Actions'),
     	);
     	return $columns;
     }
@@ -46,15 +47,33 @@ class UserLabel_List_Table extends WP_List_Table {
     	$output = isset($item->$column_name) ? $item->$column_name : '';
         switch($column_name) {
         	case 'cap_title':
-        		$url = add_query_arg( array( 'action'=>'edit','id'=>$item->ID ) );
-        		return sprintf( '<a href="%s">%s</a>' , $url , $output );
+				if ( ! $item->blog_id ) 
+					$icon = '<span title="Network" class="icon-undisclosed-network icon16"></span>';
+				else 
+					$icon = '<span title="Local" class="icon-undisclosed-local icon16"></span>';
+        		if ( ( is_network_admin() ^ $item->blog_id ) ) {
+					$url = add_query_arg( array( 'action'=>'edit','id'=>$item->ID ) );
+					$url = remove_query_arg('message',$url);
+					$url = remove_query_arg('deleted',$url);
+					return sprintf( '<a href="%s">%s</a>' , $url , $icon .$output );
+				} else {
+					return $icon.$output;
+				}
         	case 'capability':
         		return $output;
         	case 'blog':
-        		return $item->blog_id ? get_blog_details( $item->blog_id , true )->siteurl : __('(Network)','wpundisclosed');
-        		$output;
+        		return $item->blog_id ? get_blog_details( $item->blog_id , true )->siteurl : __('Network','wpundisclosed');
         	case 'blog_id':
         		return $output;
+        	case 'actions':
+        		if ( ( is_network_admin() ^ $item->blog_id ) ) {
+					$url = add_query_arg( array('action'=>'delete','id'=>$item->ID,'_wpnonce'=>wp_create_nonce('userlabel-delete')) );
+					$url = remove_query_arg('message',$url);
+					$url = remove_query_arg('deleted',$url);
+					return sprintf('<a href="%s" class="button">%s</button>',$url,__('Delete'));
+				} else {
+					return '';
+				}
 		}
 	}
 	function prepare_items() {
@@ -105,8 +124,11 @@ class UserLabel_List_Table extends WP_List_Table {
 			switch ($action) {
 				case 'delete':
 					foreach ($_REQUEST[$this->_args['plural']] as $ul_id)
-						UndisclosedUserlabel::delete_userlabel( $ul_id );
-					break;
+						if ( UndisclosedUserlabel::get_userlabel( intval($ul_id) ) )
+							UndisclosedUserlabel::delete_userlabel( intval($ul_id) );
+					return wp_redirect( add_query_arg( array('page'=>'user_labels' , 'message'=>3 , 'deleted' => count($_REQUEST[$this->_args['plural']]) ) , $_SERVER['SCRIPT_NAME'] ) );
+				default:
+					
 			}
 		}
 	}

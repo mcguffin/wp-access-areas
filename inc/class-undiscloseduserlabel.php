@@ -7,14 +7,44 @@
 if ( ! class_exists('UndisclosedUserlabel') ):
 class UndisclosedUserlabel {
 	
-	static function get_available_userlabels() {
-		global $wpdb; //This is used only if making any database queries
+	static function get_available_userlabels( $limit = 0 , $order = 'blog_id DESC,cap_title ASC'  ) {
+		global $wpdb;
 		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
-
-		$query = $wpdb->prepare( 'SELECT * FROM '.$table_name.' WHERE blog_id=0 OR blog_id=%s ORDER BY cap_title ASC' ,
-			$wpdb->blogid
-		);
+		
+		$query = 'SELECT * FROM '.$table_name.' WHERE blog_id=0 ';
+		$query_param = array();
+		if ( ! is_network_admin() ) {
+			$query_param[] = get_current_blog_id();
+			$query .= 'OR blog_id=%d';
+		}
+		if ( $sql_orderby = sanitize_sql_orderby($order) ) {
+			$query .= " ORDER BY $sql_orderby";
+		}
+		if ( count($query_param) ) {
+			array_unshift($query_param,$query);
+			$query = call_user_func_array( array($wpdb,'prepare') , $query_param);
+		}
 		return $wpdb->get_results($query);
+	}
+	static function get_blog_userlabels( $blog_id = 0 , $order_by = 'cap_title' , $order = 'ASC' ) {
+		global $wpdb;
+		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
+		if ( ! $blog_id ) 
+			$blog_id = get_current_blog_id();
+		$query = 'SELECT * FROM '.$table_name.' WHERE blog_id=%s ';
+		if ( $sql_orderby = sanitize_sql_orderby("$order_by $order") )
+			$query .= " ORDER BY $sql_orderby";
+		
+		return $wpdb->get_results( $wpdb->prepare( $query , $blog_id ) );
+	}
+	static function get_network_userlabels(  $order_by = 'cap_title' , $order = 'ASC' ) {
+		global $wpdb;
+		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
+		$query = 'SELECT * FROM '.$table_name.' WHERE blog_id=0 ';
+		if ( $sql_orderby = sanitize_sql_orderby("$order_by $order") )
+			$query .= " ORDER BY $sql_orderby";
+		
+		return $wpdb->get_results( $query );
 	}
 	static function get_label_array( ) {
 		$labels = self::get_available_userlabels( );
@@ -41,20 +71,21 @@ class UndisclosedUserlabel {
 			}
 			foreach ( $blogids as $blogid ) {
 				switch_to_blog( $userlabel->blog_id );
-				self::_delete_userlabel_from_blog( );
+				self::_delete_userlabel_from_blog( $userlabel );
 			}
 			restore_current_blog();
 		} else {
-			self::_delete_userlabel_from_blog( );
+			self::_delete_userlabel_from_blog( $userlabel );
 		}
 		$wpdb->query( $wpdb->prepare( "DELETE FROM $table_name WHERE ID=%d",$id ) );
 	}
 	
-	private static function _delete_userlabel_from_blog( ) {
+	private static function _delete_userlabel_from_blog( &$userlabel ) {
+		global $wpdb;
 		// delete everything from posts and restore usefull default values
-		$query = $wpdb->prepare("UPDATE $wpdb->posts SET post_view_cap='exists',post_status='private' WHERE post_view_cap=%s" , $default_cap , $userlabel->capability );
-		$query = $wpdb->prepare("UPDATE $wpdb->posts SET post_edit_cap='exists' WHERE post_edit_cap=%s" , $default_cap , $userlabel->capability ); // back to default
-		$query = $wpdb->prepare("UPDATE $wpdb->posts SET post_comment_cap='exists',comment_status='closed' WHERE post_comment_cap=%s" , $default_cap , $userlabel->capability ); // back to default
+		$query = $wpdb->prepare("UPDATE $wpdb->posts SET post_view_cap='exists',post_status='private' WHERE post_view_cap=%s" , $userlabel->capability );
+		$query = $wpdb->prepare("UPDATE $wpdb->posts SET post_edit_cap='exists' WHERE post_edit_cap=%s" , $userlabel->capability ); // back to default
+		$query = $wpdb->prepare("UPDATE $wpdb->posts SET post_comment_cap='exists',comment_status='closed' WHERE post_comment_cap=%s" , $userlabel->capability ); // back to default
 
 		// remove all caps from users
 		$users = get_users( ); 
