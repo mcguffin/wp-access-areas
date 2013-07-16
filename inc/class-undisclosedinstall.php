@@ -5,7 +5,8 @@
 */
 
 // ----------------------------------------
-//	This class provides install and uninstall routines for the WP undisclosed plugin.
+//	This class provides install and uninstall 
+//	routines for the WP undisclosed plugin.
 // ----------------------------------------
 
 if ( ! class_exists('UndisclosedInstall') ) :
@@ -42,9 +43,9 @@ class UndisclosedInstall {
 	static function uninstall() {
 		if ( ! current_user_can( 'activate_plugins' ) )
 			return;
-
-		global $wpdb;
-		// move to uninstall routine later
+		
+		self::_remove_custom_caps();
+		
 		self::_uninstall_capabilities_table();
 		
 		if (function_exists('is_multisite') && is_multisite() ) {
@@ -88,7 +89,7 @@ class UndisclosedInstall {
 	// --------------------------------------------------
 	private static function _install_capabilities_table( ) {
 		global $wpdb;
-		$table_name = $wpdb->base_prefix . "disclosure_userlabels";
+		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
 		if($wpdb->get_var("show tables like '$table_name'") != $table_name) {
 			$sql = "CREATE TABLE " . $table_name . " (
 				ID bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -104,10 +105,27 @@ class UndisclosedInstall {
 			dbDelta($sql);
 		}
 	}
+	
+	
 	private static function _uninstall_capabilities_table( ) {
 		global $wpdb;
 		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
 		$wpdb->query("DROP TABLE IF EXISTS $table_name");
+	}
+	// --------------------------------------------
+	// remove Caps from User
+	private function _uninstall_custom_caps( ) {
+		global $wpdb;
+		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
+		$uids = $wpdb->get_col( "SELECT user_id FROM $wpdb->usermeta WHERE meta_key LIKE '{$wpdb->base_prefix}%capabilities' AND meta_value LIKE '%\"".WPUND_USERLABEL_PREFIX."%'" );
+		$caps = $wpdb->get_col( "SELECT capability FROM $table_name" );
+		foreach ( $uids as $uid) {
+			$user = new WP_User( $uid );
+			foreach ( $caps as $capability )
+				if ( $user->has_cap() )
+					$user->remove_cap( $capability );
+		}
+		
 	}
 	
 }

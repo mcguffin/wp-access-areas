@@ -88,7 +88,7 @@ class UndisclosedUserlabel {
 		$query = $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_comment_cap='exists',comment_status='closed' WHERE post_comment_cap=%s" , $userlabel->capability ) ); // back to default
 
 		// remove all caps from users
-		$users = get_users( ); 
+		$users = get_users( );
 		foreach( $users as $user )
 			$user->remove_cap( $userlabel->capability );
 	}
