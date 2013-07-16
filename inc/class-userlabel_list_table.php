@@ -18,12 +18,14 @@ class UserLabel_List_Table extends WP_List_Table {
             'ajax'      => false,        //does this table support ajax?
         ) );
 	}
-	function column_cb($item){
-		return sprintf(
-			'<input type="checkbox" name="%1$s[]" value="%2$s" />',
-			/*$1%s*/ $this->_args['plural'],  //Let's simply repurpose the table's singular label
-			/*$2%s*/ $item->ID                //The value of the checkbox should be the record's id
-		);
+	function column_cb($item) {
+		if ( ( is_network_admin() ^ $item->blog_id ) )
+			return sprintf(
+				'<input type="checkbox" name="%1$s[]" value="%2$s" />',
+				/*$1%s*/ $this->_args['plural'],
+				/*$2%s*/ $item->ID
+			);
+		return '';
 	}
 
     function get_columns() {

@@ -123,11 +123,14 @@ class UndisclosedUsers {
 		if ( ! is_network_admin() )
 			$labelrows[ __( 'Grant Access' , 'wpundisclosed' ) ] = array( 'network' => false ,		'labels' => UndisclosedUserLabel::get_blog_userlabels() , );
 		
+		$label_caps = (array) (is_multisite() ? get_user_meta($profileuser->ID , WPUND_GLOBAL_USERMETA_KEY , true ) : null); 
+		
 		foreach ( $labelrows as $row_title => $value ) {
 			extract( $value );
 			
 			if ( empty($labels) ) 
 				continue;
+			
 			
 			?><tr class="<?php echo $network ? 'undisclosed-network' : 'undisclosed-local' ?>">
 				<th><?php
@@ -143,10 +146,11 @@ class UndisclosedUsers {
 				?></th>
 				<td><?php
 				foreach ( $labels as $label ) {
+					$user_has_cap = in_array( $label->capability , $label_caps ) || $profileuser->has_cap( $label->capability );
 					?><span class="disclosure-label-item"><?php
 						?><input type="hidden" name="userlabels[<?php echo $label->ID ?>]" value="0" /><?php
 				
-						?><input id="cap-<?php echo $label->capability ?>" type="checkbox" name="userlabels[<?php echo $label->ID ?>]" value="1" <?php checked( $profileuser->has_cap( $label->capability ) , true ) ?> /><?php
+						?><input id="cap-<?php echo $label->capability ?>" type="checkbox" name="userlabels[<?php echo $label->ID ?>]" value="1" <?php checked( $user_has_cap , true ) ?> /><?php
 						?><label for="cap-<?php echo $label->capability ?>">  <?php echo $label->cap_title ?></label><?php
 					?></span><?php
 				}
@@ -199,14 +203,16 @@ class UndisclosedUsers {
 			return;
 				
 		$ugroups = array();
+		$label_caps = (array) (is_multisite() ? get_user_meta($user_ID , WPUND_GLOBAL_USERMETA_KEY , true ) : null); 
 		
 		$labels = UndisclosedUserLabel::get_available_userlabels( );
 		if ( is_multisite() && is_super_admin( $user_ID ) )
 			return '<div class="disclosure-labels"><span class="disclosure-label-item access-all-areas"><span class="icon-undisclosed-network icon16"></span>' . __('Everywhere') . '</span></div>';
 		
 		$user = new WP_User( $user_ID );
+		
 		foreach ($labels as $label) {
-			if ( $user->has_cap( $label->capability ) ) {
+			if ( in_array( $label->capability , $label_caps ) || $user->has_cap( $label->capability ) ) {
 				$icon =  $label->blog_id ? '<span class="icon-undisclosed-local icon16"></span>' : '<span class="icon-undisclosed-network icon16"></span>';
 				$ugroups[] = '<span class="disclosure-label-item">' . $icon . $label->cap_title . '</span>';
 			}

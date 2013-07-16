@@ -61,7 +61,7 @@ class UndisclosedCaps {
 					// do create action
 					if ( ! empty( $_POST ) )  {
 						if ( $edit_id = UndisclosedUserlabel::create_userlabel( $data ) )
-							$redirect_url =  add_query_arg( array('page'=>'user_labels' , 'message' => 1 ) , $_SERVER['SCRIPT_NAME'] );
+							$redirect_url =  add_query_arg( array('page'=>'user_labels' , 'action' => 'new' , 'message' => 1 ) , $_SERVER['SCRIPT_NAME'] );
 							// $redirect_url = add_query_arg(array('page'=>'user_labels' , 'message' => 1 ),$_SERVER['SCRIPT_NAME']);
 						else 
 							$redirect_url = add_query_arg(array('page'=>'user_labels' , 'action' => 'new' , 'message' => UndisclosedUserlabel::what_went_wrong() , 'cap_title'=>$_POST['cap_title'] ),$_SERVER['SCRIPT_NAME']);

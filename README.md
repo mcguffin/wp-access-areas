@@ -23,10 +23,11 @@ Roadmap
 v 1.0.0
 √ test in WP current
 √ test in WP current MU
-- test in WP trunk
-- test in WP trunk MU
-- Translate to german
+√ test in WP trunk
+√ test in WP trunk MU
+√ Translate to german
 - Future Implement editing
-- New Wording instead of "Label": Access Area / Befugnis(se) / Zugangsbereich
+√ New Wording instead of "Label": Access Area / Befugnis(se) / Zugangsbereich
+- Edit Post: Separate local from global caps. 
 
 - Publish on wordpress.org
