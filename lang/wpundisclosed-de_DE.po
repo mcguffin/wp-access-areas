@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: WordPress Undisclosed v0.9b\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2013-07-16 13:03:04+0000\n"
+"PO-Revision-Date: 2013-07-16 14:02:06+0000\n"
 "Last-Translator: admin <joern@flyingletters.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -51,23 +51,23 @@ msgstr "Sie haben nicht die erforderlichen Rechte Netzwerk weite Zugriffsbereich
 #: inc/class-undisclosedcaps.php:132
 #@ wpundisclosed
 msgid "Edit Access Area"
-msgstr "Zugriffsbereich bearbeiten"
+msgstr "Zugangsbereich bearbeiten"
 
 #: inc/class-undisclosedcaps.php:134
 #: inc/class-undisclosedcaps.php:159
 #@ wpundisclosed
 msgid "Create Access Area"
-msgstr "Zugriffsbereich erstellen"
+msgstr "Zugangsbereich erstellen"
 
 #: inc/class-undisclosedcaps.php:149
 #@ wpundisclosed
 msgid "Access Area"
-msgstr "Zugriffsbereich"
+msgstr "Zugangsbereich"
 
 #: inc/class-undisclosedcaps.php:150
 #@ wpundisclosed
 msgid "New Access Area"
-msgstr "Neuer Zugriffsbereich"
+msgstr "Neuer Zugangsbereich"
 
 #: inc/class-undisclosedcaps.php:157
 #@ wpundisclosed
@@ -77,25 +77,25 @@ msgstr "Änderungen sichern"
 #: inc/class-undisclosedcaps.php:175
 #@ wpundisclosed
 msgid "Access Area created."
-msgstr "Zugriffsbereich wurde erstellt."
+msgstr "Zugangsbereich wurde erstellt."
 
 #: inc/class-undisclosedcaps.php:178
 #@ wpundisclosed
 msgid "Access Area updated."
-msgstr "Zugriffsbereich wurde aktualisiert."
+msgstr "Zugangsbereich wurde aktualisiert."
 
 #: inc/class-undisclosedcaps.php:181
 #, php-format
 #@ wpundisclosed
 msgid "Access Area deleted."
 msgid_plural "%d Access Areas deleted."
-msgstr[0] "Zugriffsbereich gelöscht."
-msgstr[1] "Es wurden %d Zugriffsbereiche gelöscht."
+msgstr[0] "Zugangsbereich gelöscht."
+msgstr[1] "Es wurden %d Zugangsbereiche gelöscht."
 
 #: inc/class-undisclosedcaps.php:184
 #@ wpundisclosed
 msgid "An Access Area with that Name already exists."
-msgstr "Ein Zugriffsbereich existiert schon unter diesem Namen."
+msgstr "Ein Zugangsbereich existiert schon unter diesem Namen."
 
 #: inc/class-undisclosedcaps.php:205
 #@ wpundisclosed
@@ -106,7 +106,7 @@ msgstr "Erstellen"
 #: inc/class-undisclosededitpost.php:38
 #@ wpundisclosed
 msgid "Access"
-msgstr "Zugriff"
+msgstr "Zugang"
 
 #: inc/class-undisclosededitpost.php:87
 #@ wpundisclosed
@@ -161,12 +161,12 @@ msgstr "(Netzwerk)"
 #: inc/class-undisclosedusers.php:121
 #@ wpundisclosed
 msgid "Grant Network-Wide Access"
-msgstr "Netzwerkweiten Zugriff gewähren"
+msgstr "Netzwerkweiten Zugang gewähren"
 
 #: inc/class-undisclosedusers.php:124
 #@ wpundisclosed
 msgid "Grant Access"
-msgstr "Zugriff gewähren"
+msgstr "Zugang gewähren"
 
 #: inc/class-undisclosedusers.php:173
 #@ wpundisclosed
@@ -218,5 +218,5 @@ msgstr "Der angegebene Zugangsbereich konnte nicht gefunden werden."
 #: inc/class-undisclosededitpost.php:157
 #@ wpundisclosed
 msgid "Users with Access to"
-msgstr "Benutzer mit Zugriff auf:"
+msgstr "Benutzer mit Zugang zu:"
 
