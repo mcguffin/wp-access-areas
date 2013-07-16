@@ -63,8 +63,6 @@ class UndisclosedPosts {
 	}
 	
 	static function get_posts_where( $where , &$wp_query ) {
-		if ( $wp_query->is_single()  )
-			return $where;
 		global $wpdb;
 		$where = self::_get_where( $where , $wpdb->posts );
 		return $where;
@@ -75,7 +73,7 @@ class UndisclosedPosts {
 	}
 
 
-	private static function _get_where( $where , $table_name = 'p' ) {
+	private static function _get_where( $where , $table_name = 'p' ) {		
 		if ( current_user_can( 'administrator' ) )
 			return $where;
 		if ( is_user_logged_in() ) {
