@@ -1,3 +1,8 @@
+#post-disclosure .inside {
+	padding:0;
+	margin:0;
+}
+
 .undisclosed-network th,
 .undisclosed-network td {
 	border-top:1px solid #f0f0f0;
@@ -53,7 +58,19 @@
 	-moz-box-shadow: 3px 3px 10px #666;
 	box-shadow: 3px 3px 10px #666;
 	-ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=10, Direction=135, Color='#6666')";
-}
+
+
+
+
+	border-width:0;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	-ms-filter: none;
+
+	-webkit-border-radius:0;
+	-moz-border-radius:0;
+	border-radius:0;}
 .select-user-label-form {
 	display:inline-block;
 }

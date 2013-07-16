@@ -1,8 +1,8 @@
 <?php
 /**
-* @package WPUndisclosed
-* @version 1.0
-*/
+* @package WP_AccessAreas
+* @version 1.0.0
+*/ 
 
 
 

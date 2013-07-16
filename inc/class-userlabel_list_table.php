@@ -1,9 +1,17 @@
 <?php
+/**
+* @package WP_AccessAreas
+* @version 1.0.0
+*/ 
 
 if ( ! class_exists('WP_List_Table') ) {
     require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 }
 
+
+// ----------------------------------------
+//	Defines the List view table for Access Areas in the backend.
+// ----------------------------------------
 if ( ! class_exists( 'UserLabel_List_Table' ) ) :
 class UserLabel_List_Table extends WP_List_Table {
 	
@@ -35,7 +43,7 @@ class UserLabel_List_Table extends WP_List_Table {
     	);
     	if ( is_multisite() )
     		$columns['blog'] =  __('Scope','wpundisclosed');
-    	$columns['actions'] = __('Actions');
+    	
     	return $columns;
     }
     function get_sortable_columns() {
@@ -50,16 +58,25 @@ class UserLabel_List_Table extends WP_List_Table {
         switch($column_name) {
         	case 'cap_title':
 				if ( ! $item->blog_id ) 
-					$icon = '<span title="Network" class="icon-undisclosed-network icon16"></span>';
+					$ret = '<span title="Network" class="icon-undisclosed-network icon16"></span>';
 				else 
-					$icon = '<span title="Local" class="icon-undisclosed-local icon16"></span>';
-        		if ( ( is_network_admin() ^ $item->blog_id ) ) {
+					$ret = '<span title="Local" class="icon-undisclosed-local icon16"></span>';
+
+        		if ( is_network_admin() ^ $item->blog_id ) {
 					$url = add_query_arg( array( 'action'=>'edit','id'=>$item->ID ) );
 					$url = remove_query_arg('message',$url);
 					$url = remove_query_arg('deleted',$url);
-					return sprintf( '<a href="%s">%s</a>' , $url , $icon .$output );
+					$ret .= sprintf( '<strong><a href="%s">%s</a></strong>' , $url , $output );
+					
+					$del_url = add_query_arg( array('action'=>'delete','id'=>$item->ID,'_wpnonce'=>wp_create_nonce('userlabel-delete')) );
+					$del_url = remove_query_arg('message',$url);
+					$del_url = remove_query_arg('deleted',$url);
+					$ret .= sprintf('<br /><div class="row-actions"><span class="remove"><a href="%s" class="submitdelete">%s</a></span></div>',$url,__('Delete'));
+					return $ret;
+					if ( ( is_network_admin() ^ $item->blog_id ) ) {
+					}
 				} else {
-					return $icon.$output;
+					return $ret.$output;
 				}
         	case 'capability':
         		return $output;

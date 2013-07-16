@@ -1,10 +1,8 @@
 <?php
-
-
 /**
-* @package WPUndisclosed
-* @version 1.0
-*/
+* @package WP_AccessAreas
+* @version 1.0.0
+*/ 
 
 // ----------------------------------------
 //	This class provides an UI for assining 
@@ -27,6 +25,11 @@ class UndisclosedEditPost {
 			add_filter('manage_pages_columns' , array(__CLASS__ , 'add_disclosure_column'));
 			add_filter('manage_pages_custom_column' , array(__CLASS__ , 'manage_disclosure_column') , 10 ,2 );
 		}
+		add_action( 'load-post.php' , array( __CLASS__ , 'load_style' ) );
+		add_action( 'load-post-new.php' , array( __CLASS__ , 'load_style' ) );
+	}
+	static function load_style() {
+		wp_enqueue_style( 'disclosure-admin' );
 	}
 	
 	// --------------------------------------------------
@@ -84,7 +87,7 @@ class UndisclosedEditPost {
 		
 		
 		?><div class="disclosure-view-select misc-pub-section">
-			<label for="select-disclosure"><?php _e( 'Visible to:' , 'wpundisclosed') ?></label>
+			<label for="select-disclosure"><strong><?php _e( 'Who can read:' , 'wpundisclosed') ?></strong></label><br />
 			<select id="select-disclosure" name="post_view_cap">
 				<option value="exist" <?php selected($post->post_view_cap , 'exist') ?>><?php _e( 'WordPress default' , 'wpundisclosed' ) ?></option>
 				<option value="read" <?php selected($post->post_view_cap , 'read') ?>><?php _e( 'Blog users' , 'wpundisclosed' ) ?></option>
@@ -139,7 +142,7 @@ class UndisclosedEditPost {
 
 //* // for future use
 		?><div class="disclosure-comment-select misc-pub-section">
-			<label for="select-disclosure"><?php _e( 'Who can comment:' , 'wpundisclosed') ?></label>
+			<label for="select-disclosure"><strong><?php _e( 'Who can comment:' , 'wpundisclosed') ?></strong></label><br />
 			<select id="select-disclosure" name="post_comment_cap">
 				<option value="exist" <?php selected($post->post_comment_cap , 'exist') ?>><?php _e( 'WordPress default' , 'wpundisclosed' ) ?></option>
 				<option value="read" <?php selected($post->post_comment_cap , 'read') ?>><?php _e( 'Blog users' , 'wpundisclosed' ) ?></option>

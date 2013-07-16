@@ -1,4 +1,8 @@
 <?php
+/**
+* @package WP_AccessAreas
+* @version 1.0.0
+*/ 
 
 // ----------------------------------------
 //	Data model for Userlabels.

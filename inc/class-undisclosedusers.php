@@ -1,4 +1,8 @@
 <?php
+/**
+* @package WP_AccessAreas
+* @version 1.0.0
+*/ 
 
 // ----------------------------------------
 //	This class provides an UI to assign Userlabels to Users.
