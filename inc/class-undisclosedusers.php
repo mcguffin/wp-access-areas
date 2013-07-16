@@ -10,7 +10,8 @@ class UndisclosedUsers {
 	static function init( ) {
 		if ( is_admin() ) {
 			add_action( 'admin_init' , array( __CLASS__ , 'admin_init' ) );
-			add_filter('wpmu_users_columns' , array(__CLASS__ , 'add_userlabels_column'));
+			if ( is_accessareas_active_for_network() )
+				add_filter('wpmu_users_columns' , array(__CLASS__ , 'add_userlabels_column'));
 			add_filter('manage_users_columns' , array(__CLASS__ , 'add_userlabels_column'));
 			add_filter('manage_users_custom_column' , array(__CLASS__ , 'manage_userlabels_column') , 10 ,3 );
 		}
@@ -33,7 +34,6 @@ class UndisclosedUsers {
 			
 			
 			add_filter('views_users' , array( __CLASS__ , 'table_views' ) );
-		//	add_filter('views_users-network' , array( __CLASS__ , 'table_views' ) );
 		}
 		add_filter( 'additional_capabilities_display' , '__return_false' );
 	}
@@ -111,7 +111,7 @@ class UndisclosedUsers {
 	}
 	static function personal_options( $profileuser ) {
 		// IS_PROFILE_PAGE : self or other
-		if ( ! current_user_can( 'promote_users' ) ) 
+		if ( ! current_user_can( 'promote_users' ) || (is_network_admin() && ! is_accessareas_active_for_network() ) ) 
 			return;
 		$labels = UndisclosedUserLabel::get_available_userlabels( );
 		?><h3><?php _e( 'Access Areas' , 'wpundisclosed' ) ?></h3><?php
@@ -120,7 +120,7 @@ class UndisclosedUsers {
 		$labelrows = array( 
 								__( 'Grant Network-Wide Access' , 'wpundisclosed' )	=> array( 'network' => true ,	'labels' => UndisclosedUserLabel::get_network_userlabels()  , ), 
 			 );
-		if ( ! is_network_admin() )
+		if ( ! is_network_admin() && is_accessareas_active_for_network() )
 			$labelrows[ __( 'Grant Access' , 'wpundisclosed' ) ] = array( 'network' => false ,		'labels' => UndisclosedUserLabel::get_blog_userlabels() , );
 		
 		$label_caps = (array) (is_multisite() ? get_user_meta($profileuser->ID , WPUND_GLOBAL_USERMETA_KEY , true ) : null); 
@@ -171,8 +171,8 @@ class UndisclosedUsers {
 	static function table_views( $views ) {
 		$ret = '';
 		$ret .= self::_listtable_label_select( UndisclosedUserLabel::get_blog_userlabels() , 'local' );
-		$ret .= self::_listtable_label_select( UndisclosedUserLabel::get_network_userlabels() , 'network');
-
+		if ( is_accessareas_active_for_network() )
+			$ret .= self::_listtable_label_select( UndisclosedUserLabel::get_network_userlabels() , 'network');
 		if ( $ret )
 			$views['labels'] = '<strong>'.__('Access Areas:','wpundisclosed').' </strong>' . $ret;
 		return $views;

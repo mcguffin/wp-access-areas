@@ -16,7 +16,8 @@ class UndisclosedCaps {
 		add_action( 'admin_init' , array( __CLASS__ , 'admin_init' ) );
 		if ( is_admin() ) {
 			add_action( 'admin_menu', array( __CLASS__ , 'user_menu' ));
-			add_action( 'network_admin_menu', array( __CLASS__ , 'user_menu' ));
+			if ( is_accessareas_active_for_network() )
+				add_action( 'network_admin_menu', array( __CLASS__ , 'user_menu' ));
 		}
 	}
 

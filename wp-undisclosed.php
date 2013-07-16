@@ -47,7 +47,12 @@ define( 'WPUND_USERLABEL_TABLE' , "disclosure_userlabels");
 define( 'WPUND_USERLABEL_PREFIX' , "userlabel_");
 define( 'WPUND_GLOBAL_USERMETA_KEY' , "undisclosed_global_capabilities");
 
+function is_accessareas_active_for_network( ) {
+	if ( ! function_exists( 'is_plugin_active_for_network' ) )
+		require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
 
+	return is_plugin_active_for_network( basename(dirname(__FILE__)).'/'.basename(__FILE__) );
+}
 require_once( dirname(__FILE__). '/inc/class-undisclosedcore.php' );
 require_once( dirname(__FILE__). '/inc/class-undisclosedinstall.php' );
 require_once( dirname(__FILE__). '/inc/class-undisclosedcaps.php' );
