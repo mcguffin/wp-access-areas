@@ -50,6 +50,12 @@ class UndisclosedUsers {
 			return;
 		
 		// sanitize
+		global $wpdb;
+		
+		if ( is_multisite() ) {
+			$blogids = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
+			$current_blog_id = get_current_blog_id();
+		}
 		$label_data = array();
 		foreach ($_POST['userlabels'] as $label_id => $add ) {
 			$label_data[ intval($label_id) ] = (bool) $add;
@@ -58,12 +64,9 @@ class UndisclosedUsers {
 		$global_label_data = array();
 		foreach ($label_data as $label_id => $add) {
 			$label = UndisclosedUserLabel::get_userlabel( $label_id );
-			if ( ! $label->blog_id && $add )
-				$global_label_data[] = $label->capability;
-			// network or 
-			if ( is_multisite() && ! $label->blog_id ) { // network
-				global $wpdb;
-				$blogids = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
+			if ( is_multisite() && ! $label->blog_id ) { // global
+				if ( $add )
+					$global_label_data[] = $label->capability;
 				foreach ( $blogids as $blog_id ) {
 					if ( is_user_member_of_blog( $user_id , $blog_id ) ) {
 						switch_to_blog( $blog_id );
@@ -72,17 +75,18 @@ class UndisclosedUsers {
 					}
 				}
 				restore_current_blog();
-			} else { // blog only
+			} else { // local or single page 
 				if ( is_multisite() ) {
-					switch_to_blog( $label->blog_id );
-					$user->for_blog( $label->blog_id );
+					switch_to_blog( $current_blog_id );
+					$user->for_blog( $current_blog_id );
 				}
 				self::_set_cap_for_user( $label->capability , $user , $add );
 			}
 		}
 		if ( is_multisite() ) {
 			update_user_meta($user_id, WPUND_GLOBAL_USERMETA_KEY , $global_label_data );
-			restore_current_blog();
+			switch_to_blog( $current_blog_id );
+			$user->for_blog( $current_blog_id );
 		}
 	}
 	
@@ -197,18 +201,20 @@ class UndisclosedUsers {
 		$ugroups = array();
 		
 		$labels = UndisclosedUserLabel::get_available_userlabels( );
+		if ( is_multisite() && is_super_admin( $user_ID ) )
+			return '<div class="disclosure-labels"><span class="disclosure-label-item access-all-areas"><span class="icon-undisclosed-network icon16"></span>' . __('Everywhere') . '</span></div>';
 		
 		$user = new WP_User( $user_ID );
-			foreach ($labels as $label) {
-				if ( $user->has_cap( $label->capability ) ) {
-					$icon =  $label->blog_id ? '<span class="icon-undisclosed-local icon16"></span>' : '<span class="icon-undisclosed-network icon16"></span>';
-					$ugroups[] = '<span class="disclosure-label-item">' . $icon . $label->cap_title . '</span>';
-				}
+		foreach ($labels as $label) {
+			if ( $user->has_cap( $label->capability ) ) {
+				$icon =  $label->blog_id ? '<span class="icon-undisclosed-local icon16"></span>' : '<span class="icon-undisclosed-network icon16"></span>';
+				$ugroups[] = '<span class="disclosure-label-item">' . $icon . $label->cap_title . '</span>';
 			}
-		if ( count( $ugroups ) ) {
 		}
-		return '<div class="disclosure-labels">'.implode("", $ugroups) . '</div>';
-		// echo all groups by user.
+		if ( count( $ugroups ) )
+			return '<div class="disclosure-labels">'.implode("", $ugroups) . '</div>';
+
+		return '';
 	}
 }
 UndisclosedUsers::init();
