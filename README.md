@@ -8,18 +8,15 @@ You can either restrict access to logged-in uses only, certain WordPress-Roles o
 even custom Access Areas.
 
 
-Create Access Areas
--------------------
+### Create Access Areas
 ![Area Access Manager](screenshot-1.png)
 
 
-Assign Access Areas to Blog users
----------------------------------
+### Assign Access Areas to Blog users
 ![User Editing](screenshot-2.png)
 
 
-Fine tune access to your Posts
-------------------------------
+### Fine tune access to your blog contents
 ![Post Access Control](screenshot-3.png)
 
 
