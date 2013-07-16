@@ -123,7 +123,6 @@ class UndisclosedInstall {
 	// remove Caps from User
 	private function _uninstall_custom_caps( ) {
 		global $wpdb;
-		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
 
 		$query =  "SELECT * FROM $wpdb->usermeta WHERE meta_key LIKE '{$wpdb->base_prefix}%capabilities' AND meta_value LIKE '%\"".WPUND_USERLABEL_PREFIX."%'" ;
 		$usermeta = $wpdb->get_results($query);

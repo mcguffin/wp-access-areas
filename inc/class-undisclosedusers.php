@@ -59,15 +59,17 @@ class UndisclosedUsers {
 		foreach ($label_data as $label_id => $add) {
 			$label = UndisclosedUserLabel::get_userlabel( $label_id );
 			if ( ! $label->blog_id && $add )
-				$global_label_data[] = intval($label->ID);
+				$global_label_data[] = $label->capability;
 			// network or 
 			if ( is_multisite() && ! $label->blog_id ) { // network
 				global $wpdb;
 				$blogids = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
 				foreach ( $blogids as $blog_id ) {
-					switch_to_blog( $blog_id );
-					$user->for_blog( $blog_id );
-					self::_set_cap_for_user( $label->capability , $user , $add );
+					if ( is_user_member_of_blog( $user_id , $blog_id ) ) {
+						switch_to_blog( $blog_id );
+						$user->for_blog( $blog_id );
+						self::_set_cap_for_user( $label->capability , $user , $add );
+					}
 				}
 				restore_current_blog();
 			} else { // blog only
@@ -86,13 +88,12 @@ class UndisclosedUsers {
 	
 	static function add_user_to_blog( $user_id , $role , $blog_id ) {
 		switch_to_blog( $blog_id );
-		$label_IDs = get_user_meta($user_id, WPUND_GLOBAL_USERMETA_KEY , true );
-		if ( ! $label_IDs )
+		$label_caps = get_user_meta($user_id, WPUND_GLOBAL_USERMETA_KEY , true );
+		if ( ! $label_caps )
 			return;
 		$user = new WP_User( $user_id );
-		foreach ( $label_IDs as $label_id ) {
-			$label = UndisclosedUserLabel::get_userlabel( $label_id );
-			self::_set_cap_for_user( $label->capability , $user , true );
+		foreach ( $label_caps as $cap ) {
+			self::_set_cap_for_user( $cap , $user , true );
 		}
 		restore_current_blog();
 	}

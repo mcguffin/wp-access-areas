@@ -69,11 +69,25 @@ class UndisclosedUserlabel {
 			} else {
 				$blogids = array( $userlabel->blog_id );
 			}
-			foreach ( $blogids as $blogid ) {
-				switch_to_blog( $userlabel->blog_id );
+			foreach ( $blogids as $blog_id ) {
+				switch_to_blog( $blog_id );
 				self::_delete_userlabel_from_blog( $userlabel );
 			}
 			restore_current_blog();
+			
+			// remove global capabilities
+			$query =  "SELECT * FROM $wpdb->usermeta WHERE meta_key = '".WPUND_GLOBAL_USERMETA_KEY."' AND meta_value LIKE '%\"".WPUND_USERLABEL_PREFIX."%'" ;
+			$usermeta = $wpdb->get_results($query);
+
+			foreach ( $usermeta as $meta) {
+				$caps = maybe_unserialize($meta->meta_value);
+				$caps = array_filter( $caps , array( __CLASS__ , 'is_not_custom_cap' ) );
+				$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->usermeta SET meta_value=%s WHERE umeta_id=%d",
+					serialize( $caps ), 
+					$meta->umeta_id
+				) );
+			}
+
 		} else {
 			self::_delete_userlabel_from_blog( $userlabel );
 		}
@@ -86,13 +100,22 @@ class UndisclosedUserlabel {
 		$query = $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_view_cap='exists',post_status='private' WHERE post_view_cap=%s" , $userlabel->capability ) );
 		$query = $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_edit_cap='exists' WHERE post_edit_cap=%s" , $userlabel->capability ) ); // back to default
 		$query = $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_comment_cap='exists',comment_status='closed' WHERE post_comment_cap=%s" , $userlabel->capability ) ); // back to default
+		
+		if ( is_multisite() )
+			$current_blog_id = get_current_blog_id();
 
+		
 		// remove all caps from users
 		$users = get_users( );
-		foreach( $users as $user )
+		foreach( $users as $user ) {
+			if ( is_multisite() )
+				$user->for_blog( $current_blog_id );
 			$user->remove_cap( $userlabel->capability );
+		}
 	}
-	
+	private static function is_not_custom_cap( $capname ) {
+		return strpos( $capname , WPUND_USERLABEL_PREFIX ) !== 0;
+	}
 	static function get_userlabel( $id ) {
 		global $wpdb;
 		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
