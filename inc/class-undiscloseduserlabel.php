@@ -108,7 +108,7 @@ class UndisclosedUserlabel {
 		$capability = WPUND_USERLABEL_PREFIX;
 		if ( $blog_id ) 
 			$capability .= "{$blog_id}_";
-		$capability .= sanitize_title_with_dashes($cap_title);
+		$capability .= sanitize_title($cap_title);
 
 		$query = $wpdb->prepare(
 			"INSERT INTO $table_name (`cap_title`,`capability`,`blog_id`) VALUES (%s,%s,%d)",
