@@ -78,14 +78,15 @@ class UndisclosedUsers {
 				self::_set_cap_for_user( $label->capability , $user , $add );
 			}
 		}
-		update_user_meta($user_id, 'undisclosed_global_capabilities' , $global_label_data );
-		if ( is_multisite() )
+		if ( is_multisite() ) {
+			update_user_meta($user_id, WPUND_GLOBAL_USERMETA_KEY , $global_label_data );
 			restore_current_blog();
+		}
 	}
 	
 	static function add_user_to_blog( $user_id , $role , $blog_id ) {
 		switch_to_blog( $blog_id );
-		$label_IDs = get_user_meta($user_id, 'undisclosed_global_capabilities' , true );
+		$label_IDs = get_user_meta($user_id, WPUND_GLOBAL_USERMETA_KEY , true );
 		if ( ! $label_IDs )
 			return;
 		$user = new WP_User( $user_id );
