@@ -1,7 +1,7 @@
 <?php
 
 // ----------------------------------------
-//	Data model for Userlabels.
+//	Frontend Post Filters
 // ----------------------------------------
 
 if ( ! class_exists('UndisclosedPosts') ):

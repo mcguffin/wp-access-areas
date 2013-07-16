@@ -35,7 +35,7 @@ class UndisclosedEditPost {
 	static function add_meta_boxes() {
 		global $wp_post_types;
 		foreach ( array_keys($wp_post_types) as $post_type )
-			add_meta_box( 'post-disclosure' , __('Restrictions','wpundisclosed') , array(__CLASS__,'disclosure_box_info') , $post_type , 'side' , 'high' );
+			add_meta_box( 'post-disclosure' , __('Access','wpundisclosed') , array(__CLASS__,'disclosure_box_info') , $post_type , 'side' , 'high' );
 	}
 	// --------------------------------------------------
 	// saving post
@@ -99,7 +99,7 @@ class UndisclosedEditPost {
 				<?php } ?>
 				</optgroup>
 
-				<optgroup label="<?php _e( 'Users with label' , 'wpundisclosed') ?>">
+				<optgroup label="<?php _e( 'Users with Access to' , 'wpundisclosed') ?>">
 				<?php foreach ($groups as $group=>$groupname) { 
 					if ( ! current_user_can($group) && ! $is_admin )
 						continue;
@@ -125,7 +125,7 @@ class UndisclosedEditPost {
 				<?php } ?>
 				</optgroup>
 
-				<optgroup label="<?php _e( 'Users with label' , 'wpundisclosed') ?>">
+				<optgroup label="<?php _e( 'Users with Access to' , 'wpundisclosed') ?>">
 				<?php foreach ($groups as $group=>$groupname) { 
 					if ( !current_user_can($group) && !$is_admin )
 						continue;
@@ -154,7 +154,7 @@ class UndisclosedEditPost {
 				<?php } ?>
 				</optgroup>
 
-				<optgroup label="<?php _e( 'Users with label' , 'wpundisclosed') ?>">
+				<optgroup label="<?php _e( 'Users with Access to' , 'wpundisclosed') ?>">
 				<?php foreach ($groups as $group=>$groupname) { 
 					if ( !current_user_can($group) && !$is_admin )
 						continue;

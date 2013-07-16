@@ -1,5 +1,5 @@
-WordPress Undisclosed
-=====================
+WordPress Access Areas
+======================
 
 About
 -----
@@ -21,9 +21,12 @@ Move the plugin dir in your `wp-content/` directory and activate it in the GUI.
 Roadmap
 -------
 v 1.0.0
-- Test in W 3.6 + Single environment, Single 3.6
+√ test in WP current
+√ test in WP current MU
+- test in WP trunk
+- test in WP trunk MU
 - Translate to german
-- Implement editing
+- Future Implement editing
 - New Wording instead of "Label": Access Area / Befugnis(se) / Zugangsbereich
 
 - Publish on wordpress.org

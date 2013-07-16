@@ -114,14 +114,14 @@ class UndisclosedUsers {
 		if ( ! current_user_can( 'promote_users' ) ) 
 			return;
 		$labels = UndisclosedUserLabel::get_available_userlabels( );
-		?><h3><?php _e( 'User-Labels' , 'wpundisclosed' ) ?></h3><?php
+		?><h3><?php _e( 'Access Areas' , 'wpundisclosed' ) ?></h3><?php
 		?><table class="form-table" id="disclosure-group-items"><?php
 		
 		$labelrows = array( 
-								__( 'Network User-Labels' , 'wpundisclosed' )	=> array( 'network' => true ,	'labels' => UndisclosedUserLabel::get_network_userlabels()  , ), 
+								__( 'Grant Network-Wide Access' , 'wpundisclosed' )	=> array( 'network' => true ,	'labels' => UndisclosedUserLabel::get_network_userlabels()  , ), 
 			 );
 		if ( ! is_network_admin() )
-			$labelrows[ __( 'Local User-Labels' , 'wpundisclosed' ) ] = array( 'network' => false ,		'labels' => UndisclosedUserLabel::get_blog_userlabels() , );
+			$labelrows[ __( 'Grant Access' , 'wpundisclosed' ) ] = array( 'network' => false ,		'labels' => UndisclosedUserLabel::get_blog_userlabels() , );
 		
 		foreach ( $labelrows as $row_title => $value ) {
 			extract( $value );
@@ -170,7 +170,7 @@ class UndisclosedUsers {
 		$ret .= self::_listtable_label_select( UndisclosedUserLabel::get_network_userlabels() , 'network');
 
 		if ( $ret )
-			$views['labels'] = '<strong>'.__('User-Label:').' </strong>' . $ret;
+			$views['labels'] = '<strong>'.__('Access Areas:','wpundisclosed').' </strong>' . $ret;
 		return $views;
 	}
 	private static function _listtable_label_select( $labels , $slug ) {
@@ -191,7 +191,7 @@ class UndisclosedUsers {
 	
 	static function add_userlabels_column($columns) {
 
-		$columns['labels'] = __('Labels','wpundisclosed');
+		$columns['labels'] = __('Access Areas','wpundisclosed');
 		return $columns;
 	}
 	static function manage_userlabels_column($wtf, $column, $user_ID) {

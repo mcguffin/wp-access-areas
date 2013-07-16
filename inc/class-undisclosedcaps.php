@@ -30,12 +30,8 @@ class UndisclosedCaps {
 	static function user_menu() { // @ admin_menu
 		if ( (is_network_admin() && ! current_user_can( 'manage_network_users' )) || ( ! current_user_can( 'promote_users' ) ) )
 			return;
-
-		// 'users.php' or 'profile.php'
 		
-		// add_submenu_page( 'users.php' , __('Manage User-Labels','wpundisclosed'), __('User-Labels','wpundisclosed'), 'promote_users', 'user_labels', array(__CLASS__,'manage_userlabels_page') );
-		// add_users_page(              $page_title, $menu_title, $capability, $menu_slug, $function);
-		add_users_page(__('Manage User-Labels','wpundisclosed'), __('User-Labels','wpundisclosed'), 'promote_users', 'user_labels', array(__CLASS__,'manage_userlabels_page'));
+		add_users_page(__('Manage Access Areas','wpundisclosed'), __('Access Areas','wpundisclosed'), 'promote_users', 'user_labels', array(__CLASS__,'manage_userlabels_page'));
 		add_action( 'load-users_page_user_labels' , array( __CLASS__ , 'do_userlabel_actions' ) );
 		add_action( 'load-users_page_user_labels' , array( __CLASS__ , 'load_style' ) );
 	}
@@ -133,9 +129,9 @@ class UndisclosedCaps {
 		?><div id="icon-undisclosed-userlabel" class="icon32"><br></div><?php
 		?><h2><?php
 			if ( $userlabel_id ) { 
-				_e('Edit User-Label','wpundisclosed');
+				_e('Edit Access Area','wpundisclosed');
 			} else {
-				_e('Create User-Label','wpundisclosed');
+				_e('Create Access Area','wpundisclosed');
 			}
 		?></h2>
 		<?php self::_put_message( ) ?>
@@ -150,8 +146,8 @@ class UndisclosedCaps {
 				<table class="form-table">
 					<tbody>
 						<tr>
-							<th scope="row"><label for="title"><?php _e('User-Label','wpundisclosed') ?></label></th>
-							<td><input class="regular-text" maxlength="64" type="text" name="cap_title" value="<?php echo $cap_title ?>" id="cap_title" placeholder="<?php _e('New User-Label','wpundisclosed') ?>" autocomplete="off" /></td>
+							<th scope="row"><label for="title"><?php _e('Access Area','wpundisclosed') ?></label></th>
+							<td><input class="regular-text" maxlength="64" type="text" name="cap_title" value="<?php echo $cap_title ?>" id="cap_title" placeholder="<?php _e('New Access Area','wpundisclosed') ?>" autocomplete="off" /></td>
 						</tr>
 					</tbody>
 				</table>
@@ -160,7 +156,7 @@ class UndisclosedCaps {
 			if ( $userlabel_id ) { 
 				_e('Save changes','wpundisclosed');
 			}  else {
-				_e( 'Create User-Label' , 'wpundisclosed' );
+				_e( 'Create Access Area' , 'wpundisclosed' );
 			}
 				
 				
@@ -176,19 +172,19 @@ class UndisclosedCaps {
 		$message_wrap = '<div id="message" class="updated"><p>%s<p></div>';
 		switch( $_REQUEST['message'] ) {
 			case 1: // created
-				$message = __('User-label created.','wpundisclosed');
+				$message = __('Access Area created.','wpundisclosed');
 				break;
 			case 2: // updated
-				$message = __('User-label updated.','wpundisclosed');
+				$message = __('Access Area updated.','wpundisclosed');
 				break;
 			case 3: // deleted
-				$message = sprintf(_n('User-label deleted.' , '%d User-labels deleted.' , $_REQUEST['deleted'] , 'wpundisclosed') , $_REQUEST['deleted'] );
+				$message = sprintf(_n('Access Area deleted.' , '%d Access Areas deleted.' , $_REQUEST['deleted'] , 'wpundisclosed') , $_REQUEST['deleted'] );
 				break;
 			case 4: // exists
-				$message = __('A User-label with that Name already exists.','wpundisclosed');
+				$message = __('An Access Area with that Name already exists.','wpundisclosed');
 				break;
 			case 5: // not found
-				$message = __('Counld not find the specified User-label.','wpundisclosed');
+				$message = __('Could not find the specified Access Area.','wpundisclosed');
 				break;
 			default:
 				$message = '';
@@ -205,8 +201,8 @@ class UndisclosedCaps {
 
 		?><div class="wrap"><?php
 		?><div id="icon-undisclosed-userlabel" class="icon32"><br></div><?php
-		?><h2><?php _e('Manage User-Labels','wpundisclosed') ?>
-			<a href="<?php echo remove_query_arg('message',add_query_arg(array('action'=>'new'))) ?>" class="add-new-h2"><?php _ex('Add New','userlabel','wpundisclosed') ?></a>
+		?><h2><?php _e('Manage Access Areas','wpundisclosed') ?>
+			<a href="<?php echo remove_query_arg('message',add_query_arg(array('action'=>'new'))) ?>" class="add-new-h2"><?php _ex('Add New','access area','wpundisclosed') ?></a>
 		</h2>
 		<?php self::_put_message( ) ?>
 		<?php
