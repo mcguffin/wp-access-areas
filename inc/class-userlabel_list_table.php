@@ -79,9 +79,12 @@ class UserLabel_List_Table extends WP_List_Table {
 	function prepare_items() {
 		global $wpdb; //This is used only if making any database queries
 		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
-
+		
+		$current_page = $this->get_pagenum();
 		$per_page = 25;
-
+		$limit = (($current_page-1)*$per_page).",$per_page";
+		$total_items = UndisclosedUserlabel::get_count_available_userlabels( );
+		
 		$columns = $this->get_columns();
 		$hidden = array();
 		$sortable = $this->get_sortable_columns();
@@ -91,10 +94,18 @@ class UserLabel_List_Table extends WP_List_Table {
 
 		$this->process_bulk_action();
 
+		$order = isset($_GET['orderby']) ? $_GET['orderby'] : null;
+		if ( ! is_null( $order) ) {
+			if ( isset($_GET['order']) )
+				$order .= ' '.$_GET['order'];
+			else 
+				$order .= ' ASC'; 
+		}
 		// use wpdb here!
-		$data = UndisclosedUserlabel::get_available_userlabels();
-		$current_page = $this->get_pagenum();
-		$total_items = count($data);
+		$data = UndisclosedUserlabel::get_available_userlabels( $limit , $order );
+
+		
+		
 		
 		
 		$this->items = $data;

@@ -48,7 +48,7 @@ class UndisclosedCaps {
 			wp_die( __('You do not have permission to do this.' , 'wpundisclosed' ) );
 		$table = new UserLabel_List_Table();
 		$table->process_bulk_action();
-			
+		$redirect_url = false;
 		if (isset($_REQUEST['action'])) {
 			// do actions
 			$data = self::_sanitize_userlabel_data( $_POST );
@@ -63,29 +63,44 @@ class UndisclosedCaps {
 			switch ( $_REQUEST['action'] ) {
 				case 'new':
 					// do create action
-					if ( ! empty( $_POST ) && $edit_id = UndisclosedUserlabel::create_userlabel( $data ) ) 
-						return wp_redirect(add_query_arg(array('page'=>'user_labels' , 'message' => 1 ),$_SERVER['SCRIPT_NAME']));
+					if ( ! empty( $_POST ) )  {
+						if ( $edit_id = UndisclosedUserlabel::create_userlabel( $data ) )
+							$redirect_url =  add_query_arg( array('page'=>'user_labels' , 'message' => 1 ) , $_SERVER['SCRIPT_NAME'] );
+							// $redirect_url = add_query_arg(array('page'=>'user_labels' , 'message' => 1 ),$_SERVER['SCRIPT_NAME']);
+						else 
+							$redirect_url = add_query_arg(array('page'=>'user_labels' , 'action' => 'new' , 'message' => UndisclosedUserlabel::what_went_wrong() , 'cap_title'=>$_POST['cap_title'] ),$_SERVER['SCRIPT_NAME']);
+					}
 					break;
 				case 'edit':
 					// update and redirect
-					if ( ! empty( $_POST ) && $edit_id = UndisclosedUserlabel::update_userlabel( $data ) ) 
-						return wp_redirect( add_query_arg( array('id' => $edit_id , 'message'=>2 ) ) );
-					
+					if ( ! empty( $_POST ) ) {
+						if ( $edit_id = UndisclosedUserlabel::update_userlabel( $data ) )
+							$redirect_url = add_query_arg( array('id' => $edit_id , 'message' => 2 ) );
+						else 
+							$redirect_url = add_query_arg( array('id' => $edit_id , 'message' => UndisclosedUserlabel::what_went_wrong() , 'cap_title'=>$_POST['cap_title'] ) );
+					}
 					if ( ! isset( $_GET['id'] ) ) 
-						return wp_redirect( add_query_arg(array('page'=>'user_labels' ),$_SERVER['SCRIPT_NAME']) );
+						$redirect_url = add_query_arg( array('page'=>'user_labels' ) , $_SERVER['SCRIPT_NAME'] );
 						
 					break;
 				case 'delete':
 					// delete and redirect
-					if ( isset( $_GET['id'] ) && $userlabel = UndisclosedUserlabel::get_userlabel( $_GET['id'] ) ) 
-						UndisclosedUserlabel::delete_userlabel( $_GET['id'] );
-					return wp_redirect( add_query_arg(array('page'=>'user_labels' , 'message'=>3 , 'deleted' => 1 ),$_SERVER['SCRIPT_NAME']) );
+					if ( isset( $_REQUEST['id'] )  ) {
+						if ( $deleted = UndisclosedUserlabel::delete_userlabel( $_REQUEST['id'] ) ) {
+							$redirect_url = add_query_arg(array('page'=>'user_labels' , 'message' => 3 , 'deleted' => $deleted ) , $_SERVER['SCRIPT_NAME'] );
+						} else {
+							$redirect_url = add_query_arg(array('page'=>'user_labels' , 'message' => UndisclosedUserlabel::what_went_wrong() ) , $_SERVER['SCRIPT_NAME'] );
+						}
+					}
+						
+					break;
 				default:
 					wp_redirect( remove_query_arg('action') );
 			}
 		}
-		// create and redirect
-		$data;
+		if ( $redirect_url )
+			wp_redirect( $redirect_url );
+		
 	}
 	static function manage_userlabels_page( ) {
 		if (isset($_REQUEST['action'])) {
@@ -110,6 +125,9 @@ class UndisclosedCaps {
 				'cap_title' => '',
 				'blog_id'	=> get_current_blog_id(),
 			) ;
+		$cap_title = $userlabel->cap_title;
+		if ( ! $cap_title && isset( $_REQUEST['cap_title'] ) )
+			$cap_title = $_REQUEST['cap_title'];
 		
 		?><div class="wrap"><?php
 		?><div id="icon-undisclosed-userlabel" class="icon32"><br></div><?php
@@ -133,7 +151,7 @@ class UndisclosedCaps {
 					<tbody>
 						<tr>
 							<th scope="row"><label for="title"><?php _e('User-Label','wpundisclosed') ?></label></th>
-							<td><input class="regular-text" maxlength="64" type="text" name="cap_title" value="<?php echo $userlabel->cap_title ?>" id="cap_title" placeholder="<?php _e('New User-Label','wpundisclosed') ?>" autocomplete="off" /></td>
+							<td><input class="regular-text" maxlength="64" type="text" name="cap_title" value="<?php echo $cap_title ?>" id="cap_title" placeholder="<?php _e('New User-Label','wpundisclosed') ?>" autocomplete="off" /></td>
 						</tr>
 					</tbody>
 				</table>
@@ -165,6 +183,12 @@ class UndisclosedCaps {
 				break;
 			case 3: // deleted
 				$message = sprintf(_n('User-label deleted.' , '%d User-labels deleted.' , $_REQUEST['deleted'] , 'wpundisclosed') , $_REQUEST['deleted'] );
+				break;
+			case 4: // exists
+				$message = __('A User-label with that Name already exists.','wpundisclosed');
+				break;
+			case 5: // not found
+				$message = __('Counld not find the specified User-label.','wpundisclosed');
 				break;
 			default:
 				$message = '';

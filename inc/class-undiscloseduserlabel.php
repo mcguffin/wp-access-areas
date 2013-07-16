@@ -6,7 +6,18 @@
 
 if ( ! class_exists('UndisclosedUserlabel') ):
 class UndisclosedUserlabel {
-	
+	private static $_what_went_wrong=0;
+	static function get_count_available_userlabels( ) {
+		global $wpdb;
+		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
+		
+		$query = "SELECT COUNT(*) FROM $table_name WHERE blog_id=0 ";
+		if ( ! is_network_admin() ) {
+			$blog_id = get_current_blog_id();
+			$query .= "OR blog_id=$blog_id";
+		}
+		return $wpdb->get_var($query);
+	}
 	static function get_available_userlabels( $limit = 0 , $order = 'blog_id DESC,cap_title ASC'  ) {
 		global $wpdb;
 		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
@@ -20,6 +31,8 @@ class UndisclosedUserlabel {
 		if ( $sql_orderby = sanitize_sql_orderby($order) ) {
 			$query .= " ORDER BY $sql_orderby";
 		}
+		if ( $limit )
+			$query .= " LIMIT $limit" ;
 		if ( count($query_param) ) {
 			array_unshift($query_param,$query);
 			$query = call_user_func_array( array($wpdb,'prepare') , $query_param);
@@ -62,7 +75,10 @@ class UndisclosedUserlabel {
 		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
 
 		$userlabel = self::get_userlabel( $id );
-
+		if ( ! $userlabel ) {
+			self::$_what_went_wrong = 5;
+			return false;
+		}
 		if ( is_multisite() ) {
 			if ( ! $userlabel->blog_id ) { // network wide !
 				$blogids = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
@@ -91,7 +107,7 @@ class UndisclosedUserlabel {
 		} else {
 			self::_delete_userlabel_from_blog( $userlabel );
 		}
-		$wpdb->query( $wpdb->prepare( "DELETE FROM $table_name WHERE ID=%d",$id ) );
+		return $wpdb->query( $wpdb->prepare( "DELETE FROM $table_name WHERE ID=%d",$id ) );
 	}
 	
 	private static function _delete_userlabel_from_blog( &$userlabel ) {
@@ -122,12 +138,22 @@ class UndisclosedUserlabel {
 
 		return $wpdb->get_row( $wpdb->prepare("SELECT * FROM $table_name WHERE ID = %d",$id) );
 	}
+	static function what_went_wrong( ) {
+		$ret = self::$_what_went_wrong;
+		self::$_what_went_wrong = 0;
+		return $ret;
+	}
 	static function create_userlabel( $data ) {
 		global $wpdb;
 		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
 
 		extract( $data , EXTR_SKIP );
-
+		
+		if ( self::title_exists( $cap_title , $blog_id ) ) {
+			self::$_what_went_wrong = 4;
+			return false;
+		}
+		
 		$capability = WPUND_USERLABEL_PREFIX;
 		if ( $blog_id ) 
 			$capability .= "{$blog_id}_";
@@ -147,6 +173,12 @@ class UndisclosedUserlabel {
 		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
 
 		extract( $data , EXTR_SKIP );
+
+		if ( self::title_exists( $cap_title , $blog_id ) ) {
+			self::$_what_went_wrong = 4;
+			return false;
+		}
+
 		$query = $wpdb->prepare(
 			"UPDATE $table_name SET cap_title=%s,blog_id=%d WHERE ID=%d",
 			$cap_title,
@@ -155,6 +187,11 @@ class UndisclosedUserlabel {
 		);
 		$wpdb->query( $query );
 		return $id;
+	}
+	static function title_exists( $cap_title , $blog_id ) {
+		global $wpdb;
+		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
+		return $wpdb->get_var( $wpdb->prepare( "SELECT id FROM $table_name WHERE cap_title='%s' AND blog_id='%d'" , $cap_title , $blog_id) );
 	}
 }
 endif;
