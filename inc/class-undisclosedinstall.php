@@ -64,7 +64,8 @@ class UndisclosedInstall {
 	// --------------------------------------------------
 	private static function _install_posts_table( ) {
 		global $wpdb;
-		$cols = array( 'comment_cap'=>'post_comment_cap' , 'edit_cap'=>'post_edit_cap' , 'view_cap'=>'post_view_cap' );
+		// , 'edit_cap'=>'post_edit_cap' will be used later.
+		$cols = array( 'comment_cap'=>'post_comment_cap' , 'view_cap'=>'post_view_cap' );
 		foreach ( $cols as $idx => $col ) {
 			$c = $wpdb->get_results("SHOW COLUMNS FROM $wpdb->posts LIKE '$col'");
 			if (empty($c))
@@ -77,7 +78,8 @@ class UndisclosedInstall {
 	}
 	private static function _uninstall_posts_table( ) {
 		global $wpdb;
-		$cols = array( 'comment_cap'=>'post_comment_cap' , 'edit_cap'=>'post_edit_cap' , 'view_cap'=>'post_view_cap' );
+		// , 'edit_cap'=>'post_edit_cap' will be used later.
+		$cols = array( 'comment_cap'=>'post_comment_cap' , 'view_cap'=>'post_view_cap' );
 		foreach ( $cols as $idx => $col ) {
 			$c = $wpdb->get_results("SHOW COLUMNS FROM $wpdb->posts LIKE '$col'");
 			if (!empty($c))
