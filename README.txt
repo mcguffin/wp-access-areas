@@ -1,6 +1,6 @@
 === WordPress Access Areas ===
 Contributors: podpirate
-Donate link: 
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WF4Z3HU93XYJA
 Tags: access, role, capability, user, security, editor
 Requires at least: 3.5
 Tested up to: 3.6
@@ -27,7 +27,8 @@ Latest files on [GitHub](https://github.com/mcguffin/wp-access-areas).
 
 == Installation ==
 
-1. Upload the 'wp-access-areas.zip' to the `/wp-content/plugins/` directory and unzip it.
+1. Upload the 'wp-access-areas.zip' to the `/wp-content/plugins/` directory and unzip it. 
+
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Frequently asked questions ==
@@ -47,7 +48,7 @@ I did this mainly for performance reason. The plugin mainly affects the WHERE Cl
 = Does it mess up my database? =
 
 Well, it makes changes to your database, but it won't make a mess out of it. Upon install it does two things:
-1. It creates a table names {$wp_prefix}_disclosure_userlabels. The access areas you define are here.
+1. It creates a table named ´{$wp_prefix}_disclosure_userlabels´. The access areas you define are here.
 2. It adds three columns to Your Posts tables: post_view_cap and post_comment_cap. 
 
 Upon uninstall these changes will be removed completely, as well as it will remove any custom generated capability from Your user's profiles.
@@ -59,10 +60,14 @@ I personally prefer GitHub. The plugin code is here: [GitHub](https://github.com
 = I want to use the latest files. How can I do this? =
 
 Use the GitHub Repo rather than the WordPress Plugin. Do as follows:
+
 1. If you haven't already done: [Install git](https://help.github.com/articles/set-up-git)
-2. in the console cd into Your 'wp-content/plugins' directory
-3. type 'git clone git@github.com:mcguffin/wp-access-areas.git'
-4. If you want to update to the latest files (be careful, might be untested on Your WP-Version) type 'git pull'.
+
+2. in the console cd into Your 'wp-content/plugins´ directory
+
+3. type `git clone git@github.com:mcguffin/wp-access-areas.git`
+
+4. If you want to update to the latest files (be careful, might be untested on Your WP-Version) type git pull´.
 
 = I found a bug and fixed it. How can I contribute? =
 

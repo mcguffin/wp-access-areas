@@ -149,7 +149,6 @@ class UndisclosedEditPost {
 			
 				<optgroup label="<?php _e( 'WordPress roles' , 'wpundisclosed') ?>">
 				<?php foreach ($rolenames as $role=>$rolename) {
-					var_dump($role);
 					if ( !self::_user_can_role( $role , $user_role_caps ) )
 						continue;
 					?>
