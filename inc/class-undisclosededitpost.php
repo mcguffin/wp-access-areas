@@ -141,6 +141,8 @@ class UndisclosedEditPost {
 */
 
 //* // for future use
+		if ( post_type_supports( $post->post_type , 'comments' ) ) {
+		
 		?><div class="disclosure-comment-select misc-pub-section">
 			<label for="select-disclosure"><strong><?php _e( 'Who can comment:' , 'wpundisclosed') ?></strong></label><br />
 			<select id="select-disclosure" name="post_comment_cap">
@@ -166,6 +168,8 @@ class UndisclosedEditPost {
 				</optgroup>
 			</select>
 		</div><?php
+		
+		}
 //*/
 	}
 	static function _user_can_role( $role , $user_role_caps ) {
