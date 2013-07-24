@@ -51,14 +51,15 @@ class UndisclosedEditPost {
 		/* // future use
 		$data['post_edit_cap']		= isset($postarr['post_edit_cap']) ? $postarr['post_edit_cap'] : 'exist';
 		*/
-		$data['post_comment_cap']	= isset($postarr['post_comment_cap']) ? $postarr['post_comment_cap'] : 'exist';
-		if ( $data['post_comment_cap'] == 'exist' )
-			$data['comment_status'] = 'open';
-		else 
-			$data['comment_status'] = 'closed';
-		
+
+		if ( post_type_supports( $data["post_type"] , 'comments' ) ) {
+			$data['post_comment_cap']	= isset($postarr['post_comment_cap']) ? $postarr['post_comment_cap'] : 'exist';
+			if ( $data['post_comment_cap'] == 'exist' )
+				$data['comment_status'] = 'open';
+			else 
+				$data['comment_status'] = 'closed';
+		}
 		return $data;
-		
 	}
 	
 	// --------------------------------------------------
