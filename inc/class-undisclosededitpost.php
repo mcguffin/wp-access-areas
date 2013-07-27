@@ -74,7 +74,12 @@ class UndisclosedEditPost {
 		$rolenames = $roles->get_names();
 		$groups = UndisclosedUserlabel::get_label_array( );
 
-		$user_role_caps = $roles->get_role(wp_get_current_user()->roles[0])->capabilities;
+		$user_roles = wp_get_current_user()->roles;
+		$user_role_caps = array();
+		foreach ( $user_roles as $i=>$rolename )
+			if ( $roles->is_role( $rolename ) )
+				$user_role_caps += $roles->get_role($rolename)->capabilities;
+				
 		$is_admin = current_user_can( 'administrator' );
 		// 
 		/*

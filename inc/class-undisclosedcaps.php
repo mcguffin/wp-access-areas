@@ -170,7 +170,7 @@ class UndisclosedCaps {
 		if ( ! isset( $_REQUEST['message'] ) )
 			return;
 			
-		$message_wrap = '<div id="message" class="updated"><p>%s<p></div>';
+		$message_wrap = '<div id="message" class="updated"><p>%s</p></div>';
 		switch( $_REQUEST['message'] ) {
 			case 1: // created
 				$message = __('Access Area created.','wpundisclosed');
