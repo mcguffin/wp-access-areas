@@ -1,0 +1,186 @@
+# Copyright (C) 2013 WordPress Access Areas
+# This file is distributed under the same license as the WordPress Access Areas package.
+msgid ""
+msgstr ""
+"Project-Id-Version: WordPress Access Areas 1.0.0\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/wp-access-areas\n"
+"POT-Creation-Date: 2013-07-27 18:26:25+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2013-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: inc/class-undisclosedcaps.php:35 inc/class-undisclosedcaps.php:205
+msgid "Manage Access Areas"
+msgstr ""
+
+#: inc/class-undisclosedcaps.php:35 inc/class-undisclosedusers.php:121
+#: inc/class-undisclosedusers.php:202
+msgid "Access Areas"
+msgstr ""
+
+#: inc/class-undisclosedcaps.php:45
+msgid "You do not have permission to do this."
+msgstr ""
+
+#: inc/class-undisclosedcaps.php:55
+msgid "Please enter a Label."
+msgstr ""
+
+#: inc/class-undisclosedcaps.php:58
+msgid "You do not have permission to edit network wide user labels."
+msgstr ""
+
+#: inc/class-undisclosedcaps.php:133
+msgid "Edit Access Area"
+msgstr ""
+
+#: inc/class-undisclosedcaps.php:135 inc/class-undisclosedcaps.php:160
+msgid "Create Access Area"
+msgstr ""
+
+#: inc/class-undisclosedcaps.php:150
+msgid "Access Area"
+msgstr ""
+
+#: inc/class-undisclosedcaps.php:151
+msgid "New Access Area"
+msgstr ""
+
+#: inc/class-undisclosedcaps.php:158
+msgid "Save changes"
+msgstr ""
+
+#: inc/class-undisclosedcaps.php:176
+msgid "Access Area created."
+msgstr ""
+
+#: inc/class-undisclosedcaps.php:179
+msgid "Access Area updated."
+msgstr ""
+
+#: inc/class-undisclosedcaps.php:182
+msgid "Access Area deleted."
+msgid_plural "%d Access Areas deleted."
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/class-undisclosedcaps.php:185
+msgid "An Access Area with that Name already exists."
+msgstr ""
+
+#: inc/class-undisclosedcaps.php:188
+msgid "Could not find the specified Access Area."
+msgstr ""
+
+#: inc/class-undisclosedcaps.php:206
+msgctxt "access area"
+msgid "Add New"
+msgstr ""
+
+#: inc/class-undisclosededitpost.php:41
+msgid "Access"
+msgstr ""
+
+#: inc/class-undisclosededitpost.php:90
+msgid "Who can read:"
+msgstr ""
+
+#: inc/class-undisclosededitpost.php:92 inc/class-undisclosededitpost.php:147
+msgid "WordPress default"
+msgstr ""
+
+#: inc/class-undisclosededitpost.php:93 inc/class-undisclosededitpost.php:148
+#: inc/class-undisclosededitpost.php:194
+msgid "Blog users"
+msgstr ""
+
+#: inc/class-undisclosededitpost.php:95 inc/class-undisclosededitpost.php:150
+msgid "WordPress roles"
+msgstr ""
+
+#: inc/class-undisclosededitpost.php:105 inc/class-undisclosededitpost.php:159
+msgid "Users with Access to"
+msgstr ""
+
+#: inc/class-undisclosededitpost.php:145
+msgid "Who can comment:"
+msgstr ""
+
+#: inc/class-undisclosededitpost.php:186
+msgid "Visible to"
+msgstr ""
+
+#: inc/class-undisclosededitpost.php:194
+msgid "Everybody"
+msgstr ""
+
+#: inc/class-undisclosedposts.php:52
+msgid "Please <a href=\"%s\">log in</a> to see this content!"
+msgstr ""
+
+#: inc/class-undiscloseduserlabel.php:72
+msgid "(Network)"
+msgstr ""
+
+#: inc/class-undisclosedusers.php:125
+msgid "Grant Network-Wide Access"
+msgstr ""
+
+#: inc/class-undisclosedusers.php:128
+msgid "Grant Access"
+msgstr ""
+
+#: inc/class-undisclosedusers.php:181
+msgid "Access Areas:"
+msgstr ""
+
+#: inc/class-undisclosedusers.php:191
+msgid "(None)"
+msgstr ""
+
+#: inc/class-undisclosedusers.php:214
+msgid "Everywhere"
+msgstr ""
+
+#: inc/class-userlabel_list_table.php:42
+msgid "Name"
+msgstr ""
+
+#: inc/class-userlabel_list_table.php:45
+msgid "Scope"
+msgstr ""
+
+#: inc/class-userlabel_list_table.php:74 inc/class-userlabel_list_table.php:92
+#: inc/class-userlabel_list_table.php:146
+msgid "Delete"
+msgstr ""
+
+#: inc/class-userlabel_list_table.php:84
+msgid "Network"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "WordPress Access Areas"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://wordpress.org/plugins/wp-access-areas/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Lets you define Access Areas and assign them to Posts, Pages and Custom Post "
+"types. Through Access Areas you can fine-tune who can view or comment your "
+"posts."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Joern Lund"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://github.com/mcguffin/"
+msgstr ""
