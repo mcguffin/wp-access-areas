@@ -6,7 +6,7 @@
 
 /*
 Plugin Name: WordPress Access Areas
-Plugin URI: https://github.com/mcguffin/wp-access-areas
+Plugin URI: http://wordpress.org/plugins/wp-access-areas/
 Description: Lets you define Access Areas and assign them to Posts, Pages and Custom Post types. Through Access Areas you can fine-tune who can view or comment your posts.
 Author: Joern Lund
 Version: 1.0.0
