@@ -150,7 +150,10 @@ class UserLabel_List_Table extends WP_List_Table {
 	function process_bulk_action() {
 		//Detect when a bulk action is being triggered...
 		$action = $this->current_action();
-		if ( -1 !== $action && wp_verify_nonce(@$_REQUEST['_wpnonce'],'bulk-'.$this->_args['plural'] ) ) {
+		$nonce = isset($_REQUEST['_wpnonce']) ? $_REQUEST['_wpnonce'] : false;
+		if ( !$nonce )
+			return;
+		if ( -1 !== $action && wp_verify_nonce($nonce,'bulk-'.$this->_args['plural'] ) ) {
 			switch ($action) {
 				case 'delete':
 					foreach ($_REQUEST[$this->_args['plural']] as $ul_id)

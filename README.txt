@@ -3,7 +3,7 @@ Contributors: podpirate
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WF4Z3HU93XYJA
 Tags: access, role, capability, user, security, editor
 Requires at least: 3.5
-Tested up to: 3.6
+Tested up to: 3.6-RC2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -12,13 +12,13 @@ Fine tuning access to your posts.
 
 == Description ==
 
-WP Access Areas lets you fine-tune who may read or comment on your Blog posts.
+WP Access Areas lets you fine-tune who may read, edit or comment on your Blog posts.
 You can either restrict access to logged-in uses only, certain WordPress-Roles or 
 even custom Access Areas.
 
 = Features =
 - Define custom Access Areas and assign them to your blog-users
-- Restrict reading and commenting permission to logged-in users, certain WordPress-Roles or Access Areas
+- Restrict reading, editing and commenting permission to logged-in users, certain WordPress-Roles or Access Areas
 - define global access areas on a network
 - German localization
 - Clean uninstall
@@ -35,19 +35,15 @@ Latest files on [GitHub](https://github.com/mcguffin/wp-access-areas).
 
 = What does it exactly do? =
 
-For each Post it stores a capabilty the user needs to have in order to view or comment a post. By defining Access Areas You create nothing more than custom capabilities. 
-
-= Only viewing and commens? Why not editing? =
-
-I couldn't figure out yet which hook to use. I will step into further investigations in the future and add the feature, as it makes totally sense.
+For each Post it stores a capabilty the user needs to have in order to view, edit or comment on a post. By defining Access Areas You create nothing more than custom capabilities. 
 
 = Why didn't you use post_meta to store permissions? WordPress already provides an API for this! =
 
-I did this mainly for performance reason. The plugin mainly affects the WHERE Clause in the database. In some cases using post_meta would mean to add a JOIN clause to the Database query, which would decrease your site's performance.
+I did this mainly for performance reason. For detecting the reading-permission on specific content, the plugin mainly affects the WHERE clause used to retrieve posts. In most cases, using post_meta would mean to add a JOIN clause to the database query, which would slow down your site's performance.
 
 = Does it mess up my database? =
 
-Well, it makes changes to your database, but it won't make a mess out of it. Upon install it does two things:
+It makes changes to your database, but it won't make a mess out of it. Upon install it does two things:
 1. It creates a table named ´{$wp_prefix}_disclosure_userlabels´. The access areas you define are here.
 2. It adds three columns to Your Posts tables: post_view_cap and post_comment_cap. 
 
@@ -84,8 +80,16 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 = 1.0.0 =
 Initial Release
 
+= 1.1.0 =
+Added editing restrictions.
+Several fixes.
+
+
 == Upgrade notice ==
 
 = 1.0.0 =
+A plugin is born.
+
+= 1.1.0 =
 A plugin is born.
 

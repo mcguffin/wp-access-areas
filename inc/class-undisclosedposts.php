@@ -13,18 +13,16 @@ class UndisclosedPosts {
 	
 	static function init() {
 
-		if ( ! is_admin() ) {
-			// viewing restrictions
-			add_action( 'get_pages' , array( __CLASS__ , 'skip_undisclosed_items' ) , 10 , 1 );
-			add_filter( "posts_where" , array( __CLASS__ , "get_posts_where" ) , 10, 2 );
+		// viewing restrictions
+		add_action( 'get_pages' , array( __CLASS__ , 'skip_undisclosed_items' ) , 10 , 1 );
+		add_filter( "posts_where" , array( __CLASS__ , "get_posts_where" ) , 10, 2 );
 
-			add_filter( "get_next_post_where" , array( __CLASS__ , "get_adjacent_post_where" ) , 10, 3 );
-			add_filter( "get_previous_post_where" , array( __CLASS__ , "get_adjacent_post_where" ) , 10, 3 );
-			
-			
-			// comment restrictions
-			add_filter( 'comments_open', array(__CLASS__,'comments_open') , 10 , 2 );
-		}
+		add_filter( "get_next_post_where" , array( __CLASS__ , "get_adjacent_post_where" ) , 10, 3 );
+		add_filter( "get_previous_post_where" , array( __CLASS__ , "get_adjacent_post_where" ) , 10, 3 );
+		
+		
+		// comment restrictions
+		add_filter( 'comments_open', array(__CLASS__,'comments_open') , 10 , 2 );
 		// implement editing restrictions
 	}
 	

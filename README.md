@@ -3,7 +3,7 @@ WordPress Access Areas
 
 About
 -----
-WP Access Areas lets you fine-tune who may read or comment on your Blog posts.
+WP Access Areas lets you fine-tune who may read, edit or comment on your Blog posts.
 You can either restrict access to logged-in uses only, certain WordPress-Roles or 
 even custom Access Areas.
 
@@ -28,7 +28,7 @@ Move the plugin dir in your `wp-content/` directory and activate it in the GUI.
 Features
 --------
 - Define custom Access Areas and assign them to your blog-users
-- Restrict reading and commenting permission to logged-in users, certain WordPress-Roles or Access Areas
+- Restrict reading, editing and commenting permission to logged-in users, certain WordPress-Roles or Access Areas
 - On a Network you can define global access areas
 - German localization
 - Clean uninstall

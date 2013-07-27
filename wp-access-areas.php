@@ -1,15 +1,15 @@
 <?php
 /**
 * @package WP_AccessAreas
-* @version 1.0.0
+* @version 1.1.0
 */ 
 
 /*
 Plugin Name: WordPress Access Areas
 Plugin URI: http://wordpress.org/plugins/wp-access-areas/
-Description: Lets you define Access Areas and assign them to Posts, Pages and Custom Post types. Through Access Areas you can fine-tune who can view or comment your posts.
+Description: Lets you define Access Areas and assign them to Posts, Pages and Custom Post types. Through Access Areas you can fine-tune who can view, edit or comment on your posts.
 Author: Joern Lund
-Version: 1.0.0
+Version: 1.1.0
 Author URI: https://github.com/mcguffin/
 */
 

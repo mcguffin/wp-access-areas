@@ -27,6 +27,33 @@ class UndisclosedEditPost {
 		}
 		add_action( 'load-post.php' , array( __CLASS__ , 'load_style' ) );
 		add_action( 'load-post-new.php' , array( __CLASS__ , 'load_style' ) );
+		add_filter('map_meta_cap', array( __CLASS__ , 'map_meta_cap' ) ,10,4);
+	}
+	static function map_meta_cap($caps, $cap, $user_id, $args ) {
+//		print_r( func_get_args());
+		switch ( $cap ) {
+			case 'edit_post':
+			case 'delete_post':
+			case 'edit_page':
+			case 'delete_page':
+				if ( count($args[0]) ) {
+					$post_ID = $args[0];
+					// if he not can like specfied, ;
+					$edit_cap = get_post( $post_ID )->post_edit_cap;
+					if ( ! $edit_cap )
+						break;
+					global $wp_roles;
+					if ( $wp_roles->is_role( $edit_cap )) {
+						if ( ! self::_user_can_role( $edit_cap ) )
+							$caps[] = 'do_not_allow';
+					} else {
+						if ( ! current_user_can( $edit_cap ) )
+							$caps[] = 'do_not_allow';
+					}
+				}
+				break;
+		}
+		return $caps;
 	}
 	static function load_style() {
 		wp_enqueue_style( 'disclosure-admin' );
@@ -48,17 +75,18 @@ class UndisclosedEditPost {
 			return $data;
 
 		$data['post_view_cap']		= isset($postarr['post_view_cap']) ? $postarr['post_view_cap'] : 'exist';
-		/* // future use
+		//* // future use
 		$data['post_edit_cap']		= isset($postarr['post_edit_cap']) ? $postarr['post_edit_cap'] : 'exist';
-		*/
-		$data['post_comment_cap']	= isset($postarr['post_comment_cap']) ? $postarr['post_comment_cap'] : 'exist';
-		if ( $data['post_comment_cap'] == 'exist' )
-			$data['comment_status'] = 'open';
-		else 
-			$data['comment_status'] = 'closed';
-		
+		//*/
+
+		if ( post_type_supports( $data["post_type"] , 'comments' ) ) {
+			$data['post_comment_cap']	= isset($postarr['post_comment_cap']) ? $postarr['post_comment_cap'] : 'exist';
+			if ( $data['post_comment_cap'] == 'exist' )
+				$data['comment_status'] = 'open';
+			else 
+				$data['comment_status'] = 'closed';
+		}
 		return $data;
-		
 	}
 	
 	// --------------------------------------------------
@@ -66,6 +94,8 @@ class UndisclosedEditPost {
 	// --------------------------------------------------
 	static function disclosure_box_info() {
 		$post = get_post(get_the_ID());
+		$post_type_object = get_post_type_object($post->post_type);
+		$editing_cap = $post_type_object->cap->edit_posts;
 
 		// <select> with - Evereybody, Logged-in only, list WP-Roles, list discosure-groups
 		$current_user = wp_get_current_user();
@@ -73,7 +103,8 @@ class UndisclosedEditPost {
 		$rolenames = $roles->get_names();
 		$groups = UndisclosedUserlabel::get_label_array( );
 
-		$user_role_caps = $roles->get_role(wp_get_current_user()->roles[0])->capabilities;
+		$user_role_caps = self::get_user_role_caps();
+		
 		$is_admin = current_user_can( 'administrator' );
 		// 
 		/*
@@ -112,16 +143,15 @@ class UndisclosedEditPost {
 				</optgroup>
 			</select>
 		</div><?php
-/* // for future use
+//* // for future use
 		?><div class="disclosure-edit-select misc-pub-section">
-			<label for="select-disclosure"><?php _e( 'Editable for:' , 'wpundisclosed') ?></label>
+			<label for="select-disclosure"><strong><?php _e( 'Who can edit:' , 'wpundisclosed') ?></strong></label><br />
 			<select id="select-disclosure" name="post_edit_cap">
 				<option value="exist" <?php selected($post->post_edit_cap , 'exist') ?>><?php _e( 'WordPress default' , 'wpundisclosed' ) ?></option>
-				<option value="read" <?php selected($post->post_edit_cap , 'read') ?>><?php _e( 'Blog users' , 'wpundisclosed' ) ?></option>
 			
 				<optgroup label="<?php _e( 'WordPress roles' , 'wpundisclosed') ?>">
 				<?php foreach ($rolenames as $role=>$rolename) {
-					if ( !current_user_can( $role ) )
+					if ( !self::_user_can_role( $role , $user_role_caps ) || ! get_role( $role )->has_cap( $editing_cap ) )
 						continue;
 					?>
 					<option value="<?php echo $role ?>" <?php selected($post->post_edit_cap , $role) ?>><?php _ex( $rolename, 'User role' ) ?></option>
@@ -138,9 +168,10 @@ class UndisclosedEditPost {
 				</optgroup>
 			</select>
 		</div><?php
-*/
 
 //* // for future use
+		if ( post_type_supports( $post->post_type , 'comments' ) ) {
+		
 		?><div class="disclosure-comment-select misc-pub-section">
 			<label for="select-disclosure"><strong><?php _e( 'Who can comment:' , 'wpundisclosed') ?></strong></label><br />
 			<select id="select-disclosure" name="post_comment_cap">
@@ -166,9 +197,24 @@ class UndisclosedEditPost {
 				</optgroup>
 			</select>
 		</div><?php
+		
+		}
 //*/
 	}
-	static function _user_can_role( $role , $user_role_caps ) {
+	static function get_user_role_caps(){
+		global $wp_roles;
+		$user_roles = wp_get_current_user()->roles;
+		$user_role_caps = array();
+		foreach ( $user_roles as $i=>$rolename )
+			if ( $wp_roles->is_role( $rolename ) )
+				$user_role_caps += $wp_roles->get_role($rolename)->capabilities;
+		return $user_role_caps;
+	}
+	
+	static function _user_can_role( $role , $user_role_caps = null ) {
+		if ( is_null( $user_role_caps ) )
+			$user_role_caps = self::get_user_role_caps();
+
 		$roles = new WP_Roles();
 		if ($roles->is_role($role))
 			return 0 == count(array_diff_assoc(  $roles->get_role( $role )->capabilities , $user_role_caps));
