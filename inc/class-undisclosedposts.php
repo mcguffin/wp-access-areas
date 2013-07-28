@@ -23,7 +23,6 @@ class UndisclosedPosts {
 		
 		// comment restrictions
 		add_filter( 'comments_open', array(__CLASS__,'comments_open') , 10 , 2 );
-		// implement editing restrictions
 	}
 	
 	// --------------------------------------------------

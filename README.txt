@@ -77,19 +77,19 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 
 == Changelog ==
 
-= 1.0.0 =
-Initial Release
+= 1.1.2 =
+Added versioncheck
+
+= 1.1.1 =
+Improve loading behaviour
 
 = 1.1.0 =
 Added editing restrictions.
 Several fixes.
 
+= 1.0.0 =
+Initial Release
 
 == Upgrade notice ==
 
-= 1.0.0 =
-A plugin is born.
-
-= 1.1.0 =
-A plugin is born.
 

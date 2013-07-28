@@ -24,7 +24,21 @@ class UndisclosedCore {
 	}
 	// translation ready.
 	static function plugin_loaded() {
+		self::check_version();
 		load_plugin_textdomain( 'wpundisclosed' , false, dirname(dirname( plugin_basename( __FILE__ ))) . '/lang');
+	}
+	
+	static function check_version( ) {
+		if ( is_multisite( ) ) {
+			$installed_version = get_site_option('accessareas_version');
+			update_site_option( 'accessareas_version' , WPUND_VERSION );
+		} else {
+			$installed_version = get_option('accessareas_version');
+			update_option( 'accessareas_version' , WPUND_VERSION );
+		}
+		if ( ! $installed_version || version_compare( WPUND_VERSION , $installed_version ) )
+			accessareas_activate();
+//		self::uninstall();
 	}
 }
 UndisclosedCore::init();
