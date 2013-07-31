@@ -58,6 +58,12 @@ class UndisclosedInstall {
 		}
 	}
 	
+	function activate_for_blog( $blog_id ) {
+		switch_to_blog( $blog_id );
+		self::_install_posts_table( );
+		restore_current_blog();
+	}
+	
 
 	// --------------------------------------------------
 	// posts table
