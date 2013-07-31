@@ -18,7 +18,7 @@ Domain Path: /lang/
 
 
 // table name for userlabels
-define( 'WPUND_VERSION' , "1.1.2"); // edit-col came with 1.1.0
+define( 'WPUND_VERSION' , "1.1.3"); // edit-col came with 1.1.0
 define( 'WPUND_USERLABEL_TABLE' , "disclosure_userlabels");
 define( 'WPUND_USERLABEL_PREFIX' , "userlabel_");
 define( 'WPUND_GLOBAL_USERMETA_KEY' , "undisclosed_global_capabilities");
