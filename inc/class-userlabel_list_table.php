@@ -69,12 +69,10 @@ class UserLabel_List_Table extends WP_List_Table {
 					$ret .= sprintf( '<strong><a href="%s">%s</a></strong>' , $url , $output );
 					
 					$del_url = add_query_arg( array('action'=>'delete','id'=>$item->ID,'_wpnonce'=>wp_create_nonce('userlabel-delete')) );
-					$del_url = remove_query_arg('message',$url);
-					$del_url = remove_query_arg('deleted',$url);
-					$ret .= sprintf('<br /><div class="row-actions"><span class="remove"><a href="%s" class="submitdelete">%s</a></span></div>',$url,__('Delete'));
+					$del_url = remove_query_arg('message',$del_url);
+					$del_url = remove_query_arg('deleted',$del_url);
+					$ret .= sprintf('<br /><div class="row-actions"><span class="remove"><a href="%s" class="submitdelete">%s</a></span></div>',$del_url,__('Delete'));
 					return $ret;
-					if ( ( is_network_admin() ^ $item->blog_id ) ) {
-					}
 				} else {
 					return $ret.$output;
 				}
