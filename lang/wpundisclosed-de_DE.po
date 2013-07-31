@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WordPress Access Areas v1.0.0\n"
+"Project-Id-Version: WordPress Access Areas v1.1.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2013-07-27 18:11:24+0000\n"
+"PO-Revision-Date: 2013-07-31 09:11:30+0000\n"
 "Last-Translator: admin <joern@flyingletters.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -144,7 +144,7 @@ msgstr "Sichtbar für"
 msgid "Everybody"
 msgstr "Jeder"
 
-#: inc/class-undisclosedposts.php:50
+#: inc/class-undisclosedposts.php:49
 #, php-format
 #@ wpundisclosed
 msgid "Please <a href=\"%s\">log in</a> to see this content!"
@@ -223,4 +223,40 @@ msgstr "Wer darf lesen:"
 #@ wpundisclosed
 msgid "Who can edit:"
 msgstr "Wer darf bearbeiten:"
+
+#. translators: plugin header field 'Name'
+#: wp-access-areas.php:0
+#@ wpundisclosed
+msgid "WordPress Access Areas"
+msgstr ""
+
+#. translators: plugin header field 'PluginURI'
+#: wp-access-areas.php:0
+#@ wpundisclosed
+msgid "http://wordpress.org/plugins/wp-access-areas/"
+msgstr ""
+
+#. translators: plugin header field 'Description'
+#: wp-access-areas.php:0
+#@ wpundisclosed
+msgid "Lets you define Access Areas and assign them to Posts, Pages and Custom Post types. Through Access Areas you can fine-tune who can view, edit or comment on your posts."
+msgstr "Fine-Tuning für Ihre WordPress-Inhalte. Defeinieren Sie Zugangsbereiche und bestimmen Sie für jeden Inhalt, wer ihn lesen, bearbeiten oder Kommentieren darf."
+
+#. translators: plugin header field 'Author'
+#: wp-access-areas.php:0
+#@ wpundisclosed
+msgid "Joern Lund"
+msgstr "Jörn Lund"
+
+#. translators: plugin header field 'AuthorURI'
+#: wp-access-areas.php:0
+#@ wpundisclosed
+msgid "https://github.com/mcguffin/"
+msgstr ""
+
+#. translators: plugin header field 'Version'
+#: wp-access-areas.php:0
+#@ wpundisclosed
+msgid "1.1.2"
+msgstr ""
 

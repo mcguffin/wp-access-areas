@@ -17,6 +17,9 @@ class UndisclosedCore {
 	static function init() {
 		add_action( 'plugins_loaded' , array( __CLASS__, 'plugin_loaded' ) );
 		add_action( 'admin_init' , array(__CLASS__,'admin_enqueue_scripts') );
+
+		if ( is_network_admin() )
+			add_action('wpmu_new_blog' , array( __CLASS__ , 'set_network_roles_for_blog' ) , 10 ,6 );
 	}
 
 	static function admin_enqueue_scripts() {
@@ -27,6 +30,7 @@ class UndisclosedCore {
 		self::check_version();
 		load_plugin_textdomain( 'wpundisclosed' , false, dirname(dirname( plugin_basename( __FILE__ ))) . '/lang');
 	}
+	
 	
 	static function check_version( ) {
 		if ( is_multisite( ) ) {
