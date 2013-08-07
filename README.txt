@@ -77,6 +77,9 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 
 == Changelog ==
 
+= 1.1.5 =
+Fix [uninstall issue](http://wordpress.org/support/topic/cant-delete-the-plugin)
+
 = 1.1.4 =
 Fix: issue where WP-comment settings were not applied while saving post
 Improve DE Localization
@@ -101,4 +104,4 @@ Initial Release
 
 == Upgrade notice ==
 
-Everybody should update to version 1.1.4.
+Everybody should update
