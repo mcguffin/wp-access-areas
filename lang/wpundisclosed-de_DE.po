@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WordPress Access Areas v1.1.2\n"
+"Project-Id-Version: WordPress Access Areas v1.1.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2013-07-31 09:11:30+0000\n"
+"PO-Revision-Date: 2013-08-07 09:04:35+0000\n"
 "Last-Translator: admin <joern@flyingletters.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -108,38 +108,38 @@ msgstr "Erstellen"
 msgid "Access"
 msgstr "Zugang"
 
-#: inc/class-undisclosededitpost.php:123
-#: inc/class-undisclosededitpost.php:150
-#: inc/class-undisclosededitpost.php:178
+#: inc/class-undisclosededitpost.php:121
+#: inc/class-undisclosededitpost.php:148
+#: inc/class-undisclosededitpost.php:176
 #@ wpundisclosed
 msgid "WordPress default"
 msgstr "WordPress Standard"
 
-#: inc/class-undisclosededitpost.php:124
-#: inc/class-undisclosededitpost.php:179
-#: inc/class-undisclosededitpost.php:240
+#: inc/class-undisclosededitpost.php:122
+#: inc/class-undisclosededitpost.php:177
+#: inc/class-undisclosededitpost.php:238
 #@ wpundisclosed
 msgid "Blog users"
 msgstr "Blog-Benutzer"
 
-#: inc/class-undisclosededitpost.php:126
-#: inc/class-undisclosededitpost.php:152
-#: inc/class-undisclosededitpost.php:181
+#: inc/class-undisclosededitpost.php:124
+#: inc/class-undisclosededitpost.php:150
+#: inc/class-undisclosededitpost.php:179
 #@ wpundisclosed
 msgid "WordPress roles"
 msgstr "WordPress Rollen"
 
-#: inc/class-undisclosededitpost.php:176
+#: inc/class-undisclosededitpost.php:174
 #@ wpundisclosed
 msgid "Who can comment:"
 msgstr "Wer darf kommentieren:"
 
-#: inc/class-undisclosededitpost.php:232
+#: inc/class-undisclosededitpost.php:230
 #@ wpundisclosed
 msgid "Visible to"
 msgstr "Sichtbar für"
 
-#: inc/class-undisclosededitpost.php:240
+#: inc/class-undisclosededitpost.php:238
 #@ wpundisclosed
 msgid "Everybody"
 msgstr "Jeder"
@@ -190,14 +190,14 @@ msgstr "Name"
 msgid "Scope"
 msgstr "Gültigkeitsbereich"
 
-#: inc/class-userlabel_list_table.php:84
+#: inc/class-userlabel_list_table.php:82
 #@ wpundisclosed
 msgid "Network"
 msgstr "Netzwerk"
 
 #: inc/class-userlabel_list_table.php:74
-#: inc/class-userlabel_list_table.php:92
-#: inc/class-userlabel_list_table.php:146
+#: inc/class-userlabel_list_table.php:90
+#: inc/class-userlabel_list_table.php:144
 #@ default
 msgid "Delete"
 msgstr ""
@@ -207,19 +207,19 @@ msgstr ""
 msgid "Could not find the specified Access Area."
 msgstr "Der angegebene Zugangsbereich konnte nicht gefunden werden."
 
-#: inc/class-undisclosededitpost.php:136
-#: inc/class-undisclosededitpost.php:161
-#: inc/class-undisclosededitpost.php:190
+#: inc/class-undisclosededitpost.php:134
+#: inc/class-undisclosededitpost.php:159
+#: inc/class-undisclosededitpost.php:188
 #@ wpundisclosed
 msgid "Users with Access to"
 msgstr "Benutzer mit Zugang zu:"
 
-#: inc/class-undisclosededitpost.php:121
+#: inc/class-undisclosededitpost.php:119
 #@ wpundisclosed
 msgid "Who can read:"
 msgstr "Wer darf lesen:"
 
-#: inc/class-undisclosededitpost.php:148
+#: inc/class-undisclosededitpost.php:146
 #@ wpundisclosed
 msgid "Who can edit:"
 msgstr "Wer darf bearbeiten:"
@@ -257,6 +257,6 @@ msgstr ""
 #. translators: plugin header field 'Version'
 #: wp-access-areas.php:0
 #@ wpundisclosed
-msgid "1.1.2"
+msgid "1.1.4"
 msgstr ""
 
