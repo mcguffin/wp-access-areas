@@ -29,10 +29,10 @@ class UndisclosedPosts {
 	// comment restrictions
 	// --------------------------------------------------
 	static function comments_open( $open, $post_id ) {
-		if ( $open )
+		if ( $open ) // open by wp
 			return $open;
-
 		$_post = get_post($post_id);
+
 		return self::_user_can($_post->post_comment_cap);
 	}
 	
