@@ -79,6 +79,7 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 
 = 1.1.4 =
 Fix: issue where WP-comment settings were not applied while saving post
+Improve DE Localization
 
 = 1.1.3 =
 Fix: post tables did not update on wpmu_new_blog
