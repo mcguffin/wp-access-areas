@@ -40,6 +40,7 @@ class UndisclosedInstall {
 //		self::uninstall();
 	}
 	static function uninstall() {
+		global $wpdb;
 		if ( ! current_user_can( 'activate_plugins' ) )
 			return;
 		
