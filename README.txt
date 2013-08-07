@@ -77,6 +77,10 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 
 == Changelog ==
 
+= 1.1.4 =
+Fix: issue where WP-comment settings were not applied while saving post
+Improve DE Localization
+
 = 1.1.3 =
 Fix: post tables did not update on wpmu_new_blog
 Fix: [deletion issue](http://wordpress.org/support/topic/bug-report-cant-delete-area?replies=1)
@@ -97,4 +101,4 @@ Initial Release
 
 == Upgrade notice ==
 
-Everybody using the plugin in Multisite context should update to version 1.1.3.
+Everybody should update to version 1.1.4.
