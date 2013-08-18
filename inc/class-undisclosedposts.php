@@ -31,9 +31,14 @@ class UndisclosedPosts {
 	static function comments_open( $open, $post_id ) {
 		if ( $open ) // open by wp
 			return $open;
-		$_post = get_post($post_id);
-
-		return self::_user_can($_post->post_comment_cap);
+		
+		if ( $_post = get_post($post_id) ) {
+			if ( $_post->post_comment_cap == 'exist' ) // 'exist' in this context means 'use wp defaults'. 
+				return $open;
+		
+			return self::_user_can($_post->post_comment_cap);
+		}
+		return false;
 	}
 	
 	
