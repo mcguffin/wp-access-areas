@@ -5,7 +5,7 @@
 */ 
 
 // ----------------------------------------
-//	This class provides an interface for editing the permission groups
+//	This class provides an interface for editing access areas
 // ----------------------------------------
 
 if ( ! class_exists('UndisclosedCaps' ) ) :

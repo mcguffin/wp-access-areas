@@ -44,12 +44,13 @@ class UserLabel_List_Table extends WP_List_Table {
     	if ( is_multisite() )
     		$columns['blog'] =  __('Scope','wpundisclosed');
     	
+		$columns['capability'] = __('WP Capability','wpundisclosed');
     	return $columns;
     }
     function get_sortable_columns() {
     	$columns = array(
 			'cap_title'		=> array('cap_title',false),
-			'blog'		=> array('blog_id',false),
+			'blog'			=> array('blog_id',false),
     	);
     	return $columns;
     }
@@ -77,7 +78,7 @@ class UserLabel_List_Table extends WP_List_Table {
 					return $ret.$output;
 				}
         	case 'capability':
-        		return $output;
+        		return "<code>$output</code>";
         	case 'blog':
         		return $item->blog_id ? get_blog_details( $item->blog_id , true )->siteurl : __('Network','wpundisclosed');
         	case 'blog_id':
