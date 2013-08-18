@@ -77,6 +77,10 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 
 == Changelog ==
 
+= 1.1.6 =
+Feature: WP-Capability column in Access Areas table view
+Fixed: Commenting was still possible after switching off comments and setting comment capabilities to 'use WP defaults'.
+
 = 1.1.5 =
 Fix [uninstall issue](http://wordpress.org/support/topic/cant-delete-the-plugin)
 
@@ -104,4 +108,4 @@ Initial Release
 
 == Upgrade notice ==
 
-Everybody should update
+Everybody should update.
