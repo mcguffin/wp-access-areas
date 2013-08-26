@@ -3,7 +3,7 @@ Contributors: podpirate
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WF4Z3HU93XYJA
 Tags: access, role, capability, user, security, editor
 Requires at least: 3.5
-Tested up to: 3.6-RC2
+Tested up to: 3.6
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -77,6 +77,9 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 
 == Changelog ==
 
+= 1.1.7 =
+Fixed: Fixed issue, where posts table was not modified after creating new blog. Use WP's upgrade network function to fix all posts tables.
+
 = 1.1.6 =
 Feature: WP-Capability column in Access Areas table view
 Fixed: Commenting was still possible after switching off comments and setting comment capabilities to 'use WP defaults'.
@@ -108,4 +111,5 @@ Initial Release
 
 == Upgrade notice ==
 
-Everybody should update.
+Everybody should update. 
+After Upgrade yu shoud use WP's upgrade network function to fix all posts tables in your network.
