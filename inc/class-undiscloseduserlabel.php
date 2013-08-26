@@ -118,7 +118,7 @@ class UndisclosedUserlabel {
 		global $wpdb;
 		// delete everything from posts and restore usefull default values
 		$query = $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_view_cap='exists',post_status='private' WHERE post_view_cap=%s" , $userlabel->capability ) );
-	//	$query = $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_edit_cap='exists' WHERE post_edit_cap=%s" , $userlabel->capability ) ); // back to default
+		$query = $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_edit_cap='exists' WHERE post_edit_cap=%s" , $userlabel->capability ) ); // back to default
 		$query = $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_comment_cap='exists',comment_status='closed' WHERE post_comment_cap=%s" , $userlabel->capability ) ); // back to default
 		
 		if ( is_multisite() )
