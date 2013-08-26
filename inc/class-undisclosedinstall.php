@@ -47,13 +47,13 @@ class UndisclosedInstall {
 		self::_uninstall_custom_caps();
 		self::_uninstall_capabilities_table();
 		
-		if (function_exists('is_multisite') && is_multisite() ) {
+		if (function_exists('is_multisite') && is_multisite() && is_network_admin() ) {
 			$blogids = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
 			foreach ( $blogids as $blog_id) {
 				switch_to_blog($blog_id);
 				self::_uninstall_posts_table( );
+				restore_current_blog();
 			}
-			restore_current_blog();
 		} else {
 			self::_uninstall_posts_table( );
 		}

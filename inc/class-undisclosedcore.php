@@ -18,8 +18,8 @@ class UndisclosedCore {
 		add_action( 'plugins_loaded' , array( __CLASS__, 'plugin_loaded' ) );
 		add_action( 'admin_init' , array(__CLASS__,'admin_enqueue_scripts') );
 
-		if ( is_network_admin() )
-			add_action('wpmu_new_blog' , array( __CLASS__ , 'set_network_roles_for_blog' ) , 10 ,6 );
+		add_action('wpmu_new_blog' , array( __CLASS__ , 'set_network_roles_for_blog' ) , 10 , 1 );
+		add_action('wpmu_upgrade_site' , array( __CLASS__ , 'set_network_roles_for_blog' ) , 10 ,1 );
 	}
 
 	static function admin_enqueue_scripts() {
@@ -31,7 +31,10 @@ class UndisclosedCore {
 		load_plugin_textdomain( 'wpundisclosed' , false, dirname(dirname( plugin_basename( __FILE__ ))) . '/lang');
 	}
 	
-	
+	static function set_network_roles_for_blog( $blog_id /*, $user_id, $domain, $path, $site_id, $meta */ ) {
+		require_once( dirname(__FILE__). '/class-undisclosedinstall.php' );
+		UndisclosedInstall::activate_for_blog( $blog_id );
+	}
 	static function check_version( ) {
 		if ( is_multisite( ) ) {
 			$installed_version = get_site_option('accessareas_version');
