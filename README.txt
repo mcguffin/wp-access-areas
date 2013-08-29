@@ -77,6 +77,9 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 
 == Changelog ==
 
+= 1.1.8 =
+Fixed: Fixed issue, where access areas where not shown on user editing in single-site installs.
+
 = 1.1.7 =
 Fixed: Fixed issue, where posts table was not modified after creating new blog. Use WP's upgrade network function to fix all posts tables.
 
@@ -112,4 +115,3 @@ Initial Release
 == Upgrade notice ==
 
 Everybody should update. 
-After Upgrade yu shoud use WP's upgrade network function to fix all posts tables in your network.
