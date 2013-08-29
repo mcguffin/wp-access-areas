@@ -118,15 +118,15 @@ class UndisclosedUsers {
 		if ( ! current_user_can( 'promote_users' ) || (is_network_admin() && ! is_accessareas_active_for_network() ) ) 
 			return;
 		$labels = UndisclosedUserLabel::get_available_userlabels( );
+		
 		?><h3><?php _e( 'Access Areas' , 'wpundisclosed' ) ?></h3><?php
 		?><table class="form-table" id="disclosure-group-items"><?php
 		
 		$labelrows = array( 
 								__( 'Grant Network-Wide Access' , 'wpundisclosed' )	=> array( 'network' => true ,	'labels' => UndisclosedUserLabel::get_network_userlabels()  , ), 
 			 );
-		if ( ! is_network_admin() && is_accessareas_active_for_network() )
+		if ( ! is_network_admin() /*&& is_accessareas_active_for_network()*/ )
 			$labelrows[ __( 'Grant Access' , 'wpundisclosed' ) ] = array( 'network' => false ,		'labels' => UndisclosedUserLabel::get_blog_userlabels() , );
-		
 		$label_caps = (array) (is_multisite() ? get_user_meta($profileuser->ID , WPUND_GLOBAL_USERMETA_KEY , true ) : null); 
 		
 		foreach ( $labelrows as $row_title => $value ) {
