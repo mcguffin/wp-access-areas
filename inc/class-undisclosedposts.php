@@ -62,7 +62,7 @@ class UndisclosedPosts {
 		// remove undisclosed posts
 		$ret = array();
 		foreach ( $items as $i => $item ) {
-			if ( self::_user_can( $item->post_view_cap ) )
+			if ( wpaa_user_can( $item->post_view_cap ) )
 				$ret[] = $item;
 		}
 		return $ret;
@@ -79,38 +79,34 @@ class UndisclosedPosts {
 	}
 
 
-	private static function _get_where( $where , $table_name = 'p' ) {		
-		if ( current_user_can( 'administrator' ) )
+	private static function _get_where( $where , $table_name = 'p' ) {
+		// not true on multisite
+		if ( current_user_can('administrator') )
 			return $where;
+		
+		$cond = array( "$table_name.post_view_cap = 'exist'" );
 		if ( is_user_logged_in() ) {
 			// get current user's groups
 			$roles = new WP_Roles();
-			$cond = array( "$table_name.post_view_cap = 'exist'");
-			foreach( array_keys( array_merge( UndisclosedUserlabel::get_label_array( ) , $roles->get_names() )) as $cap)
-				if ( current_user_can($cap) )
-					$cond[] = "$table_name.post_view_cap = '$cap'";
 			
-			return $where . " AND (".implode( ' OR ' , $cond ) . ")";
+			// reading
+			if ( current_user_can( 'read' ) )
+				$cond[] = "$table_name.post_view_cap = 'read'"; // logged in users
+			
+			// user's roles
+			$user_roles = wpaa_user_contained_roles();
+			foreach ( $user_roles as $role )
+				$cond[] = "$table_name.post_view_cap = '$role'"; 
+			
+			// user's custom caps
+			foreach( UndisclosedUserlabel::get_label_array( ) as $cap => $capname)
+				if ( current_user_can( $cap ) )
+					$cond[] = "$table_name.post_view_cap = '$cap'";
 		}
-		$where .= " AND ($table_name.post_view_cap = 'exist') ";
-
+		$where .= " AND (".implode( ' OR ' , $cond ) . ")";
 		return $where;
 	}
-	
-	// --------------------------------------------------
-	// private - retrieving user capabilities
-	// --------------------------------------------------
-	static function _user_can_role( $role , $user_role_caps ) {
-		$roles = new WP_Roles();
-		if ($roles->is_role($role))
-			return 0 == count(array_diff_assoc(  $roles->get_role( $role )->capabilities , $user_role_caps));
-		return false;
-	}
-	static function _user_can($cap) {
-		if ( !$cap || 'exist' == $cap || 'read' == $cap && is_user_logged_in() )
-			return true;
-		return current_user_can( $cap );
-	}
+
 }
 UndisclosedPosts::init();
 endif;

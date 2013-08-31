@@ -17,9 +17,10 @@ class UndisclosedCore {
 	static function init() {
 		add_action( 'plugins_loaded' , array( __CLASS__, 'plugin_loaded' ) );
 		add_action( 'admin_init' , array(__CLASS__,'admin_enqueue_scripts') );
-
-		add_action('wpmu_new_blog' , array( __CLASS__ , 'set_network_roles_for_blog' ) , 10 , 1 );
-		add_action('wpmu_upgrade_site' , array( __CLASS__ , 'set_network_roles_for_blog' ) , 10 ,1 );
+		if ( is_multisite() ) {
+			add_action('wpmu_new_blog' , array( __CLASS__ , 'set_network_roles_for_blog' ) , 10 , 1 );
+			add_action('wpmu_upgrade_site' , array( __CLASS__ , 'set_network_roles_for_blog' ) , 10 ,1 );
+		}
 	}
 
 	static function admin_enqueue_scripts() {
@@ -45,8 +46,8 @@ class UndisclosedCore {
 		}
 		if ( ! $installed_version || version_compare( WPUND_VERSION , $installed_version ) )
 			accessareas_activate();
-//		self::uninstall();
 	}
+
 }
 UndisclosedCore::init();
 endif;
