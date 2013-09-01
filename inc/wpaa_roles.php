@@ -11,7 +11,7 @@ function wpaa_user_can( $cap ) {
 	// exist always true. read always treu for logged in users. admin can do verything on single sites
 	if ( 'exist' == $cap 
 		|| 'read' == $cap && is_user_logged_in() 
-		|| ( ! is_multisite() && current_user_can( 'administrator' ) ) 
+		|| ( wpaa_is_local_cap( $cap ) && current_user_can( 'administrator' ) ) 
 	)
 		return true;
 	
@@ -21,6 +21,34 @@ function wpaa_user_can( $cap ) {
 	
 	// any other cap including custom caps.
 	return current_user_can( $cap );
+}
+
+function wpaa_user_can_accessarea( $cap ) {
+	global $wp_roles;
+
+	// always true for administrators on local caps
+	if ( wpaa_is_local_cap( $cap ) && current_user_can( 'administrator' ) )
+		$can = true;
+	else
+		$can = current_user_can( $cap );
+	
+	// any other cap including custom caps.
+	return $can;
+}
+
+function wpaa_is_local_cap( $cap ) {
+	return strpos($cap,wpaa_get_local_prefix( )) === 0;
+}
+
+function wpaa_get_local_prefix( $blog_id = null ){
+	$prefix = WPUND_USERLABEL_PREFIX;
+	if ( ! $blog_id )
+		$blog_id = get_current_blog_id();
+
+	if ( $blog_id ) 
+		$prefix .= "{$blog_id}_";
+	
+	return $prefix;
 }
 
 // returns if current users caps all cover the given role

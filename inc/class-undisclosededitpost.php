@@ -134,7 +134,7 @@ class UndisclosedEditPost {
 
 				<optgroup label="<?php _e( 'Users with Access to' , 'wpundisclosed') ?>">
 				<?php foreach ($groups as $group=>$groupname) { 
-					if ( ! current_user_can($group) && ! $is_admin )
+					if ( ! wpaa_user_can_accessarea($group) )
 						continue;
 					?>
 					<option value="<?php echo $group ?>" <?php selected($post->post_view_cap , $group) ?>><?php _e( $groupname , 'wpundisclosed' ) ?></option>
@@ -159,7 +159,7 @@ class UndisclosedEditPost {
 
 				<optgroup label="<?php _e( 'Users with Access to' , 'wpundisclosed') ?>">
 				<?php foreach ($groups as $group=>$groupname) { 
-					if ( !current_user_can($group) && !$is_admin )
+					if ( ! wpaa_user_can_accessarea($group) )
 						continue;
 					?>
 					<option value="<?php echo $group ?>" <?php selected($post->post_edit_cap , $group) ?>><?php _e( $groupname , 'wpundisclosed' ) ?></option>
@@ -188,7 +188,7 @@ class UndisclosedEditPost {
 
 				<optgroup label="<?php _e( 'Users with Access to' , 'wpundisclosed') ?>">
 				<?php foreach ($groups as $group=>$groupname) { 
-					if ( !current_user_can($group) && !$is_admin )
+					if ( ! wpaa_user_can_accessarea($group) )
 						continue;
 					?>
 					<option value="<?php echo $group ?>" <?php selected($post->post_comment_cap , $group) ?>><?php _e( $groupname , 'wpundisclosed' ) ?></option>

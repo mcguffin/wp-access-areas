@@ -29,15 +29,12 @@ class UndisclosedPosts {
 	// comment restrictions
 	// --------------------------------------------------
 	static function comments_open( $open, $post_id ) {
-		if ( $open ) // open by wp
-			return $open;
+		if ( $open ) // opened by wp 
+			return true;
 		
-		if ( $_post = get_post($post_id) ) {
-			if ( $_post->post_comment_cap == 'exist' ) // 'exist' in this context means 'use wp defaults'. 
-				return $open;
+		if ( $_post = get_post($post_id) )
+			return wpaa_user_can($_post->post_comment_cap);
 		
-			return self::_user_can($_post->post_comment_cap);
-		}
 		return false;
 	}
 	
@@ -49,7 +46,7 @@ class UndisclosedPosts {
 	static function undisclosed_content( $content ) {
 		if ( current_user_can( 'administrator' ) )
 			return $content;
-		if ( self::_user_can( get_post()->post_view_cap ) )
+		if ( wpaa_user_can( get_post()->post_view_cap ) )
 			return $content;
 		return sprintf(__('Please <a href="%s">log in</a> to see this content!' , 'wpundisclosed'),wp_login_url( get_permalink() ));
 	}
@@ -81,7 +78,7 @@ class UndisclosedPosts {
 
 	private static function _get_where( $where , $table_name = 'p' ) {
 		// not true on multisite
-		if ( current_user_can('administrator') )
+		if ( ! is_multisite() && current_user_can('administrator') )
 			return $where;
 		
 		$cond = array( "$table_name.post_view_cap = 'exist'" );
@@ -100,7 +97,7 @@ class UndisclosedPosts {
 			
 			// user's custom caps
 			foreach( UndisclosedUserlabel::get_label_array( ) as $cap => $capname)
-				if ( current_user_can( $cap ) )
+				if ( wpaa_user_can_accessarea( $cap ) )
 					$cond[] = "$table_name.post_view_cap = '$cap'";
 		}
 		$where .= " AND (".implode( ' OR ' , $cond ) . ")";
