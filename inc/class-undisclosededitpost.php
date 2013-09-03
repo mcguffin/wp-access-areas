@@ -44,7 +44,7 @@ class UndisclosedEditPost {
 						break;
 					global $wp_roles;
 					if ( $wp_roles->is_role( $edit_cap )) {
-						if ( ! self::_user_can_role( $edit_cap ) )
+						if ( ! wpaa_user_can_role( $edit_cap ) )
 							$caps[] = 'do_not_allow';
 					} else {
 						if ( ! current_user_can( $edit_cap ) )
@@ -100,8 +100,9 @@ class UndisclosedEditPost {
 		$roles = new WP_Roles();
 		$rolenames = $roles->get_names();
 		$groups = UndisclosedUserlabel::get_label_array( );
-
-		$user_role_caps = self::get_user_role_caps();
+		
+		
+		$user_role_caps = wpaa_get_user_role_caps();
 		
 		$is_admin = current_user_can( 'administrator' );
 		// 
@@ -124,7 +125,7 @@ class UndisclosedEditPost {
 				<optgroup label="<?php _e( 'WordPress roles' , 'wpundisclosed') ?>">
 				<?php foreach ($rolenames as $role=>$rolename) {
 					global $_asssas;
-					if ( !self::_user_can_role( $role , $user_role_caps ) )
+					if ( !wpaa_user_can_role( $role , $user_role_caps ) )
 						continue;
 					?>
 					<option value="<?php echo $role ?>" <?php selected($post->post_view_cap , $role) ?>><?php _ex( $rolename, 'User role' ) ?></option>
@@ -133,7 +134,7 @@ class UndisclosedEditPost {
 
 				<optgroup label="<?php _e( 'Users with Access to' , 'wpundisclosed') ?>">
 				<?php foreach ($groups as $group=>$groupname) { 
-					if ( ! current_user_can($group) && ! $is_admin )
+					if ( ! wpaa_user_can_accessarea($group) )
 						continue;
 					?>
 					<option value="<?php echo $group ?>" <?php selected($post->post_view_cap , $group) ?>><?php _e( $groupname , 'wpundisclosed' ) ?></option>
@@ -149,7 +150,7 @@ class UndisclosedEditPost {
 			
 				<optgroup label="<?php _e( 'WordPress roles' , 'wpundisclosed') ?>">
 				<?php foreach ($rolenames as $role=>$rolename) {
-					if ( !self::_user_can_role( $role , $user_role_caps ) || ! get_role( $role )->has_cap( $editing_cap ) )
+					if ( !wpaa_user_can_role( $role , $user_role_caps ) || ! get_role( $role )->has_cap( $editing_cap ) )
 						continue;
 					?>
 					<option value="<?php echo $role ?>" <?php selected($post->post_edit_cap , $role) ?>><?php _ex( $rolename, 'User role' ) ?></option>
@@ -158,7 +159,7 @@ class UndisclosedEditPost {
 
 				<optgroup label="<?php _e( 'Users with Access to' , 'wpundisclosed') ?>">
 				<?php foreach ($groups as $group=>$groupname) { 
-					if ( !current_user_can($group) && !$is_admin )
+					if ( ! wpaa_user_can_accessarea($group) )
 						continue;
 					?>
 					<option value="<?php echo $group ?>" <?php selected($post->post_edit_cap , $group) ?>><?php _e( $groupname , 'wpundisclosed' ) ?></option>
@@ -178,7 +179,7 @@ class UndisclosedEditPost {
 			
 				<optgroup label="<?php _e( 'WordPress roles' , 'wpundisclosed') ?>">
 				<?php foreach ($rolenames as $role=>$rolename) {
-					if ( !self::_user_can_role( $role , $user_role_caps ) )
+					if ( !wpaa_user_can_role( $role , $user_role_caps ) )
 						continue;
 					?>
 					<option value="<?php echo $role ?>" <?php selected($post->post_comment_cap , $role) ?>><?php _ex( $rolename, 'User role' ) ?></option>
@@ -187,7 +188,7 @@ class UndisclosedEditPost {
 
 				<optgroup label="<?php _e( 'Users with Access to' , 'wpundisclosed') ?>">
 				<?php foreach ($groups as $group=>$groupname) { 
-					if ( !current_user_can($group) && !$is_admin )
+					if ( ! wpaa_user_can_accessarea($group) )
 						continue;
 					?>
 					<option value="<?php echo $group ?>" <?php selected($post->post_comment_cap , $group) ?>><?php _e( $groupname , 'wpundisclosed' ) ?></option>
@@ -198,25 +199,6 @@ class UndisclosedEditPost {
 		
 		}
 //*/
-	}
-	static function get_user_role_caps(){
-		global $wp_roles;
-		$user_roles = wp_get_current_user()->roles;
-		$user_role_caps = array();
-		foreach ( $user_roles as $i=>$rolename )
-			if ( $wp_roles->is_role( $rolename ) )
-				$user_role_caps += $wp_roles->get_role($rolename)->capabilities;
-		return $user_role_caps;
-	}
-	
-	static function _user_can_role( $role , $user_role_caps = null ) {
-		if ( is_null( $user_role_caps ) )
-			$user_role_caps = self::get_user_role_caps();
-
-		$roles = new WP_Roles();
-		if ($roles->is_role($role))
-			return 0 == count(array_diff_assoc(  $roles->get_role( $role )->capabilities , $user_role_caps));
-		return false;
 	}
 	
 	// --------------------------------------------------

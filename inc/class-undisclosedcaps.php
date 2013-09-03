@@ -13,7 +13,6 @@ if ( ! class_exists('UndisclosedCaps' ) ) :
 class UndisclosedCaps {
 	
 	static function init( ) {
-		add_action( 'admin_init' , array( __CLASS__ , 'admin_init' ) );
 		if ( is_admin() ) {
 			add_action( 'admin_menu', array( __CLASS__ , 'user_menu' ));
 			if ( is_accessareas_active_for_network() )
@@ -21,13 +20,7 @@ class UndisclosedCaps {
 		}
 	}
 
-	static function admin_init() {
-	}
-
-
-
-
-
+	
 	static function user_menu() { // @ admin_menu
 		if ( (is_network_admin() && ! current_user_can( 'manage_network_users' )) || ( ! current_user_can( 'promote_users' ) ) )
 			return;
