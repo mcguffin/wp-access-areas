@@ -14,7 +14,7 @@ class UndisclosedPosts {
 	static function init() {
 
 		// viewing restrictions
-		add_action( 'get_pages' , array( __CLASS__ , 'skip_undisclosed_items' ) , 10 , 1 );
+		add_action( 'get_pages' , array( __CLASS__ , 'skip_undisclosed_items' ) , 10 , 1 ); // needed by nav menus
 		add_filter( "posts_where" , array( __CLASS__ , "get_posts_where" ) , 10, 2 );
 
 		add_filter( "get_next_post_where" , array( __CLASS__ , "get_adjacent_post_where" ) , 10, 3 );
@@ -43,14 +43,6 @@ class UndisclosedPosts {
 	// --------------------------------------------------
 	// viewing restrictions
 	// --------------------------------------------------
-	static function undisclosed_content( $content ) {
-		if ( current_user_can( 'administrator' ) )
-			return $content;
-		if ( wpaa_user_can( get_post()->post_view_cap ) )
-			return $content;
-		return sprintf(__('Please <a href="%s">log in</a> to see this content!' , 'wpundisclosed'),wp_login_url( get_permalink() ));
-	}
-	
 	static function skip_undisclosed_items( $items ) {
 		// everything's fine - return.
 		if ( current_user_can( 'administrator' ) )
