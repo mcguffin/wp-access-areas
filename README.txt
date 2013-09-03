@@ -77,6 +77,10 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 
 == Changelog ==
 
+= 1.1.9 =
+Feature/Debug: Network admins now have access to all areas on all blogs. Blog admins have access to all areas on their own blog(s).
+Code: put general use processes into function
+
 = 1.1.8 =
 Fixed: Fixed issue, where access areas where not shown on user editing in single-site installs.
 
