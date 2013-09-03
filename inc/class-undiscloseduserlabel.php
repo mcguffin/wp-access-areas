@@ -158,9 +158,8 @@ class UndisclosedUserlabel {
 			return false;
 		}
 		
-		$capability = WPUND_USERLABEL_PREFIX;
-		if ( $blog_id ) 
-			$capability .= "{$blog_id}_";
+		
+		$capability = $blog_id ? wpaa_get_local_prefix($blog_id) : WPUND_USERLABEL_PREFIX;
 		$capability .= sanitize_title($cap_title);
 
 		$query = $wpdb->prepare(

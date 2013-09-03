@@ -9,7 +9,7 @@ Plugin Name: WordPress Access Areas
 Plugin URI: http://wordpress.org/plugins/wp-access-areas/
 Description: Lets you define Access Areas and assign them to Posts, Pages and Custom Post types. Through Access Areas you can fine-tune who can view, edit or comment on your posts.
 Author: Joern Lund
-Version: 1.1.8
+Version: 1.1.9
 Author URI: https://github.com/mcguffin/
 
 Text Domain: wpundisclosed
@@ -18,7 +18,7 @@ Domain Path: /lang/
 
 
 // table name for userlabels
-define( 'WPUND_VERSION' , "1.1.8"); // edit-col came with 1.1.0
+define( 'WPUND_VERSION' , "1.1.9"); // edit-col came with 1.1.0
 define( 'WPUND_USERLABEL_TABLE' , "disclosure_userlabels");
 define( 'WPUND_USERLABEL_PREFIX' , "userlabel_");
 define( 'WPUND_GLOBAL_USERMETA_KEY' , "undisclosed_global_capabilities");
@@ -31,8 +31,14 @@ function is_accessareas_active_for_network( ) {
 
 	return is_plugin_active_for_network( basename(dirname(__FILE__)).'/'.basename(__FILE__) );
 }
+
+// common plugin functions
 require_once( dirname(__FILE__). '/inc/class-undisclosedcore.php' );
 
+// function library
+require_once( dirname(__FILE__). '/inc/wpaa_roles.php' );
+
+// installation hooks
 function accessareas_activate(){
 	require_once( dirname(__FILE__). '/inc/class-undisclosedinstall.php' );
 	UndisclosedInstall::activate();
@@ -46,6 +52,7 @@ function accessareas_uninstall(){
 	UndisclosedInstall::uninstall();
 }
 
+// access area data model 
 require_once( dirname(__FILE__). '/inc/class-undiscloseduserlabel.php' );
 if ( is_admin() ) {
 	require_once( dirname(__FILE__). '/inc/class-undisclosedcaps.php' );
@@ -58,6 +65,8 @@ if ( is_admin() ) {
 	register_uninstall_hook( __FILE__ , 'accessareas_uninstall' );
 	
 }
+
+// frontend output
 require_once( dirname(__FILE__). '/inc/class-undisclosedposts.php' );
 
 

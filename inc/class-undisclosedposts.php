@@ -14,7 +14,7 @@ class UndisclosedPosts {
 	static function init() {
 
 		// viewing restrictions
-		add_action( 'get_pages' , array( __CLASS__ , 'skip_undisclosed_items' ) , 10 , 1 );
+		add_action( 'get_pages' , array( __CLASS__ , 'skip_undisclosed_items' ) , 10 , 1 ); // needed by nav menus
 		add_filter( "posts_where" , array( __CLASS__ , "get_posts_where" ) , 10, 2 );
 
 		add_filter( "get_next_post_where" , array( __CLASS__ , "get_adjacent_post_where" ) , 10, 3 );
@@ -29,15 +29,12 @@ class UndisclosedPosts {
 	// comment restrictions
 	// --------------------------------------------------
 	static function comments_open( $open, $post_id ) {
-		if ( $open ) // open by wp
-			return $open;
+		if ( $open ) // opened by wp 
+			return true;
 		
-		if ( $_post = get_post($post_id) ) {
-			if ( $_post->post_comment_cap == 'exist' ) // 'exist' in this context means 'use wp defaults'. 
-				return $open;
+		if ( $_post = get_post($post_id) )
+			return wpaa_user_can($_post->post_comment_cap);
 		
-			return self::_user_can($_post->post_comment_cap);
-		}
 		return false;
 	}
 	
@@ -46,14 +43,6 @@ class UndisclosedPosts {
 	// --------------------------------------------------
 	// viewing restrictions
 	// --------------------------------------------------
-	static function undisclosed_content( $content ) {
-		if ( current_user_can( 'administrator' ) )
-			return $content;
-		if ( self::_user_can( get_post()->post_view_cap ) )
-			return $content;
-		return sprintf(__('Please <a href="%s">log in</a> to see this content!' , 'wpundisclosed'),wp_login_url( get_permalink() ));
-	}
-	
 	static function skip_undisclosed_items( $items ) {
 		// everything's fine - return.
 		if ( current_user_can( 'administrator' ) )
@@ -62,7 +51,7 @@ class UndisclosedPosts {
 		// remove undisclosed posts
 		$ret = array();
 		foreach ( $items as $i => $item ) {
-			if ( self::_user_can( $item->post_view_cap ) )
+			if ( wpaa_user_can( $item->post_view_cap ) )
 				$ret[] = $item;
 		}
 		return $ret;
@@ -79,38 +68,34 @@ class UndisclosedPosts {
 	}
 
 
-	private static function _get_where( $where , $table_name = 'p' ) {		
-		if ( current_user_can( 'administrator' ) )
+	private static function _get_where( $where , $table_name = 'p' ) {
+		// not true on multisite
+		if ( ! is_multisite() && current_user_can('administrator') )
 			return $where;
+		
+		$cond = array( "$table_name.post_view_cap = 'exist'" );
 		if ( is_user_logged_in() ) {
 			// get current user's groups
 			$roles = new WP_Roles();
-			$cond = array( "$table_name.post_view_cap = 'exist'");
-			foreach( array_keys( array_merge( UndisclosedUserlabel::get_label_array( ) , $roles->get_names() )) as $cap)
-				if ( current_user_can($cap) )
-					$cond[] = "$table_name.post_view_cap = '$cap'";
 			
-			return $where . " AND (".implode( ' OR ' , $cond ) . ")";
+			// reading
+			if ( current_user_can( 'read' ) )
+				$cond[] = "$table_name.post_view_cap = 'read'"; // logged in users
+			
+			// user's roles
+			$user_roles = wpaa_user_contained_roles();
+			foreach ( $user_roles as $role )
+				$cond[] = "$table_name.post_view_cap = '$role'"; 
+			
+			// user's custom caps
+			foreach( UndisclosedUserlabel::get_label_array( ) as $cap => $capname)
+				if ( wpaa_user_can_accessarea( $cap ) )
+					$cond[] = "$table_name.post_view_cap = '$cap'";
 		}
-		$where .= " AND ($table_name.post_view_cap = 'exist') ";
-
+		$where .= " AND (".implode( ' OR ' , $cond ) . ")";
 		return $where;
 	}
-	
-	// --------------------------------------------------
-	// private - retrieving user capabilities
-	// --------------------------------------------------
-	static function _user_can_role( $role , $user_role_caps ) {
-		$roles = new WP_Roles();
-		if ($roles->is_role($role))
-			return 0 == count(array_diff_assoc(  $roles->get_role( $role )->capabilities , $user_role_caps));
-		return false;
-	}
-	static function _user_can($cap) {
-		if ( !$cap || 'exist' == $cap || 'read' == $cap && is_user_logged_in() )
-			return true;
-		return current_user_can( $cap );
-	}
+
 }
 UndisclosedPosts::init();
 endif;
