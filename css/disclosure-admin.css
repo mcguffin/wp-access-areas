@@ -97,3 +97,17 @@
 	font-weight:bold;
 	color:333;
 }
+
+
+/* bulk edit */
+#wpbody-content .bulk-edit-row-page .inline-edit-col-right {
+	width:35%;
+}
+
+#wpbody-content .bulk-edit-row-page .inline-edit-col-access-areas {
+	width:30%;
+	margin-top:27px;
+}
+#wpbody-content .bulk-edit-row-page .inline-edit-col-access-areas label span.title {
+	width:auto;
+}

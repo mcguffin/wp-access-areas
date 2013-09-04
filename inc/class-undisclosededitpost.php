@@ -24,7 +24,9 @@ class UndisclosedEditPost {
 
 			add_filter('manage_pages_columns' , array(__CLASS__ , 'add_disclosure_column'));
 			add_filter('manage_pages_custom_column' , array(__CLASS__ , 'manage_disclosure_column') , 10 ,2 );
+			add_action('bulk_edit_custom_box' , array(__CLASS__,'bulk_edit_fields') , 10 , 2 );
 		}
+		add_action( 'load-edit.php' , array( __CLASS__ , 'load_style' ) );
 		add_action( 'load-post.php' , array( __CLASS__ , 'load_style' ) );
 		add_action( 'load-post-new.php' , array( __CLASS__ , 'load_style' ) );
 		add_filter('map_meta_cap', array( __CLASS__ , 'map_meta_cap' ) ,10,4);
@@ -91,115 +93,143 @@ class UndisclosedEditPost {
 	// edit post - the meta box
 	// --------------------------------------------------
 	static function disclosure_box_info() {
-		$post = get_post(get_the_ID());
-		$post_type_object = get_post_type_object($post->post_type);
-		$editing_cap = $post_type_object->cap->edit_posts;
+		global $wp_roles;
+		$post 				= get_post(get_the_ID());
+		$post_type_object 	= get_post_type_object($post->post_type);
+		$editing_cap 		= $post_type_object->cap->edit_posts;
 
 		// <select> with - Evereybody, Logged-in only, list WP-Roles, list discosure-groups
-		$current_user = wp_get_current_user();
-		$roles = new WP_Roles();
-		$rolenames = $roles->get_names();
-		$groups = UndisclosedUserlabel::get_label_array( );
+		$roles	 			= $wp_roles->get_names();
+		$groups 			= UndisclosedUserlabel::get_label_array( );
 		
 		
-		$user_role_caps = wpaa_get_user_role_caps();
-		
-		$is_admin = current_user_can( 'administrator' );
-		// 
-		/*
-		(1) inject css: 
-		#post-disclosure .inside{
-			margin:0;
-			padding:0
+		$user_role_caps 	= wpaa_get_user_role_caps();
+
+		$rolenames 			= array();
+		$edit_rolenames		= array();
+		foreach ( $roles as $role => $rolename ) {
+			if ( wpaa_user_can_role( $role , $user_role_caps ) ) {
+				$rolenames[$role] = $rolename;
+				if ( get_role( $role )->has_cap( $editing_cap ) ) {
+					$edit_rolenames[$role] = $rolename;
+				}
+			}
 		}
-		(2) don't show optgrous without options
-		*/
-		
 		
 		?><div class="disclosure-view-select misc-pub-section">
-			<label for="select-disclosure"><strong><?php _e( 'Who can read:' , 'wpundisclosed') ?></strong></label><br />
-			<select id="select-disclosure" name="post_view_cap">
-				<option value="exist" <?php selected($post->post_view_cap , 'exist') ?>><?php _e( 'WordPress default' , 'wpundisclosed' ) ?></option>
-				<option value="read" <?php selected($post->post_view_cap , 'read') ?>><?php _e( 'Blog users' , 'wpundisclosed' ) ?></option>
-			
-				<optgroup label="<?php _e( 'WordPress roles' , 'wpundisclosed') ?>">
-				<?php foreach ($rolenames as $role=>$rolename) {
-					global $_asssas;
-					if ( !wpaa_user_can_role( $role , $user_role_caps ) )
-						continue;
-					?>
-					<option value="<?php echo $role ?>" <?php selected($post->post_view_cap , $role) ?>><?php _ex( $rolename, 'User role' ) ?></option>
-				<?php } ?>
-				</optgroup>
-
-				<optgroup label="<?php _e( 'Users with Access to' , 'wpundisclosed') ?>">
-				<?php foreach ($groups as $group=>$groupname) { 
-					if ( ! wpaa_user_can_accessarea($group) )
-						continue;
-					?>
-					<option value="<?php echo $group ?>" <?php selected($post->post_view_cap , $group) ?>><?php _e( $groupname , 'wpundisclosed' ) ?></option>
-				<?php } ?>
-				</optgroup>
-			</select>
+			<label for="post_view_cap-select"><strong><?php _e( 'Who can read:' , 'wpundisclosed') ?></strong></label><br />
+			<?php 
+				self::access_area_dropdown( $rolenames , $groups , $post->post_view_cap , 'post_view_cap' );
+			?>
 		</div><?php
-//* // for future use
 		?><div class="disclosure-edit-select misc-pub-section">
-			<label for="select-disclosure"><strong><?php _e( 'Who can edit:' , 'wpundisclosed') ?></strong></label><br />
-			<select id="select-disclosure" name="post_edit_cap">
-				<option value="exist" <?php selected($post->post_edit_cap , 'exist') ?>><?php _e( 'WordPress default' , 'wpundisclosed' ) ?></option>
-			
-				<optgroup label="<?php _e( 'WordPress roles' , 'wpundisclosed') ?>">
-				<?php foreach ($rolenames as $role=>$rolename) {
-					if ( !wpaa_user_can_role( $role , $user_role_caps ) || ! get_role( $role )->has_cap( $editing_cap ) )
-						continue;
-					?>
-					<option value="<?php echo $role ?>" <?php selected($post->post_edit_cap , $role) ?>><?php _ex( $rolename, 'User role' ) ?></option>
-				<?php } ?>
-				</optgroup>
-
-				<optgroup label="<?php _e( 'Users with Access to' , 'wpundisclosed') ?>">
-				<?php foreach ($groups as $group=>$groupname) { 
-					if ( ! wpaa_user_can_accessarea($group) )
-						continue;
-					?>
-					<option value="<?php echo $group ?>" <?php selected($post->post_edit_cap , $group) ?>><?php _e( $groupname , 'wpundisclosed' ) ?></option>
-				<?php } ?>
-				</optgroup>
-			</select>
+			<label for="post_edit_cap-select"><strong><?php _e( 'Who can edit:' , 'wpundisclosed') ?></strong></label><br />
+			<?php 
+				self::access_area_dropdown( $edit_rolenames , $groups , $post->post_edit_cap , 'post_edit_cap' );
+			?>
 		</div><?php
 
-//* // for future use
 		if ( post_type_supports( $post->post_type , 'comments' ) ) {
 		
 		?><div class="disclosure-comment-select misc-pub-section">
-			<label for="select-disclosure"><strong><?php _e( 'Who can comment:' , 'wpundisclosed') ?></strong></label><br />
-			<select id="select-disclosure" name="post_comment_cap">
-				<option value="exist" <?php selected($post->post_comment_cap , 'exist') ?>><?php _e( 'WordPress default' , 'wpundisclosed' ) ?></option>
-				<option value="read" <?php selected($post->post_comment_cap , 'read') ?>><?php _e( 'Blog users' , 'wpundisclosed' ) ?></option>
-			
-				<optgroup label="<?php _e( 'WordPress roles' , 'wpundisclosed') ?>">
-				<?php foreach ($rolenames as $role=>$rolename) {
-					if ( !wpaa_user_can_role( $role , $user_role_caps ) )
-						continue;
-					?>
-					<option value="<?php echo $role ?>" <?php selected($post->post_comment_cap , $role) ?>><?php _ex( $rolename, 'User role' ) ?></option>
-				<?php } ?>
-				</optgroup>
-
-				<optgroup label="<?php _e( 'Users with Access to' , 'wpundisclosed') ?>">
-				<?php foreach ($groups as $group=>$groupname) { 
-					if ( ! wpaa_user_can_accessarea($group) )
-						continue;
-					?>
-					<option value="<?php echo $group ?>" <?php selected($post->post_comment_cap , $group) ?>><?php _e( $groupname , 'wpundisclosed' ) ?></option>
-				<?php } ?>
-				</optgroup>
-			</select>
+			<label for="post_comment_cap-select"><strong><?php _e( 'Who can comment:' , 'wpundisclosed') ?></strong></label><br />
+			<?php 
+				self::access_area_dropdown( $rolenames , $groups , $post->post_comment_cap , 'post_comment_cap' );
+			?>
 		</div><?php
 		
 		}
 //*/
 	}
+	
+	static function access_area_dropdown( $roles , $groups , $selected_cap , $fieldname , $first_item_value = null , $first_item_label = ''  ) {
+
+		?>
+		<select id="<?php echo $fieldname ?>-select" name="<?php echo $fieldname ?>"><?php
+			if ( ! is_null( $first_item_value ) && ! is_null( $first_item_label ) ) {
+				?><option value="<?php $first_item_value ?>"><?php echo $first_item_label ?></option><?php
+			}
+		
+			?><option value="exist" <?php selected($selected_cap , 'exist') ?>><?php _e( 'WordPress default' , 'wpundisclosed' ) ?></option><?php
+			if ( $fieldname != 'post_edit_cap' ) {
+				?><option value="read" <?php selected($selected_cap , 'read') ?>><?php _e( 'Blog users' , 'wpundisclosed' ) ?></option><?php
+			}
+			
+			?><optgroup label="<?php _e( 'WordPress roles' , 'wpundisclosed') ?>">
+			<?php foreach ($roles as $role => $rolename) {
+				if ( !wpaa_user_can_role( $role , $user_role_caps ) )
+					continue;
+				?>
+				<option value="<?php echo $role ?>" <?php selected($selected_cap , $role) ?>><?php _ex( $rolename, 'User role' ) ?></option>
+			<?php } ?>
+			</optgroup>
+			<?php if ( count($groups) ) { ?>
+				<optgroup label="<?php _e( 'Users with Access to' , 'wpundisclosed') ?>">
+				<?php foreach ($groups as $group=>$groupname) { 
+					if ( ! wpaa_user_can_accessarea($group) )
+						continue;
+					?>
+					<option value="<?php echo $group ?>" <?php selected($selected_cap , $group) ?>><?php _e( $groupname , 'wpundisclosed' ) ?></option>
+				<?php } /* foreach( $groups ) */ ?>
+				</optgroup>
+			<?php }  /* if count( $groups ) */ ?>
+		</select>
+		<?php
+	}
+	
+	static function bulk_edit_fields( $column_name, $post_type ) {
+		global $wp_roles;
+
+		$editing_cap 	= get_post_type_object($post_type)->cap->edit_posts;
+		// <select> with - Evereybody, Logged-in only, list WP-Roles, list discosure-groups
+		$current_user 		= wp_get_current_user();
+		$roles	 			= $wp_roles->get_names();
+		$groups 			= UndisclosedUserlabel::get_label_array( );
+		
+		$user_role_caps 	= wpaa_get_user_role_caps();
+
+		$rolenames 			= array();
+		$edit_rolenames		= array();
+		foreach ( $roles as $role => $rolename ) {
+			if ( wpaa_user_can_role( $role , $user_role_caps ) ) {
+				$rolenames[$role] = $rolename;
+				if ( get_role( $role )->has_cap( $editing_cap ) ) {
+					$edit_rolenames[$role] = $rolename;
+				}
+			}
+		}
+
+		?><fieldset class="inline-edit-col-access-areas">	
+			<div class="inline-edit-col">
+				<div class="inline-edit-group">
+					<label>
+						<span class="title"><?php _e( 'Who can read:' , 'wpundisclosed') ?></span>
+						<?php 
+						self::access_area_dropdown( $rolenames , $groups , '' , 'post_view_cap' , -1 , __( '&mdash; No Change &mdash;' ) );
+						?>
+					</label>
+				</div>
+				<div class="inline-edit-group">
+					<label>
+						<span class="title"><?php _e( 'Who can edit:' , 'wpundisclosed') ?></span>
+						<?php 
+						self::access_area_dropdown( $edit_rolenames , $groups , '' , 'post_edit_cap'  , -1 , __( '&mdash; No Change &mdash;' )  );
+						?>
+					</label>
+				</div>
+				<div class="inline-edit-group">
+					<label>
+						<span class="title"><?php _e( 'Who can comment:' , 'wpundisclosed') ?></span>
+						<?php 
+						self::access_area_dropdown( $rolenames , $groups , '' , 'post_comment_cap'  , -1 , __( '&mdash; No Change &mdash;' ) );
+						?>
+					</label>
+				</div>
+			</div>
+		</fieldset><?php
+		
+	}
+	
 	
 	// --------------------------------------------------
 	// admin list views
@@ -208,19 +238,29 @@ class UndisclosedEditPost {
 		$cols = array();
 		foreach ($columns as $k=>$v) {
 			$cols[$k] = $v;
-			if ($k=='author') 
-				$cols['disclosure'] = __('Visible to','wpundisclosed');
+			if ($k=='author') {
+				$cols['view_cap'] = __('Visible to','wpundisclosed');
+				$cols['comment_cap'] = __('Commentable to','wpundisclosed');
+			}
 		}
 		return $cols;
 	}
 	static function manage_disclosure_column($column, $post_ID) {
-		if ( $column != 'disclosure')
-			return;
-		$roles = new WP_Roles();
-		$names = array_merge(array('exist' => __( 'Everybody' , 'wpundisclosed' ), 'read' => __( 'Blog users' , 'wpundisclosed' )) , UndisclosedUserlabel::get_label_array( ), $roles->get_names());
-		$names[''] = $names['exist'];
-		$val = get_post($post_ID)->post_view_cap;
-		_e($names[$val]);
+		global $wp_roles;
+		switch ( $column ) {
+			case 'view_cap':
+				$names = array_merge(array('exist' => __( 'Everybody' , 'wpundisclosed' ), 'read' => __( 'Blog users' , 'wpundisclosed' )) , UndisclosedUserlabel::get_label_array( ), $wp_roles->get_names());
+				$names[''] = $names['exist'];
+				$val = get_post($post_ID)->post_view_cap;
+				_e($names[$val]);
+				break;
+			case 'comment_cap':
+				$names = array_merge(array('exist' => __( 'Everybody' , 'wpundisclosed' ), 'read' => __( 'Blog users' , 'wpundisclosed' )) , UndisclosedUserlabel::get_label_array( ), $wp_roles->get_names());
+				$names[''] = $names['exist'];
+				$val = get_post($post_ID)->post_comment_cap;
+				_e($names[$val]);
+				break;
+		}
 	}
 
 }
