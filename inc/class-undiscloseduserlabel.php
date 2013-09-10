@@ -10,7 +10,9 @@
 
 if ( ! class_exists('UndisclosedUserlabel') ):
 class UndisclosedUserlabel {
+	
 	private static $_what_went_wrong=0;
+	
 	static function get_count_available_userlabels( ) {
 		global $wpdb;
 		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
@@ -151,7 +153,7 @@ class UndisclosedUserlabel {
 		global $wpdb;
 		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
 
-		extract( $data , EXTR_SKIP );
+		extract( $data , EXTR_SKIP ); // cap_title, blog_id
 		
 		if ( self::title_exists( $cap_title , $blog_id ) ) {
 			self::$_what_went_wrong = 4;
@@ -194,7 +196,7 @@ class UndisclosedUserlabel {
 	static function title_exists( $cap_title , $blog_id ) {
 		global $wpdb;
 		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
-		return $wpdb->get_var( $wpdb->prepare( "SELECT id FROM $table_name WHERE cap_title='%s' AND blog_id='%d'" , $cap_title , $blog_id) );
+		return $wpdb->get_var( $wpdb->prepare( "SELECT id FROM $table_name WHERE cap_title=%s AND blog_id=%d" , $cap_title , $blog_id) );
 	}
 }
 endif;

@@ -25,6 +25,7 @@ class UndisclosedCore {
 
 	static function admin_enqueue_scripts() {
 		wp_register_style( 'disclosure-admin' , plugins_url('css/disclosure-admin.css', dirname(__FILE__)) );
+		wp_register_script( 'disclosure-admin-user-ajax' , plugins_url('js/disclosure-admin-user-ajax.js', dirname(__FILE__)) );
 	}
 	// translation ready.
 	static function plugin_loaded() {

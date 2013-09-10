@@ -81,11 +81,9 @@ class UndisclosedEditPost {
 		$data['post_edit_cap']		= isset($postarr['post_edit_cap']) ? $postarr['post_edit_cap'] : 'exist';
 		//*/
 
-		if ( post_type_supports( $data["post_type"] , 'comments' ) ) {
+		if ( post_type_supports( $data["post_type"] , 'comments' ) )
 			$data['post_comment_cap']	= isset($postarr['post_comment_cap']) ? $postarr['post_comment_cap'] : 'exist';
-			if ( $data['post_comment_cap'] != 'exist' )
-				$data['comment_status'] = 'closed';
-		}
+		
 		return $data;
 	}
 	
@@ -143,7 +141,8 @@ class UndisclosedEditPost {
 	}
 	
 	static function access_area_dropdown( $roles , $groups , $selected_cap , $fieldname , $first_item_value = null , $first_item_label = ''  ) {
-
+		// comments should be: wp-defaults, logged in users
+		// 
 		?>
 		<select id="<?php echo $fieldname ?>-select" name="<?php echo $fieldname ?>"><?php
 			if ( ! is_null( $first_item_value ) && ! is_null( $first_item_label ) ) {
@@ -152,7 +151,7 @@ class UndisclosedEditPost {
 		
 			?><option value="exist" <?php selected($selected_cap , 'exist') ?>><?php _e( 'WordPress default' , 'wpundisclosed' ) ?></option><?php
 			if ( $fieldname != 'post_edit_cap' ) {
-				?><option value="read" <?php selected($selected_cap , 'read') ?>><?php _e( 'Blog users' , 'wpundisclosed' ) ?></option><?php
+				?><option value="read" <?php selected($selected_cap , 'read') ?>><?php _e( 'Logged in Users' , 'wpundisclosed' ) ?></option><?php
 			}
 			
 			?><optgroup label="<?php _e( 'WordPress roles' , 'wpundisclosed') ?>">

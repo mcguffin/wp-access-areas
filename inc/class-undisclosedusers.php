@@ -18,6 +18,7 @@ class UndisclosedUsers {
 				add_filter('wpmu_users_columns' , array(__CLASS__ , 'add_userlabels_column'));
 			add_filter('manage_users_columns' , array(__CLASS__ , 'add_userlabels_column'));
 			add_filter('manage_users_custom_column' , array(__CLASS__ , 'manage_userlabels_column') , 10 ,3 );
+			
 		}
 		add_action('add_user_to_blog',array(__CLASS__,'add_user_to_blog'),10,3);
 	}
@@ -30,18 +31,49 @@ class UndisclosedUsers {
 			add_action( 'profile_update' , array(__CLASS__ , 'profile_update') , 10, 2 );
 			add_action( 'edit_user_profile' , array( __CLASS__ , 'personal_options' ) );
 			add_action( 'show_user_profile' , array( __CLASS__ , 'personal_options' ) );
+			
+			// css
+			add_action( 'load-users.php' , array( __CLASS__ , 'load_user_editor' ) );
 			add_action( 'load-profile.php' , array( __CLASS__ , 'load_user_editor' ) );
 			add_action( 'load-user-edit.php' , array( __CLASS__ , 'load_user_editor' ) );
-
-			add_action( 'load-users.php' , array( __CLASS__ , 'load_user_editor' ) );
-			add_action( 'load-user-edit.php' , array( __CLASS__ , 'load_user_editor' ) );
 			
+			// ajax
+			wp_enqueue_script( 'disclosure-admin-user-ajax' );
+			add_action( 'wp_ajax_add_accessarea', array( __CLASS__ , 'ajax_add_access_area' ) );
 			
 			add_filter('views_users' , array( __CLASS__ , 'table_views' ) );
 		}
 		add_filter( 'additional_capabilities_display' , '__return_false' );
 	}
-
+	
+	
+	// --------------------------------------------------
+	// ajax adding access areas
+	// --------------------------------------------------
+	static function ajax_add_access_area() {
+		if ( wp_verify_nonce(@$_POST['_wp_ajax_nonce'] , 'userlabel-new' ) && current_user_can( 'promote_users' ) ) {
+			if ( ( !$_POST['blog_id'] && !is_super_admin() ) || ( $_POST['blog_id'] && $_POST['blog_id'] != get_current_blog_id() ) ) {
+				?><span class="disclosure-label-item error"><?php _e('Insufficient privileges.','wpundisclosed'); ?></span><?php  // throw_error: insufficient privileges
+			} else {
+				$create_id = UndisclosedUserlabel::create_userlabel( array('cap_title' => $_POST['cap_title'], 'blog_id' => $_POST['blog_id'] ) );
+			
+				if ( $create_id ) {
+					$label = UndisclosedUserlabel::get_userlabel( $create_id );
+					self::_select_label_formitem( $label , true );
+				} else {
+					switch (UndisclosedUserlabel::what_went_wrong()) {
+						case 4: // Error: area exists
+							?><span class="disclosure-label-item error"><?php _e('Access Area exists.','wpundisclosed'); ?></span><?php  // throw_error: insufficient privileges
+							break;
+					};
+				}
+			}
+		} else {
+			?><span class="disclosure-label-item error"><?php _e('Insufficient privileges.','wpundisclosed'); ?></span><?php  // throw_error: insufficient privileges
+			// throw_error: insufficient privileges
+		}
+		die();
+	}
 	
 	// --------------------------------------------------
 	// user editing
@@ -122,11 +154,18 @@ class UndisclosedUsers {
 		?><h3><?php _e( 'Access Areas' , 'wpundisclosed' ) ?></h3><?php
 		?><table class="form-table" id="disclosure-group-items"><?php
 		
-		$labelrows = array( 
-								__( 'Grant Network-Wide Access' , 'wpundisclosed' )	=> array( 'network' => true ,	'labels' => UndisclosedUserLabel::get_network_userlabels()  , ), 
-			 );
+		$labelrows = array();
+		$labelrows[ __( 'Grant Network-Wide Access' , 'wpundisclosed' )] = array( 
+			'network' => true ,	
+			'labels' => UndisclosedUserLabel::get_network_userlabels()  , 
+			'can_ajax_add' => is_network_admin() || is_super_admin(),
+		);
 		if ( ! is_network_admin() /*&& is_accessareas_active_for_network()*/ )
-			$labelrows[ __( 'Grant Access' , 'wpundisclosed' ) ] = array( 'network' => false ,		'labels' => UndisclosedUserLabel::get_blog_userlabels() , );
+			$labelrows[ __( 'Grant Access' , 'wpundisclosed' ) ] = array( 
+				'network' => false ,
+				'labels' => UndisclosedUserLabel::get_blog_userlabels() ,
+				'can_ajax_add' => current_user_can( 'promote_users' ),
+			);
 		$label_caps = (array) (is_multisite() ? get_user_meta($profileuser->ID , WPUND_GLOBAL_USERMETA_KEY , true ) : null); 
 		
 		foreach ( $labelrows as $row_title => $value ) {
@@ -151,22 +190,46 @@ class UndisclosedUsers {
 				<td><?php
 				foreach ( $labels as $label ) {
 					$user_has_cap = in_array( $label->capability , $label_caps ) || $profileuser->has_cap( $label->capability );
+					self::_select_label_formitem( $label , $user_has_cap );
+					/*
 					?><span class="disclosure-label-item"><?php
 						?><input type="hidden" name="userlabels[<?php echo $label->ID ?>]" value="0" /><?php
 				
 						?><input id="cap-<?php echo $label->capability ?>" type="checkbox" name="userlabels[<?php echo $label->ID ?>]" value="1" <?php checked( $user_has_cap , true ) ?> /><?php
 						?><label for="cap-<?php echo $label->capability ?>">  <?php echo $label->cap_title ?></label><?php
 					?></span><?php
+					*/
 				}
+				
+				if ( $can_ajax_add )
+					self::_ajax_add_area_formitem( $network ? 0 : get_current_blog_id() );
+				
 			?></td></tr><?php
 		
 		}
 		?></table><?php
 	}
+	private static function _select_label_formitem( $label , $checked ) {
+		?><span class="disclosure-label-item"><?php
+			?><input type="hidden" name="userlabels[<?php echo $label->ID ?>]" value="0" /><?php
+	
+			?><input id="cap-<?php echo $label->capability ?>" type="checkbox" name="userlabels[<?php echo $label->ID ?>]" value="1" <?php checked( $checked , true ) ?> /><?php
+			?><label for="cap-<?php echo $label->capability ?>">  <?php echo $label->cap_title ?></label><?php
+		?></span><?php
+	}
+	
+	private static function _ajax_add_area_formitem( $blog_id ) {
+		?><span class="disclosure-label-item ajax-add-item"><?php
+			wp_nonce_field( 'userlabel-new' , '_wp_ajax_nonce' );
+			?><input type="hidden" name="blog_id" value="<?php echo $blog_id; ?>" /><?php
+			?><input id="cap-add" type="text" name="cap_title" placeholder="<?php _ex('Add New','access area','wpundisclosed') ?>" /><?php
+			
+			?><a href="#" id="cap-add-submit" class="button"><?php _e('+') ?></a><?php
+		?></span><?php
+	}
 	
 	
-
-
+	
 	
 	// --------------------------------------------------
 	// user admin list view

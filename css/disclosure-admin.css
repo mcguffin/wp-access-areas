@@ -90,7 +90,10 @@
 	-moz-border-radius:0;
 	border-radius:0;
 }
-
+.disclosure-label-item.error {
+	background:#faa;
+	color:#600;
+}
 .disclosure-label-item input[type='checkbox'] {
 }
 .disclosure-label-item label {
@@ -111,3 +114,13 @@
 #wpbody-content .bulk-edit-row-page .inline-edit-col-access-areas label span.title {
 	width:auto;
 }
+
+
+
+
+/* axax add */
+#cap-add {
+	width:9em;
+}
+
+
