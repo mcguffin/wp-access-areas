@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WordPress Access Areas v1.1.4\n"
+"Project-Id-Version: WordPress Access Areas v1.1.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2013-08-07 09:04:35+0000\n"
+"PO-Revision-Date: 2013-09-12 06:29:18+0000\n"
 "Last-Translator: admin <joern@flyingletters.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -20,71 +20,71 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Textdomain-Support: yes"
 
-#: inc/class-undisclosedcaps.php:35
-#: inc/class-undisclosedcaps.php:205
+#: inc/class-undisclosedcaps.php:28
+#: inc/class-undisclosedcaps.php:198
 #@ wpundisclosed
 msgid "Manage Access Areas"
 msgstr "Zugangsbereiche verwalten"
 
-#: inc/class-undisclosedcaps.php:35
-#: inc/class-undisclosedusers.php:121
+#: inc/class-undisclosedcaps.php:28
+#: inc/class-undisclosedusers.php:122
 #: inc/class-undisclosedusers.php:202
 #@ wpundisclosed
 msgid "Access Areas"
 msgstr "Zugangsbereiche"
 
-#: inc/class-undisclosedcaps.php:45
+#: inc/class-undisclosedcaps.php:38
 #@ wpundisclosed
 msgid "You do not have permission to do this."
 msgstr "Sie haben nicht die erforderlichen Rechte."
 
-#: inc/class-undisclosedcaps.php:55
+#: inc/class-undisclosedcaps.php:48
 #@ wpundisclosed
 msgid "Please enter a Label."
 msgstr "Bitte geben Sie ein Namen ein"
 
-#: inc/class-undisclosedcaps.php:58
+#: inc/class-undisclosedcaps.php:51
 #@ wpundisclosed
 msgid "You do not have permission to edit network wide user labels."
 msgstr "Sie haben nicht die erforderlichen Rechte Netzwerk weite Zugriffsbereiche zu bearbeiten."
 
-#: inc/class-undisclosedcaps.php:133
+#: inc/class-undisclosedcaps.php:126
 #@ wpundisclosed
 msgid "Edit Access Area"
 msgstr "Zugangsbereich bearbeiten"
 
-#: inc/class-undisclosedcaps.php:135
-#: inc/class-undisclosedcaps.php:160
+#: inc/class-undisclosedcaps.php:128
+#: inc/class-undisclosedcaps.php:153
 #@ wpundisclosed
 msgid "Create Access Area"
 msgstr "Zugangsbereich erstellen"
 
-#: inc/class-undisclosedcaps.php:150
+#: inc/class-undisclosedcaps.php:143
 #@ wpundisclosed
 msgid "Access Area"
 msgstr "Zugangsbereich"
 
-#: inc/class-undisclosedcaps.php:151
+#: inc/class-undisclosedcaps.php:144
 #@ wpundisclosed
 msgid "New Access Area"
 msgstr "Neuer Zugangsbereich"
 
-#: inc/class-undisclosedcaps.php:158
+#: inc/class-undisclosedcaps.php:151
 #@ wpundisclosed
 msgid "Save changes"
 msgstr "Änderungen sichern"
 
-#: inc/class-undisclosedcaps.php:176
+#: inc/class-undisclosedcaps.php:169
 #@ wpundisclosed
 msgid "Access Area created."
 msgstr "Zugangsbereich wurde erstellt."
 
-#: inc/class-undisclosedcaps.php:179
+#: inc/class-undisclosedcaps.php:172
 #@ wpundisclosed
 msgid "Access Area updated."
 msgstr "Zugangsbereich wurde aktualisiert."
 
-#: inc/class-undisclosedcaps.php:182
+#: inc/class-undisclosedcaps.php:175
 #, php-format
 #@ wpundisclosed
 msgid "Access Area deleted."
@@ -92,75 +92,65 @@ msgid_plural "%d Access Areas deleted."
 msgstr[0] "Zugangsbereich gelöscht."
 msgstr[1] "Es wurden %d Zugangsbereiche gelöscht."
 
-#: inc/class-undisclosedcaps.php:185
+#: inc/class-undisclosedcaps.php:178
 #@ wpundisclosed
 msgid "An Access Area with that Name already exists."
 msgstr "Ein Zugangsbereich existiert schon unter diesem Namen."
 
-#: inc/class-undisclosedcaps.php:206
+#: inc/class-undisclosedcaps.php:199
 #@ wpundisclosed
 msgctxt "access area"
 msgid "Add New"
 msgstr "Erstellen"
 
-#: inc/class-undisclosededitpost.php:68
+#: inc/class-undisclosededitpost.php:67
 #@ wpundisclosed
 msgid "Access"
 msgstr "Zugang"
 
-#: inc/class-undisclosededitpost.php:121
-#: inc/class-undisclosededitpost.php:148
-#: inc/class-undisclosededitpost.php:176
+#: inc/class-undisclosededitpost.php:149
 #@ wpundisclosed
 msgid "WordPress default"
 msgstr "WordPress Standard"
 
-#: inc/class-undisclosededitpost.php:122
-#: inc/class-undisclosededitpost.php:177
-#: inc/class-undisclosededitpost.php:238
+#: inc/class-undisclosededitpost.php:195
+#: inc/class-undisclosededitpost.php:201
 #@ wpundisclosed
 msgid "Blog users"
 msgstr "Blog-Benutzer"
 
-#: inc/class-undisclosededitpost.php:124
-#: inc/class-undisclosededitpost.php:150
-#: inc/class-undisclosededitpost.php:179
+#: inc/class-undisclosededitpost.php:154
 #@ wpundisclosed
 msgid "WordPress roles"
 msgstr "WordPress Rollen"
 
-#: inc/class-undisclosededitpost.php:174
+#: inc/class-undisclosededitpost.php:130
 #@ wpundisclosed
 msgid "Who can comment:"
 msgstr "Wer darf kommentieren:"
 
-#: inc/class-undisclosededitpost.php:230
+#: inc/class-undisclosededitpost.php:185
 #@ wpundisclosed
 msgid "Visible to"
 msgstr "Sichtbar für"
 
-#: inc/class-undisclosededitpost.php:238
+#: inc/class-undisclosededitpost.php:195
+#: inc/class-undisclosededitpost.php:201
 #@ wpundisclosed
 msgid "Everybody"
 msgstr "Jeder"
-
-#: inc/class-undisclosedposts.php:49
-#, php-format
-#@ wpundisclosed
-msgid "Please <a href=\"%s\">log in</a> to see this content!"
-msgstr "Bitte <a href=\"%s\">einloggen</a> um diese Seite anzuschauen!"
 
 #: inc/class-undiscloseduserlabel.php:72
 #@ wpundisclosed
 msgid "(Network)"
 msgstr "(Netzwerk)"
 
-#: inc/class-undisclosedusers.php:125
+#: inc/class-undisclosedusers.php:126
 #@ wpundisclosed
 msgid "Grant Network-Wide Access"
 msgstr "Netzwerkweiten Zugang gewähren"
 
-#: inc/class-undisclosedusers.php:128
+#: inc/class-undisclosedusers.php:129
 #@ wpundisclosed
 msgid "Grant Access"
 msgstr "Zugang gewähren"
@@ -190,36 +180,34 @@ msgstr "Name"
 msgid "Scope"
 msgstr "Gültigkeitsbereich"
 
-#: inc/class-userlabel_list_table.php:82
+#: inc/class-userlabel_list_table.php:83
 #@ wpundisclosed
 msgid "Network"
 msgstr "Netzwerk"
 
-#: inc/class-userlabel_list_table.php:74
-#: inc/class-userlabel_list_table.php:90
-#: inc/class-userlabel_list_table.php:144
+#: inc/class-userlabel_list_table.php:75
+#: inc/class-userlabel_list_table.php:91
+#: inc/class-userlabel_list_table.php:145
 #@ default
 msgid "Delete"
 msgstr ""
 
-#: inc/class-undisclosedcaps.php:188
+#: inc/class-undisclosedcaps.php:181
 #@ wpundisclosed
 msgid "Could not find the specified Access Area."
 msgstr "Der angegebene Zugangsbereich konnte nicht gefunden werden."
 
-#: inc/class-undisclosededitpost.php:134
-#: inc/class-undisclosededitpost.php:159
-#: inc/class-undisclosededitpost.php:188
+#: inc/class-undisclosededitpost.php:163
 #@ wpundisclosed
 msgid "Users with Access to"
 msgstr "Benutzer mit Zugang zu:"
 
-#: inc/class-undisclosededitpost.php:119
+#: inc/class-undisclosededitpost.php:115
 #@ wpundisclosed
 msgid "Who can read:"
 msgstr "Wer darf lesen:"
 
-#: inc/class-undisclosededitpost.php:146
+#: inc/class-undisclosededitpost.php:121
 #@ wpundisclosed
 msgid "Who can edit:"
 msgstr "Wer darf bearbeiten:"
@@ -254,9 +242,24 @@ msgstr "Jörn Lund"
 msgid "https://github.com/mcguffin/"
 msgstr ""
 
+#: inc/class-undisclosededitpost.php:151
+#@ wpundisclosed
+msgid "Logged in Users"
+msgstr "Eingeloggte Benutzer"
+
+#: inc/class-undisclosededitpost.php:186
+#@ wpundisclosed
+msgid "Commentable to"
+msgstr "Kommentierbar"
+
+#: inc/class-userlabel_list_table.php:47
+#@ wpundisclosed
+msgid "WP Capability"
+msgstr ""
+
 #. translators: plugin header field 'Version'
 #: wp-access-areas.php:0
 #@ wpundisclosed
-msgid "1.1.4"
+msgid "1.1.11"
 msgstr ""
 
