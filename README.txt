@@ -77,6 +77,16 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 
 == Changelog ==
 
+= 1.1.11 =
+Debug: Fix Comment issue. Selecting "WordPress default" now does what it is supposed to: handling over the comment responsibility to WordPress.
+
+= 1.1.10 =
+Debug: Fix missing file issue
+
+= 1.1.9 =
+Feature/Debug: Network admins now have access to all areas on all blogs. Blog admins have access to all areas on their own blog(s).
+Code: put general use processes into function
+
 = 1.1.9 =
 Feature/Debug: Network admins now have access to all areas on all blogs. Blog admins have access to all areas on their own blog(s).
 Code: put general use processes into function
@@ -118,4 +128,4 @@ Initial Release
 
 == Upgrade notice ==
 
-Everybody should update. 
+Debug: Fix Comments. Selecting "WordPress default" now does what it is supposed to: handling over the comment responsibility to WordPress.
