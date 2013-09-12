@@ -32,7 +32,6 @@ class UndisclosedEditPost {
 		add_filter('map_meta_cap', array( __CLASS__ , 'map_meta_cap' ) ,10,4);
 	}
 	static function map_meta_cap($caps, $cap, $user_id, $args ) {
-//		print_r( func_get_args());
 		switch ( $cap ) {
 			case 'edit_post':
 			case 'delete_post':
