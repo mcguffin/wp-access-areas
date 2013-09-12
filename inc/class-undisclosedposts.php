@@ -29,13 +29,11 @@ class UndisclosedPosts {
 	// comment restrictions
 	// --------------------------------------------------
 	static function comments_open( $open, $post_id ) {
-		if ( $open ) // opened by wp 
-			return true;
-		
-		if ( $_post = get_post($post_id) )
-			return wpaa_user_can($_post->post_comment_cap);
-		
-		return false;
+		if ( $post = get_post($post_id) ) {
+			if ( $post->post_comment_cap != 'exist' )
+				$open = wpaa_user_can( $post->post_comment_cap );
+		}
+		return $open;
 	}
 	
 	
