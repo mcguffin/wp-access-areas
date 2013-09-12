@@ -197,8 +197,8 @@ class UndisclosedEditPost {
 				}
 			}
 		}
-
-		?><fieldset class="inline-edit-col-access-areas">	
+		
+		?><fieldset class="inline-edit-col-access-areas">
 			<div class="inline-edit-col">
 				<div class="inline-edit-group">
 					<label>
