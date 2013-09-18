@@ -27,34 +27,6 @@ class UndisclosedEditPost {
 		}
 		add_action( 'load-post.php' , array( __CLASS__ , 'load_style' ) );
 		add_action( 'load-post-new.php' , array( __CLASS__ , 'load_style' ) );
-		add_filter('map_meta_cap', array( __CLASS__ , 'map_meta_cap' ) ,10,4);
-	}
-	static function map_meta_cap($caps, $cap, $user_id, $args ) {
-		switch ( $cap ) {
-			case 'edit_post':
-			case 'delete_post':
-			case 'edit_page':
-			case 'delete_page':
-				if ( count($args[0]) ) {
-					$post_ID = $args[0];
-					// if he not can like specfied, ;
-					$post = get_post( $post_ID );
-					$edit_cap = $post->post_edit_cap;
-					$view_cap = $post->post_view_cap;
-					if ( ! $edit_cap )
-						break;
-					global $wp_roles;
-					if ( $wp_roles->is_role( $edit_cap )) {
-						if ( ! wpaa_user_can_role( $edit_cap ) || ! wpaa_user_can_role( $view_cap ) )
-							$caps[] = 'do_not_allow';
-					} else {
-						if ( ! current_user_can( $edit_cap ) || ! current_user_can( $view_cap ) )
-							$caps[] = 'do_not_allow';
-					}
-				}
-				break;
-		}
-		return $caps;
 	}
 	static function load_style() {
 		wp_enqueue_style( 'disclosure-admin' );
