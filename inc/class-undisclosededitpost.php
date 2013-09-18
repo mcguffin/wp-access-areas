@@ -38,15 +38,17 @@ class UndisclosedEditPost {
 				if ( count($args[0]) ) {
 					$post_ID = $args[0];
 					// if he not can like specfied, ;
-					$edit_cap = get_post( $post_ID )->post_edit_cap;
+					$post = get_post( $post_ID );
+					$edit_cap = $post->post_edit_cap;
+					$view_cap = $post->post_view_cap;
 					if ( ! $edit_cap )
 						break;
 					global $wp_roles;
 					if ( $wp_roles->is_role( $edit_cap )) {
-						if ( ! wpaa_user_can_role( $edit_cap ) )
+						if ( ! wpaa_user_can_role( $edit_cap ) || ! wpaa_user_can_role( $view_cap ) )
 							$caps[] = 'do_not_allow';
 					} else {
-						if ( ! current_user_can( $edit_cap ) )
+						if ( ! current_user_can( $edit_cap ) || ! current_user_can( $view_cap ) )
 							$caps[] = 'do_not_allow';
 					}
 				}
