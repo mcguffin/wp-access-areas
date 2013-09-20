@@ -25,6 +25,7 @@ class UndisclosedEditPost {
 			add_filter('manage_pages_columns' , array(__CLASS__ , 'add_disclosure_column'));
 			add_filter('manage_pages_custom_column' , array(__CLASS__ , 'manage_disclosure_column') , 10 ,2 );
 			add_action('bulk_edit_custom_box' , array(__CLASS__,'bulk_edit_fields') , 10 , 2 );
+			add_action('quick_edit_custom_box' , array(__CLASS__,'quick_edit_fields') , 10 , 2 );
 		}
 		add_action( 'load-edit.php' , array( __CLASS__ , 'load_style' ) );
 		add_action( 'load-post.php' , array( __CLASS__ , 'load_style' ) );
@@ -145,10 +146,21 @@ class UndisclosedEditPost {
 		</select>
 		<?php
 	}
-	
+	static function quick_edit_fields( $column_name, $post_type ) {
+		global $post;
+		self::_edit_fields( $column_name, $post_type , $post , null );
+	}
 	static function bulk_edit_fields( $column_name, $post_type ) {
+		self::_edit_fields( $column_name, $post_type );
+	}
+	private static function _edit_fields( $column_name, $post_type , $post = null , $first_item_value = -1 ) {
 		global $wp_roles;
 		if ($column_name == 'view_cap') {
+
+			$view_cap = ! is_null( $post ) ? $post->post_view_cap : false;
+			$edit_cap = ! is_null( $post ) ? $post->post_edit_cap : false;
+			$comment_cap = ! is_null( $post ) ? $post->post_comment_cap : false;
+
 			$post_type_object	= get_post_type_object($post_type);
 			$editing_cap 		= $post_type_object->cap->edit_posts;
 			$current_user 		= wp_get_current_user();
@@ -169,31 +181,32 @@ class UndisclosedEditPost {
 			}
 		
 			?><fieldset class="inline-edit-col-access-areas">
+				<h3><?php _e('Access','wpundisclosed') ?></h3>
 				<div class="inline-edit-col"><?php
 					if ( $post_type_object->public ) {
 						?><div class="inline-edit-group">
 							<label>
-								<span class="title"><?php _e( 'Who can read:' , 'wpundisclosed') ?></span>
+								<span class="title"><?php _e( 'Read:' , 'wpundisclosed') ?></span>
 								<?php 
-								self::access_area_dropdown( $rolenames , $groups , '' , 'post_view_cap' , -1 , __( '&mdash; No Change &mdash;' ) );
+								self::access_area_dropdown( $rolenames , $groups , $view_cap , 'post_view_cap' , $first_item_value , __( '&mdash; No Change &mdash;' ) );
 								?>
 							</label>
 						</div><?php
 					}
 					?><div class="inline-edit-group">
 						<label>
-							<span class="title"><?php _e( 'Who can edit:' , 'wpundisclosed') ?></span>
+							<span class="title"><?php _e( 'Edit:' , 'wpundisclosed') ?></span>
 							<?php 
-							self::access_area_dropdown( $edit_rolenames , $groups , '' , 'post_edit_cap'  , -1 , __( '&mdash; No Change &mdash;' )  );
+							self::access_area_dropdown( $edit_rolenames , $groups , $edit_cap , 'post_edit_cap'  , $first_item_value , __( '&mdash; No Change &mdash;' )  );
 							?>
 						</label>
 					</div><?php
 					if ( post_type_supports( $post_type , 'comments' ) ) {
 						?><div class="inline-edit-group">
 							<label>
-								<span class="title"><?php _e( 'Who can comment:' , 'wpundisclosed') ?></span>
+								<span class="title"><?php _e( 'Comment:' , 'wpundisclosed') ?></span>
 								<?php 
-								self::access_area_dropdown( $rolenames , $groups , '' , 'post_comment_cap'  , -1 , __( '&mdash; No Change &mdash;' ) );
+								self::access_area_dropdown( $rolenames , $groups , $comment_cap , 'post_comment_cap'  , $first_item_value , __( '&mdash; No Change &mdash;' ) );
 								?>
 							</label>
 						</div><?php

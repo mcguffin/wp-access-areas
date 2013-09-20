@@ -77,6 +77,14 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 
 == Changelog ==
 
+= 1.2.0 =
+Feature: Bulk edit Posts
+Feature: Ajax-Add AAs on User edit screen
+Debug: Fix invalid HMTL on user list table
+Debug: Remove edit post link from frontend
+Debug: Invisible posts are now also excluded from editing
+Debug: Remove "Who can read"-Select from non-public post types
+
 = 1.1.11 =
 Debug: Fix Comment issue. Selecting "WordPress default" now does what it is supposed to: handling over the comment responsibility to WordPress.
 
