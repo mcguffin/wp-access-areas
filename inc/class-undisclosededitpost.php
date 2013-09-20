@@ -29,32 +29,6 @@ class UndisclosedEditPost {
 		add_action( 'load-edit.php' , array( __CLASS__ , 'load_style' ) );
 		add_action( 'load-post.php' , array( __CLASS__ , 'load_style' ) );
 		add_action( 'load-post-new.php' , array( __CLASS__ , 'load_style' ) );
-		add_filter('map_meta_cap', array( __CLASS__ , 'map_meta_cap' ) ,10,4);
-	}
-	static function map_meta_cap($caps, $cap, $user_id, $args ) {
-		switch ( $cap ) {
-			case 'edit_post':
-			case 'delete_post':
-			case 'edit_page':
-			case 'delete_page':
-				if ( count($args[0]) ) {
-					$post_ID = $args[0];
-					// if he not can like specfied, ;
-					$edit_cap = get_post( $post_ID )->post_edit_cap;
-					if ( ! $edit_cap )
-						break;
-					global $wp_roles;
-					if ( $wp_roles->is_role( $edit_cap )) {
-						if ( ! wpaa_user_can_role( $edit_cap ) )
-							$caps[] = 'do_not_allow';
-					} else {
-						if ( ! current_user_can( $edit_cap ) )
-							$caps[] = 'do_not_allow';
-					}
-				}
-				break;
-		}
-		return $caps;
 	}
 	static function load_style() {
 		wp_enqueue_style( 'disclosure-admin' );
@@ -98,8 +72,6 @@ class UndisclosedEditPost {
 		// <select> with - Evereybody, Logged-in only, list WP-Roles, list discosure-groups
 		$roles	 			= $wp_roles->get_names();
 		$groups 			= UndisclosedUserlabel::get_label_array( );
-		
-		
 		$user_role_caps 	= wpaa_get_user_role_caps();
 
 		$rolenames 			= array();
@@ -113,12 +85,14 @@ class UndisclosedEditPost {
 			}
 		}
 		
-		?><div class="disclosure-view-select misc-pub-section">
-			<label for="post_view_cap-select"><strong><?php _e( 'Who can read:' , 'wpundisclosed') ?></strong></label><br />
-			<?php 
-				self::access_area_dropdown( $rolenames , $groups , $post->post_view_cap , 'post_view_cap' );
-			?>
-		</div><?php
+		if ( $post_type_object->public ) {
+			?><div class="disclosure-view-select misc-pub-section">
+				<label for="post_view_cap-select"><strong><?php _e( 'Who can read:' , 'wpundisclosed') ?></strong></label><br />
+				<?php 
+					self::access_area_dropdown( $rolenames , $groups , $post->post_view_cap , 'post_view_cap' );
+				?>
+			</div><?php
+		}
 		?><div class="disclosure-edit-select misc-pub-section">
 			<label for="post_edit_cap-select"><strong><?php _e( 'Who can edit:' , 'wpundisclosed') ?></strong></label><br />
 			<?php 
@@ -127,14 +101,12 @@ class UndisclosedEditPost {
 		</div><?php
 
 		if ( post_type_supports( $post->post_type , 'comments' ) ) {
-		
-		?><div class="disclosure-comment-select misc-pub-section">
-			<label for="post_comment_cap-select"><strong><?php _e( 'Who can comment:' , 'wpundisclosed') ?></strong></label><br />
-			<?php 
-				self::access_area_dropdown( $rolenames , $groups , $post->post_comment_cap , 'post_comment_cap' );
-			?>
-		</div><?php
-		
+			?><div class="disclosure-comment-select misc-pub-section">
+				<label for="post_comment_cap-select"><strong><?php _e( 'Who can comment:' , 'wpundisclosed') ?></strong></label><br />
+				<?php 
+					self::access_area_dropdown( $rolenames , $groups , $post->post_comment_cap , 'post_comment_cap' );
+				?>
+			</div><?php
 		}
 //*/
 	}
@@ -177,56 +149,61 @@ class UndisclosedEditPost {
 	
 	static function bulk_edit_fields( $column_name, $post_type ) {
 		global $wp_roles;
-
-		$editing_cap 	= get_post_type_object($post_type)->cap->edit_posts;
-		// <select> with - Evereybody, Logged-in only, list WP-Roles, list discosure-groups
-		$current_user 		= wp_get_current_user();
-		$roles	 			= $wp_roles->get_names();
-		$groups 			= UndisclosedUserlabel::get_label_array( );
+		if ($column_name == 'view_cap') {
+			$post_type_object	= get_post_type_object($post_type);
+			$editing_cap 		= $post_type_object->cap->edit_posts;
+			$current_user 		= wp_get_current_user();
+			$roles	 			= $wp_roles->get_names();
+			$groups 			= UndisclosedUserlabel::get_label_array( );
 		
-		$user_role_caps 	= wpaa_get_user_role_caps();
+			$user_role_caps 	= wpaa_get_user_role_caps();
 
-		$rolenames 			= array();
-		$edit_rolenames		= array();
-		foreach ( $roles as $role => $rolename ) {
-			if ( wpaa_user_can_role( $role , $user_role_caps ) ) {
-				$rolenames[$role] = $rolename;
-				if ( get_role( $role )->has_cap( $editing_cap ) ) {
-					$edit_rolenames[$role] = $rolename;
+			$rolenames 			= array();
+			$edit_rolenames		= array();
+			foreach ( $roles as $role => $rolename ) {
+				if ( wpaa_user_can_role( $role , $user_role_caps ) ) {
+					$rolenames[$role] = $rolename;
+					if ( get_role( $role )->has_cap( $editing_cap ) ) {
+						$edit_rolenames[$role] = $rolename;
+					}
 				}
 			}
+		
+			?><fieldset class="inline-edit-col-access-areas">
+				<div class="inline-edit-col"><?php
+					if ( $post_type_object->public ) {
+						?><div class="inline-edit-group">
+							<label>
+								<span class="title"><?php _e( 'Who can read:' , 'wpundisclosed') ?></span>
+								<?php 
+								self::access_area_dropdown( $rolenames , $groups , '' , 'post_view_cap' , -1 , __( '&mdash; No Change &mdash;' ) );
+								?>
+							</label>
+						</div><?php
+					}
+					?><div class="inline-edit-group">
+						<label>
+							<span class="title"><?php _e( 'Who can edit:' , 'wpundisclosed') ?></span>
+							<?php 
+							self::access_area_dropdown( $edit_rolenames , $groups , '' , 'post_edit_cap'  , -1 , __( '&mdash; No Change &mdash;' )  );
+							?>
+						</label>
+					</div><?php
+					if ( post_type_supports( $post_type , 'comments' ) ) {
+						?><div class="inline-edit-group">
+							<label>
+								<span class="title"><?php _e( 'Who can comment:' , 'wpundisclosed') ?></span>
+								<?php 
+								self::access_area_dropdown( $rolenames , $groups , '' , 'post_comment_cap'  , -1 , __( '&mdash; No Change &mdash;' ) );
+								?>
+							</label>
+						</div><?php
+					}
+				?></div>
+			</fieldset><?php
 		}
-		
-		?><fieldset class="inline-edit-col-access-areas">
-			<div class="inline-edit-col">
-				<div class="inline-edit-group">
-					<label>
-						<span class="title"><?php _e( 'Who can read:' , 'wpundisclosed') ?></span>
-						<?php 
-						self::access_area_dropdown( $rolenames , $groups , '' , 'post_view_cap' , -1 , __( '&mdash; No Change &mdash;' ) );
-						?>
-					</label>
-				</div>
-				<div class="inline-edit-group">
-					<label>
-						<span class="title"><?php _e( 'Who can edit:' , 'wpundisclosed') ?></span>
-						<?php 
-						self::access_area_dropdown( $edit_rolenames , $groups , '' , 'post_edit_cap'  , -1 , __( '&mdash; No Change &mdash;' )  );
-						?>
-					</label>
-				</div>
-				<div class="inline-edit-group">
-					<label>
-						<span class="title"><?php _e( 'Who can comment:' , 'wpundisclosed') ?></span>
-						<?php 
-						self::access_area_dropdown( $rolenames , $groups , '' , 'post_comment_cap'  , -1 , __( '&mdash; No Change &mdash;' ) );
-						?>
-					</label>
-				</div>
-			</div>
-		</fieldset><?php
-		
 	}
+		
 	
 	
 	// --------------------------------------------------

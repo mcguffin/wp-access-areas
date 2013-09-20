@@ -3,7 +3,7 @@ Contributors: podpirate
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WF4Z3HU93XYJA
 Tags: access, role, capability, user, security, editor
 Requires at least: 3.5
-Tested up to: 3.6
+Tested up to: 3.6.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -77,6 +77,16 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 
 == Changelog ==
 
+= 1.1.11 =
+Debug: Fix Comment issue. Selecting "WordPress default" now does what it is supposed to: handling over the comment responsibility to WordPress.
+
+= 1.1.10 =
+Debug: Fix missing file issue
+
+= 1.1.9 =
+Feature/Debug: Network admins now have access to all areas on all blogs. Blog admins have access to all areas on their own blog(s).
+Code: put general use processes into function
+
 = 1.1.9 =
 Feature/Debug: Network admins now have access to all areas on all blogs. Blog admins have access to all areas on their own blog(s).
 Code: put general use processes into function
@@ -118,4 +128,4 @@ Initial Release
 
 == Upgrade notice ==
 
-Everybody should update. 
+Debug: Fix Comments. Selecting "WordPress default" now does what it is supposed to: handling over the comment responsibility to WordPress.
