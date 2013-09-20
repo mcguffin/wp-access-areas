@@ -49,11 +49,10 @@ class UndisclosedEditPost {
 		if ( $data['post_status'] == 'auto-draft' )
 			return $data;
 
-		$data['post_view_cap']		= isset($postarr['post_view_cap']) ? $postarr['post_view_cap'] : 'exist';
-		//* // future use
-		$data['post_edit_cap']		= isset($postarr['post_edit_cap']) ? $postarr['post_edit_cap'] : 'exist';
-		//*/
-
+		$post_type_object 	= get_post_type_object($data["post_type"]);
+		if ( $post_type_object->public )
+			$data['post_view_cap']	= isset($postarr['post_view_cap']) ? $postarr['post_view_cap'] : 'exist';
+		$data['post_edit_cap']	= isset($postarr['post_edit_cap']) ? $postarr['post_edit_cap'] : 'exist';
 		if ( post_type_supports( $data["post_type"] , 'comments' ) )
 			$data['post_comment_cap']	= isset($postarr['post_comment_cap']) ? $postarr['post_comment_cap'] : 'exist';
 		
@@ -127,7 +126,7 @@ class UndisclosedEditPost {
 			
 			?><optgroup label="<?php _e( 'WordPress roles' , 'wpundisclosed') ?>">
 			<?php foreach ($roles as $role => $rolename) {
-				if ( !wpaa_user_can_role( $role , $user_role_caps ) )
+				if ( ! wpaa_user_can_role( $role , $user_role_caps ) )
 					continue;
 				?>
 				<option value="<?php echo $role ?>" <?php selected($selected_cap , $role) ?>><?php _ex( $rolename, 'User role' ) ?></option>

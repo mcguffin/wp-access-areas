@@ -249,14 +249,16 @@ class UndisclosedUsers {
 			return '';
 		$ret = '';
 		$current_label = isset($_GET['role']) ? $_GET['role'] : '';
-		$ret .= '<form class="select-user-label-form" method="get"><label for="select-user-label"><span class="icon-undisclosed-'.$slug.' icon16"></span>';
-		$ret .= '<select id="select-user-label" onchange="this.form.submit()" name="role">';
+//		$ret .= '<form class="select-user-label-form" method="get">';
+		$ret .= '<label for="select-user-label-'.$slug.'"><span class="icon-undisclosed-'.$slug.' icon16"></span>';
+		$ret .= '<select id="select-user-label-'.$slug.'" onchange="this.form.submit()" name="role">';
 		$ret .= sprintf('<option value="%s">%s</option>' , '' , __('(None)'));
 		foreach ( $labels as $label ) {
 			$ret .= sprintf('<option ' . selected($current_label,$label->capability,false) . ' value="%s">%s</option>' , $label->capability , $label->cap_title);
 		}
 		$ret .= '</select>';
-		$ret .= '</form>';
+		$ret .= '</label>';
+//		$ret .= '</form>';
 		return $ret;
 	}
 	
