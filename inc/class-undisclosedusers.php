@@ -191,14 +191,6 @@ class UndisclosedUsers {
 				foreach ( $labels as $label ) {
 					$user_has_cap = in_array( $label->capability , $label_caps ) || $profileuser->has_cap( $label->capability );
 					self::_select_label_formitem( $label , $user_has_cap );
-					/*
-					?><span class="disclosure-label-item"><?php
-						?><input type="hidden" name="userlabels[<?php echo $label->ID ?>]" value="0" /><?php
-				
-						?><input id="cap-<?php echo $label->capability ?>" type="checkbox" name="userlabels[<?php echo $label->ID ?>]" value="1" <?php checked( $user_has_cap , true ) ?> /><?php
-						?><label for="cap-<?php echo $label->capability ?>">  <?php echo $label->cap_title ?></label><?php
-					?></span><?php
-					*/
 				}
 				
 				if ( $can_ajax_add )
@@ -222,9 +214,9 @@ class UndisclosedUsers {
 		?><span class="disclosure-label-item ajax-add-item"><?php
 			wp_nonce_field( 'userlabel-new' , '_wp_ajax_nonce' );
 			?><input type="hidden" name="blog_id" value="<?php echo $blog_id; ?>" /><?php
-			?><input id="cap-add" type="text" name="cap_title" placeholder="<?php _ex('Add New','access area','wpundisclosed') ?>" /><?php
+			?><input class="cap-add" type="text" name="cap_title" placeholder="<?php _ex('Add New','access area','wpundisclosed') ?>" /><?php
 			
-			?><a href="#" id="cap-add-submit" class="button"><?php _e('+') ?></a><?php
+			?><a href="#" class="cap-add-submit button"><?php _e('+') ?></a><?php
 		?></span><?php
 	}
 	
@@ -249,16 +241,17 @@ class UndisclosedUsers {
 			return '';
 		$ret = '';
 		$current_label = isset($_GET['role']) ? $_GET['role'] : '';
-//		$ret .= '<form class="select-user-label-form" method="get">';
-		$ret .= '<label for="select-user-label-'.$slug.'"><span class="icon-undisclosed-'.$slug.' icon16"></span>';
+		$ret .= '<form class="select-user-label-form" method="get">';
+		$ret .= '<label for="select-user-label-'.$slug.'">';
+		$ret .= '<span class="icon-undisclosed-'.$slug.' icon16"></span>';
 		$ret .= '<select id="select-user-label-'.$slug.'" onchange="this.form.submit()" name="role">';
 		$ret .= sprintf('<option value="%s">%s</option>' , '' , __('(None)'));
 		foreach ( $labels as $label ) {
-			$ret .= sprintf('<option ' . selected($current_label,$label->capability,false) . ' value="%s">%s</option>' , $label->capability , $label->cap_title);
+			$ret .= sprintf('<option %s value="%s">%s</option>' , selected($current_label,$label->capability,false) , $label->capability , $label->cap_title);
 		}
 		$ret .= '</select>';
 		$ret .= '</label>';
-//		$ret .= '</form>';
+		$ret .= '</form>';
 		return $ret;
 	}
 	
@@ -275,7 +268,7 @@ class UndisclosedUsers {
 		$label_caps = (array) (is_multisite() ? get_user_meta($user_ID , WPUND_GLOBAL_USERMETA_KEY , true ) : null); 
 		
 		$labels = UndisclosedUserLabel::get_available_userlabels( );
-		if ( is_multisite() && is_super_admin( $user_ID ) )
+		if ( ( is_multisite() && is_super_admin( $user_ID ) ) || ( ! is_multisite() && current_user_can( 'administrator' )) )
 			return '<div class="disclosure-labels"><span class="disclosure-label-item access-all-areas"><span class="icon-undisclosed-network icon16"></span>' . __('Everywhere') . '</span></div>';
 		
 		$user = new WP_User( $user_ID );
@@ -287,7 +280,7 @@ class UndisclosedUsers {
 			}
 		}
 		if ( count( $ugroups ) )
-			return '<div class="disclosure-labels">'.implode("", $ugroups) . '</div>';
+			return '<div class="disclosure-labels">' . implode("", $ugroups) . '</div>';
 
 		return '';
 	}
