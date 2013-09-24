@@ -105,27 +105,26 @@ class UndisclosedPosts {
 		// not true on multisite
 		if ( ! is_multisite() && current_user_can('administrator') )
 			return $where;
-		
-		$cond = array( "$table_name.post_view_cap = 'exist'" );
+		$caps = array('exist');
 		if ( is_user_logged_in() ) {
 			// get current user's groups
 			$roles = new WP_Roles();
 			
 			// reading
 			if ( current_user_can( 'read' ) )
-				$cond[] = "$table_name.post_view_cap = 'read'"; // logged in users
+				$caps[] = 'read';
 			
 			// user's roles
 			$user_roles = wpaa_user_contained_roles();
 			foreach ( $user_roles as $role )
-				$cond[] = "$table_name.post_view_cap = '$role'"; 
+				$caps[] = $role;
 			
 			// user's custom caps
 			foreach( UndisclosedUserlabel::get_label_array( ) as $cap => $capname)
 				if ( wpaa_user_can_accessarea( $cap ) )
-					$cond[] = "$table_name.post_view_cap = '$cap'";
+					$caps[] = $cap;
 		}
-		$where .= " AND (".implode( ' OR ' , $cond ) . ")";
+		$where .= " AND $table_name.post_view_cap IN ('".implode( "','" , $caps ) . "')";
 		return $where;
 	}
 

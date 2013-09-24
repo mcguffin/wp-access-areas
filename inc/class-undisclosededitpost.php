@@ -108,12 +108,12 @@ class UndisclosedEditPost {
 				?>
 			</div><?php
 		}
-//*/
 	}
 	
+	// --------------------------------------------------
+	// edit post - Access Area droppdown menu
+	// --------------------------------------------------
 	static function access_area_dropdown( $roles , $groups , $selected_cap , $fieldname , $first_item_value = null , $first_item_label = ''  ) {
-		// comments should be: wp-defaults, logged in users
-		// 
 		?>
 		<select id="<?php echo $fieldname ?>-select" name="<?php echo $fieldname ?>"><?php
 			if ( ! is_null( $first_item_value ) && ! is_null( $first_item_label ) ) {
@@ -146,13 +146,22 @@ class UndisclosedEditPost {
 		</select>
 		<?php
 	}
+	// --------------------------------------------------
+	// Quick Edit hook callback
+	// --------------------------------------------------
 	static function quick_edit_fields( $column_name, $post_type ) {
 		global $post;
 		self::_edit_fields( $column_name, $post_type , $post , null );
 	}
+	// --------------------------------------------------
+	// Bulk Edit hook callback
+	// --------------------------------------------------
 	static function bulk_edit_fields( $column_name, $post_type ) {
 		self::_edit_fields( $column_name, $post_type );
 	}
+	// --------------------------------------------------
+	// Quick/Bulk Edit html
+	// --------------------------------------------------
 	private static function _edit_fields( $column_name, $post_type , $post = null , $first_item_value = -1 ) {
 		global $wp_roles;
 		if ($column_name == 'view_cap') {
@@ -232,6 +241,9 @@ class UndisclosedEditPost {
 		}
 		return $cols;
 	}
+	// --------------------------------------------------
+	// admin list view column
+	// --------------------------------------------------
 	static function manage_disclosure_column($column, $post_ID) {
 		global $wp_roles;
 		switch ( $column ) {
