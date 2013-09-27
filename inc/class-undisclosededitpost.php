@@ -51,11 +51,15 @@ class UndisclosedEditPost {
 			return $data;
 
 		$post_type_object 	= get_post_type_object($data["post_type"]);
-		if ( $post_type_object->public )
-			$data['post_view_cap']	= isset($postarr['post_view_cap']) ? $postarr['post_view_cap'] : 'exist';
-		$data['post_edit_cap']	= isset($postarr['post_edit_cap']) ? $postarr['post_edit_cap'] : 'exist';
-		if ( post_type_supports( $data["post_type"] , 'comments' ) )
-			$data['post_comment_cap']	= isset($postarr['post_comment_cap']) ? $postarr['post_comment_cap'] : 'exist';
+		
+		if ( $post_type_object->public && isset($postarr['post_view_cap']) && $postarr['post_view_cap'] )
+			$data['post_view_cap']	= $postarr['post_view_cap'];
+		
+		if (isset($postarr['post_edit_cap']) && $postarr['post_edit_cap']) 
+			$data['post_edit_cap']	= $postarr['post_edit_cap'];
+	
+		if ( post_type_supports( $data["post_type"] , 'comments' ) && isset($postarr['post_comment_cap']) && $postarr['post_comment_cap'] )
+			$data['post_comment_cap']	= $postarr['post_comment_cap'];
 		
 		return $data;
 	}
