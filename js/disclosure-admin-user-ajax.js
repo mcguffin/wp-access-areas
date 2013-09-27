@@ -10,7 +10,6 @@
 			$.post(
 				ajaxurl,data,
 				function( data, textStatus, jqXHR ) {
-					console.log();
 					$(data).insertBefore($parent);
 					$parent.find("input[name='cap_title']").val('');
 					$('.disclosure-label-item.error').fadeOut(5000,function(){$(this).remove()});

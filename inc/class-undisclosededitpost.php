@@ -26,11 +26,31 @@ class UndisclosedEditPost {
 			add_filter('manage_pages_custom_column' , array(__CLASS__ , 'manage_disclosure_column') , 10 ,2 );
 			add_action('bulk_edit_custom_box' , array(__CLASS__,'bulk_edit_fields') , 10 , 2 );
 			add_action('quick_edit_custom_box' , array(__CLASS__,'quick_edit_fields') , 10 , 2 );
+
+			add_action( 'wp_ajax_get_accessarea_values', array( __CLASS__ , 'ajax_get_accessarea_values' ) );
 		}
 		add_action( 'load-edit.php' , array( __CLASS__ , 'load_style' ) );
+		add_action( 'load-edit.php' , array( __CLASS__ , 'load_edit_script' ) );
 		add_action( 'load-post.php' , array( __CLASS__ , 'load_style' ) );
 		add_action( 'load-post-new.php' , array( __CLASS__ , 'load_style' ) );
 	}
+	
+	static function ajax_get_accessarea_values() {
+		if ( isset( $_POST['post_ID'] ) && current_user_can( 'edit_post' , $_POST['post_ID'] ) ) {
+			header('Content-Type: application/json');
+			$result = wp_parse_args( get_post($_POST['post_ID'] , ARRAY_A ) , array(
+				'post_view_cap'		=> 'exist',
+				'post_edit_cap'		=> 'exist',
+				'post_comment_cap'	=> 'exist',
+			));
+			echo json_encode( $result );
+		}
+		die;
+	}
+	
+	static function load_edit_script() {
+		wp_enqueue_script( 'disclosure-quick-edit' , plugins_url('js/disclosure-quick-edit.js', dirname(__FILE__)) );
+	} 
 	static function load_style() {
 		wp_enqueue_style( 'disclosure-admin' );
 	}
@@ -131,7 +151,7 @@ class UndisclosedEditPost {
 			
 			?><optgroup label="<?php _e( 'WordPress roles' , 'wpundisclosed') ?>">
 			<?php foreach ($roles as $role => $rolename) {
-				if ( ! wpaa_user_can_role( $role , $user_role_caps ) )
+				if ( ! wpaa_user_can_role( $role ) )
 					continue;
 				?>
 				<option value="<?php echo $role ?>" <?php selected($selected_cap , $role) ?>><?php _ex( $rolename, 'User role' ) ?></option>
@@ -155,6 +175,7 @@ class UndisclosedEditPost {
 	// --------------------------------------------------
 	static function quick_edit_fields( $column_name, $post_type ) {
 		global $post;
+		// enqueue
 		self::_edit_fields( $column_name, $post_type , $post , null );
 	}
 	// --------------------------------------------------
@@ -192,8 +213,7 @@ class UndisclosedEditPost {
 					}
 				}
 			}
-		
-			?><fieldset class="inline-edit-col-access-areas">
+			?><fieldset class="inline-edit-col-access-areas inline-edit-col-left">
 				<h3><?php _e('Access','wpundisclosed') ?></h3>
 				<div class="inline-edit-col"><?php
 					if ( $post_type_object->public ) {
