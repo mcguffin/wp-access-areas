@@ -23,6 +23,8 @@ class UndisclosedUsers {
 		add_action('add_user_to_blog',array(__CLASS__,'add_user_to_blog'),10,3);
 	}
 	
+	
+	
 	// --------------------------------------------------
 	// general actions
 	// --------------------------------------------------
@@ -45,6 +47,8 @@ class UndisclosedUsers {
 		}
 		add_filter( 'additional_capabilities_display' , '__return_false' );
 	}
+	
+	
 	
 	
 	// --------------------------------------------------
@@ -143,9 +147,10 @@ class UndisclosedUsers {
 		// prevent blogadmin from granting network permissions he does not own himself.
 		$network = ! wpaa_is_local_cap( $capability );
 		$can_grant = current_user_can( $capability ) || ! $network;
-		if ( ! $can_grant )
+		$is_change = ($add && ! $user->has_cap( $capability )) || (!$add && $user->has_cap( $capability ));
+		if ( ! $can_grant && $is_change )
 			wp_die(__('You are not allowed to perform the requested operation.','wpundisclosed'));
-		if ( $add ) 
+		if ( $add && ! $user->has_cap( $capability ) ) 
 			$user->add_cap( $capability , true );
 		else 
 			$user->remove_cap( $capability );
@@ -173,7 +178,6 @@ class UndisclosedUsers {
 				'can_ajax_add' => current_user_can( 'promote_users' ),
 			);
 		$label_caps = (array) (is_multisite() ? get_user_meta($profileuser->ID , WPUND_GLOBAL_USERMETA_KEY , true ) : null); 
-		
 		foreach ( $labelrows as $row_title => $value ) {
 			extract( $value );
 			
@@ -217,6 +221,9 @@ class UndisclosedUsers {
 			?><input type="hidden" name="userlabels[<?php echo $label->ID ?>]" value="0" /><?php
 			?><input <?php echo $attr_disabled ?> id="cap-<?php echo $label->capability ?>" type="checkbox" name="userlabels[<?php echo $label->ID ?>]" value="1" <?php checked( $checked , true ) ?> /><?php
 			?><label for="cap-<?php echo $label->capability ?>">  <?php echo $label->cap_title ?></label><?php
+			if ( ! $enabled ) {
+				?><input type="hidden" name="userlabels[<?php echo $label->ID ?>]" value="<?php echo (int) $checked  ?>" /><?php
+			}
 		?></span><?php
 	}
 	

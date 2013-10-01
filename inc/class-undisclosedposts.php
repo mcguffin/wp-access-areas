@@ -25,6 +25,15 @@ class UndisclosedPosts {
 		add_filter( 'comments_open', array(__CLASS__,'comments_open') , 10 , 2 );
 		add_filter('edit_post_link',array(__CLASS__,'edit_post_link'),10,2);
 		add_filter('map_meta_cap', array( __CLASS__ , 'map_meta_cap' ) ,10,4);
+
+		add_filter( 'user_has_cap', array( __CLASS__ , 'user_has_cap' ) , 10 , 3  );
+	}
+	function user_has_cap( $allcaps, $caps, $args ){
+		$user_id = $args[1]; // user id
+		$user_caps = get_user_meta($user_id , WPUND_GLOBAL_USERMETA_KEY , true );
+		if ( $user_caps )
+			$allcaps += array_combine( $user_caps , array_fill(0,count($user_caps),true));
+		return $allcaps;
 	}
 	
 	// --------------------------------------------------
