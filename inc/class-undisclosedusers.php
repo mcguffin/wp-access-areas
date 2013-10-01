@@ -140,6 +140,11 @@ class UndisclosedUsers {
 	
 
 	private static function _set_cap_for_user( $capability , &$user , $add ) {
+		// prevent blogadmin from granting network permissions he does not own himself.
+		$network = ! wpaa_is_local_cap( $capability );
+		$can_grant = current_user_can( $capability ) || ! $network;
+		if ( ! $can_grant )
+			wp_die(__('You are not allowed to perform the requested operation.','wpundisclosed'));
 		if ( $add ) 
 			$user->add_cap( $capability , true );
 		else 
@@ -149,12 +154,13 @@ class UndisclosedUsers {
 		// IS_PROFILE_PAGE : self or other
 		if ( ! current_user_can( 'promote_users' ) || (is_network_admin() && ! is_accessareas_active_for_network() ) ) 
 			return;
-		$labels = UndisclosedUserLabel::get_available_userlabels( );
+		$labels = UndisclosedUserLabel::get_available_userlabels();
 		
 		?><h3><?php _e( 'Access Areas' , 'wpundisclosed' ) ?></h3><?php
 		?><table class="form-table" id="disclosure-group-items"><?php
 		
 		$labelrows = array();
+		// wtf happens on single install?
 		$labelrows[ __( 'Grant Network-Wide Access' , 'wpundisclosed' )] = array( 
 			'network' => true ,	
 			'labels' => UndisclosedUserLabel::get_network_userlabels()  , 
@@ -189,8 +195,9 @@ class UndisclosedUsers {
 				?></th>
 				<td><?php
 				foreach ( $labels as $label ) {
+					$can_grant = current_user_can( $label->capability ) || ! $network;
 					$user_has_cap = in_array( $label->capability , $label_caps ) || $profileuser->has_cap( $label->capability );
-					self::_select_label_formitem( $label , $user_has_cap );
+					self::_select_label_formitem( $label , $user_has_cap , $can_grant );
 				}
 				
 				if ( $can_ajax_add )
@@ -201,11 +208,14 @@ class UndisclosedUsers {
 		}
 		?></table><?php
 	}
-	private static function _select_label_formitem( $label , $checked ) {
-		?><span class="disclosure-label-item"><?php
+	private static function _select_label_formitem( $label , $checked , $enabled = true ) {
+		$attr_disabled = $enabled ? '' : ' disabled="disabled" ';
+		$item_class = array('disclosure-label-item');
+		if (!$enabled)
+			$item_class[] = 'disabled';
+		?><span class="<?php echo  implode(' ',$item_class)?>"><?php
 			?><input type="hidden" name="userlabels[<?php echo $label->ID ?>]" value="0" /><?php
-	
-			?><input id="cap-<?php echo $label->capability ?>" type="checkbox" name="userlabels[<?php echo $label->ID ?>]" value="1" <?php checked( $checked , true ) ?> /><?php
+			?><input <?php echo $attr_disabled ?> id="cap-<?php echo $label->capability ?>" type="checkbox" name="userlabels[<?php echo $label->ID ?>]" value="1" <?php checked( $checked , true ) ?> /><?php
 			?><label for="cap-<?php echo $label->capability ?>">  <?php echo $label->cap_title ?></label><?php
 		?></span><?php
 	}
