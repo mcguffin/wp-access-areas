@@ -4,7 +4,6 @@ jQuery(document).ready(function($){
 		data.post_ID = 	inlineEditPost.getId(this);
 		$.post( ajaxurl, data,
 			function( data, textStatus, jqXHR ) {
-				console.log(data.post_view_cap);
 				var props=['post_view_cap','post_edit_cap','post_comment_cap']
 				for ( var s in props ) {
 					var val = data[props[s]];

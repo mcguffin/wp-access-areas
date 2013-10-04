@@ -16,16 +16,15 @@ if ( ! class_exists('UndisclosedCore') ) :
 class UndisclosedCore {
 	static function init() {
 		add_action( 'plugins_loaded' , array( __CLASS__, 'plugin_loaded' ) );
-		add_action( 'admin_init' , array(__CLASS__,'admin_enqueue_scripts') );
 		if ( is_multisite() ) {
 			add_action('wpmu_new_blog' , array( __CLASS__ , 'set_network_roles_for_blog' ) , 10 , 1 );
 			add_action('wpmu_upgrade_site' , array( __CLASS__ , 'set_network_roles_for_blog' ) , 10 ,1 );
 		}
+		self::admin_register_scripts();
 	}
-
-	static function admin_enqueue_scripts() {
-		wp_register_style( 'disclosure-admin' , plugins_url('css/disclosure-admin.css', dirname(__FILE__)) );
+	static function admin_register_scripts() {
 		wp_register_script( 'disclosure-admin-user-ajax' , plugins_url('js/disclosure-admin-user-ajax.js', dirname(__FILE__)) );
+		wp_register_style( 'disclosure-admin' , plugins_url('css/disclosure-admin.css', dirname(__FILE__)) );
 	}
 	// translation ready.
 	static function plugin_loaded() {

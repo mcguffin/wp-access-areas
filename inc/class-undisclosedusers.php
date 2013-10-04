@@ -39,6 +39,9 @@ class UndisclosedUsers {
 			add_action( 'load-profile.php' , array( __CLASS__ , 'load_user_editor' ) );
 			add_action( 'load-user-edit.php' , array( __CLASS__ , 'load_user_editor' ) );
 			
+			add_action( 'load-profile.php' , array(__CLASS__,'admin_enqueue_user_scripts') );
+			add_action( 'load-user-edit.php' , array(__CLASS__,'admin_enqueue_user_scripts') );
+
 			// ajax
 			wp_enqueue_script( 'disclosure-admin-user-ajax' );
 			add_action( 'wp_ajax_add_accessarea', array( __CLASS__ , 'ajax_add_access_area' ) );
@@ -79,6 +82,10 @@ class UndisclosedUsers {
 		die();
 	}
 	
+	static function admin_enqueue_user_scripts() {
+		wp_enqueue_script( 'disclosure-admin-user-ajax');
+	}
+
 	// --------------------------------------------------
 	// user editing
 	// --------------------------------------------------
@@ -150,9 +157,9 @@ class UndisclosedUsers {
 		$is_change = ($add && ! $user->has_cap( $capability )) || (!$add && $user->has_cap( $capability ));
 		if ( ! $can_grant && $is_change )
 			wp_die(__('You are not allowed to perform the requested operation.','wpundisclosed'));
-		if ( $add && ! $user->has_cap( $capability ) ) 
+		if ( $add && $is_change ) 
 			$user->add_cap( $capability , true );
-		else 
+		else if ( ! $add && $is_change ) 
 			$user->remove_cap( $capability );
 	}
 	static function personal_options( $profileuser ) {

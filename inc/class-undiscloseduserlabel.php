@@ -79,7 +79,7 @@ class UndisclosedUserlabel {
 	static function delete_userlabel( $id ) {
 		global $wpdb;
 		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
-
+		
 		$userlabel = self::get_userlabel( $id );
 		if ( ! $userlabel ) {
 			self::$_what_went_wrong = 5;
@@ -109,7 +109,6 @@ class UndisclosedUserlabel {
 					$meta->umeta_id
 				) );
 			}
-
 		} else {
 			self::_delete_userlabel_from_blog( $userlabel );
 		}

@@ -13,14 +13,15 @@
 					$(data).insertBefore($parent);
 					$parent.find("input[name='cap_title']").val('');
 					$('.disclosure-label-item.error').fadeOut(5000,function(){$(this).remove()});
-				}			
+				}
 			);
-		
 			return false;
-		}).on('keypress' , '.cap-add' , function(event){
+		}).on('keypress' , '.cap-add:focus' , function(event){
 			if ( event.keyCode == 13 ) {
 				event.preventDefault();
-				return $('.cap-add-submit').click();
+				event.stopPropagation();
+				$(this).next('.cap-add-submit').click();
+				return false;
 			}
 		});
 	
