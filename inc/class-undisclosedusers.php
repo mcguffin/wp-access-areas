@@ -35,15 +35,14 @@ class UndisclosedUsers {
 			add_action( 'show_user_profile' , array( __CLASS__ , 'personal_options' ) );
 			
 			// css
-			add_action( 'load-users.php' , array( __CLASS__ , 'load_user_editor' ) );
-			add_action( 'load-profile.php' , array( __CLASS__ , 'load_user_editor' ) );
-			add_action( 'load-user-edit.php' , array( __CLASS__ , 'load_user_editor' ) );
+			add_action( 'load-users.php' , array( __CLASS__ , 'enqueue_style' ) );
 			
-			add_action( 'load-profile.php' , array(__CLASS__,'admin_enqueue_user_scripts') );
-			add_action( 'load-user-edit.php' , array(__CLASS__,'admin_enqueue_user_scripts') );
+			// css + js
+			add_action( 'load-profile.php' , array( __CLASS__ , 'enqueue_style_script' ) );
+			add_action( 'load-user-edit.php' , array( __CLASS__ , 'enqueue_style_script' ) );
 
+			add_action( 'admin_enqueue_scripts', array( __CLASS__ , 'admin_enqueue_user_scripts' ) );
 			// ajax
-			wp_enqueue_script( 'disclosure-admin-user-ajax' );
 			add_action( 'wp_ajax_add_accessarea', array( __CLASS__ , 'ajax_add_access_area' ) );
 			
 			add_filter('views_users' , array( __CLASS__ , 'table_views' ) );
@@ -51,7 +50,28 @@ class UndisclosedUsers {
 		add_filter( 'additional_capabilities_display' , '__return_false' );
 	}
 	
+	static function enqueue_style_script() {
+		self::enqueue_style();
+		self::enqueue_script();
+		
+	}
+	static function enqueue_style() {
+		add_action('admin_enqueue_scripts' , array(__CLASS__,'load_style'));
+	}
+	static function enqueue_script() {
+		add_action('admin_enqueue_scripts' , array(__CLASS__,'load_edit_script'));
+	}
+	static function load_edit_script() {
+		wp_enqueue_script( 'disclosure-admin-user-ajax');
+	} 
+	static function load_style() {
+		wp_enqueue_style( 'disclosure-admin' );
+	}
 	
+	
+	
+	static function admin_enqueue_user_scripts() {
+	}
 	
 	
 	// --------------------------------------------------
@@ -82,16 +102,10 @@ class UndisclosedUsers {
 		die();
 	}
 	
-	static function admin_enqueue_user_scripts() {
-		wp_enqueue_script( 'disclosure-admin-user-ajax');
-	}
 
 	// --------------------------------------------------
 	// user editing
 	// --------------------------------------------------
-	static function load_user_editor() {
-		wp_enqueue_style( 'disclosure-admin' );
-	}
 	static function profile_update( $user_id, $old_user_data ) {
 		if ( ! current_user_can( 'promote_users' ) || ! isset( $_POST['userlabels'] ) ) 
 			return;

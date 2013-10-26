@@ -27,15 +27,15 @@ class UndisclosedCaps {
 		
 		add_users_page(__('Manage Access Areas','wpundisclosed'), __('Access Areas','wpundisclosed'), 'promote_users', 'user_labels', array(__CLASS__,'manage_userlabels_page'));
 		add_action( 'load-users_page_user_labels' , array( __CLASS__ , 'do_userlabel_actions' ) );
-		add_action( 'load-users_page_user_labels' , array( __CLASS__ , 'load_style' ) );
-	}
-	static function load_style() {
-		wp_enqueue_style( 'disclosure-admin' );
 	}
 	
 	static function do_userlabel_actions() {
+	
 		if ( ! current_user_can( 'promote_users' ) ) 
 			wp_die( __('You do not have permission to do this.' , 'wpundisclosed' ) );
+		
+		wp_enqueue_style( 'disclosure-admin' );
+		
 		$table = new UserLabel_List_Table();
 		$table->process_bulk_action();
 		$redirect_url = false;

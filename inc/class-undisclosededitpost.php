@@ -29,10 +29,13 @@ class UndisclosedEditPost {
 
 			add_action( 'wp_ajax_get_accessarea_values', array( __CLASS__ , 'ajax_get_accessarea_values' ) );
 		}
-		add_action( 'load-edit.php' , array( __CLASS__ , 'load_style' ) );
 		add_action( 'load-edit.php' , array( __CLASS__ , 'load_edit_script' ) );
+		add_action( 'load-edit.php' , array( __CLASS__ , 'load_style' ) );
+		
 		add_action( 'load-post.php' , array( __CLASS__ , 'load_style' ) );
 		add_action( 'load-post-new.php' , array( __CLASS__ , 'load_style' ) );
+
+		wp_register_script( 'disclosure-quick-edit' , plugins_url('js/disclosure-quick-edit.js', dirname(__FILE__)) );
 	}
 	
 	static function ajax_get_accessarea_values() {
@@ -47,9 +50,8 @@ class UndisclosedEditPost {
 		}
 		die;
 	}
-	
 	static function load_edit_script() {
-		wp_enqueue_script( 'disclosure-quick-edit' , plugins_url('js/disclosure-quick-edit.js', dirname(__FILE__)) );
+		wp_enqueue_script( 'disclosure-quick-edit' );
 	} 
 	static function load_style() {
 		wp_enqueue_style( 'disclosure-admin' );
