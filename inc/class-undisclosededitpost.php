@@ -16,6 +16,9 @@ class UndisclosedEditPost {
 		if ( is_admin() ) {
 			// edit post
 			add_filter('wp_insert_post_data', array(__CLASS__ , 'edit_post') , 10 ,2 );
+			add_action('edit_attachment',array(__CLASS__ , 'edit_attachment') );
+			add_action('add_attachment',array(__CLASS__ , 'edit_attachment') );
+			
 			add_action('add_meta_boxes' , array( __CLASS__ , 'add_meta_boxes' ) );
 
 			// list views
@@ -29,13 +32,12 @@ class UndisclosedEditPost {
 
 			add_action( 'wp_ajax_get_accessarea_values', array( __CLASS__ , 'ajax_get_accessarea_values' ) );
 		}
-		add_action( 'load-edit.php' , array( __CLASS__ , 'load_edit_script' ) );
-		add_action( 'load-edit.php' , array( __CLASS__ , 'load_style' ) );
+		add_action( 'load-edit.php' , array( __CLASS__ , 'enqueue_script_style' ) );
+		add_action( 'load-edit.php' , array( __CLASS__ , 'enqueue_style' ) );
 		
-		add_action( 'load-post.php' , array( __CLASS__ , 'load_style' ) );
-		add_action( 'load-post-new.php' , array( __CLASS__ , 'load_style' ) );
+		add_action( 'load-post.php' , array( __CLASS__ , 'enqueue_style' ) );
+		add_action( 'load-post-new.php' , array( __CLASS__ , 'enqueue_style' ) );
 
-		wp_register_script( 'disclosure-quick-edit' , plugins_url('js/disclosure-quick-edit.js', dirname(__FILE__)) );
 	}
 	
 	static function ajax_get_accessarea_values() {
@@ -50,6 +52,18 @@ class UndisclosedEditPost {
 		}
 		die;
 	}
+	
+	static function enqueue_script_style() {
+		self::enqueue_style();
+		self::enqueue_script();
+	}
+	static function enqueue_style() {
+		add_action('admin_enqueue_scripts' , array(__CLASS__,'load_style'));
+	}
+	static function enqueue_script() {
+		add_action('admin_enqueue_scripts' , array(__CLASS__,'load_edit_script'));
+	}
+
 	static function load_edit_script() {
 		wp_enqueue_script( 'disclosure-quick-edit' );
 	} 
@@ -71,7 +85,6 @@ class UndisclosedEditPost {
 	static function edit_post( $data, $postarr ) {
 		if ( $data['post_status'] == 'auto-draft' )
 			return $data;
-
 		$post_type_object 	= get_post_type_object($data["post_type"]);
 		
 		if ( $post_type_object->public && isset($postarr['post_view_cap']) && $postarr['post_view_cap'] )
@@ -84,6 +97,21 @@ class UndisclosedEditPost {
 			$data['post_comment_cap']	= $postarr['post_comment_cap'];
 		
 		return $data;
+	}
+	static function edit_attachment( $attachment_ID ) {
+		$attachment = get_post($attachment_ID);
+		$post_edit_cap = isset($_POST['post_edit_cap']) ? sanitize_title($_POST['post_edit_cap']) : $attachment->post_edit_cap;
+		$post_comment_cap = isset($_POST['post_comment_cap']) ? sanitize_title($_POST['post_comment_cap']) : $attachment->post_comment_cap;
+	
+		if ( $post_edit_cap != $attachment->post_edit_cap || $post_comment_cap != $attachment->post_comment_cap ) {
+			// use $wpdb instead of wp_update_post to avoid inifinite do_action
+			global $wpdb;
+			$data = array(
+				'post_edit_cap' => $post_edit_cap,
+				'post_comment_cap' => $post_comment_cap,
+			);
+			$wpdb->update( $wpdb->posts , $data , array( 'ID' => $attachment_ID ) , array('%s','%s') , array( '%d' ) );
+		}
 	}
 	
 	// --------------------------------------------------
@@ -111,7 +139,7 @@ class UndisclosedEditPost {
 			}
 		}
 		
-		if ( $post_type_object->public ) {
+		if ( $post_type_object->public && $post->post_type != 'attachment' ) { 
 			?><div class="disclosure-view-select misc-pub-section">
 				<label for="post_view_cap-select"><strong><?php _e( 'Who can read:' , 'wpundisclosed') ?></strong></label><br />
 				<?php 
@@ -140,6 +168,8 @@ class UndisclosedEditPost {
 	// edit post - Access Area droppdown menu
 	// --------------------------------------------------
 	static function access_area_dropdown( $roles , $groups , $selected_cap , $fieldname , $first_item_value = null , $first_item_label = ''  ) {
+		if ( ! $selected_cap )
+			$selected_cap = 'exist';
 		?>
 		<select id="<?php echo $fieldname ?>-select" name="<?php echo $fieldname ?>"><?php
 			if ( ! is_null( $first_item_value ) && ! is_null( $first_item_label ) ) {

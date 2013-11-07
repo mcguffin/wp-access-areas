@@ -38,10 +38,10 @@ class UndisclosedUsers {
 			add_action( 'load-users.php' , array( __CLASS__ , 'enqueue_style' ) );
 			
 			// css + js
-			add_action( 'load-profile.php' , array( __CLASS__ , 'enqueue_style_script' ) );
-			add_action( 'load-user-edit.php' , array( __CLASS__ , 'enqueue_style_script' ) );
+			add_action( 'load-profile.php' , array( __CLASS__ , 'enqueue_script_style' ) );
+			add_action( 'load-user-edit.php' , array( __CLASS__ , 'enqueue_script_style' ) );
 
-			add_action( 'admin_enqueue_scripts', array( __CLASS__ , 'admin_enqueue_user_scripts' ) );
+//			add_action( 'admin_enqueue_scripts', array( __CLASS__ , 'admin_enqueue_user_scripts' ) );
 			// ajax
 			add_action( 'wp_ajax_add_accessarea', array( __CLASS__ , 'ajax_add_access_area' ) );
 			
@@ -50,10 +50,9 @@ class UndisclosedUsers {
 		add_filter( 'additional_capabilities_display' , '__return_false' );
 	}
 	
-	static function enqueue_style_script() {
+	static function enqueue_script_style() {
 		self::enqueue_style();
 		self::enqueue_script();
-		
 	}
 	static function enqueue_style() {
 		add_action('admin_enqueue_scripts' , array(__CLASS__,'load_style'));
@@ -69,10 +68,10 @@ class UndisclosedUsers {
 	}
 	
 	
-	
+	/*
 	static function admin_enqueue_user_scripts() {
 	}
-	
+	*/
 	
 	// --------------------------------------------------
 	// ajax adding access areas

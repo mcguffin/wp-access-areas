@@ -27,7 +27,7 @@ function wpaa_is_access_area( $cap ) {
 	return strpos( $cap , WPUND_USERLABEL_PREFIX ) === 0;
 }
 
-function wpaa_user_can_accessarea( $cap , $args ) {
+function wpaa_user_can_accessarea( $cap , $args = array() ) {
 	global $wp_roles;
 
 	// always true for administrators on local caps
