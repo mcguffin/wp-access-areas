@@ -153,8 +153,8 @@ class UndisclosedEditPost {
 				self::access_area_dropdown( $edit_rolenames , $groups , $post->post_edit_cap , 'post_edit_cap' );
 			?>
 		</div><?php
-
-		if ( post_type_supports( $post->post_type , 'comments' ) ) {
+		
+		if ( post_type_supports( $post->post_type , 'comments' ) && wpaa_user_can( $post->post_comment_cap ) ) {
 			?><div class="disclosure-comment-select misc-pub-section">
 				<label for="post_comment_cap-select"><strong><?php _e( 'Who can comment:' , 'wpundisclosed') ?></strong></label><br />
 				<?php 
