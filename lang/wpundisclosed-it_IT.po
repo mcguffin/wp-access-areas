@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: WordPress Access Areas v1.2.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-01-30 18:40:05+0000\n"
+"PO-Revision-Date: 2014-01-30 19:06:59+0000\n"
 "Last-Translator: Francesco Carpana <f.carpana@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -34,6 +34,7 @@ msgid "Access Areas"
 msgstr "Aree d'Accesso"
 
 #: inc/class-undisclosedcaps.php:35
+#: inc/class-undisclosedusers.php:172
 #@ wpundisclosed
 msgid "You do not have permission to do this."
 msgstr "Il tuo utente non ha i permessi necessari per l'operazione in corso."
@@ -320,11 +321,6 @@ msgstr ""
 #: inc/class-undisclosedusers.php:92
 #@ wpundisclosed
 msgid "Access Area exists."
-msgstr ""
-
-#: inc/class-undisclosedusers.php:172
-#@ wpundisclosed
-msgid "You are not allowed to perform the requested operation."
 msgstr ""
 
 #: inc/class-undisclosedusers.php:256

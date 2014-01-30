@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: WordPress Access Areas v1.2.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-01-30 18:39:41+0000\n"
+"PO-Revision-Date: 2014-01-30 19:09:02+0000\n"
 "Last-Translator: admin <joern@flyingletters.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -34,6 +34,7 @@ msgid "Access Areas"
 msgstr "Zugangsbereiche"
 
 #: inc/class-undisclosedcaps.php:35
+#: inc/class-undisclosedusers.php:172
 #@ wpundisclosed
 msgid "You do not have permission to do this."
 msgstr "Sie haben nicht die erforderlichen Rechte."
@@ -326,11 +327,6 @@ msgstr "Wenn jemand versucht, eine Geschützte Seite direkt aufzurufen:"
 #@ wpundisclosed
 msgid "Fallback Page"
 msgstr "Ausweichseite"
-
-#: inc/class-undisclosedusers.php:172
-#@ wpundisclosed
-msgid "You are not allowed to perform the requested operation."
-msgstr "Sie haben nicht die erforderlichen Rechte, um diesen Vorgang auszuführen."
 
 #. translators: plugin header field 'Version'
 #: wp-access-areas.php:0
