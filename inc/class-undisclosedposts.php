@@ -13,19 +13,27 @@ class UndisclosedPosts {
 	
 	static function init() {
 
-		// viewing restrictions
+		// viewing restrictions on posts lists
 		add_action( 'get_pages' , array( __CLASS__ , 'skip_undisclosed_items' ) , 10 , 1 ); // needed by nav menus
-		add_filter( "posts_where" , array( __CLASS__ , "get_posts_where" ) , 10, 2 );
+		add_filter( "posts_where" , array( __CLASS__ , "get_posts_where" ) , 10 , 2 );
+		add_filter( "posts_join" , array( __CLASS__ , "get_posts_join" ) , 10 , 2 );
 
-		add_filter( "get_next_post_where" , array( __CLASS__ , "get_adjacent_post_where" ) , 10, 3 );
-		add_filter( "get_previous_post_where" , array( __CLASS__ , "get_adjacent_post_where" ) , 10, 3 );
+		add_filter( "get_next_post_where" , array( __CLASS__ , "get_adjacent_post_where" ) , 10 , 3 );
+		add_filter( "get_previous_post_where" , array( __CLASS__ , "get_adjacent_post_where" ) , 10 , 3 );
+		add_filter( "get_next_post_join" , array( __CLASS__ , "get_adjacent_post_join" ) , 10 , 3 );
+		add_filter( "get_previous_post_join" , array( __CLASS__ , "get_adjacent_post_join" ) , 10 , 3 );
 		
+		// behaviour
+		add_action('template_redirect',array(__CLASS__,'template_redirect')); // or wp
 		
 		// comment restrictions
 		add_filter( 'comments_open', array(__CLASS__,'comments_open') , 10 , 2 );
-		add_filter('edit_post_link',array(__CLASS__,'edit_post_link'),10,2);
-		add_filter('map_meta_cap', array( __CLASS__ , 'map_meta_cap' ) ,10,4);
+		
+		//misc
+		add_filter( 'edit_post_link' , array(__CLASS__,'edit_post_link') , 10 , 2 );
 
+		// caps
+		add_filter( 'map_meta_cap' , array( __CLASS__ , 'map_meta_cap' ) , 10 , 4 );
 		add_filter( 'user_has_cap', array( __CLASS__ , 'user_has_cap' ) , 10 , 3  );
 	}
 	function user_has_cap( $allcaps, $caps, $args ){
@@ -39,10 +47,35 @@ class UndisclosedPosts {
 	// --------------------------------------------------
 	// comment restrictions
 	// --------------------------------------------------
+	static function template_redirect() {
+		if ( is_single() && $post = get_post() ) {
+			if ( ! wpaa_user_can( $post->post_view_cap ) ) {
+				$post 		= apply_filters( 'wpaa_view_restricted_area' , $post );
+				$behaviour 	= get_post_meta($post->ID,'_wpaa_post_behaviour',true);
+				$fallback_page	= get_post_meta($post->ID,'_wpaa_fallback_page',true);
+				
+				if ( $behaviour == 'page' || is_user_logged_in() )
+					$redirect = wp_login_url( get_permalink( $fallback_page ) );
+				else 
+					$redirect = wp_login_url( get_permalink() );
+				
+				$redirect = apply_filters( 'wpaa_restricted_area_redirect' , $redirect );
+				if ( $redirect ) {
+					wp_redirect( $redirect );
+					exit();
+				}
+			}
+		}
+	}
+	
+	
+	// --------------------------------------------------
+	// comment restrictions
+	// --------------------------------------------------
 	static function comments_open( $open, $post_id ) {
 		if ( $post = get_post($post_id) ) {
-			if ( $post->post_comment_cap != 'exist' )
-				$open = wpaa_user_can( $post->post_comment_cap );
+			if ( $post->post_view_cap != 'exist' || $post->post_comment_cap != 'exist' )
+				$open = wpaa_user_can( $post->post_comment_cap ) && wpaa_user_can( $post->post_view_cap );
 		}
 		return $open;
 	}
@@ -104,9 +137,20 @@ class UndisclosedPosts {
 		$where = self::_get_where( $where , $wpdb->posts );
 		return $where;
 	}
+	static function get_posts_join( $join , &$wp_query ) {
+		global $wpdb;
+		if (is_single())
+			$join .= " LEFT JOIN $wpdb->postmeta AS wpaa_postmeta ON wpaa_postmeta.meta_key = '_wpaa_post_behaviour' AND wpaa_postmeta.meta_value IS NOT NULL";
+		return $join;
+	}
 	
 	static function get_adjacent_post_where( $where , $in_same_cat, $excluded_categories ) {
 		return self::_get_where($where);
+	}
+	static function get_adjacent_post_join( $join , $in_same_term, $excluded_terms ) {
+		global $wpdb;
+		$join .= " LEFT JOIN $wpdb->postmeta AS wpaa_postmeta ON wpaa_postmeta.meta_key = '_wpaa_post_behaviour' AND wpaa_postmeta.meta_value IS NOT NULL";
+		return $join;
 	}
 
 
@@ -133,8 +177,12 @@ class UndisclosedPosts {
 				if ( wpaa_user_can_accessarea( $cap ) )
 					$caps[] = $cap;
 		}
-		$where .= " AND $table_name.post_view_cap IN ('".implode( "','" , $caps ) . "')";
-		return $where;
+		$add_where = " $table_name.post_view_cap IN ('".implode( "','" , $caps ) . "')";
+		if ( is_single() )
+			$add_where .= " OR (wpaa_postmeta.meta_value IS NOT NULL)";
+
+		$add_where = " AND ( $add_where ) ";
+		return $where . $add_where;
 	}
 
 }
