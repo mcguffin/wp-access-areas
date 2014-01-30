@@ -79,6 +79,7 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 
 = 1.2.1 =
 Feature: Option to redirect to wp-login or fallback page.
+Italian localization
 
 = 1.2.0 =
 Feature: Bulk edit Posts
