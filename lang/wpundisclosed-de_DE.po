@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WordPress Access Areas v1.1.11\n"
+"Project-Id-Version: WordPress Access Areas v1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2013-09-12 06:29:18+0000\n"
+"PO-Revision-Date: 2013-09-24 15:48:46+0000\n"
 "Last-Translator: admin <joern@flyingletters.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -27,8 +27,8 @@ msgid "Manage Access Areas"
 msgstr "Zugangsbereiche verwalten"
 
 #: inc/class-undisclosedcaps.php:28
-#: inc/class-undisclosedusers.php:122
-#: inc/class-undisclosedusers.php:202
+#: inc/class-undisclosedusers.php:154
+#: inc/class-undisclosedusers.php:260
 #@ wpundisclosed
 msgid "Access Areas"
 msgstr "Zugangsbereiche"
@@ -98,74 +98,76 @@ msgid "An Access Area with that Name already exists."
 msgstr "Ein Zugangsbereich existiert schon unter diesem Namen."
 
 #: inc/class-undisclosedcaps.php:199
+#: inc/class-undisclosedusers.php:217
 #@ wpundisclosed
 msgctxt "access area"
 msgid "Add New"
 msgstr "Erstellen"
 
-#: inc/class-undisclosededitpost.php:67
+#: inc/class-undisclosededitpost.php:44
+#: inc/class-undisclosededitpost.php:193
 #@ wpundisclosed
 msgid "Access"
 msgstr "Zugang"
 
-#: inc/class-undisclosededitpost.php:149
+#: inc/class-undisclosededitpost.php:123
 #@ wpundisclosed
 msgid "WordPress default"
 msgstr "WordPress Standard"
 
-#: inc/class-undisclosededitpost.php:195
-#: inc/class-undisclosededitpost.php:201
+#: inc/class-undisclosededitpost.php:251
+#: inc/class-undisclosededitpost.php:257
 #@ wpundisclosed
 msgid "Blog users"
 msgstr "Blog-Benutzer"
 
-#: inc/class-undisclosededitpost.php:154
+#: inc/class-undisclosededitpost.php:128
 #@ wpundisclosed
 msgid "WordPress roles"
 msgstr "WordPress Rollen"
 
-#: inc/class-undisclosededitpost.php:130
+#: inc/class-undisclosededitpost.php:105
 #@ wpundisclosed
 msgid "Who can comment:"
 msgstr "Wer darf kommentieren:"
 
-#: inc/class-undisclosededitpost.php:185
+#: inc/class-undisclosededitpost.php:238
 #@ wpundisclosed
 msgid "Visible to"
 msgstr "Sichtbar für"
 
-#: inc/class-undisclosededitpost.php:195
-#: inc/class-undisclosededitpost.php:201
+#: inc/class-undisclosededitpost.php:251
+#: inc/class-undisclosededitpost.php:257
 #@ wpundisclosed
 msgid "Everybody"
 msgstr "Jeder"
 
-#: inc/class-undiscloseduserlabel.php:72
+#: inc/class-undiscloseduserlabel.php:74
 #@ wpundisclosed
 msgid "(Network)"
 msgstr "(Netzwerk)"
 
-#: inc/class-undisclosedusers.php:126
+#: inc/class-undisclosedusers.php:158
 #@ wpundisclosed
 msgid "Grant Network-Wide Access"
-msgstr "Netzwerkweiten Zugang gewähren"
+msgstr "Netzwerk-Zugang gewähren"
 
-#: inc/class-undisclosedusers.php:129
+#: inc/class-undisclosedusers.php:164
 #@ wpundisclosed
 msgid "Grant Access"
 msgstr "Zugang gewähren"
 
-#: inc/class-undisclosedusers.php:181
+#: inc/class-undisclosedusers.php:236
 #@ wpundisclosed
 msgid "Access Areas:"
 msgstr "Zugangsbereiche:"
 
-#: inc/class-undisclosedusers.php:191
+#: inc/class-undisclosedusers.php:248
 #@ default
 msgid "(None)"
 msgstr ""
 
-#: inc/class-undisclosedusers.php:214
+#: inc/class-undisclosedusers.php:272
 #@ default
 msgid "Everywhere"
 msgstr ""
@@ -197,17 +199,17 @@ msgstr ""
 msgid "Could not find the specified Access Area."
 msgstr "Der angegebene Zugangsbereich konnte nicht gefunden werden."
 
-#: inc/class-undisclosededitpost.php:163
+#: inc/class-undisclosededitpost.php:137
 #@ wpundisclosed
 msgid "Users with Access to"
 msgstr "Benutzer mit Zugang zu:"
 
-#: inc/class-undisclosededitpost.php:115
+#: inc/class-undisclosededitpost.php:90
 #@ wpundisclosed
 msgid "Who can read:"
 msgstr "Wer darf lesen:"
 
-#: inc/class-undisclosededitpost.php:121
+#: inc/class-undisclosededitpost.php:97
 #@ wpundisclosed
 msgid "Who can edit:"
 msgstr "Wer darf bearbeiten:"
@@ -216,7 +218,7 @@ msgstr "Wer darf bearbeiten:"
 #: wp-access-areas.php:0
 #@ wpundisclosed
 msgid "WordPress Access Areas"
-msgstr ""
+msgstr "WordPress Zugangsbereiche"
 
 #. translators: plugin header field 'PluginURI'
 #: wp-access-areas.php:0
@@ -228,7 +230,7 @@ msgstr ""
 #: wp-access-areas.php:0
 #@ wpundisclosed
 msgid "Lets you define Access Areas and assign them to Posts, Pages and Custom Post types. Through Access Areas you can fine-tune who can view, edit or comment on your posts."
-msgstr "Fine-Tuning für Ihre WordPress-Inhalte. Defeinieren Sie Zugangsbereiche und bestimmen Sie für jeden Inhalt, wer ihn lesen, bearbeiten oder Kommentieren darf."
+msgstr "Fine-Tuning für Ihre WordPress-Inhalte. Definieren Sie Zugangsbereiche und bestimmen Sie für jeden Inhalt, wer ihn lesen, bearbeiten oder Kommentieren darf."
 
 #. translators: plugin header field 'Author'
 #: wp-access-areas.php:0
@@ -242,12 +244,12 @@ msgstr "Jörn Lund"
 msgid "https://github.com/mcguffin/"
 msgstr ""
 
-#: inc/class-undisclosededitpost.php:151
+#: inc/class-undisclosededitpost.php:125
 #@ wpundisclosed
 msgid "Logged in Users"
 msgstr "Eingeloggte Benutzer"
 
-#: inc/class-undisclosededitpost.php:186
+#: inc/class-undisclosededitpost.php:239
 #@ wpundisclosed
 msgid "Commentable to"
 msgstr "Kommentierbar"
@@ -255,11 +257,49 @@ msgstr "Kommentierbar"
 #: inc/class-userlabel_list_table.php:47
 #@ wpundisclosed
 msgid "WP Capability"
-msgstr ""
+msgstr "WordPress Berechtigung"
 
 #. translators: plugin header field 'Version'
 #: wp-access-areas.php:0
 #@ wpundisclosed
-msgid "1.1.11"
+msgid "1.2.0"
+msgstr ""
+
+#: inc/class-undisclosedusers.php:56
+#: inc/class-undisclosedusers.php:72
+#@ wpundisclosed
+msgid "Insufficient privileges."
+msgstr "Ungenügende Rechte"
+
+#: inc/class-undisclosedusers.php:66
+#@ wpundisclosed
+msgid "Access Area exists."
+msgstr "Zugangsbereich existiert."
+
+#: inc/class-undisclosedusers.php:219
+#@ default
+msgid "+"
+msgstr ""
+
+#: inc/class-undisclosededitpost.php:200
+#: inc/class-undisclosededitpost.php:209
+#: inc/class-undisclosededitpost.php:218
+#@ default
+msgid "&mdash; No Change &mdash;"
+msgstr ""
+
+#: inc/class-undisclosededitpost.php:198
+#@ wpundisclosed
+msgid "Read:"
+msgstr ""
+
+#: inc/class-undisclosededitpost.php:207
+#@ wpundisclosed
+msgid "Edit:"
+msgstr ""
+
+#: inc/class-undisclosededitpost.php:216
+#@ wpundisclosed
+msgid "Comment:"
 msgstr ""
 

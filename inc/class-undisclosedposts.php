@@ -25,19 +25,26 @@ class UndisclosedPosts {
 		add_filter( 'comments_open', array(__CLASS__,'comments_open') , 10 , 2 );
 		add_filter('edit_post_link',array(__CLASS__,'edit_post_link'),10,2);
 		add_filter('map_meta_cap', array( __CLASS__ , 'map_meta_cap' ) ,10,4);
+
+		add_filter( 'user_has_cap', array( __CLASS__ , 'user_has_cap' ) , 10 , 3  );
+	}
+	function user_has_cap( $allcaps, $caps, $args ){
+		$user_id = $args[1]; // user id
+		$user_caps = get_user_meta($user_id , WPUND_GLOBAL_USERMETA_KEY , true );
+		if ( $user_caps )
+			$allcaps += array_combine( $user_caps , array_fill(0,count($user_caps),true));
+		return $allcaps;
 	}
 	
 	// --------------------------------------------------
 	// comment restrictions
 	// --------------------------------------------------
 	static function comments_open( $open, $post_id ) {
-		if ( $open ) // opened by wp 
-			return true;
-		
-		if ( $_post = get_post($post_id) )
-			return wpaa_user_can($_post->post_comment_cap);
-		
-		return false;
+		if ( $post = get_post($post_id) ) {
+			if ( $post->post_comment_cap != 'exist' )
+				$open = wpaa_user_can( $post->post_comment_cap );
+		}
+		return $open;
 	}
 	
 	
@@ -67,14 +74,8 @@ class UndisclosedPosts {
 					$view_cap = $post->post_view_cap;
 					if ( ! $edit_cap )
 						break;
-					global $wp_roles;
-					if ( $wp_roles->is_role( $edit_cap )) {
-						if ( ! wpaa_user_can_role( $edit_cap ) || ! wpaa_user_can_role( $view_cap ) )
-							$caps[] = 'do_not_allow';
-					} else {
-						if ( ! current_user_can( $edit_cap ) || ! current_user_can( $view_cap ) )
-							$caps[] = 'do_not_allow';
-					}
+					if ( ! wpaa_user_can( $edit_cap ) || ! wpaa_user_can( $view_cap ) )
+						$caps[] = 'do_not_allow';
 				}
 				break;
 		}
@@ -113,27 +114,26 @@ class UndisclosedPosts {
 		// not true on multisite
 		if ( ! is_multisite() && current_user_can('administrator') )
 			return $where;
-		
-		$cond = array( "$table_name.post_view_cap = 'exist'" );
+		$caps = array('exist');
 		if ( is_user_logged_in() ) {
 			// get current user's groups
 			$roles = new WP_Roles();
 			
 			// reading
 			if ( current_user_can( 'read' ) )
-				$cond[] = "$table_name.post_view_cap = 'read'"; // logged in users
+				$caps[] = 'read';
 			
 			// user's roles
 			$user_roles = wpaa_user_contained_roles();
 			foreach ( $user_roles as $role )
-				$cond[] = "$table_name.post_view_cap = '$role'"; 
+				$caps[] = $role;
 			
 			// user's custom caps
 			foreach( UndisclosedUserlabel::get_label_array( ) as $cap => $capname)
 				if ( wpaa_user_can_accessarea( $cap ) )
-					$cond[] = "$table_name.post_view_cap = '$cap'";
+					$caps[] = $cap;
 		}
-		$where .= " AND (".implode( ' OR ' , $cond ) . ")";
+		$where .= " AND $table_name.post_view_cap IN ('".implode( "','" , $caps ) . "')";
 		return $where;
 	}
 

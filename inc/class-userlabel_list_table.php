@@ -155,12 +155,11 @@ class UserLabel_List_Table extends WP_List_Table {
 		if ( -1 !== $action && wp_verify_nonce($nonce,'bulk-'.$this->_args['plural'] ) ) {
 			switch ($action) {
 				case 'delete':
-					foreach ($_REQUEST[$this->_args['plural']] as $ul_id)
-						if ( UndisclosedUserlabel::get_userlabel( intval($ul_id) ) )
+					foreach ($_REQUEST[$this->_args['plural']] as $ul_id) 
+						if ( $ul = UndisclosedUserlabel::get_userlabel( intval($ul_id) ) ) 
 							UndisclosedUserlabel::delete_userlabel( intval($ul_id) );
 					return wp_redirect( add_query_arg( array('page'=>'user_labels' , 'message'=>3 , 'deleted' => count($_REQUEST[$this->_args['plural']]) ) , $_SERVER['SCRIPT_NAME'] ) );
 				default:
-					
 			}
 		}
 	}

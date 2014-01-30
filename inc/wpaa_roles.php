@@ -5,32 +5,36 @@
 */ 
 
 // 
-function wpaa_user_can( $cap ) {
+function wpaa_user_can( $cap , $args = array() ) {
 	global $wp_roles;
 	
-	// exist always true. read always treu for logged in users. admin can do verything on single sites
-	if ( 'exist' == $cap 
-		|| 'read' == $cap && is_user_logged_in() 
-		|| ( wpaa_is_local_cap( $cap ) && current_user_can( 'administrator' ) ) 
-	)
+	// exist always true. read always true for logged in users. 
+	if ( 'exist' == $cap || ('read' == $cap && is_user_logged_in() ) ) 
 		return true;
 	
 	// true for role
 	if ( $wp_roles->is_role( $cap ) )
-		return wpaa_user_can_role( $cap );
+		$can = wpaa_user_can_role( $cap );
+	else if ( wpaa_is_access_area( $cap ) )
+		$can = wpaa_user_can_accessarea( $cap , $args );
+	else 
+		$can = current_user_can( $cap , $args );
 	
-	// any other cap including custom caps.
-	return current_user_can( $cap );
+	return $can;
 }
 
-function wpaa_user_can_accessarea( $cap ) {
+function wpaa_is_access_area( $cap ) {
+	return strpos( $cap , WPUND_USERLABEL_PREFIX ) === 0;
+}
+
+function wpaa_user_can_accessarea( $cap , $args = array() ) {
 	global $wp_roles;
 
 	// always true for administrators on local caps
-	if ( wpaa_is_local_cap( $cap ) && current_user_can( 'administrator' ) )
+	if ( wpaa_is_local_cap( $cap ) && current_user_can( 'administrator' ) || is_super_admin() )
 		$can = true;
 	else
-		$can = current_user_can( $cap );
+		$can = current_user_can( $cap , $args );
 	
 	// any other cap including custom caps.
 	return $can;

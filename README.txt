@@ -3,7 +3,7 @@ Contributors: podpirate
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WF4Z3HU93XYJA
 Tags: access, role, capability, user, security, editor
 Requires at least: 3.5
-Tested up to: 3.6.1
+Tested up to: 3.7.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -76,6 +76,14 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 3. Post Access Control
 
 == Changelog ==
+
+= 1.2.0 =
+Feature: Bulk edit Posts
+Feature: Ajax-Add AAs on User edit screen
+Debug: Fix invalid HMTL on user list table
+Debug: Remove edit post link from frontend
+Debug: Invisible posts are now also excluded from editing
+Debug: Remove "Who can read"-Select from non-public post types
 
 = 1.1.11 =
 Debug: Fix Comment issue. Selecting "WordPress default" now does what it is supposed to: handling over the comment responsibility to WordPress.
