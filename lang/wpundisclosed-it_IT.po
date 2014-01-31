@@ -3,19 +3,19 @@ msgstr ""
 "Project-Id-Version: WordPress Access Areas v1.2.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-01-30 19:09:02+0000\n"
-"Last-Translator: admin <joern@flyingletters.com>\n"
+"PO-Revision-Date: 2014-01-31 09:43:28+0000\n"
+"Last-Translator: Francesco Carpana\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: CSL v1.x\n"
-"X-Poedit-Language: German\n"
-"X-Poedit-Country: GERMANY\n"
-"X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 1.6.3\n"
+"X-Poedit-Language: \n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
-"X-Poedit-Basepath: \n"
+"X-Poedit-Basepath: .\n"
 "X-Poedit-Bookmarks: \n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Textdomain-Support: yes"
@@ -24,202 +24,202 @@ msgstr ""
 #: inc/class-undisclosedcaps.php:198
 #@ wpundisclosed
 msgid "Manage Access Areas"
-msgstr "Zugangsbereiche verwalten"
+msgstr "Gestione Aree d'Accesso"
 
 #: inc/class-undisclosedcaps.php:28
 #: inc/class-undisclosedusers.php:184
 #: inc/class-undisclosedusers.php:297
 #@ wpundisclosed
 msgid "Access Areas"
-msgstr "Zugangsbereiche"
+msgstr "Aree d'Accesso"
 
 #: inc/class-undisclosedcaps.php:35
 #: inc/class-undisclosedusers.php:172
 #@ wpundisclosed
 msgid "You do not have permission to do this."
-msgstr "Sie haben nicht die erforderlichen Rechte."
+msgstr "Il tuo utente non ha i permessi necessari per l'operazione in corso."
 
 #: inc/class-undisclosedcaps.php:48
 #@ wpundisclosed
 msgid "Please enter a Label."
-msgstr "Bitte geben Sie ein Namen ein"
+msgstr "Si prega di inserire un'etichetta"
 
 #: inc/class-undisclosedcaps.php:51
 #@ wpundisclosed
 msgid "You do not have permission to edit network wide user labels."
-msgstr "Sie haben nicht die erforderlichen Rechte Netzwerk weite Zugriffsbereiche zu bearbeiten."
+msgstr "Non si dispone dei permessi necessari per modificare a livello di rete etichette utente."
 
 #: inc/class-undisclosedcaps.php:126
 #@ wpundisclosed
 msgid "Edit Access Area"
-msgstr "Zugangsbereich bearbeiten"
+msgstr "Modifica l'Area d'Accesso"
 
 #: inc/class-undisclosedcaps.php:128
 #: inc/class-undisclosedcaps.php:153
 #@ wpundisclosed
 msgid "Create Access Area"
-msgstr "Zugangsbereich erstellen"
+msgstr "Crea Area d'Accesso"
 
 #: inc/class-undisclosedcaps.php:143
 #@ wpundisclosed
 msgid "Access Area"
-msgstr "Zugangsbereich"
+msgstr "Area d'Accesso"
 
 #: inc/class-undisclosedcaps.php:144
 #@ wpundisclosed
 msgid "New Access Area"
-msgstr "Neuer Zugangsbereich"
+msgstr "Nuova Area d'Accesso"
 
 #: inc/class-undisclosedcaps.php:151
 #@ wpundisclosed
 msgid "Save changes"
-msgstr "Änderungen sichern"
+msgstr "Salva i cambiamenti"
 
 #: inc/class-undisclosedcaps.php:169
 #@ wpundisclosed
 msgid "Access Area created."
-msgstr "Zugangsbereich wurde erstellt."
+msgstr "Area d'Accesso creata."
 
 #: inc/class-undisclosedcaps.php:172
 #@ wpundisclosed
 msgid "Access Area updated."
-msgstr "Zugangsbereich wurde aktualisiert."
+msgstr "Area d'Accesso aggiornata"
 
 #: inc/class-undisclosedcaps.php:175
 #, php-format
 #@ wpundisclosed
 msgid "Access Area deleted."
 msgid_plural "%d Access Areas deleted."
-msgstr[0] "Zugangsbereich gelöscht."
-msgstr[1] "Es wurden %d Zugangsbereiche gelöscht."
+msgstr[0] "Area d'Accesso cancellata."
+msgstr[1] "Cancellate %d Aree d'Accesso"
 
 #: inc/class-undisclosedcaps.php:178
 #@ wpundisclosed
 msgid "An Access Area with that Name already exists."
-msgstr "Ein Zugangsbereich existiert schon unter diesem Namen."
+msgstr "Un Area d'Accesso con questo nome esiste già"
 
 #: inc/class-undisclosedcaps.php:199
 #: inc/class-undisclosedusers.php:254
 #@ wpundisclosed
 msgctxt "access area"
 msgid "Add New"
-msgstr "Erstellen"
+msgstr "Aggiungi Nuova"
 
 #: inc/class-undisclosededitpost.php:80
 #: inc/class-undisclosededitpost.php:315
 #@ wpundisclosed
 msgid "Access"
-msgstr "Zugang"
+msgstr "Accesso"
 
 #: inc/class-undisclosededitpost.php:245
 #@ wpundisclosed
 msgid "WordPress default"
-msgstr "WordPress Standard"
+msgstr "WordPress Predefinito"
 
 #: inc/class-undisclosededitpost.php:373
 #: inc/class-undisclosededitpost.php:379
 #@ wpundisclosed
 msgid "Blog users"
-msgstr "Blog-Benutzer"
+msgstr "Utente Blog"
 
 #: inc/class-undisclosededitpost.php:250
 #@ wpundisclosed
 msgid "WordPress roles"
-msgstr "WordPress Rollen"
+msgstr "Ruolo WordPress"
 
 #: inc/class-undisclosededitpost.php:184
 #@ wpundisclosed
 msgid "Who can comment:"
-msgstr "Wer darf kommentieren:"
+msgstr "Chi può commentare"
 
 #: inc/class-undisclosededitpost.php:360
 #@ wpundisclosed
 msgid "Visible to"
-msgstr "Sichtbar für"
+msgstr "Visibile da"
 
 #: inc/class-undisclosededitpost.php:373
 #: inc/class-undisclosededitpost.php:379
 #@ wpundisclosed
 msgid "Everybody"
-msgstr "Jeder"
+msgstr "Tutti"
 
 #: inc/class-undiscloseduserlabel.php:74
 #@ wpundisclosed
 msgid "(Network)"
-msgstr "(Netzwerk)"
+msgstr "(Rete)"
 
 #: inc/class-undisclosedusers.php:189
 #@ wpundisclosed
 msgid "Grant Network-Wide Access"
-msgstr "Netzwerk-Zugang gewähren"
+msgstr "Concedi l'Accesso a livello di Rete"
 
 #: inc/class-undisclosedusers.php:195
 #@ wpundisclosed
 msgid "Grant Access"
-msgstr "Zugang gewähren"
+msgstr "Concedi Accesso"
 
 #: inc/class-undisclosedusers.php:273
 #@ wpundisclosed
 msgid "Access Areas:"
-msgstr "Zugangsbereiche:"
+msgstr "Aree d'Accesso:"
 
 #: inc/class-undisclosedusers.php:285
 #@ default
 msgid "(None)"
-msgstr ""
+msgstr "(Nessuno)"
 
 #: inc/class-undisclosedusers.php:309
 #@ default
 msgid "Everywhere"
-msgstr ""
+msgstr "Ovunque"
 
 #: inc/class-userlabel_list_table.php:42
 #@ wpundisclosed
 msgid "Name"
-msgstr "Name"
+msgstr "Nome"
 
 #: inc/class-userlabel_list_table.php:45
 #@ wpundisclosed
 msgid "Scope"
-msgstr "Gültigkeitsbereich"
+msgstr "Scopo"
 
 #: inc/class-userlabel_list_table.php:83
 #@ wpundisclosed
 msgid "Network"
-msgstr "Netzwerk"
+msgstr "Rete"
 
 #: inc/class-userlabel_list_table.php:75
 #: inc/class-userlabel_list_table.php:91
 #: inc/class-userlabel_list_table.php:145
 #@ default
 msgid "Delete"
-msgstr ""
+msgstr "Cancella"
 
 #: inc/class-undisclosedcaps.php:181
 #@ wpundisclosed
 msgid "Could not find the specified Access Area."
-msgstr "Der angegebene Zugangsbereich konnte nicht gefunden werden."
+msgstr "Area d'Accesso non trovata."
 
 #: inc/class-undisclosededitpost.php:259
 #@ wpundisclosed
 msgid "Users with Access to"
-msgstr "Benutzer mit Zugang zu:"
+msgstr "Utenti con Accesso a"
 
 #: inc/class-undisclosededitpost.php:168
 #@ wpundisclosed
 msgid "Who can read:"
-msgstr "Wer darf lesen:"
+msgstr "Chi può leggere"
 
 #: inc/class-undisclosededitpost.php:176
 #@ wpundisclosed
 msgid "Who can edit:"
-msgstr "Wer darf bearbeiten:"
+msgstr "Chi può modificare"
 
 #. translators: plugin header field 'Name'
 #: wp-access-areas.php:0
 #@ wpundisclosed
 msgid "WordPress Access Areas"
-msgstr "WordPress Zugangsbereiche"
+msgstr ""
 
 #. translators: plugin header field 'PluginURI'
 #: wp-access-areas.php:0
@@ -231,13 +231,13 @@ msgstr ""
 #: wp-access-areas.php:0
 #@ wpundisclosed
 msgid "Lets you define Access Areas and assign them to Posts, Pages and Custom Post types. Through Access Areas you can fine-tune who can view, edit or comment on your posts."
-msgstr "Fine-Tuning für Ihre WordPress-Inhalte. Definieren Sie Zugangsbereiche und bestimmen Sie für jeden Inhalt, wer ihn lesen, bearbeiten oder Kommentieren darf."
+msgstr "Consente di definire Aree di Accesso e di assegnare loro post, pagine e post personalizzati. Attraverso le Aree di Accesso è possibile ottimizzare chi può visualizzare, modificare o commentare i tuoi post."
 
 #. translators: plugin header field 'Author'
 #: wp-access-areas.php:0
 #@ wpundisclosed
 msgid "Joern Lund"
-msgstr "Jörn Lund"
+msgstr ""
 
 #. translators: plugin header field 'AuthorURI'
 #: wp-access-areas.php:0
@@ -248,85 +248,85 @@ msgstr ""
 #: inc/class-undisclosededitpost.php:247
 #@ wpundisclosed
 msgid "Logged in Users"
-msgstr "Eingeloggte Benutzer"
+msgstr "Utenti Loggati"
 
 #: inc/class-undisclosededitpost.php:361
 #@ wpundisclosed
 msgid "Commentable to"
-msgstr "Kommentierbar"
+msgstr "Commentabile da"
 
 #: inc/class-userlabel_list_table.php:47
 #@ wpundisclosed
 msgid "WP Capability"
-msgstr "WordPress Berechtigung"
-
-#: inc/class-undisclosedusers.php:82
-#: inc/class-undisclosedusers.php:98
-#@ wpundisclosed
-msgid "Insufficient privileges."
-msgstr "Ungenügende Rechte"
-
-#: inc/class-undisclosedusers.php:92
-#@ wpundisclosed
-msgid "Access Area exists."
-msgstr "Zugangsbereich existiert."
-
-#: inc/class-undisclosedusers.php:256
-#@ default
-msgid "+"
 msgstr ""
+
+#: inc/class-undisclosededitpost.php:83
+#@ wpundisclosed
+msgid "Behaviour"
+msgstr "Comportamento"
+
+#: inc/class-undisclosededitpost.php:195
+#@ wpundisclosed
+msgid "Show 404"
+msgstr "Mostra 404"
+
+#: inc/class-undisclosededitpost.php:199
+#@ wpundisclosed
+msgid "Redirect to the fallback page."
+msgstr "Reindirizzamento alla pagina di fallback."
+
+#: inc/class-undisclosededitpost.php:203
+#@ wpundisclosed
+msgid "If not logged in, redirect to Login Page. Otherwise redirect to the fallback page."
+msgstr "Se non autenticato, ridirigi sulla pagina di login. Altrimenti ridirigi alla pagina di fallback."
+
+#: inc/class-undisclosededitpost.php:211
+#@ wpundisclosed
+msgid "If somebody tries to view a restricted post directly:"
+msgstr "Se qualcuno tenta di visualizzare direttamente un post riservato:"
+
+#: inc/class-undisclosededitpost.php:220
+#@ wpundisclosed
+msgid "Fallback Page"
+msgstr "Pagina di Fallback"
+
+#: inc/class-undisclosededitpost.php:320
+#@ wpundisclosed
+msgid "Read:"
+msgstr "Leggi:"
 
 #: inc/class-undisclosededitpost.php:322
 #: inc/class-undisclosededitpost.php:331
 #: inc/class-undisclosededitpost.php:340
 #@ default
 msgid "&mdash; No Change &mdash;"
-msgstr ""
-
-#: inc/class-undisclosededitpost.php:320
-#@ wpundisclosed
-msgid "Read:"
-msgstr "Lesen:"
+msgstr "&mdash; Nessun Cambiamento &mdash;"
 
 #: inc/class-undisclosededitpost.php:329
 #@ wpundisclosed
 msgid "Edit:"
-msgstr "Bearbeiten:"
+msgstr "Modifica:"
 
 #: inc/class-undisclosededitpost.php:338
 #@ wpundisclosed
 msgid "Comment:"
-msgstr "Kommentieren:"
+msgstr "Commento:"
 
-#: inc/class-undisclosededitpost.php:83
+#: inc/class-undisclosedusers.php:82
+#: inc/class-undisclosedusers.php:98
 #@ wpundisclosed
-msgid "Behaviour"
-msgstr "Verhalten"
+msgid "Insufficient privileges."
+msgstr "Privilegi insufficienti."
 
-#: inc/class-undisclosededitpost.php:195
+#: inc/class-undisclosedusers.php:92
 #@ wpundisclosed
-msgid "Show 404"
-msgstr "404 Seite zeigen"
+msgid "Access Area exists."
+msgstr "Area d'Accesso esistente."
 
-#: inc/class-undisclosededitpost.php:199
-#@ wpundisclosed
-msgid "Redirect to the fallback page."
-msgstr "Zur Ausweichseite weiterleiten"
-
-#: inc/class-undisclosededitpost.php:203
-#@ wpundisclosed
-msgid "If not logged in, redirect to Login Page. Otherwise redirect to the fallback page."
-msgstr "Nicht eingeloggte User zum Login weiterleiten. Andernfalls zur Ausweichseite."
-
-#: inc/class-undisclosededitpost.php:211
-#@ wpundisclosed
-msgid "If somebody tries to view a restricted post directly:"
-msgstr "Wenn jemand versucht, eine Geschützte Seite direkt aufzurufen:"
-
-#: inc/class-undisclosededitpost.php:220
-#@ wpundisclosed
-msgid "Fallback Page"
-msgstr "Ausweichseite"
+#: inc/class-undisclosedusers.php:256
+#@ default
+msgid "+"
+msgstr ""
 
 #. translators: plugin header field 'Version'
 #: wp-access-areas.php:0

@@ -169,7 +169,7 @@ class UndisclosedUsers {
 		$can_grant = current_user_can( $capability ) || ! $network;
 		$is_change = ($add && ! $user->has_cap( $capability )) || (!$add && $user->has_cap( $capability ));
 		if ( ! $can_grant && $is_change )
-			wp_die(__('You are not allowed to perform the requested operation.','wpundisclosed'));
+			wp_die( __('You do not have permission to do this.' , 'wpundisclosed' ) );
 		if ( $add && $is_change ) 
 			$user->add_cap( $capability , true );
 		else if ( ! $add && $is_change ) 
