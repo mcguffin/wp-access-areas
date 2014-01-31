@@ -77,6 +77,10 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 
 == Changelog ==
 
+= 1.2.1 =
+Feature: Option to redirect to wp-login or fallback page.
+Italian localization
+
 = 1.2.0 =
 Feature: Bulk edit Posts
 Feature: Ajax-Add AAs on User edit screen
@@ -136,4 +140,3 @@ Initial Release
 
 == Upgrade notice ==
 
-Debug: Fix Comments. Selecting "WordPress default" now does what it is supposed to: handling over the comment responsibility to WordPress.

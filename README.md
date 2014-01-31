@@ -36,5 +36,5 @@ Features
 
 Compatibility
 -------------
-- WP 3.5.2 through 3.6
+- WP 3.5.2 through 3.8.1
 
