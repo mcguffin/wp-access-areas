@@ -271,7 +271,7 @@ class UndisclosedEditPost {
 			'exclude'	=> $restricted_pages,
 		));
 	}
-	static function behaviour_select(  ) {
+	static function behaviour_select( $post_behaviour = '' ) {
 		$behaviours = array(
 			array( 
 				'value'	=> '',
