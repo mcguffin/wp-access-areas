@@ -33,6 +33,10 @@ Features
 - German and Italian localization
 - Clean uninstall
 
+Compatibility
+-------------
+- WP 3.5.2 through 3.8.1
+
 Plugin API
 ----------
 ### Action hook `wpaa_view_restricted_post` ###
@@ -48,7 +52,7 @@ function my_deny( $forbidden_post_id , $forbidden_post ) {
 add_action('wpaa_view_restricted_post','my_deny' , 10 , 2 );
 ```
 
-### Filter `wpaa_restricted_post_redirect` ### 
+### Filter `wpaa_restricted_post_redirect` ####
 
 Alternative redirect for access restricted posts.
 
@@ -72,7 +76,7 @@ Will return true if one the following conditions is met:
 
  - If `$cap` is an access area: the user is in the specified access area
  - If `$cap` is a WP-role: the user has the specified role a superior role
- - `[current_user_can( $cap , $args )](http://codex.wordpress.org/Function_Reference/current_user_can)` is ˚true˚
+ - `current_user_can( $cap , $args )` is ˚true˚ (see WP function reference for [`current_user_can`](http://codex.wordpress.org/Function_Reference/current_user_can)
  
 Examples:
 ```
@@ -130,7 +134,7 @@ Example:
 ```
 // current user is an editor
 wpaa_user_contained_roles();
-// function returns array('subscriber','contributor','author','editor')
+// will return array('subscriber','contributor','author','editor')
 ```
 
 #### `wpaa_contained_roles( $role )` ####
@@ -140,7 +144,7 @@ Example:
 ```
 // current user is an editor
 wpaa_contained_roles('editor');
-// function returns array('subscriber','contributor','author','editor')
+// will return array('subscriber','contributor','author','editor')
 ```
 
 #### `wpaa_role_contains( $container , $contained )` ####
@@ -148,14 +152,8 @@ Check if role `$contained` is covered by role `$container`.
 
 Example:
 ```
-wpaa_role_contains('editor',`contributor`);
-// true
+wpaa_role_contains('editor',`contributor`); // true
 
-wpaa_role_contains('editor',`administrator`);
-// false
+wpaa_role_contains('author',`editor`); // false
 ```
-
-Compatibility
--------------
-- WP 3.5.2 through 3.8.1
 
