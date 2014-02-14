@@ -79,6 +79,7 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 
 = 1.2.1 =
 Feature: Option to redirect to wp-login or fallback page.
+Feature: post classes
 Italian localization
 
 = 1.2.0 =

@@ -99,11 +99,11 @@ class UndisclosedPosts {
 		$post = get_post( $post_ID );
 		
 		if ( $post->post_view_cap != 'exist' && wpaa_user_can( $post->post_view_cap ) ) {
-			$classes[] = 'wpaa-view-granted';
+			$classes[] = 'wpaa-view-restricted';
 			$classes[] = "wpaa-view-{$post->post_view_cap}";
 		}
 		if ( $post->post_edit_cap != 'exist' && current_user_can('edit_post',$post_ID ) ) {
-			$classes[] = 'wpaa-edit-granted';
+			$classes[] = 'wpaa-edit-restricted';
 			$classes[] = "wpaa-edit-{$post->post_edit_cap}";
 		}
 		if ( $post->post_comment_cap != 'exist' && wpaa_user_can( $post->post_comment_cap ) && wpaa_user_can( $post->post_view_cap ) ) {
