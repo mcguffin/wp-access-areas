@@ -72,7 +72,7 @@ Function reference
 Checks if the current user user has the the specified capability or role `$cap`.
 `$args` is passed to WPs `current_user_can( $cap , $args )` function.
 
-Will return true if one the following conditions is met:
+Will return `true` if one the following conditions is met:
 
  - If `$cap` is an access area: the user is in the specified access area
  - If `$cap` is a WP-role: the user has the specified role a superior role
@@ -97,7 +97,7 @@ Check if `$cap` is an valid access area name.
 #### `wpaa_user_can_accessarea( $cap , $args = array() )` ####
 
 Check if a user is capable of the specified access area. 
-On single Sites always ˚true˚ for administrators, on multisites always true for super admins.
+On single Sites always `true` for administrators, on multisites always `true` for super admins.
 
 `$args` is passed to WPs `current_user_can( $cap , $args )` function.
 
