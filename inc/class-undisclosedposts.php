@@ -36,7 +36,7 @@ class UndisclosedPosts {
 		add_filter( 'map_meta_cap' , array( __CLASS__ , 'map_meta_cap' ) , 10 , 4 );
 		add_filter( 'user_has_cap', array( __CLASS__ , 'user_has_cap' ) , 10 , 3  );
 	}
-	function user_has_cap( $allcaps, $caps, $args ){
+	static function user_has_cap( $allcaps, $caps, $args ){
 		$user_id = $args[1]; // user id
 		$user_caps = get_user_meta($user_id , WPUND_GLOBAL_USERMETA_KEY , true );
 		if ( $user_caps )
