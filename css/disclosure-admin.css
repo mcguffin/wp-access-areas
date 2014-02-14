@@ -43,7 +43,13 @@
 .wp-gte-38 .icon-undisclosed-network.icon16:before {
 	font-family:dashicons;
 	font-size:1.5em;
-	line-height:0.7em;
+	line-height:0.5em;
+}
+.wp-gte-38 .icon-undisclosed-local.icon16:before {
+	content:'\f102';
+}
+.wp-gte-38 .icon-undisclosed-network.icon16:before {
+	content:'\f319';
 }
 /* h2 icons on admin pages are deprecated as of WP 3.8 */
 .wp-gte-38 #icon-undisclosed-network,

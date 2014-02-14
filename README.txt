@@ -79,6 +79,7 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 1. Area Access Manager
 2. User Editing
 3. Post Access Control
+4. Post Access Behaviour
 
 == Changelog ==
 
