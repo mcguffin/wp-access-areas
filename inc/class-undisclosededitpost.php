@@ -189,49 +189,30 @@ class UndisclosedEditPost {
 		}
 	}
 	static function disclosure_box_behaviour( ) {
-		$behaviours = array(
-			array( 
-				'value'	=> '',
-				'label' => __( 'Show 404' , 'wpundisclosed'),
-			),
-			array(
-				'value'	=> 'page',
-				'label' => __( 'Redirect to the fallback page.' , 'wpundisclosed'),
-			),
-			array(
-				'value'	=> 'login',
-				'label' => __( 'If not logged in, redirect to Login Page. Otherwise redirect to the fallback page.' , 'wpundisclosed'),
-			),
-		);
 		$post 				= get_post(get_the_ID());
 		$post_behaviour 	= get_post_meta( $post->ID , '_wpaa_post_behaviour' , true );
 		$post_fallback_page	= get_post_meta( $post->ID , '_wpaa_fallback_page' , true );
 
 		?><div class="disclosure-view-select misc-pub-section"><?php
 			?><p class="description"><?php _e('If somebody tries to view a restricted post directly:' , 'wpundisclosed' ); ?></p><?php
-		foreach ( $behaviours as $item ) {
-			extract( $item );
-			?><label for="disclosure-view-post-behaviour-<?php echo $value ?>">
-				<input name="_wpaa_post_behaviour" <?php checked( $value , $post_behaviour ); ?> class="wpaa-post-behaviour" id="disclosure-view-post-behaviour-<?php echo $value ?>" value="<?php echo $value ?>"  type="radio" />
-				<?php echo $label ?>
-				<br /><?php
-		}
+		
+		self::behaviour_select( $post_behaviour );
+		
+		?></div><?php
+		
+		?><div class="disclosure-view-select misc-pub-section"><?php
 		?><label for="_wpaa_fallback_page"><?php
 		_e('Fallback Page','wpundisclosed');
 		?></label><?php
-		
-		wp_dropdown_pages(array(
-			'selected' 	=> $post_fallback_page,
-			'name'		=> '_wpaa_fallback_page',
-		));
-		
+		// only offer non-restricted pages
+		self::fallback_page_dropdown( $post_fallback_page );
 		?></div><?php
 
 	}
 	
 	
 	// --------------------------------------------------
-	// edit post - Access Area droppdown menu
+	// edit post - Access Area dropdown menu
 	// --------------------------------------------------
 	static function access_area_dropdown( $roles , $groups , $selected_cap , $fieldname , $first_item_value = null , $first_item_label = ''  ) {
 		if ( ! $selected_cap )
@@ -267,6 +248,52 @@ class UndisclosedEditPost {
 			<?php }  /* if count( $groups ) */ ?>
 		</select>
 		<?php
+	}
+	// --------------------------------------------------
+	// edit post - Fallback page dropdown menu
+	// --------------------------------------------------
+	static function fallback_page_dropdown( $post_fallback_page = false ) {
+		global $wpdb;
+		
+		// if not fallback page, use global fallback page
+		if ( ! $post_fallback_page )
+			$post_fallback_page = get_option('wpaa_fallback_page');
+		
+		$restricted_pages = $wpdb->get_col($wpdb->prepare("SELECT id 
+			FROM $wpdb->posts 
+			WHERE 
+				post_type=%s AND 
+				post_status=%s AND
+				post_view_cap!=%s" , 'page','publish','exist' ));
+		wp_dropdown_pages(array(
+			'selected' 	=> $post_fallback_page,
+			'name'		=> '_wpaa_fallback_page',
+			'exclude'	=> $restricted_pages,
+		));
+	}
+	static function behaviour_select(  ) {
+		$behaviours = array(
+			array( 
+				'value'	=> '',
+				'label' => __( 'Show 404' , 'wpundisclosed'),
+			),
+			array(
+				'value'	=> 'page',
+				'label' => __( 'Redirect to the fallback page.' , 'wpundisclosed'),
+			),
+			array(
+				'value'	=> 'login',
+				'label' => __( 'If not logged in, redirect to login. Otherwise redirect to the fallback page.' , 'wpundisclosed'),
+			),
+		);
+
+		foreach ( $behaviours as $item ) {
+			extract( $item );
+			?><label for="disclosure-view-post-behaviour-<?php echo $value ?>">
+				<input name="_wpaa_post_behaviour" <?php checked( $value , $post_behaviour ); ?> class="wpaa-post-behaviour" id="disclosure-view-post-behaviour-<?php echo $value ?>" value="<?php echo $value ?>"  type="radio" />
+				<?php echo $label ?>
+				<br /></label><?php
+		}
 	}
 	// --------------------------------------------------
 	// Quick Edit hook callback

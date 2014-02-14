@@ -49,22 +49,28 @@ class UndisclosedPosts {
 	// comment restrictions
 	// --------------------------------------------------
 	static function template_redirect() {
-		if ( is_single() && $post = get_post() ) {
-			if ( ! wpaa_user_can( $post->post_view_cap ) ) {
-				$post 		= apply_filters( 'wpaa_view_restricted_area' , $post );
-				$behaviour 	= get_post_meta($post->ID,'_wpaa_post_behaviour',true);
-				$fallback_page	= get_post_meta($post->ID,'_wpaa_fallback_page',true);
+		if ( is_single() && $restricted_post = get_post() ) {
+			if ( ! wpaa_user_can( $restricted_post->post_view_cap ) ) {
+				do_action( 'wpaa_view_restricted_post' , $restricted_post->ID , $restricted_post );
+				$behaviour 			= get_post_meta($restricted_post->ID,'_wpaa_post_behaviour',true);
+				$fallback_page_id	= get_post_meta($restricted_post->ID,'_wpaa_fallback_page',true);
 				
-				if ( $behaviour == 'page' || is_user_logged_in() )
-					$redirect = wp_login_url( get_permalink( $fallback_page ) );
-				else 
+				if ( $behaviour == 'page' || is_user_logged_in() ) {
+					
+					// check if fallback page is accessable
+					$fallback_page = get_post( $fallback_page_id );
+					if ( wpaa_user_can( $fallback_page->post_view_cap ) ) {
+						$redirect = wp_login_url( get_permalink( $fallback_page_id ) );
+					} else {
+						$redirect = home_url();
+					}
+				} else {
 					$redirect = wp_login_url( get_permalink() );
-				
-				$redirect = apply_filters( 'wpaa_restricted_area_redirect' , $redirect );
-				if ( $redirect ) {
-					wp_redirect( $redirect );
-					exit();
 				}
+				$redirect = apply_filters( 'wpaa_restricted_post_redirect' , $redirect , $restricted_post->ID , $restricted_post );
+				if ( $redirect )
+					wp_redirect( $redirect );
+				exit();
 			}
 		}
 	}

@@ -49,6 +49,11 @@ It makes changes to your database, but it won't make a mess out of it. Upon inst
 
 Upon uninstall these changes will be removed completely, as well as it will remove any custom generated capability from Your user's profiles.
 
+= I'd like to do some magic / science when a user tries to view a restricted post. And yes: I can code! =
+
+Check out the `wpaa_view_restricted_post` action hook and the `wpaa_restricted_post_redirect` filter. 
+Theres some documentation in the [GitHub Repo](https://github.com/mcguffin/wp-access-areas)
+
 = I found a bug. Where should I post it? =
 
 I personally prefer GitHub. The plugin code is here: [GitHub](https://github.com/mcguffin/wp-access-areas)
@@ -80,6 +85,7 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 = 1.2.1 =
 Feature: Option to redirect to wp-login or fallback page.
 Feature: post classes
+CSS: use nice dashicons
 Italian localization
 
 = 1.2.0 =
