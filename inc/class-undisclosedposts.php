@@ -31,6 +31,7 @@ class UndisclosedPosts {
 		
 		//misc
 		add_filter( 'edit_post_link' , array(__CLASS__,'edit_post_link') , 10 , 2 );
+		add_filter( 'post_class' , array( __CLASS__ , 'post_class' ) , 10 , 3 );
 
 		// caps
 		add_filter( 'map_meta_cap' , array( __CLASS__ , 'map_meta_cap' ) , 10 , 4 );
@@ -85,9 +86,31 @@ class UndisclosedPosts {
 	// edit link
 	// --------------------------------------------------
 	static function edit_post_link( $link , $post_ID ) {
+		// we only get a post id, se we better rely on map_meta_cap, where the post object is loaded
 		if ( current_user_can('edit_post',$post_ID ) )
 			return $link;
 		return '';
+	}
+	
+	// --------------------------------------------------
+	// Post class
+	// --------------------------------------------------
+	static function post_class( $classes , $class , $post_ID ) {
+		$post = get_post( $post_ID );
+		
+		if ( $post->post_view_cap != 'exist' && wpaa_user_can( $post->post_view_cap ) ) {
+			$classes[] = 'wpaa-view-granted';
+			$classes[] = "wpaa-view-{$post->post_view_cap}";
+		}
+		if ( $post->post_edit_cap != 'exist' && current_user_can('edit_post',$post_ID ) ) {
+			$classes[] = 'wpaa-edit-granted';
+			$classes[] = "wpaa-edit-{$post->post_edit_cap}";
+		}
+		if ( $post->post_comment_cap != 'exist' && wpaa_user_can( $post->post_comment_cap ) && wpaa_user_can( $post->post_view_cap ) ) {
+			$classes[] = 'wpaa-comment-restricted';
+			$classes[] = "wpaa-comment-{$post->post_comment_cap}";
+		}
+		return array_unique($classes);
 	}
 	
 	// --------------------------------------------------
