@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: WordPress Access Areas v1.2.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-02-15 22:53:10+0000\n"
+"PO-Revision-Date: 2014-02-15 23:23:07+0000\n"
 "Last-Translator: Francesco Carpana\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -334,6 +334,8 @@ msgstr ""
 #@ wpundisclosed
 msgid "If not logged in, redirect to login. Otherwise redirect to the fallback page."
 msgstr ""
+"Se non autenticato, ridirigi sulla pagina di login. Altrimenti ridirigi alla \n"
+"pagina di fallback."
 
 #: inc/class-undisclosedsettings.php:24
 #@ wpundisclosed
