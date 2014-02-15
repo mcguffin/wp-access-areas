@@ -83,6 +83,11 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 
 == Changelog ==
 
+= 1.2.2 =
+Fix: Used wrong option name on edit post
+Fix: Embarrassing wrong var name on edit post
+L10n: Added one more italian string
+
 = 1.2.1 =
 Feature: Option to redirect to wp-login or to fallback page.
 Feature: action hook an filter on access attempt for a restricted post. (see GitHub Repo for details)
