@@ -192,7 +192,7 @@ class UndisclosedEditPost {
 		$post 				= get_post(get_the_ID());
 		$post_behavior 	= get_post_meta( $post->ID , '_wpaa_post_behavior' , true );
 		if ( ! $post_fallback_page )
-			$post_fallback_page = get_option('wpaa_behavior');
+			$post_fallback_page = get_option('wpaa_default_behavior');
 
 		$post_fallback_page	= get_post_meta( $post->ID , '_wpaa_fallback_page' , true );
 		if ( ! $post_fallback_page )
