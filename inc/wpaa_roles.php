@@ -120,6 +120,3 @@ function wpaa_role_contains( $container , $contained ) {
 	}
 	return $contains;
 }
-
-
-//var_dump(wpaa_role_contains_role( 'administrator' , 'administrator' ));

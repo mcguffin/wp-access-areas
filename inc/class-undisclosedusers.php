@@ -325,4 +325,3 @@ class UndisclosedUsers {
 UndisclosedUsers::init();
 endif;
 
-?>

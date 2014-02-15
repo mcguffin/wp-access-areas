@@ -18,7 +18,11 @@ Domain Path: /lang/
 
 /*
 Next:
-- handle single post view
+1.2.2 Settings panel (select default behavior | fallback)
+- put note when fallback page is access restricted | private | draft
+- remove view access control + fallback behavior from fallback page edit
+- Pages list: show fallback page note
+- set fallback page per local access area (manage page deletions!)
 - uninstall.php
 */
 
@@ -64,6 +68,7 @@ if ( is_admin() ) {
 	require_once( dirname(__FILE__). '/inc/class-userlabel_list_table.php' );
 	require_once( dirname(__FILE__). '/inc/class-undisclosedusers.php' );
 	require_once( dirname(__FILE__). '/inc/class-undisclosededitpost.php' );
+	require_once( dirname(__FILE__). '/inc/class-undisclosedsettings.php' );
 
 	register_activation_hook( __FILE__ , 'accessareas_activate' );
 	register_deactivation_hook( __FILE__ , 'accessareas_deactivate' );
@@ -73,7 +78,3 @@ if ( is_admin() ) {
 
 // frontend output
 require_once( dirname(__FILE__). '/inc/class-undisclosedposts.php' );
-
-
-
-?>

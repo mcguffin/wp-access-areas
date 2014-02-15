@@ -23,7 +23,7 @@ class UndisclosedPosts {
 		add_filter( "get_next_post_join" , array( __CLASS__ , "get_adjacent_post_join" ) , 10 , 3 );
 		add_filter( "get_previous_post_join" , array( __CLASS__ , "get_adjacent_post_join" ) , 10 , 3 );
 		
-		// behaviour
+		// behavior
 		add_action('template_redirect',array(__CLASS__,'template_redirect')); // or wp
 		
 		// comment restrictions
@@ -49,28 +49,46 @@ class UndisclosedPosts {
 	// comment restrictions
 	// --------------------------------------------------
 	static function template_redirect() {
-		if ( is_single() && $restricted_post = get_post() ) {
+		if ( is_singular() && $restricted_post = get_post() ) {
 			if ( ! wpaa_user_can( $restricted_post->post_view_cap ) ) {
 				do_action( 'wpaa_view_restricted_post' , $restricted_post->ID , $restricted_post );
-				$behaviour 			= get_post_meta($restricted_post->ID,'_wpaa_post_behaviour',true);
+				$redirect			= false;
+				$behavior 			= get_post_meta($restricted_post->ID,'_wpaa_post_behavior',true);
 				$fallback_page_id	= get_post_meta($restricted_post->ID,'_wpaa_fallback_page',true);
 				
-				if ( $behaviour == 'page' || is_user_logged_in() ) {
+				// no behavior? take default value
+				if ( ! $behavior )
+					$behavior = get_option( 'wpaa_default_behavior' );
+
+				
+				if ( $behavior == 'page' || is_user_logged_in() ) {
 					
-					// check if fallback page is accessable
+					// no fallback? take default value
+					if ( ! $fallback_page_id )
+						$fallback_page_id = get_option( 'wpaa_fallback_page' );
+					
 					$fallback_page = get_post( $fallback_page_id );
-					if ( wpaa_user_can( $fallback_page->post_view_cap ) ) {
-						$redirect = wp_login_url( get_permalink( $fallback_page_id ) );
+					
+					if ( wpaa_user_can( $fallback_page->post_view_cap ) && $fallback_page->post_status == 'publish' ) {
+						// if accessable take user to the fallback page
+						$redirect = get_permalink( $fallback_page_id );
 					} else {
+						// last resort: send him home
 						$redirect = home_url();
 					}
-				} else {
+				} else if ( $behavior == 'login' ) {
+					// get user to login and return him to the requested page.
 					$redirect = wp_login_url( get_permalink() );
+				} else if ( $behavior == '404' ) { // 404
+					global $wp_query;
+					$wp_query->set_404();
+					status_header(404);
 				}
 				$redirect = apply_filters( 'wpaa_restricted_post_redirect' , $redirect , $restricted_post->ID , $restricted_post );
-				if ( $redirect )
+				if ( $redirect ) {
 					wp_redirect( $redirect );
-				exit();
+					exit();
+				}
 			}
 		}
 	}
@@ -168,8 +186,8 @@ class UndisclosedPosts {
 	}
 	static function get_posts_join( $join , &$wp_query ) {
 		global $wpdb;
-		if (is_single())
-			$join .= " LEFT JOIN $wpdb->postmeta AS wpaa_postmeta ON wpaa_postmeta.meta_key = '_wpaa_post_behaviour' AND wpaa_postmeta.meta_value IS NOT NULL";
+// 		if ( is_singular() )
+// 			$join .= " LEFT JOIN $wpdb->postmeta AS wpaa_postmeta ON wpaa_postmeta.meta_key = '_wpaa_post_behavior' AND wpaa_postmeta.meta_value IS NOT NULL";
 		return $join;
 	}
 	
@@ -178,15 +196,16 @@ class UndisclosedPosts {
 	}
 	static function get_adjacent_post_join( $join , $in_same_term, $excluded_terms ) {
 		global $wpdb;
-		$join .= " LEFT JOIN $wpdb->postmeta AS wpaa_postmeta ON wpaa_postmeta.meta_key = '_wpaa_post_behaviour' AND wpaa_postmeta.meta_value IS NOT NULL";
+		$join .= " LEFT JOIN $wpdb->postmeta AS wpaa_postmeta ON wpaa_postmeta.meta_key = '_wpaa_post_behavior' AND wpaa_postmeta.meta_value IS NOT NULL";
 		return $join;
 	}
 
 
 	private static function _get_where( $where , $table_name = 'p' ) {
 		// not true on multisite
-		if ( ! is_multisite() && current_user_can('administrator') )
+		if ( is_singular() || ( ! is_multisite() && current_user_can('administrator') ) )
 			return $where;
+		
 		$caps = array('exist');
 		if ( is_user_logged_in() ) {
 			// get current user's groups
@@ -217,5 +236,3 @@ class UndisclosedPosts {
 }
 UndisclosedPosts::init();
 endif;
-
-?>

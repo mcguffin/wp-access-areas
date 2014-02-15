@@ -151,8 +151,3 @@ class UndisclosedInstall {
 	
 }
 endif;
-
-
-
-
-?>
