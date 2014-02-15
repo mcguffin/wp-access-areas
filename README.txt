@@ -84,9 +84,10 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 == Changelog ==
 
 = 1.2.1 =
-Feature: Option to redirect to wp-login or fallback page.
+Feature: Option to redirect to wp-login or to fallback page.
+Feature: action hook an filter on access attempt for a restricted post. (see GitHub Repo for details)
 Feature: post classes
-CSS: use nice dashicons
+CSS: use dashicons
 Italian localization
 
 = 1.2.0 =
