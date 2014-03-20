@@ -3,7 +3,7 @@ Contributors: podpirate
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WF4Z3HU93XYJA
 Tags: access, role, capability, user, security, editor
 Requires at least: 3.5
-Tested up to: 3.8.1
+Tested up to: 3.9
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -82,6 +82,10 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 4. Post Access Behaviour
 
 == Changelog ==
+
+= 1.2.3 =
+Check WP 3.9 compatibility
+Fix: With no AAs present add Access Area didn't show up on profile edit page
 
 = 1.2.2 =
 Fix: Used wrong option name on edit post
