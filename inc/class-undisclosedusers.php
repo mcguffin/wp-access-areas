@@ -186,23 +186,26 @@ class UndisclosedUsers {
 		
 		$labelrows = array();
 		// wtf happens on single install?
-		$labelrows[ __( 'Grant Network-Wide Access' , 'wpundisclosed' )] = array( 
-			'network' => true ,	
-			'labels' => UndisclosedUserLabel::get_network_userlabels()  , 
-			'can_ajax_add' => is_network_admin() || is_super_admin(),
-		);
-		if ( ! is_network_admin() /*&& is_accessareas_active_for_network()*/ )
+		if ( ! is_network_admin() ) {
 			$labelrows[ __( 'Grant Access' , 'wpundisclosed' ) ] = array( 
 				'network' => false ,
 				'labels' => UndisclosedUserLabel::get_blog_userlabels() ,
 				'can_ajax_add' => current_user_can( 'promote_users' ),
 			);
-		$label_caps = (array) (is_multisite() ? get_user_meta($profileuser->ID , WPUND_GLOBAL_USERMETA_KEY , true ) : null); 
+		}
+		if ( ( is_network_admin() || is_super_admin() ) && is_accessareas_active_for_network() ) {
+			$labelrows[ __( 'Grant Network-Wide Access' , 'wpundisclosed' )] = array( 
+				'network' => true ,	
+				'labels' => UndisclosedUserLabel::get_network_userlabels(), 
+				'can_ajax_add' => is_network_admin() || is_super_admin(),
+			);
+		}
+		//$label_caps = (array) (is_multisite() ? get_user_meta($profileuser->ID , WPUND_GLOBAL_USERMETA_KEY , true ) : null); 
 		foreach ( $labelrows as $row_title => $value ) {
 			extract( $value );
 			
-			if ( empty($labels) ) 
-				continue;
+		//	if ( empty($labels) ) 
+		//		continue;
 			
 			
 			?><tr class="<?php echo $network ? 'undisclosed-network' : 'undisclosed-local' ?>">
@@ -220,7 +223,7 @@ class UndisclosedUsers {
 				<td><?php
 				foreach ( $labels as $label ) {
 					$can_grant = current_user_can( $label->capability ) || ! $network;
-					$user_has_cap = in_array( $label->capability , $label_caps ) || $profileuser->has_cap( $label->capability );
+					$user_has_cap = /*in_array( $label->capability , $label_caps ) ||*/ $profileuser->has_cap( $label->capability );
 					self::_select_label_formitem( $label , $user_has_cap , $can_grant );
 				}
 				
@@ -302,7 +305,7 @@ class UndisclosedUsers {
 			return;
 				
 		$ugroups = array();
-		$label_caps = (array) (is_multisite() ? get_user_meta($user_ID , WPUND_GLOBAL_USERMETA_KEY , true ) : null); 
+		// $label_caps = (array) (is_multisite() ? get_user_meta($user_ID , WPUND_GLOBAL_USERMETA_KEY , true ) : null); 
 		
 		$labels = UndisclosedUserLabel::get_available_userlabels( );
 		if ( ( is_multisite() && is_super_admin( $user_ID ) ) || ( ! is_multisite() && current_user_can( 'administrator' )) )
@@ -311,7 +314,7 @@ class UndisclosedUsers {
 		$user = new WP_User( $user_ID );
 		
 		foreach ($labels as $label) {
-			if ( in_array( $label->capability , $label_caps ) || $user->has_cap( $label->capability ) ) {
+			if ( /*in_array( $label->capability , $label_caps ) ||*/ $user->has_cap( $label->capability ) ) {
 				$icon =  $label->blog_id ? '<span class="icon-undisclosed-local icon16"></span>' : '<span class="icon-undisclosed-network icon16"></span>';
 				$ugroups[] = '<span class="disclosure-label-item">' . $icon . $label->cap_title . '</span>';
 			}
