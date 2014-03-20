@@ -21,11 +21,19 @@ class UndisclosedCore {
 			add_action('wpmu_upgrade_site' , array( __CLASS__ , 'set_network_roles_for_blog' ) , 10 ,1 );
 		}
 		add_action('init',array(__CLASS__,'admin_register_scripts'));
+		add_filter( 'admin_body_class' , array( __CLASS__ , 'admin_body_class_gte_38' ) );
 	}
 	static function admin_register_scripts() {
 		wp_register_script( 'disclosure-admin-user-ajax' , plugins_url('js/disclosure-admin-user-ajax.js', dirname(__FILE__)) );
 		wp_register_script( 'disclosure-quick-edit' , plugins_url('js/disclosure-quick-edit.js', dirname(__FILE__)) );
 		wp_register_style( 'disclosure-admin' , plugins_url('css/disclosure-admin.css', dirname(__FILE__)) );
+	}
+	static function admin_body_class_gte_38( $admin_body_class ) {
+		if ( version_compare(get_bloginfo('version'),'3.8.0','>=') )
+			$admin_body_class .= ' wp-gte-38';
+		else
+			$admin_body_class .= ' wp-lt-38';
+		return $admin_body_class;
 	}
 	// translation ready.
 	static function plugin_loaded() {
@@ -52,5 +60,3 @@ class UndisclosedCore {
 }
 UndisclosedCore::init();
 endif;
-
-?>

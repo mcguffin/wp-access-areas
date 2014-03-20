@@ -169,7 +169,7 @@ class UndisclosedUsers {
 		$can_grant = current_user_can( $capability ) || ! $network;
 		$is_change = ($add && ! $user->has_cap( $capability )) || (!$add && $user->has_cap( $capability ));
 		if ( ! $can_grant && $is_change )
-			wp_die(__('You are not allowed to perform the requested operation.','wpundisclosed'));
+			wp_die( __('You do not have permission to do this.' , 'wpundisclosed' ) );
 		if ( $add && $is_change ) 
 			$user->add_cap( $capability , true );
 		else if ( ! $add && $is_change ) 
@@ -300,16 +300,16 @@ class UndisclosedUsers {
 			return;
 				
 		$ugroups = array();
-		$label_caps = (array) (is_multisite() ? get_user_meta($user_ID , WPUND_GLOBAL_USERMETA_KEY , true ) : null); 
+		// $label_caps = (array) (is_multisite() ? get_user_meta($user_ID , WPUND_GLOBAL_USERMETA_KEY , true ) : null); 
 		
 		$labels = UndisclosedUserLabel::get_available_userlabels( );
-		if ( ( is_multisite() && is_super_admin( $user_ID ) ) || ( ! is_multisite() && current_user_can( 'administrator' )) )
+		$user = new WP_User( $user_ID );
+		if ( ( is_multisite() && is_super_admin( $user_ID ) ) || ( ! is_multisite() && $user->has_cap( 'administrator' )) )
 			return '<div class="disclosure-labels"><span class="disclosure-label-item access-all-areas"><span class="icon-undisclosed-network icon16"></span>' . __('Everywhere') . '</span></div>';
 		
-		$user = new WP_User( $user_ID );
 		
 		foreach ($labels as $label) {
-			if ( in_array( $label->capability , $label_caps ) || $user->has_cap( $label->capability ) ) {
+			if ( /*in_array( $label->capability , $label_caps ) ||*/ $user->has_cap( $label->capability ) ) {
 				$icon =  $label->blog_id ? '<span class="icon-undisclosed-local icon16"></span>' : '<span class="icon-undisclosed-network icon16"></span>';
 				$ugroups[] = '<span class="disclosure-label-item">' . $icon . $label->cap_title . '</span>';
 			}
@@ -323,4 +323,3 @@ class UndisclosedUsers {
 UndisclosedUsers::init();
 endif;
 
-?>

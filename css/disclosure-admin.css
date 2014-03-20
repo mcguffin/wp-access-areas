@@ -13,18 +13,18 @@
 	border-top:1px solid #f0f0f0;
 	border-bottom:1px solid #dfdfdf;
 }
-
-#icon-undisclosed-network {
+/* oldstyle icons */
+.wp-lt-38 #icon-undisclosed-network {
 	background-image:url('../images/undisclosed-icons-32.png');
 	background-position:-5px -5px;
 }
-#icon-undisclosed-userlabel {
+.wp-lt-38 #icon-undisclosed-userlabel {
 	background-image:url('../images/undisclosed-icons-32.png');
 	background-position:-50px -5px;
 }
 
-.icon-undisclosed-local.icon16,
-.icon-undisclosed-network.icon16 {
+.wp-lt-38 .icon-undisclosed-local.icon16,
+.wp-lt-38 .icon-undisclosed-network.icon16 {
 	background-image:url('../images/undisclosed-icons-16.png');
 	display:inline-block;
 	float:left;
@@ -32,11 +32,29 @@
 	margin:0 0.5em 0 0.5em;
 	padding:0;
 }
-.icon-undisclosed-network.icon16 {
+.wp-lt-38 .icon-undisclosed-network.icon16 {
 	background-position:-5px -1px;
 }
-.icon-undisclosed-local.icon16 {
+.wp-lt-38 .icon-undisclosed-local.icon16 {
 	background-position:-26px -1px;
+}
+/* wp3.8+ dashicon */
+.wp-gte-38 .icon-undisclosed-local.icon16:before,
+.wp-gte-38 .icon-undisclosed-network.icon16:before {
+	font-family:dashicons;
+	font-size:1.5em;
+	line-height:0.5em;
+}
+.wp-gte-38 .icon-undisclosed-local.icon16:before {
+	content:'\f102';
+}
+.wp-gte-38 .icon-undisclosed-network.icon16:before {
+	content:'\f319';
+}
+/* h2 icons on admin pages are deprecated as of WP 3.8 */
+.wp-gte-38 #icon-undisclosed-network,
+.wp-gte-38 #icon-undisclosed-userlabel {
+	display:none;
 }
 
 

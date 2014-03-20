@@ -9,16 +9,25 @@ Plugin Name: WordPress Access Areas
 Plugin URI: http://wordpress.org/plugins/wp-access-areas/
 Description: Lets you define Access Areas and assign them to Posts, Pages and Custom Post types. Through Access Areas you can fine-tune who can view, edit or comment on your posts.
 Author: Joern Lund
-Version: 2.0.0
+Version: 1.2.2
 Author URI: https://github.com/mcguffin/
 
 Text Domain: wpundisclosed
 Domain Path: /lang/
 */
 
+/*
+Next:
+1.2.2 Settings panel (select default behavior | fallback)
+- put note when fallback page is access restricted | private | draft
+- remove view access control + fallback behavior from fallback page edit
+- Pages list: show fallback page note
+- set fallback page per local access area (manage page deletions!)
+- uninstall.php
+*/
 
 // table name for userlabels
-define( 'WPUND_VERSION' , "2.0.0"); // edit-col came with 1.1.0
+define( 'WPUND_VERSION' , "1.2.2"); // edit-col came with 1.1.0
 define( 'WPUND_USERLABEL_TABLE' , "disclosure_userlabels");
 define( 'WPUND_USERLABEL_PREFIX' , "userlabel_");
 define( 'WPUND_GLOBAL_USERMETA_KEY' , "undisclosed_global_capabilities");
@@ -59,6 +68,7 @@ if ( is_admin() ) {
 	require_once( dirname(__FILE__). '/inc/class-userlabel_list_table.php' );
 	require_once( dirname(__FILE__). '/inc/class-undisclosedusers.php' );
 	require_once( dirname(__FILE__). '/inc/class-undisclosededitpost.php' );
+	require_once( dirname(__FILE__). '/inc/class-undisclosedsettings.php' );
 
 	register_activation_hook( __FILE__ , 'accessareas_activate' );
 	register_deactivation_hook( __FILE__ , 'accessareas_deactivate' );
@@ -68,7 +78,3 @@ if ( is_admin() ) {
 
 // frontend output
 require_once( dirname(__FILE__). '/inc/class-undisclosedposts.php' );
-
-
-
-?>

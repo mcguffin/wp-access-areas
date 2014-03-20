@@ -15,7 +15,8 @@ class UndisclosedEditPost {
 	static function init() {
 		if ( is_admin() ) {
 			// edit post
-			add_filter('wp_insert_post_data', array(__CLASS__ , 'edit_post') , 10 ,2 );
+			add_filter('wp_insert_post_data', array(__CLASS__ , 'edit_post') , 10 , 2 );
+			add_filter('save_post', array(__CLASS__ , 'set_post_behavior') , 10 , 3 );
 			add_action('edit_attachment',array(__CLASS__ , 'edit_attachment') );
 			add_action('add_attachment',array(__CLASS__ , 'edit_attachment') );
 			
@@ -37,7 +38,6 @@ class UndisclosedEditPost {
 		
 		add_action( 'load-post.php' , array( __CLASS__ , 'enqueue_style' ) );
 		add_action( 'load-post-new.php' , array( __CLASS__ , 'enqueue_style' ) );
-
 	}
 	
 	static function ajax_get_accessarea_values() {
@@ -76,8 +76,12 @@ class UndisclosedEditPost {
 	// --------------------------------------------------
 	static function add_meta_boxes() {
 		global $wp_post_types;
-		foreach ( array_keys($wp_post_types) as $post_type )
+		foreach ( array_keys($wp_post_types) as $post_type ) {
 			add_meta_box( 'post-disclosure' , __('Access','wpundisclosed') , array(__CLASS__,'disclosure_box_info') , $post_type , 'side' , 'high' );
+			$post_type_object 	= get_post_type_object( $post_type );
+			if ( $post_type_object->public && $post_type != 'attachment' )
+				add_meta_box( 'post-disclosure-behavior' , __('Behaviour','wpundisclosed') , array(__CLASS__,'disclosure_box_behavior') , $post_type , 'side' , 'high' );
+		}
 	}
 	// --------------------------------------------------
 	// saving post
@@ -98,6 +102,23 @@ class UndisclosedEditPost {
 		
 		return $data;
 	}
+	
+	static function set_post_behavior(  $post_ID , $post , $update ) {
+		// set page
+		if ( isset( $_POST['_wpaa_fallback_page'] ) )
+			update_post_meta( $post_ID , '_wpaa_fallback_page' , intval( $_POST['_wpaa_fallback_page'] ) );
+		
+		if ( isset( $_POST['_wpaa_post_behavior'] ) ) {
+			$meta = $_POST['_wpaa_post_behavior'];
+		
+			if ( $meta === '' ) {
+				delete_post_meta( $post_ID , '_wpaa_post_behavior' );
+			} else if ( in_array( $meta , array( 'page' , 'login' ) ) ) {
+				update_post_meta( $post_ID , '_wpaa_post_behavior' , $meta );
+			}
+		}
+	}
+	
 	static function edit_attachment( $attachment_ID ) {
 		$attachment = get_post($attachment_ID);
 		$post_edit_cap = isset($_POST['post_edit_cap']) ? sanitize_title($_POST['post_edit_cap']) : $attachment->post_edit_cap;
@@ -122,6 +143,9 @@ class UndisclosedEditPost {
 		$post 				= get_post(get_the_ID());
 		$post_type_object 	= get_post_type_object($post->post_type);
 		$editing_cap 		= $post_type_object->cap->edit_posts;
+		
+		$post_behavior	 	= get_post_meta( $post->ID , '_wpaa_post_behavior' , true );
+		$post_fallback_page	= get_post_meta( $post->ID , '_wpaa_fallback_page' , true );
 
 		// <select> with - Evereybody, Logged-in only, list WP-Roles, list discosure-groups
 		$roles	 			= $wp_roles->get_names();
@@ -146,6 +170,7 @@ class UndisclosedEditPost {
 					self::access_area_dropdown( $rolenames , $groups , $post->post_view_cap , 'post_view_cap' );
 				?>
 			</div><?php
+			
 		}
 		?><div class="disclosure-edit-select misc-pub-section">
 			<label for="post_edit_cap-select"><strong><?php _e( 'Who can edit:' , 'wpundisclosed') ?></strong></label><br />
@@ -163,9 +188,37 @@ class UndisclosedEditPost {
 			</div><?php
 		}
 	}
+	static function disclosure_box_behavior( ) {
+		$post 				= get_post(get_the_ID());
+		$post_behavior 	= get_post_meta( $post->ID , '_wpaa_post_behavior' , true );
+		if ( ! $post_behavior )
+			$post_behavior = get_option('wpaa_default_behavior');
+
+		$post_fallback_page	= get_post_meta( $post->ID , '_wpaa_fallback_page' , true );
+		if ( ! $post_fallback_page )
+			$post_fallback_page = get_option('wpaa_fallback_page');
+
+		?><div class="disclosure-view-select misc-pub-section"><?php
+			?><p class="description"><?php _e('If somebody tries to view a restricted post directly:' , 'wpundisclosed' ); ?></p><?php
+		
+		self::behavior_select( $post_behavior );
+		
+		?></div><?php
+		
+		?><div class="disclosure-view-select misc-pub-section"><?php
+		?><label for="_wpaa_fallback_page"><?php
+		_e('Fallback Page','wpundisclosed');
+		?></label><?php
+		// only offer non-restricted pages
+		
+		self::fallback_page_dropdown( $post_fallback_page );
+		?></div><?php
+
+	}
+	
 	
 	// --------------------------------------------------
-	// edit post - Access Area droppdown menu
+	// edit post - Access Area dropdown menu
 	// --------------------------------------------------
 	static function access_area_dropdown( $roles , $groups , $selected_cap , $fieldname , $first_item_value = null , $first_item_label = ''  ) {
 		if ( ! $selected_cap )
@@ -201,6 +254,49 @@ class UndisclosedEditPost {
 			<?php }  /* if count( $groups ) */ ?>
 		</select>
 		<?php
+	}
+	// --------------------------------------------------
+	// edit post - Fallback page dropdown menu
+	// --------------------------------------------------
+	static function fallback_page_dropdown( $post_fallback_page = false , $fieldname = '_wpaa_fallback_page' ) {
+		global $wpdb;
+		
+		// if not fallback page, use global fallback page
+		$restricted_pages = $wpdb->get_col($wpdb->prepare("SELECT id 
+			FROM $wpdb->posts 
+			WHERE 
+				post_type=%s AND 
+				post_status=%s AND
+				post_view_cap!=%s" , 'page','publish','exist' ));
+		wp_dropdown_pages(array(
+			'selected' 	=> $post_fallback_page,
+			'name'		=> $fieldname,
+			'exclude'	=> $restricted_pages,
+		));
+	}
+	static function behavior_select( $post_behavior = '' , $fieldname = '_wpaa_post_behavior' ) {
+		$behaviors = array(
+			array( 
+				'value'	=> '404',
+				'label' => __( 'Show 404' , 'wpundisclosed'),
+			),
+			array(
+				'value'	=> 'page',
+				'label' => __( 'Redirect to the fallback page.' , 'wpundisclosed'),
+			),
+			array(
+				'value'	=> 'login',
+				'label' => __( 'If not logged in, redirect to login. Otherwise redirect to the fallback page.' , 'wpundisclosed'),
+			),
+		);
+
+		foreach ( $behaviors as $item ) {
+			extract( $item );
+			?><label for="disclosure-view-post-behavior-<?php echo $value ?>">
+				<input name="<?php echo $fieldname ?>" <?php checked( $value , $post_behavior ); ?> class="wpaa-post-behavior" id="disclosure-view-post-behavior-<?php echo $value ?>" value="<?php echo $value ?>"  type="radio" />
+				<?php echo $label ?>
+				<br /></label><?php
+		}
 	}
 	// --------------------------------------------------
 	// Quick Edit hook callback
@@ -321,8 +417,3 @@ class UndisclosedEditPost {
 }
 UndisclosedEditPost::init();
 endif;
-
-
-
-
-?>

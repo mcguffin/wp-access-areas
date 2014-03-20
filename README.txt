@@ -3,7 +3,7 @@ Contributors: podpirate
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WF4Z3HU93XYJA
 Tags: access, role, capability, user, security, editor
 Requires at least: 3.5
-Tested up to: 3.7.1
+Tested up to: 3.8.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -49,6 +49,11 @@ It makes changes to your database, but it won't make a mess out of it. Upon inst
 
 Upon uninstall these changes will be removed completely, as well as it will remove any custom generated capability from Your user's profiles.
 
+= I'd like to do some magic / science when a user tries to view a restricted post. And yes: I can code! =
+
+Check out the `wpaa_view_restricted_post` action hook and the `wpaa_restricted_post_redirect` filter. 
+Theres some documentation in the [GitHub Repo](https://github.com/mcguffin/wp-access-areas)
+
 = I found a bug. Where should I post it? =
 
 I personally prefer GitHub. The plugin code is here: [GitHub](https://github.com/mcguffin/wp-access-areas)
@@ -74,8 +79,21 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 1. Area Access Manager
 2. User Editing
 3. Post Access Control
+4. Post Access Behaviour
 
 == Changelog ==
+
+= 1.2.2 =
+Fix: Used wrong option name on edit post
+Fix: Embarrassing wrong var name on edit post
+L10n: Added one more italian string
+
+= 1.2.1 =
+Feature: Option to redirect to wp-login or to fallback page.
+Feature: action hook an filter on access attempt for a restricted post. (see GitHub Repo for details)
+Feature: post classes
+CSS: use dashicons
+Italian localization
 
 = 1.2.0 =
 Feature: Bulk edit Posts
@@ -136,4 +154,3 @@ Initial Release
 
 == Upgrade notice ==
 
-Debug: Fix Comments. Selecting "WordPress default" now does what it is supposed to: handling over the comment responsibility to WordPress.
