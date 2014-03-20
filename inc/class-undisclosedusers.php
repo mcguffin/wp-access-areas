@@ -200,7 +200,7 @@ class UndisclosedUsers {
 				'can_ajax_add' => is_network_admin() || is_super_admin(),
 			);
 		}
-		$label_caps = (array) (is_multisite() ? get_user_meta($profileuser->ID , WPUND_GLOBAL_USERMETA_KEY , true ) : null); 
+		//$label_caps = (array) (is_multisite() ? get_user_meta($profileuser->ID , WPUND_GLOBAL_USERMETA_KEY , true ) : null); 
 		foreach ( $labelrows as $row_title => $value ) {
 			extract( $value );
 			
@@ -223,7 +223,7 @@ class UndisclosedUsers {
 				<td><?php
 				foreach ( $labels as $label ) {
 					$can_grant = current_user_can( $label->capability ) || ! $network;
-					$user_has_cap = in_array( $label->capability , $label_caps ) || $profileuser->has_cap( $label->capability );
+					$user_has_cap = $profileuser->has_cap( $label->capability );
 					self::_select_label_formitem( $label , $user_has_cap , $can_grant );
 				}
 				
