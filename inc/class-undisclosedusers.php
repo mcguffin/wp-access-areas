@@ -200,13 +200,8 @@ class UndisclosedUsers {
 				'can_ajax_add' => is_network_admin() || is_super_admin(),
 			);
 		}
-		//$label_caps = (array) (is_multisite() ? get_user_meta($profileuser->ID , WPUND_GLOBAL_USERMETA_KEY , true ) : null); 
 		foreach ( $labelrows as $row_title => $value ) {
 			extract( $value );
-			
-		//	if ( empty($labels) ) 
-		//		continue;
-			
 			
 			?><tr class="<?php echo $network ? 'undisclosed-network' : 'undisclosed-local' ?>">
 				<th><?php
