@@ -186,23 +186,26 @@ class UndisclosedUsers {
 		
 		$labelrows = array();
 		// wtf happens on single install?
-		$labelrows[ __( 'Grant Network-Wide Access' , 'wpundisclosed' )] = array( 
-			'network' => true ,	
-			'labels' => UndisclosedUserLabel::get_network_userlabels()  , 
-			'can_ajax_add' => is_network_admin() || is_super_admin(),
-		);
-		if ( ! is_network_admin() /*&& is_accessareas_active_for_network()*/ )
+		if ( ! is_network_admin() ) {
 			$labelrows[ __( 'Grant Access' , 'wpundisclosed' ) ] = array( 
 				'network' => false ,
 				'labels' => UndisclosedUserLabel::get_blog_userlabels() ,
 				'can_ajax_add' => current_user_can( 'promote_users' ),
 			);
+		}
+		if ( ( is_network_admin() || is_super_admin() ) && is_accessareas_active_for_network() ) {
+			$labelrows[ __( 'Grant Network-Wide Access' , 'wpundisclosed' )] = array( 
+				'network' => true ,	
+				'labels' => UndisclosedUserLabel::get_network_userlabels()  , 
+				'can_ajax_add' => is_network_admin() || is_super_admin(),
+			);
+		}
 		$label_caps = (array) (is_multisite() ? get_user_meta($profileuser->ID , WPUND_GLOBAL_USERMETA_KEY , true ) : null); 
 		foreach ( $labelrows as $row_title => $value ) {
 			extract( $value );
 			
-			if ( empty($labels) ) 
-				continue;
+		//	if ( empty($labels) ) 
+		//		continue;
 			
 			
 			?><tr class="<?php echo $network ? 'undisclosed-network' : 'undisclosed-local' ?>">
@@ -305,10 +308,10 @@ class UndisclosedUsers {
 		$label_caps = (array) (is_multisite() ? get_user_meta($user_ID , WPUND_GLOBAL_USERMETA_KEY , true ) : null); 
 		
 		$labels = UndisclosedUserLabel::get_available_userlabels( );
-		if ( ( is_multisite() && is_super_admin( $user_ID ) ) || ( ! is_multisite() && current_user_can( 'administrator' )) )
+		$user = new WP_User( $user_ID );
+		if ( ( is_multisite() && is_super_admin( $user_ID ) ) || ( ! is_multisite() && $user->has_cap( 'administrator' )) )
 			return '<div class="disclosure-labels"><span class="disclosure-label-item access-all-areas"><span class="icon-undisclosed-network icon16"></span>' . __('Everywhere') . '</span></div>';
 		
-		$user = new WP_User( $user_ID );
 		
 		foreach ($labels as $label) {
 			if ( in_array( $label->capability , $label_caps ) || $user->has_cap( $label->capability ) ) {
