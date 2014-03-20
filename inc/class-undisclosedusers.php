@@ -186,23 +186,26 @@ class UndisclosedUsers {
 		
 		$labelrows = array();
 		// wtf happens on single install?
-		$labelrows[ __( 'Grant Network-Wide Access' , 'wpundisclosed' )] = array( 
-			'network' => true ,	
-			'labels' => UndisclosedUserLabel::get_network_userlabels()  , 
-			'can_ajax_add' => is_network_admin() || is_super_admin(),
-		);
-		if ( ! is_network_admin() /*&& is_accessareas_active_for_network()*/ )
+		if ( ! is_network_admin() ) {
 			$labelrows[ __( 'Grant Access' , 'wpundisclosed' ) ] = array( 
 				'network' => false ,
 				'labels' => UndisclosedUserLabel::get_blog_userlabels() ,
 				'can_ajax_add' => current_user_can( 'promote_users' ),
 			);
+		}
+		if ( ( is_network_admin() || is_super_admin() ) && is_accessareas_active_for_network() ) {
+			$labelrows[ __( 'Grant Network-Wide Access' , 'wpundisclosed' )] = array( 
+				'network' => true ,	
+				'labels' => UndisclosedUserLabel::get_network_userlabels()  , 
+				'can_ajax_add' => is_network_admin() || is_super_admin(),
+			);
+		}
 		$label_caps = (array) (is_multisite() ? get_user_meta($profileuser->ID , WPUND_GLOBAL_USERMETA_KEY , true ) : null); 
 		foreach ( $labelrows as $row_title => $value ) {
 			extract( $value );
 			
-			if ( empty($labels) ) 
-				continue;
+		//	if ( empty($labels) ) 
+		//		continue;
 			
 			
 			?><tr class="<?php echo $network ? 'undisclosed-network' : 'undisclosed-local' ?>">
