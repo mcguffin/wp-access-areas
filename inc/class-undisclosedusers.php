@@ -295,12 +295,11 @@ class UndisclosedUsers {
 		$columns['labels'] = __('Access Areas','wpundisclosed');
 		return $columns;
 	}
-	static function manage_userlabels_column($wtf, $column, $user_ID) {
+	static function manage_userlabels_column($column_content, $column, $user_ID) {
 		if ( $column != 'labels')
-			return;
+			return $column_content;
 				
 		$ugroups = array();
-		// $label_caps = (array) (is_multisite() ? get_user_meta($user_ID , WPUND_GLOBAL_USERMETA_KEY , true ) : null); 
 		
 		$labels = UndisclosedUserLabel::get_available_userlabels( );
 		$user = new WP_User( $user_ID );
@@ -309,7 +308,7 @@ class UndisclosedUsers {
 		
 		
 		foreach ($labels as $label) {
-			if ( /*in_array( $label->capability , $label_caps ) ||*/ $user->has_cap( $label->capability ) ) {
+			if ( $user->has_cap( $label->capability ) ) {
 				$icon =  $label->blog_id ? '<span class="icon-undisclosed-local icon16"></span>' : '<span class="icon-undisclosed-network icon16"></span>';
 				$ugroups[] = '<span class="disclosure-label-item">' . $icon . $label->cap_title . '</span>';
 			}
