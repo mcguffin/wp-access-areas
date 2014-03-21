@@ -83,6 +83,9 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 
 == Changelog ==
 
+= 1.2.4 =
+Fix: User list table column
+
 = 1.2.3 =
 Check WP 3.9 compatibility
 Fix: With no AAs present add Access Area didn't show up on profile edit page
