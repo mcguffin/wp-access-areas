@@ -197,6 +197,11 @@ class UndisclosedUserlabel {
 		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
 		return $wpdb->get_var( $wpdb->prepare( "SELECT id FROM $table_name WHERE cap_title=%s AND blog_id=%d" , $cap_title , $blog_id) );
 	}
+	static function capability_exists( $cap ) {
+		global $wpdb;
+		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
+		return $wpdb->get_var( $wpdb->prepare( "SELECT id FROM $table_name WHERE capability=%s" , $cap) );
+	}
 }
 endif;
 

@@ -27,6 +27,12 @@ function wpaa_is_access_area( $cap ) {
 	return strpos( $cap , WPUND_USERLABEL_PREFIX ) === 0;
 }
 
+function wpaa_access_area_exists( $cap ) {
+	if ( ! wpaa_is_access_area( $cap ) )
+		return false;
+	return UndisclosedUserlabel::capability_exists( $cap );
+}
+
 function wpaa_user_can_accessarea( $cap , $args = array() ) {
 	global $wp_roles;
 

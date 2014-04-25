@@ -19,6 +19,10 @@ class UndisclosedUsers {
 			add_filter('manage_users_columns' , array(__CLASS__ , 'add_userlabels_column'));
 			add_filter('manage_users_custom_column' , array(__CLASS__ , 'manage_userlabels_column') , 10 ,3 );
 			
+			// bulk editing
+			add_action( 'restrict_manage_users' , array( __CLASS__ , 'bulk_grant_access_dropdown' ) );
+			add_action( 'restrict_manage_users' , array( __CLASS__ , 'bulk_revoke_access_dropdown' ) );
+			add_action( 'load-users.php' ,  array( __CLASS__ , 'bulk_edit_access' ) );
 		}
 		add_action('add_user_to_blog',array(__CLASS__,'add_user_to_blog'),10,3);
 	}
@@ -100,7 +104,60 @@ class UndisclosedUsers {
 		}
 		die();
 	}
-	
+	// --------------------------------------------------
+	// bulk editing
+	// --------------------------------------------------
+	static function bulk_grant_access_dropdown() {
+		if ( current_user_can( 'promote_users' ) ) {
+			?></div><?php
+			wp_nonce_field( 'bulk-access-areas', '_wpaanonce' , true );
+			?><div class="alignleft actions"><?php
+			echo self::_label_select_all( 'grant_access_area' , __('Grant Access … ','wpundisclosed') );
+			submit_button( __( 'Grant','wpundisclosed' ), 'button', 'grantit', false );
+		}
+	}
+	static function bulk_revoke_access_dropdown() {
+		if ( current_user_can( 'promote_users' ) ) {
+			?></div><?php
+			?><div class="alignleft actions"><?php
+			echo self::_label_select_all( 'revoke_access_area' , __('Revoke Access … ','wpundisclosed') );
+			submit_button( __( 'Revoke','wpundisclosed' ), 'button', 'revokeit', false );
+		}
+	}
+	static function bulk_edit_access() {
+		if ( isset( $_REQUEST['grant_access_area'] ) && ! empty( $_REQUEST['grantit'] ) || 
+			 isset( $_REQUEST['revoke_access_area'] ) && ! empty( $_REQUEST['revokeit'] ) 	) {
+			
+			check_admin_referer( 'bulk-access-areas' , '_wpaanonce' );
+
+			if ( ! current_user_can( 'promote_users' ) )
+				wp_die( __( 'You can&#8217;t edit that user.' ) );
+			
+			$grant = isset( $_REQUEST['grant_access_area'] ) && ! empty( $_REQUEST['grantit'] );
+			
+			// check if 
+			if ( $grant ) {
+				if ( wpaa_access_area_exists( $_REQUEST['grant_access_area'] ) ) {
+					$access_area = $_REQUEST['grant_access_area'];
+					foreach ( $_REQUEST['users'] as $user_id ) {
+						$user = new WP_User( $user_id );
+						self::_set_cap_for_user( $access_area , $user , true );
+					}
+				}
+			} else {
+				if ( wpaa_access_area_exists( $_REQUEST['revoke_access_area'] ) ) {
+					// remove from all users
+					$access_area = $_REQUEST['revoke_access_area'];
+					foreach ( $_REQUEST['users'] as $user_id ) {
+						$user = new WP_User( $user_id );
+						self::_set_cap_for_user( $access_area , $user , false );
+					}
+				}
+			}
+			wp_redirect( add_query_arg('update', 'promote', 'users.php' ) );
+			exit();
+		}
+	}
 
 	// --------------------------------------------------
 	// user editing
@@ -167,7 +224,8 @@ class UndisclosedUsers {
 		// prevent blogadmin from granting network permissions he does not own himself.
 		$network = ! wpaa_is_local_cap( $capability );
 		$can_grant = current_user_can( $capability ) || ! $network;
-		$is_change = ($add && ! $user->has_cap( $capability )) || (!$add && $user->has_cap( $capability ));
+		$has_cap = $user->has_cap( $capability );
+		$is_change = ($add && ! $has_cap) || (!$add && $has_cap);
 		if ( ! $can_grant && $is_change )
 			wp_die( __('You do not have permission to do this.' , 'wpundisclosed' ) );
 		if ( $add && $is_change ) 
@@ -281,15 +339,43 @@ class UndisclosedUsers {
 		$ret .= '<span class="icon-undisclosed-'.$slug.' icon16"></span>';
 		$ret .= '<select id="select-user-label-'.$slug.'" onchange="this.form.submit()" name="role">';
 		$ret .= sprintf('<option value="%s">%s</option>' , '' , __('(None)'));
-		foreach ( $labels as $label ) {
-			$ret .= sprintf('<option %s value="%s">%s</option>' , selected($current_label,$label->capability,false) , $label->capability , $label->cap_title);
-		}
+		$ret .= self::_label_select_options( $labels , $current_label );
 		$ret .= '</select>';
 		$ret .= '</label>';
 		$ret .= '</form>';
 		return $ret;
 	}
 	
+	private static function _label_select_all( $name , $first_element_label = false ) {
+		$network = is_accessareas_active_for_network();
+		$ret = '';
+		$ret .= '<select name="'.$name.'">';
+		
+		if ( $first_element_label !== false )
+			$ret .=  sprintf('<option value="">%s</option>' , $first_element_label );
+		
+		if ( $network )
+			$ret .= sprintf('<optgroup label="%s">',__('Local','wpundisclosed'));
+		$ret .= self::_label_select_options(UndisclosedUserLabel::get_blog_userlabels());
+		if ( $network ) {
+			$ret .= '</optgroup>';
+		
+			$ret .= sprintf('<optgroup label="%s">',__('Network','wpundisclosed'));
+			$ret .= self::_label_select_options(UndisclosedUserLabel::get_network_userlabels());
+			$ret .= '</optgroup>';
+		}
+		$ret .= '</select>';
+		
+		return $ret;
+	}
+	
+	private static function _label_select_options( $labels , $current_label = false ) {
+		$ret = '';
+		foreach ( $labels as $label ) {
+			$ret .= sprintf('<option %s value="%s">%s</option>' , selected($current_label,$label->capability,false) , $label->capability , $label->cap_title);
+		}
+		return $ret;
+	}
 	static function add_userlabels_column($columns) {
 
 		$columns['labels'] = __('Access Areas','wpundisclosed');
