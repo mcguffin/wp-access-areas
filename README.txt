@@ -83,6 +83,9 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 
 == Changelog ==
 
+= 1.2.5 =
+Fix: Ignores WP's Comments closed status
+
 = 1.2.4 =
 Fix: User list table column
 
