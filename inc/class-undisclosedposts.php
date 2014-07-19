@@ -99,7 +99,7 @@ class UndisclosedPosts {
 	// --------------------------------------------------
 	static function comments_open( $open, $post_id ) {
 		if ( $post = get_post($post_id) ) {
-			if ( $post->post_view_cap != 'exist' || $post->post_comment_cap != 'exist' )
+			if ( $post->post_comment_cap != 'exist' )
 				$open = wpaa_user_can( $post->post_comment_cap ) && wpaa_user_can( $post->post_view_cap );
 		}
 		return $open;
