@@ -82,8 +82,11 @@ class UndisclosedUsers {
 	// --------------------------------------------------
 	static function ajax_add_access_area() {
 		if ( wp_verify_nonce(@$_POST['_wp_ajax_nonce'] , 'userlabel-new' ) && current_user_can( 'promote_users' ) ) {
+			$cap_title = trim($_POST['cap_title']);
 			if ( ( !$_POST['blog_id'] && !is_super_admin() ) || ( $_POST['blog_id'] && $_POST['blog_id'] != get_current_blog_id() ) ) {
 				?><span class="disclosure-label-item error"><?php _e('Insufficient privileges.','wpundisclosed'); ?></span><?php  // throw_error: insufficient privileges
+			} else if (empty($cap_title)) {
+				?><span class="disclosure-label-item error"><?php _e('Empty name.','wpundisclosed'); ?></span><?php  // throw_error: empty name
 			} else {
 				$create_id = UndisclosedUserlabel::create_userlabel( array('cap_title' => $_POST['cap_title'], 'blog_id' => $_POST['blog_id'] ) );
 			
@@ -100,7 +103,6 @@ class UndisclosedUsers {
 			}
 		} else {
 			?><span class="disclosure-label-item error"><?php _e('Insufficient privileges.','wpundisclosed'); ?></span><?php  // throw_error: insufficient privileges
-			// throw_error: insufficient privileges
 		}
 		die();
 	}
@@ -309,7 +311,7 @@ class UndisclosedUsers {
 			?><input type="hidden" name="blog_id" value="<?php echo $blog_id; ?>" /><?php
 			?><input class="cap-add" type="text" name="cap_title" placeholder="<?php _ex('Add New','access area','wpundisclosed') ?>" /><?php
 			
-			?><a href="#" class="cap-add-submit button"><?php _e('+') ?></a><?php
+			?><a href="#" class="cap-add-submit button" disabled><?php _e('+') ?></a><?php
 		?></span><?php
 	}
 	
