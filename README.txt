@@ -84,7 +84,9 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 == Changelog ==
 
 = 1.2.5 =
+Feature: Bulk edit users: Grant and revoke access.
 Fix: Ignores WP's Comments closed status
+Fix: Removed ability to create access areas with empty names.
 
 = 1.2.4 =
 Fix: User list table column
