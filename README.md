@@ -76,7 +76,7 @@ Will return `true` if one the following conditions is met:
 
  - If `$cap` is an access area: the user is in the specified access area
  - If `$cap` is a WP-role: the user has the specified role a superior role
- - `current_user_can( $cap , $args )` is `true` (see WP function reference for [`current_user_can`](http://codex.wordpress.org/Function_Reference/current_user_can)
+ - `current_user_can( $cap , $args )` is `true` (see WP function reference for [`current_user_can`](http://codex.wordpress.org/Function_Reference/current_user_can))
  
 Examples:
 ```
