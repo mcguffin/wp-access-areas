@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WordPress Access Areas v1.2.1\n"
+"Project-Id-Version: WordPress Access Areas v1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-02-15 22:57:36+0000\n"
+"PO-Revision-Date: 2014-08-04 09:15:05+0000\n"
 "Last-Translator: admin <joern@flyingletters.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -27,14 +27,14 @@ msgid "Manage Access Areas"
 msgstr "Zugangsbereiche verwalten"
 
 #: inc/class-undisclosedcaps.php:28
-#: inc/class-undisclosedusers.php:184
-#: inc/class-undisclosedusers.php:297
+#: inc/class-undisclosedusers.php:244
+#: inc/class-undisclosedusers.php:383
 #@ wpundisclosed
 msgid "Access Areas"
 msgstr "Zugangsbereiche"
 
 #: inc/class-undisclosedcaps.php:35
-#: inc/class-undisclosedusers.php:172
+#: inc/class-undisclosedusers.php:232
 #@ wpundisclosed
 msgid "You do not have permission to do this."
 msgstr "Sie haben nicht die erforderlichen Rechte."
@@ -99,7 +99,7 @@ msgid "An Access Area with that Name already exists."
 msgstr "Ein Zugangsbereich existiert schon unter diesem Namen."
 
 #: inc/class-undisclosedcaps.php:199
-#: inc/class-undisclosedusers.php:254
+#: inc/class-undisclosedusers.php:312
 #@ wpundisclosed
 msgctxt "access area"
 msgid "Add New"
@@ -148,27 +148,27 @@ msgstr "Jeder"
 msgid "(Network)"
 msgstr "(Netzwerk)"
 
-#: inc/class-undisclosedusers.php:189
+#: inc/class-undisclosedusers.php:257
 #@ wpundisclosed
 msgid "Grant Network-Wide Access"
 msgstr "Netzwerk-Zugang gewähren"
 
-#: inc/class-undisclosedusers.php:195
+#: inc/class-undisclosedusers.php:250
 #@ wpundisclosed
 msgid "Grant Access"
 msgstr "Zugang gewähren"
 
-#: inc/class-undisclosedusers.php:273
+#: inc/class-undisclosedusers.php:331
 #@ wpundisclosed
 msgid "Access Areas:"
 msgstr "Zugangsbereiche:"
 
-#: inc/class-undisclosedusers.php:285
+#: inc/class-undisclosedusers.php:343
 #@ default
 msgid "(None)"
 msgstr ""
 
-#: inc/class-undisclosedusers.php:309
+#: inc/class-undisclosedusers.php:395
 #@ default
 msgid "Everywhere"
 msgstr ""
@@ -183,6 +183,7 @@ msgstr "Name"
 msgid "Scope"
 msgstr "Gültigkeitsbereich"
 
+#: inc/class-undisclosedusers.php:365
 #: inc/class-userlabel_list_table.php:83
 #@ wpundisclosed
 msgid "Network"
@@ -260,18 +261,18 @@ msgstr "Kommentierbar"
 msgid "WP Capability"
 msgstr "WordPress Berechtigung"
 
-#: inc/class-undisclosedusers.php:82
-#: inc/class-undisclosedusers.php:98
+#: inc/class-undisclosedusers.php:87
+#: inc/class-undisclosedusers.php:105
 #@ wpundisclosed
 msgid "Insufficient privileges."
 msgstr "Ungenügende Rechte"
 
-#: inc/class-undisclosedusers.php:92
+#: inc/class-undisclosedusers.php:99
 #@ wpundisclosed
 msgid "Access Area exists."
 msgstr "Zugangsbereich existiert."
 
-#: inc/class-undisclosedusers.php:256
+#: inc/class-undisclosedusers.php:314
 #@ default
 msgid "+"
 msgstr ""
@@ -324,12 +325,6 @@ msgstr "Wenn jemand versucht, eine Geschützte Seite direkt aufzurufen:"
 msgid "Fallback Page"
 msgstr "Ausweichseite"
 
-#. translators: plugin header field 'Version'
-#: wp-access-areas.php:0
-#@ wpundisclosed
-msgid "1.2.1"
-msgstr ""
-
 #: inc/class-undisclosededitpost.php:289
 #@ wpundisclosed
 msgid "If not logged in, redirect to login. Otherwise redirect to the fallback page."
@@ -368,5 +363,46 @@ msgstr "Du kannst diese Einstellungen auch für jeden Beitrag einzeln vornehmen.
 #: inc/class-undisclosedsettings.php:51
 #@ default
 msgid "Save Changes"
+msgstr ""
+
+#: inc/class-undisclosedusers.php:89
+#@ wpundisclosed
+msgid "Empty name."
+msgstr "Leerer Name"
+
+#: inc/class-undisclosedusers.php:117
+#@ wpundisclosed
+msgid "Grant Access … "
+msgstr "Zugriff erteilen"
+
+#: inc/class-undisclosedusers.php:118
+#@ wpundisclosed
+msgid "Grant"
+msgstr "Erteilen"
+
+#: inc/class-undisclosedusers.php:125
+#@ wpundisclosed
+msgid "Revoke Access … "
+msgstr "Zugriff entziehen"
+
+#: inc/class-undisclosedusers.php:126
+#@ wpundisclosed
+msgid "Revoke"
+msgstr "Entziehen"
+
+#: inc/class-undisclosedusers.php:136
+#@ default
+msgid "You can&#8217;t edit that user."
+msgstr ""
+
+#: inc/class-undisclosedusers.php:360
+#@ wpundisclosed
+msgid "Local"
+msgstr "Lokal"
+
+#. translators: plugin header field 'Version'
+#: wp-access-areas.php:0
+#@ wpundisclosed
+msgid "1.2.5"
 msgstr ""
 
