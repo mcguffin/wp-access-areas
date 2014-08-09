@@ -117,10 +117,15 @@ class UndisclosedUserlabel {
 	
 	private static function _delete_userlabel_from_blog( &$userlabel ) {
 		global $wpdb;
+		$post_status_sql = '';
+		$default_post_status = get_option('wpaa_default_post_status');
+		if ( $default_post_status  && in_array( $default_post_status , UndisclosedSettings::get_post_stati( ) ) )
+			$post_status_sql = $wpdb->prepare(" , post_status=%s " , $default_post_status );
+			
 		// delete everything from posts and restore usefull default values
-		$query = $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_view_cap='exists',post_status='private' WHERE post_view_cap=%s" , $userlabel->capability ) );
-		$query = $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_edit_cap='exists' WHERE post_edit_cap=%s" , $userlabel->capability ) ); // back to default
-		$query = $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_comment_cap='exists',comment_status='closed' WHERE post_comment_cap=%s" , $userlabel->capability ) ); // back to default
+		$query = $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_view_cap='exist' $post_status_sql WHERE post_view_cap=%s" , $userlabel->capability ) );
+		$query = $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_edit_cap='exist' WHERE post_edit_cap=%s" , $userlabel->capability ) ); // back to default
+		$query = $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_comment_cap='exist',comment_status='closed' WHERE post_comment_cap=%s" , $userlabel->capability ) ); // back to default
 		
 		if ( is_multisite() )
 			$current_blog_id = get_current_blog_id();

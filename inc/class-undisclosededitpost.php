@@ -295,7 +295,7 @@ class UndisclosedEditPost {
 			?><label for="disclosure-view-post-behavior-<?php echo $value ?>">
 				<input name="<?php echo $fieldname ?>" <?php checked( $value , $post_behavior ); ?> class="wpaa-post-behavior" id="disclosure-view-post-behavior-<?php echo $value ?>" value="<?php echo $value ?>"  type="radio" />
 				<?php echo $label ?>
-				<br /></label><?php
+			<br /></label><?php
 		}
 	}
 	// --------------------------------------------------

@@ -55,12 +55,10 @@ class UndisclosedPosts {
 				$redirect			= false;
 				$behavior 			= get_post_meta($restricted_post->ID,'_wpaa_post_behavior',true);
 				$fallback_page_id	= get_post_meta($restricted_post->ID,'_wpaa_fallback_page',true);
-				
 				// no behavior? take default value
 				if ( ! $behavior )
 					$behavior = get_option( 'wpaa_default_behavior' );
 
-				
 				if ( $behavior == 'page' || is_user_logged_in() ) {
 					
 					// no fallback? take default value

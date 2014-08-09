@@ -22,6 +22,10 @@ class UndisclosedCore {
 		}
 		add_action('init',array(__CLASS__,'admin_register_scripts'));
 		add_filter( 'admin_body_class' , array( __CLASS__ , 'admin_body_class_gte_38' ) );
+		
+		add_option('wpaa_default_behavior' , '404' );
+		add_option('wpaa_fallback_page' , 0 );
+		add_option('wpaa_default_post_status' , 'private' );
 	}
 	static function admin_register_scripts() {
 		wp_register_script( 'disclosure-admin-user-ajax' , plugins_url('js/disclosure-admin-user-ajax.js', dirname(__FILE__)) );

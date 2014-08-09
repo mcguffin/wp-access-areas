@@ -52,10 +52,12 @@ class UndisclosedInstall {
 			foreach ( $blogids as $blog_id) {
 				switch_to_blog($blog_id);
 				self::_uninstall_posts_table( );
+				self::_remove_options();
 				restore_current_blog();
 			}
 		} else {
 			self::_uninstall_posts_table( );
+			self::_remove_options();
 		}
 	}
 	
@@ -64,7 +66,11 @@ class UndisclosedInstall {
 		self::_install_posts_table( );
 		restore_current_blog();
 	}
-	
+	private static function _remove_options() {
+		delete_option('wpaa_default_behavior' );
+		delete_option('wpaa_fallback_page' );
+		delete_option('wpaa_default_post_status' );
+	}
 
 	// --------------------------------------------------
 	// posts table
