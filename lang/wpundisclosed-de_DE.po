@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WordPress Access Areas v1.2.5\n"
+"Project-Id-Version: WordPress Access Areas v1.2.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-08-04 09:15:05+0000\n"
+"PO-Revision-Date: 2014-08-09 13:52:38+0000\n"
 "Last-Translator: admin <joern@flyingletters.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -234,12 +234,6 @@ msgstr ""
 msgid "Lets you define Access Areas and assign them to Posts, Pages and Custom Post types. Through Access Areas you can fine-tune who can view, edit or comment on your posts."
 msgstr "Fine-Tuning für Ihre WordPress-Inhalte. Definieren Sie Zugangsbereiche und bestimmen Sie für jeden Inhalt, wer ihn lesen, bearbeiten oder Kommentieren darf."
 
-#. translators: plugin header field 'Author'
-#: wp-access-areas.php:0
-#@ wpundisclosed
-msgid "Joern Lund"
-msgstr "Jörn Lund"
-
 #. translators: plugin header field 'AuthorURI'
 #: wp-access-areas.php:0
 #@ wpundisclosed
@@ -315,7 +309,7 @@ msgid "Redirect to the fallback page."
 msgstr "Zur Ausweichseite weiterleiten"
 
 #: inc/class-undisclosededitpost.php:202
-#: inc/class-undisclosedsettings.php:59
+#: inc/class-undisclosedsettings.php:74
 #@ wpundisclosed
 msgid "If somebody tries to view a restricted post directly:"
 msgstr "Wenn jemand versucht, eine Geschützte Seite direkt aufzurufen:"
@@ -330,37 +324,37 @@ msgstr "Ausweichseite"
 msgid "If not logged in, redirect to login. Otherwise redirect to the fallback page."
 msgstr "Zum Login weiterleiten. Wenn schon eingeloggt, zur Ausweichseite weiterleiten."
 
-#: inc/class-undisclosedsettings.php:24
+#: inc/class-undisclosedsettings.php:33
 #@ wpundisclosed
 msgid "Access Settings"
 msgstr "Zugriffs Optionen"
 
-#: inc/class-undisclosedsettings.php:29
+#: inc/class-undisclosedsettings.php:40
 #@ wpundisclosed
 msgid "Restricted Access Behavior"
 msgstr "Verhalten bei Beschränktem Zugriff"
 
-#: inc/class-undisclosedsettings.php:30
+#: inc/class-undisclosedsettings.php:41
 #@ wpundisclosed
 msgid "Default Behaviour"
 msgstr "Standardverhalten"
 
-#: inc/class-undisclosedsettings.php:31
+#: inc/class-undisclosedsettings.php:42
 #@ wpundisclosed
 msgid "Default Fallback Page"
 msgstr "Standard-Ausweichseite"
 
-#: inc/class-undisclosedsettings.php:43
+#: inc/class-undisclosedsettings.php:59
 #@ wpundisclosed
 msgid "Access Areas Settings"
 msgstr "Zugangsbereiche"
 
-#: inc/class-undisclosedsettings.php:50
+#: inc/class-undisclosedsettings.php:48
 #@ wpundisclosed
 msgid "You can also set these Options for each post individually."
 msgstr "Du kannst diese Einstellungen auch für jeden Beitrag einzeln vornehmen."
 
-#: inc/class-undisclosedsettings.php:51
+#: inc/class-undisclosedsettings.php:66
 #@ default
 msgid "Save Changes"
 msgstr ""
@@ -400,9 +394,55 @@ msgstr ""
 msgid "Local"
 msgstr "Lokal"
 
+#: inc/class-undisclosedsettings.php:17
+#@ wpundisclosed
+msgid "Don‘t change"
+msgstr "Nicht ändern"
+
+#: inc/class-undisclosedsettings.php:18
+#@ default
+msgid "Public"
+msgstr ""
+
+#: inc/class-undisclosedsettings.php:19
+#@ default
+msgid "Private"
+msgstr ""
+
+#: inc/class-undisclosedsettings.php:20
+#@ default
+msgid "Draft"
+msgstr ""
+
+#: inc/class-undisclosedsettings.php:21
+#@ default
+msgid "Pending Review"
+msgstr ""
+
+#: inc/class-undisclosedsettings.php:44
+#@ wpundisclosed
+msgid "Posts defaults"
+msgstr "Standardwerte für Beiträge"
+
+#: inc/class-undisclosedsettings.php:45
+#@ wpundisclosed
+msgid "Default Post Status"
+msgstr "Beitragsstatus"
+
+#: inc/class-undisclosedsettings.php:99
+#@ wpundisclosed
+msgid "Set post status of assigned posts after an Access Area has been deleted."
+msgstr "Beitragsstatus wenn ein Zugangsbereich gelöscht wird."
+
+#. translators: plugin header field 'Author'
+#: wp-access-areas.php:0
+#@ wpundisclosed
+msgid "Jörn Lund"
+msgstr ""
+
 #. translators: plugin header field 'Version'
 #: wp-access-areas.php:0
 #@ wpundisclosed
-msgid "1.2.5"
+msgid "1.2.6"
 msgstr ""
 
