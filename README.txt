@@ -3,7 +3,7 @@ Contributors: podpirate
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WF4Z3HU93XYJA
 Tags: access, role, capability, user, security, editor
 Requires at least: 3.5
-Tested up to: 3.9
+Tested up to: 4.0-beta3
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -86,6 +86,9 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 == Changelog ==
 
 = 1.2.6 =
+Feature: Option to select post status after deleting access area
+Fix: Wrong viewing permissions after delete access area
+Fix: remove options upon uninstall
 Swedish localization
 
 = 1.2.5 =
