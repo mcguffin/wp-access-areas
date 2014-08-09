@@ -8,7 +8,7 @@
 Plugin Name: WordPress Access Areas
 Plugin URI: http://wordpress.org/plugins/wp-access-areas/
 Description: Lets you define Access Areas and assign them to Posts, Pages and Custom Post types. Through Access Areas you can fine-tune who can view, edit or comment on your posts.
-Author: Joern Lund
+Author: Jörn Lund
 Version: 1.2.6
 Author URI: https://github.com/mcguffin/
 
@@ -18,12 +18,10 @@ Domain Path: /lang/
 
 /*
 Next:
-1.2.2 Settings panel (select default behavior | fallback)
 - put note when fallback page is access restricted | private | draft
 - remove view access control + fallback behavior from fallback page edit
 - Pages list: show fallback page note
 - set fallback page per local access area (manage page deletions!)
-- uninstall.php
 */
 
 // table name for userlabels
