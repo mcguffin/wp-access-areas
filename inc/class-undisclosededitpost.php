@@ -163,7 +163,7 @@ class UndisclosedEditPost {
 			}
 		}
 		
-		if ( $post_type_object->public && $post->post_type != 'attachment' ) { 
+		if ( ( $post_type_object->public || $post_type_object->show_ui ) && $post->post_type != 'attachment' ) { 
 			?><div class="disclosure-view-select misc-pub-section">
 				<label for="post_view_cap-select"><strong><?php _e( 'Who can read:' , 'wpundisclosed') ?></strong></label><br />
 				<?php 
