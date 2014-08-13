@@ -203,7 +203,6 @@ class UndisclosedPosts {
 		// not true on multisite
 		if ( is_singular() || ( ! is_multisite() && current_user_can('administrator') ) )
 			return $where;
-		
 		$caps = array('exist');
 		if ( is_user_logged_in() ) {
 			// get current user's groups
@@ -228,6 +227,7 @@ class UndisclosedPosts {
 			$add_where .= " OR (wpaa_postmeta.meta_value IS NOT NULL)";
 
 		$add_where = " AND ( $add_where ) ";
+		var_dump($where,$add_where);
 		return $where . $add_where;
 	}
 

@@ -91,7 +91,7 @@ class UndisclosedEditPost {
 			return $data;
 		$post_type_object 	= get_post_type_object($data["post_type"]);
 		
-		if ( $post_type_object->public && isset($postarr['post_view_cap']) && $postarr['post_view_cap'] )
+		if (  ( $post_type_object->public || $post_type_object->show_ui ) && isset($postarr['post_view_cap']) && $postarr['post_view_cap'] )
 			$data['post_view_cap']	= $postarr['post_view_cap'];
 		
 		if (isset($postarr['post_edit_cap']) && $postarr['post_edit_cap']) 

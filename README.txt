@@ -85,6 +85,9 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 
 == Changelog ==
 
+= 1.2.7 =
+Feature: Edit view cap now for backend-only posts as well.
+
 = 1.2.6 =
 Feature: Option to select post status after deleting access area
 Fix: Wrong viewing permissions after delete access area
