@@ -113,7 +113,7 @@ class UndisclosedEditPost {
 		
 			if ( $meta === '' ) {
 				delete_post_meta( $post_ID , '_wpaa_post_behavior' );
-			} else if ( in_array( $meta , array( 'page' , 'login' ) ) ) {
+			} else if ( in_array( $meta , array( '404' , 'page' , 'login' ) ) ) {
 				update_post_meta( $post_ID , '_wpaa_post_behavior' , $meta );
 			}
 		}

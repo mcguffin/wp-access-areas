@@ -86,7 +86,8 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 == Changelog ==
 
 = 1.2.7 =
-Feature: Edit view cap now for backend-only posts as well.
+Feature: Edit view cap now available for backend-only posts as well.
+Fix: 404 behaviour not saving when defalt behaviour is other than 404
 
 = 1.2.6 =
 Feature: Option to select post status after deleting access area
