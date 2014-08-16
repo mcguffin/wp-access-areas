@@ -260,6 +260,8 @@ class UndisclosedEditPost {
 	// --------------------------------------------------
 	static function fallback_page_dropdown( $post_fallback_page = false , $fieldname = '_wpaa_fallback_page' ) {
 		global $wpdb;
+		if ( ! wpaa_is_post_public( $post_fallback_page ) )
+			$post_fallback_page = 0;
 		
 		// if not fallback page, use global fallback page
 		$restricted_pages = $wpdb->get_col($wpdb->prepare("SELECT id 
@@ -272,6 +274,8 @@ class UndisclosedEditPost {
 			'selected' 	=> $post_fallback_page,
 			'name'		=> $fieldname,
 			'exclude'	=> $restricted_pages,
+			'show_option_none' => __('Front page'),
+			'option_none_value' => 0,
 		));
 	}
 	static function behavior_select( $post_behavior = '' , $fieldname = '_wpaa_post_behavior' ) {

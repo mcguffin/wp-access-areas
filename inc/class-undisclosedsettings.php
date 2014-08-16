@@ -12,6 +12,7 @@ if ( ! class_exists('UndisclosedSettings' ) ) :
 
 class UndisclosedSettings {
 	private static $post_stati;
+
 	static function init( ) {
 		self::$post_stati = array(
 			'' => __('Don‘t change','wpundisclosed'),
@@ -33,6 +34,7 @@ class UndisclosedSettings {
 		add_options_page(__('Access Settings','wpundisclosed'), __('Access Settings','wpundisclosed'), 'promote_users', 'wpaa_settings', array(__CLASS__,'settings_page'));
 	}
 	static function register_settings() { // @ admin_init
+		
 		register_setting( 'wpaa_settings' , 'wpaa_default_behavior', array(__CLASS__,'sanitize_behavior') );
 		register_setting( 'wpaa_settings' , 'wpaa_fallback_page' , array(__CLASS__,'sanitize_fallbackpage') );
 		register_setting( 'wpaa_settings' , 'wpaa_default_post_status' , array(__CLASS__,'sanitize_poststatus') );
@@ -75,7 +77,9 @@ class UndisclosedSettings {
 		UndisclosedEditPost::behavior_select( $behavior , 'wpaa_default_behavior' );
 	}
 	static function sanitize_behavior( $behavior ) {
-		return preg_replace('/!^(|page|login)$/','',$behavior);
+		if ( ! preg_match('/^(404|page|login)$/',$behavior) )
+			$behavior = '404';
+		return $behavior;
 	}
 	static function select_fallback_page(){
 		$post_fallback_page = get_option('wpaa_fallback_page');

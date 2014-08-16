@@ -64,10 +64,8 @@ class UndisclosedPosts {
 					// no fallback? take default value
 					if ( ! $fallback_page_id )
 						$fallback_page_id = get_option( 'wpaa_fallback_page' );
-					
-					$fallback_page = get_post( $fallback_page_id );
-					
-					if ( wpaa_user_can( $fallback_page->post_view_cap ) && $fallback_page->post_status == 'publish' ) {
+										
+					if ( $fallback_page_id && wpaa_is_post_public( $fallback_page_id ) ) {
 						// if accessable take user to the fallback page
 						$redirect = get_permalink( $fallback_page_id );
 					} else {
@@ -227,7 +225,6 @@ class UndisclosedPosts {
 			$add_where .= " OR (wpaa_postmeta.meta_value IS NOT NULL)";
 
 		$add_where = " AND ( $add_where ) ";
-		var_dump($where,$add_where);
 		return $where . $add_where;
 	}
 

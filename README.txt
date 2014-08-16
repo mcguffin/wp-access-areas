@@ -86,8 +86,10 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 == Changelog ==
 
 = 1.2.7 =
+Feature: Explicitly select Front page as Fallback page.
 Feature: Edit view cap now available for backend-only posts as well.
 Fix: 404 behaviour not saving when defalt behaviour is other than 404
+API: added function `wpaa_is_post_public( $post )`
 
 = 1.2.6 =
 Feature: Option to select post status after deleting access area

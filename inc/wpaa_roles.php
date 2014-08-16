@@ -126,3 +126,14 @@ function wpaa_role_contains( $container , $contained ) {
 	}
 	return $contains;
 }
+
+
+// check if a post is publicly viewable
+function wpaa_is_post_public( $post ) {
+	if ( ! is_object( $post ) )
+		$post = get_post( $post );
+	if ( $post )
+		return $post->post_status == 'publish' && $post->post_view_cap == 'exist';
+	return false;
+}
+

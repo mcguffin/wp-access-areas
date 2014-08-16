@@ -157,3 +157,15 @@ wpaa_role_contains('editor',`contributor`); // true
 wpaa_role_contains('author',`editor`); // false
 ```
 
+#### `wpaa_is_post_public( $post )` ####
+Check if post `$post` (post ID or post object) is visible to the public.
+
+Example:
+```
+wpaa_is_post_public( 1 ); 
+
+// same as
+$post = get_post( 1 );
+wpaa_is_post_public( $post ); 
+```
+
