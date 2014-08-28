@@ -3,7 +3,7 @@ Contributors: podpirate
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WF4Z3HU93XYJA
 Tags: access, role, capability, user, security, editor
 Requires at least: 3.5
-Tested up to: 4.0-beta3
+Tested up to: 4.0-RC1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -21,10 +21,14 @@ even custom Access Areas.
 - Restrict reading, editing and commenting permission to logged-in users, certain WordPress-Roles or Access Areas
 - define global access areas on a network
 - Supports bulk editing
-- German and swedish localization
+- German, Italian, Polish and Swedish localization (Huge Thankyou @ all translators!)
 - Clean uninstall
 
 Latest files on [GitHub](https://github.com/mcguffin/wp-access-areas).
+
+= Known Limitations =
+- WordPress calendar Widget still shows dates where even restricted posts have been created. When clicked on such a date a 404 will occur.
+- Taxonomy menus (e.g. Tags / Categories) also count restricted posts when the total number of posts in a taxonomy is ascertained. See [this post](http://wordpress.org/support/topic/archive-recents-posts-last-comments-show-restricted-content?replies=5#post-5929330) for details.
 
 == Installation ==
 
@@ -84,6 +88,14 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 4. Post Access Behaviour
 
 == Changelog ==
+
+= 1.2.8 =
+Fix: Hide inacessible posts in Recent Comments widget
+Fix: Hide inacessible posts in Latest posts widget
+Fix: Hide inacessible posts in Archive widget
+Fix: Don't show comments to inaccessible posts in WP-Admin. (Prohibits editing as well.)
+L10n: Polish localisation
+
 
 = 1.2.7 =
 Feature: Explicitly select Front page as Fallback page.

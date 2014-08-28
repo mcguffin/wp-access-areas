@@ -16,6 +16,13 @@ class UndisclosedPosts {
 		// viewing restrictions on posts lists
 		add_action( 'get_pages' , array( __CLASS__ , 'skip_undisclosed_items' ) , 10 , 1 ); // needed by nav menus
 		add_filter( "posts_where" , array( __CLASS__ , "get_posts_where" ) , 10 , 2 );
+		add_filter( "getarchives_where" , array( __CLASS__ , "get_archiveposts_where" ) , 10 , 2 );
+		/*
+		// activate as soon as patch @ https://core.trac.wordpress.org/attachment/ticket/29319/general-template.diff makes it into core.
+		add_filter( "getcalendar_where" , array( __CLASS__ , "get_archiveposts_where" ) , 10 , 1 );
+		add_filter( "getcalendar_next_where" , array( __CLASS__ , "get_archiveposts_where" ) , 10 , 1 );
+		add_filter( "getcalendar_previous_where" , array( __CLASS__ , "get_archiveposts_where" ) , 10 , 1 );
+		//*/
 		add_filter( "posts_join" , array( __CLASS__ , "get_posts_join" ) , 10 , 2 );
 
 		add_filter( "get_next_post_where" , array( __CLASS__ , "get_adjacent_post_where" ) , 10 , 3 );
@@ -28,6 +35,8 @@ class UndisclosedPosts {
 		
 		// comment restrictions
 		add_filter( 'comments_open', array(__CLASS__,'comments_open') , 10 , 2 );
+		add_filter( 'comments_clauses' , array( __CLASS__ , 'comments_query_clauses' ) , 10 , 2 );
+		add_filter( 'wp_count_comments' , array( __CLASS__ , 'count_comments' ) , 10 , 2 );
 		
 		//misc
 		add_filter( 'edit_post_link' , array(__CLASS__,'edit_post_link') , 10 , 2 );
@@ -46,7 +55,7 @@ class UndisclosedPosts {
 	}
 	
 	// --------------------------------------------------
-	// comment restrictions
+	// template redirect
 	// --------------------------------------------------
 	static function template_redirect() {
 		if ( is_singular() && $restricted_post = get_post() ) {
@@ -89,6 +98,17 @@ class UndisclosedPosts {
 		}
 	}
 	
+	// --------------------------------------------------
+	// comments query
+	// --------------------------------------------------
+	static function comments_query_clauses( $clauses , $wp_comment_query ) {
+		global $wpdb;
+		if ( strpos( $clauses['join'] , $wpdb->posts ) === false )
+			$clauses['join'] = "JOIN {$wpdb->posts} ON {$wpdb->posts}.ID = {$wpdb->comments}.comment_post_ID";
+		$clauses['where'] = self::_get_where( $clauses['where'] , $wpdb->posts );
+		return $clauses;
+	}
+	
 	
 	// --------------------------------------------------
 	// comment restrictions
@@ -100,7 +120,57 @@ class UndisclosedPosts {
 		}
 		return $open;
 	}
-	
+	static function count_comments( $stats , $post_id = 0 ) {
+		global $wpdb;
+		if ( $post_id ) {
+			$post = get_post( $post_id );
+			
+			// user can read post. return empty stats to trigger WP stats count.
+			if ( $post && wpaa_user_can( $post->post_view_cap ) ) {
+				return $stats;
+			}
+
+			// user can not read post. Return empty stats.
+			return (object) array(
+				'moderated' => 0,
+				'approved' => 0,
+				'post-trashed' => 0,
+				'spam' => 0,
+				'total_comments' => 0,
+				'trash' => 0,
+			);
+		}
+		$clauses = self::comments_query_clauses( array(
+			'join' => '',
+			'where' => '',
+		),null);
+		$join	= $clauses['join'];
+		$where	= $clauses['where'];
+		
+		// taken from wp_count_comments
+		$count = $wpdb->get_results( "SELECT comment_approved, COUNT( * ) AS num_comments FROM {$wpdb->comments} {$join} {$where} GROUP BY comment_approved", ARRAY_A );
+
+		$total = 0;
+		$approved = array('0' => 'moderated', '1' => 'approved', 'spam' => 'spam', 'trash' => 'trash', 'post-trashed' => 'post-trashed');
+		foreach ( (array) $count as $row ) {
+			// Don't count post-trashed toward totals
+			if ( 'post-trashed' != $row['comment_approved'] && 'trash' != $row['comment_approved'] )
+				$total += $row['num_comments'];
+			if ( isset( $approved[$row['comment_approved']] ) )
+				$stats[$approved[$row['comment_approved']]] = $row['num_comments'];
+		}
+
+		$stats['total_comments'] = $total;
+		foreach ( $approved as $key ) {
+			if ( empty($stats[$key]) )
+				$stats[$key] = 0;
+		}
+
+		$stats = (object) $stats;
+		wp_cache_set("comments-{$post_id}", $stats, 'counts');
+
+		return $stats;
+	}
 	
 	// --------------------------------------------------
 	// edit link
@@ -154,6 +224,19 @@ class UndisclosedPosts {
 						$caps[] = 'do_not_allow';
 				}
 				break;
+			case 'edit_comment':
+				if ( count($args[0]) ) {
+					$comment_ID = $args[0];
+					$comment = get_comment( $comment_ID );
+					if ( $comment && $comment->comment_post_ID  ) {
+						$post = get_post( $comment->comment_post_ID );
+						$view_cap = $post->post_view_cap;
+						if ( ! wpaa_user_can( $view_cap ) )
+							$caps[] = 'do_not_allow';
+						
+					}
+				}
+				break;
 		}
 		return $caps;
 	}
@@ -175,6 +258,10 @@ class UndisclosedPosts {
 		return $ret;
 	}
 	
+	static function get_archiveposts_where( $where , $args = null ) {
+		$where = self::_get_where( $where , '' );
+		return $where;
+	}
 	static function get_posts_where( $where , &$wp_query ) {
 		global $wpdb;
 		$where = self::_get_where( $where , $wpdb->posts );
@@ -198,9 +285,14 @@ class UndisclosedPosts {
 
 
 	private static function _get_where( $where , $table_name = 'p' ) {
-		// not true on multisite
-		if ( is_singular() || ( ! is_multisite() && current_user_can('administrator') ) )
+		global $wpdb;
+		// disable filtering: on queries for single posts/pages and for single blog administrators
+		if ( ( is_singular() && preg_match( "/{$wpdb->posts}.(post_name|ID)\s?=/" , $where ) ) || ( ! is_multisite() && current_user_can('administrator') ) ) {
 			return $where;
+		}
+		if ( $table_name && substr($table_name,-1) !== '.' )
+			$table_name .= '.';
+		
 		$caps = array('exist');
 		if ( is_user_logged_in() ) {
 			// get current user's groups
@@ -220,9 +312,9 @@ class UndisclosedPosts {
 				if ( wpaa_user_can_accessarea( $cap ) )
 					$caps[] = $cap;
 		}
-		$add_where = " $table_name.post_view_cap IN ('".implode( "','" , $caps ) . "')";
-		if ( is_single() )
-			$add_where .= " OR (wpaa_postmeta.meta_value IS NOT NULL)";
+		$add_where = " {$table_name}post_view_cap IN ('".implode( "','" , $caps ) . "')";
+//		if ( is_single() ) // why did I do this....?
+//			$add_where .= " OR (wpaa_postmeta.meta_value IS NOT NULL)";
 
 		$add_where = " AND ( $add_where ) ";
 		return $where . $add_where;

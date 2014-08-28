@@ -1,0 +1,453 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WordPress Access Areas v1.2.7\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2014-08-28 10:06:55+0000\n"
+"Last-Translator: admin <joern@flyingletters.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Poedit 1.6.8\n"
+"X-Poedit-Language: \n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: \n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: inc/class-undisclosedcaps.php:28
+#: inc/class-undisclosedcaps.php:198
+#@ wpundisclosed
+msgid "Manage Access Areas"
+msgstr "Zarządzaj obszarami dostępu"
+
+#: inc/class-undisclosedcaps.php:28
+#: inc/class-undisclosedusers.php:244
+#: inc/class-undisclosedusers.php:383
+#@ wpundisclosed
+msgid "Access Areas"
+msgstr "Obszary dostępu"
+
+#: inc/class-undisclosedcaps.php:35
+#: inc/class-undisclosedusers.php:232
+#@ wpundisclosed
+msgid "You do not have permission to do this."
+msgstr "Nie masz wystarczających uprawnień."
+
+#: inc/class-undisclosedcaps.php:48
+#@ wpundisclosed
+msgid "Please enter a Label."
+msgstr "Uzupełnij etykietę."
+
+#: inc/class-undisclosedcaps.php:51
+#@ wpundisclosed
+msgid "You do not have permission to edit network wide user labels."
+msgstr "Nie masz uprawnień by edytować etykietę użytkowników w sieci."
+
+#: inc/class-undisclosedcaps.php:126
+#@ wpundisclosed
+msgid "Edit Access Area"
+msgstr "Edytuj obszar dostępu"
+
+#: inc/class-undisclosedcaps.php:128
+#: inc/class-undisclosedcaps.php:153
+#@ wpundisclosed
+msgid "Create Access Area"
+msgstr "Dodaj obszar dostępu"
+
+#: inc/class-undisclosedcaps.php:143
+#@ wpundisclosed
+msgid "Access Area"
+msgstr "Obszar dostępu"
+
+#: inc/class-undisclosedcaps.php:144
+#@ wpundisclosed
+msgid "New Access Area"
+msgstr "Nowy obszar dostępu"
+
+#: inc/class-undisclosedcaps.php:151
+#@ wpundisclosed
+msgid "Save changes"
+msgstr "Zapisz zmiany"
+
+#: inc/class-undisclosedcaps.php:169
+#@ wpundisclosed
+msgid "Access Area created."
+msgstr "Obszar dostępu utworzony."
+
+#: inc/class-undisclosedcaps.php:172
+#@ wpundisclosed
+msgid "Access Area updated."
+msgstr "Obszar dostępu został zaktualizowany."
+
+#: inc/class-undisclosedcaps.php:175
+#, php-format
+#@ wpundisclosed
+msgid "Access Area deleted."
+msgid_plural "%d Access Areas deleted."
+msgstr[0] "Obszar dostępu został usunięty."
+msgstr[1] "Es wurden %d Zugangsbereiche gelöscht."
+
+#: inc/class-undisclosedcaps.php:178
+#@ wpundisclosed
+msgid "An Access Area with that Name already exists."
+msgstr "Obszar dostępu o takiej nazwie już istnieje."
+
+#: inc/class-undisclosedcaps.php:199
+#: inc/class-undisclosedusers.php:312
+#@ wpundisclosed
+msgctxt "access area"
+msgid "Add New"
+msgstr "Dodaj nowy"
+
+#: inc/class-undisclosededitpost.php:80
+#: inc/class-undisclosededitpost.php:349
+#@ wpundisclosed
+msgid "Access"
+msgstr "Dostęp"
+
+#: inc/class-undisclosededitpost.php:232
+#@ wpundisclosed
+msgid "WordPress default"
+msgstr "Domyślny"
+
+#: inc/class-undisclosededitpost.php:407
+#: inc/class-undisclosededitpost.php:413
+#@ wpundisclosed
+msgid "Blog users"
+msgstr "Użytkownicy"
+
+#: inc/class-undisclosededitpost.php:237
+#@ wpundisclosed
+msgid "WordPress roles"
+msgstr "Role"
+
+#: inc/class-undisclosededitpost.php:184
+#@ wpundisclosed
+msgid "Who can comment:"
+msgstr "Publikacja komentarzy:"
+
+#: inc/class-undisclosededitpost.php:394
+#@ wpundisclosed
+msgid "Visible to"
+msgstr "Widoczne dla"
+
+#: inc/class-undisclosededitpost.php:407
+#: inc/class-undisclosededitpost.php:413
+#@ wpundisclosed
+msgid "Everybody"
+msgstr "Wszyscy"
+
+#: inc/class-undiscloseduserlabel.php:74
+#@ wpundisclosed
+msgid "(Network)"
+msgstr "(Sieć)"
+
+#: inc/class-undisclosedusers.php:257
+#@ wpundisclosed
+msgid "Grant Network-Wide Access"
+msgstr "Dostęp w sieci"
+
+#: inc/class-undisclosedusers.php:250
+#@ wpundisclosed
+msgid "Grant Access"
+msgstr "Pełen dostęp"
+
+#: inc/class-undisclosedusers.php:331
+#@ wpundisclosed
+msgid "Access Areas:"
+msgstr "Obszary dostępu"
+
+#: inc/class-undisclosedusers.php:343
+#@ default
+msgid "(None)"
+msgstr ""
+
+#: inc/class-undisclosedusers.php:395
+#@ default
+msgid "Everywhere"
+msgstr "Wszędzie"
+
+#: inc/class-userlabel_list_table.php:42
+#@ wpundisclosed
+msgid "Name"
+msgstr "Nazwa"
+
+#: inc/class-userlabel_list_table.php:45
+#@ wpundisclosed
+msgid "Scope"
+msgstr "Zakres"
+
+#: inc/class-undisclosedusers.php:365
+#: inc/class-userlabel_list_table.php:83
+#@ wpundisclosed
+msgid "Network"
+msgstr "Sieć"
+
+#: inc/class-userlabel_list_table.php:75
+#: inc/class-userlabel_list_table.php:91
+#: inc/class-userlabel_list_table.php:145
+#@ default
+msgid "Delete"
+msgstr "Usuń"
+
+#: inc/class-undisclosedcaps.php:181
+#@ wpundisclosed
+msgid "Could not find the specified Access Area."
+msgstr "Nie można znaleźć określonego obszaru dostępu."
+
+#: inc/class-undisclosededitpost.php:246
+#@ wpundisclosed
+msgid "Users with Access to"
+msgstr "Użytkownicy z dostępem do"
+
+#: inc/class-undisclosededitpost.php:168
+#@ wpundisclosed
+msgid "Who can read:"
+msgstr "Czytanie:"
+
+#: inc/class-undisclosededitpost.php:176
+#@ wpundisclosed
+msgid "Who can edit:"
+msgstr "Edycja:"
+
+#. translators: plugin header field 'Name'
+#: wp-access-areas.php:0
+#@ wpundisclosed
+msgid "WordPress Access Areas"
+msgstr "Obszary dostępu Wordpress"
+
+#. translators: plugin header field 'PluginURI'
+#: wp-access-areas.php:0
+#@ wpundisclosed
+msgid "http://wordpress.org/plugins/wp-access-areas/"
+msgstr ""
+
+#. translators: plugin header field 'Description'
+#: wp-access-areas.php:0
+#@ wpundisclosed
+msgid "Lets you define Access Areas and assign them to Posts, Pages and Custom Post types. Through Access Areas you can fine-tune who can view, edit or comment on your posts."
+msgstr "Wtyczka pozwala na definiowanie obszarów dostępowych i przypisywanie ich do wpisów, stron i formatów wpisu. Za pomocą obszarów dostępowych decydujesz kto może przeglądać, edytować i komentować Twoje wpisy."
+
+#. translators: plugin header field 'AuthorURI'
+#: wp-access-areas.php:0
+#@ wpundisclosed
+msgid "https://github.com/mcguffin/"
+msgstr ""
+
+#: inc/class-undisclosededitpost.php:234
+#@ wpundisclosed
+msgid "Logged in Users"
+msgstr "Zalogowani użytkownicy"
+
+#: inc/class-undisclosededitpost.php:395
+#@ wpundisclosed
+msgid "Commentable to"
+msgstr "Komentować mogą:"
+
+#: inc/class-userlabel_list_table.php:47
+#@ wpundisclosed
+msgid "WP Capability"
+msgstr "Uprawnienia WP"
+
+#: inc/class-undisclosedusers.php:87
+#: inc/class-undisclosedusers.php:105
+#@ wpundisclosed
+msgid "Insufficient privileges."
+msgstr "Niewystarczające uprawnienia."
+
+#: inc/class-undisclosedusers.php:99
+#@ wpundisclosed
+msgid "Access Area exists."
+msgstr "Taki obszar dostępu już istnieje."
+
+#: inc/class-undisclosedusers.php:314
+#@ default
+msgid "+"
+msgstr ""
+
+#: inc/class-undisclosededitpost.php:356
+#: inc/class-undisclosededitpost.php:365
+#: inc/class-undisclosededitpost.php:374
+#@ default
+msgid "&mdash; No Change &mdash;"
+msgstr ""
+
+#: inc/class-undisclosededitpost.php:354
+#@ wpundisclosed
+msgid "Read:"
+msgstr "Czytanie:"
+
+#: inc/class-undisclosededitpost.php:363
+#@ wpundisclosed
+msgid "Edit:"
+msgstr "Edycja:"
+
+#: inc/class-undisclosededitpost.php:372
+#@ wpundisclosed
+msgid "Comment:"
+msgstr "Komentowanie:"
+
+#: inc/class-undisclosededitpost.php:83
+#@ wpundisclosed
+msgid "Behaviour"
+msgstr "Działania"
+
+#: inc/class-undisclosededitpost.php:285
+#@ wpundisclosed
+msgid "Show 404"
+msgstr "Pokaż błąd 404"
+
+#: inc/class-undisclosededitpost.php:289
+#@ wpundisclosed
+msgid "Redirect to the fallback page."
+msgstr "Przekieruj na stronę"
+
+#: inc/class-undisclosededitpost.php:202
+#: inc/class-undisclosedsettings.php:76
+#@ wpundisclosed
+msgid "If somebody tries to view a restricted post directly:"
+msgstr "Gdy ktoś próbuje podejrzeć stronę bezpośrednio:"
+
+#: inc/class-undisclosededitpost.php:210
+#@ wpundisclosed
+msgid "Fallback Page"
+msgstr "Strona przekierowania"
+
+#: inc/class-undisclosededitpost.php:293
+#@ wpundisclosed
+msgid "If not logged in, redirect to login. Otherwise redirect to the fallback page."
+msgstr "Gdy niezalogowany, przekieruj na ekran logowania. W innym wypadku przenieś na stronę przekierowania."
+
+#: inc/class-undisclosedsettings.php:34
+#@ wpundisclosed
+msgid "Access Settings"
+msgstr "Opcje dostępu"
+
+#: inc/class-undisclosedsettings.php:42
+#@ wpundisclosed
+msgid "Restricted Access Behavior"
+msgstr "Działania - obszar niedostępny."
+
+#: inc/class-undisclosedsettings.php:43
+#@ wpundisclosed
+msgid "Default Behaviour"
+msgstr "Domyślne działanie"
+
+#: inc/class-undisclosedsettings.php:44
+#@ wpundisclosed
+msgid "Default Fallback Page"
+msgstr "Domyślna strona przekierowania"
+
+#: inc/class-undisclosedsettings.php:61
+#@ wpundisclosed
+msgid "Access Areas Settings"
+msgstr "Ustawienia obszaru dostępu"
+
+#: inc/class-undisclosedsettings.php:50
+#@ wpundisclosed
+msgid "You can also set these Options for each post individually."
+msgstr "Te opcje możesz również ustawić indywidualnie dla każdego wpisu/podstrony."
+
+#: inc/class-undisclosedsettings.php:68
+#@ default
+msgid "Save Changes"
+msgstr "Zapisz zmiany"
+
+#: inc/class-undisclosedusers.php:89
+#@ wpundisclosed
+msgid "Empty name."
+msgstr "Uzupełnij imię."
+
+#: inc/class-undisclosedusers.php:117
+#@ wpundisclosed
+msgid "Grant Access … "
+msgstr "Pełen dostęp"
+
+#: inc/class-undisclosedusers.php:118
+#@ wpundisclosed
+msgid "Grant"
+msgstr "Przyznaj"
+
+#: inc/class-undisclosedusers.php:125
+#@ wpundisclosed
+msgid "Revoke Access … "
+msgstr "Odbierz dostęp"
+
+#: inc/class-undisclosedusers.php:126
+#@ wpundisclosed
+msgid "Revoke"
+msgstr "Odbierz"
+
+#: inc/class-undisclosedusers.php:136
+#@ default
+msgid "You can&#8217;t edit that user."
+msgstr ""
+
+#: inc/class-undisclosedusers.php:360
+#@ wpundisclosed
+msgid "Local"
+msgstr "Lokalny"
+
+#: inc/class-undisclosedsettings.php:18
+#@ wpundisclosed
+msgid "Don‘t change"
+msgstr "Nie zmieniaj."
+
+#: inc/class-undisclosedsettings.php:19
+#@ default
+msgid "Public"
+msgstr "Publiczny"
+
+#: inc/class-undisclosedsettings.php:20
+#@ default
+msgid "Private"
+msgstr "Prywatny"
+
+#: inc/class-undisclosedsettings.php:21
+#@ default
+msgid "Draft"
+msgstr "Szkic"
+
+#: inc/class-undisclosedsettings.php:22
+#@ default
+msgid "Pending Review"
+msgstr "Oczekuje na publikację"
+
+#: inc/class-undisclosedsettings.php:46
+#@ wpundisclosed
+msgid "Posts defaults"
+msgstr "Domyślne wpisy"
+
+#: inc/class-undisclosedsettings.php:47
+#@ wpundisclosed
+msgid "Default Post Status"
+msgstr "Domyślny status wpisu"
+
+#: inc/class-undisclosedsettings.php:103
+#@ wpundisclosed
+msgid "Set post status of assigned posts after an Access Area has been deleted."
+msgstr "Ustaw status przypisanego wpisu po usunięciu obszaru dostępowego."
+
+#. translators: plugin header field 'Author'
+#: wp-access-areas.php:0
+#@ wpundisclosed
+msgid "Jörn Lund"
+msgstr ""
+
+#: inc/class-undisclosededitpost.php:277
+#@ default
+msgid "Front page"
+msgstr ""
+
+#. translators: plugin header field 'Version'
+#: wp-access-areas.php:0
+#@ wpundisclosed
+msgid "1.2.7"
+msgstr ""
+
