@@ -22,8 +22,15 @@ even custom Access Areas.
 
 Installation
 ------------
-Move the plugin dir in your `wp-content/` directory and activate it in the GUI.
+Either move the plugin dir in your `wp-content/` directory ...
 
+... or git-clone it:
+```
+$ cd wp-content/plugins/
+$ git clone git@github.com:mcguffin/wp-access-areas.git
+```
+
+Finally activate it in the GUI.
 
 Features
 --------
@@ -35,7 +42,7 @@ Features
 
 Compatibility
 -------------
-- WP 3.5.2 through 3.8.1
+- WP 3.5.2 through 4.0-RC1
 
 Plugin API
 ----------
