@@ -89,13 +89,19 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 
 == Changelog ==
 
+= 1.2.9 =
+Fix: Cache DB results 
+Fix: Hide inacessible posts in Latest posts widget
+Fix: Hide inacessible posts in Archive widget
+Fix: Don't show comments to inaccessible posts in WP-Admin. (Prohibits editing as well.)
+L10n: Polish localisation
+
 = 1.2.8 =
 Fix: Hide inacessible posts in Recent Comments widget
 Fix: Hide inacessible posts in Latest posts widget
 Fix: Hide inacessible posts in Archive widget
 Fix: Don't show comments to inaccessible posts in WP-Admin. (Prohibits editing as well.)
 L10n: Polish localisation
-
 
 = 1.2.7 =
 Feature: Explicitly select Front page as Fallback page.
