@@ -11,7 +11,8 @@
 if ( ! class_exists('UndisclosedUserlabel') ):
 class UndisclosedUserlabel {
 	
-	private static $_what_went_wrong=0;
+	private static $_what_went_wrong = 0;
+	private static $_query_cache = array();
 	
 	static function get_count_available_userlabels( ) {
 		global $wpdb;
@@ -22,7 +23,13 @@ class UndisclosedUserlabel {
 			$blog_id = get_current_blog_id();
 			$query .= "OR blog_id=$blog_id";
 		}
-		return $wpdb->get_var($query);
+		
+		// get cached result
+		$query_key = md5( $query );
+		if ( ! isset( self::$_query_cache[$query_key] ) ) {	
+			self::$_query_cache[$query_key] = $wpdb->get_results($query);
+		}
+		return self::$_query_cache[$query_key];
 	}
 	static function get_available_userlabels( $limit = 0 , $order = 'blog_id DESC,cap_title ASC'  ) {
 		global $wpdb;
@@ -43,7 +50,13 @@ class UndisclosedUserlabel {
 			array_unshift($query_param,$query);
 			$query = call_user_func_array( array($wpdb,'prepare') , $query_param);
 		}
-		return $wpdb->get_results($query);
+		
+		// get cached result
+		$query_key = md5( $query );
+		if ( ! isset( self::$_query_cache[$query_key] ) ) {	
+			self::$_query_cache[$query_key] = $wpdb->get_results($query);
+		}
+		return self::$_query_cache[$query_key];
 	}
 	static function get_blog_userlabels( $blog_id = 0 , $order_by = 'cap_title' , $order = 'ASC' ) {
 		global $wpdb;
@@ -54,7 +67,12 @@ class UndisclosedUserlabel {
 		if ( $sql_orderby = sanitize_sql_orderby("$order_by $order") )
 			$query .= " ORDER BY $sql_orderby";
 		
-		return $wpdb->get_results( $wpdb->prepare( $query , $blog_id ) );
+		// get cached result
+		$query_key = md5( $query );
+		if ( ! isset( self::$_query_cache[$query_key] ) ) {	
+			self::$_query_cache[$query_key] = $wpdb->get_results($query);
+		}
+		return self::$_query_cache[$query_key];
 	}
 	static function get_network_userlabels(  $order_by = 'cap_title' , $order = 'ASC' ) {
 		global $wpdb;
@@ -63,7 +81,12 @@ class UndisclosedUserlabel {
 		if ( $sql_orderby = sanitize_sql_orderby("$order_by $order") )
 			$query .= " ORDER BY $sql_orderby";
 		
-		return $wpdb->get_results( $query );
+		// get cached result
+		$query_key = md5( $query );
+		if ( ! isset( self::$_query_cache[$query_key] ) ) {	
+			self::$_query_cache[$query_key] = $wpdb->get_results($query);
+		}
+		return self::$_query_cache[$query_key];
 	}
 	static function get_label_array( ) {
 		$labels = self::get_available_userlabels( );
