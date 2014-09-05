@@ -152,6 +152,12 @@ class UndisclosedUserlabel {
 		$query = $wpdb->prepare("SELECT * FROM $table_name WHERE ID = %d",$id);
 		return self::_get_cached_result( $query , 'get_row' );
 	}
+	static function get_userlabel_by_cap( $cap_name ) {
+		global $wpdb;
+		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
+		$query = $wpdb->prepare("SELECT * FROM $table_name WHERE capability = %s",$cap_name);
+		return self::_get_cached_result( $query , 'get_row' );
+	}
 	static function what_went_wrong( ) {
 		$ret = self::$_what_went_wrong;
 		self::$_what_went_wrong = 0;
@@ -180,14 +186,20 @@ class UndisclosedUserlabel {
 		);
 		$wpdb->query( $query );
 		self::_clear_cache();
-		return $wpdb->insert_id;
+		$insert_id = $wpdb->insert_id;
+		do_action( 'wpaa_create_access_area' , $capability , $cap_title , $blog_id , $insert_id );
+		return $insert_id;
 	}
-	static function update_userlabel( $data ) {
+	static function update_userlabel( $update_data ) {
 		global $wpdb;
+		$update_data = apply_filters( 'wpaa_update_access_area_data' , $update_data );
+		if ( empty( $update_data ) )
+			return false;
+		
 		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
+		extract( $data , EXTR_SKIP ); // cap_title, blog_id, id
 
-		extract( $data , EXTR_SKIP );
-
+		
 		if ( self::title_exists( $cap_title , $blog_id ) ) {
 			self::$_what_went_wrong = 4;
 			return false;
@@ -201,6 +213,7 @@ class UndisclosedUserlabel {
 		);
 		$wpdb->query( $query );
 		self::_clear_cache();
+		do_action( 'wpaa_update_access_area' , $id , $update_data );
 		return $id;
 	}
 	static function title_exists( $cap_title , $blog_id ) {

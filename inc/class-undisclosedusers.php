@@ -228,12 +228,19 @@ class UndisclosedUsers {
 		$can_grant = current_user_can( $capability ) || ! $network;
 		$has_cap = $user->has_cap( $capability );
 		$is_change = ($add && ! $has_cap) || (!$add && $has_cap);
-		if ( ! $can_grant && $is_change )
-			wp_die( __('You do not have permission to do this.' , 'wpundisclosed' ) );
-		if ( $add && $is_change ) 
-			$user->add_cap( $capability , true );
-		else if ( ! $add && $is_change ) 
-			$user->remove_cap( $capability );
+		if ( $is_change ) {
+			if ( ! $can_grant )
+				wp_die( __('You do not have permission to do this.' , 'wpundisclosed' ) );
+			if ( $add ) {
+				$user->add_cap( $capability , true );
+				do_action( 'wpaa_grant_access' , $user , $capability );
+				do_action( "wpaa_grant_{$capability}" , $user );
+			} else if ( ! $add ) {
+				$user->remove_cap( $capability );
+				do_action( 'wpaa_revoke_access' , $user , $capability );
+				do_action( "wpaa_revoke_{$capability}" , $user );
+			}
+		}
 	}
 	static function personal_options( $profileuser ) {
 		// IS_PROFILE_PAGE : self or other

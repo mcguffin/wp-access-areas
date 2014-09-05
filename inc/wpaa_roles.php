@@ -23,6 +23,15 @@ function wpaa_user_can( $cap , $args = array() ) {
 	return $can;
 }
 
+function wpaa_get_access_area( $identifier ) {
+	if ( is_numeric( $identifier ) ) {
+		return UndisclosedUserlabel::get_userlabel( $identifier );
+	} else if ( wpaa_is_access_area( $identifier ) ) {
+		return UndisclosedUserlabel::get_userlabel_by_cap( $identifier );
+	}
+	
+}
+
 function wpaa_is_access_area( $cap ) {
 	return strpos( $cap , WPUND_USERLABEL_PREFIX ) === 0;
 }

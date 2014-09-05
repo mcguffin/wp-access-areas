@@ -90,13 +90,14 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 == Changelog ==
 
 = 1.2.9 =
-Fix: Cache DB results 
-Fix: Hide inacessible posts in Latest posts widget
-Fix: Hide inacessible posts in Archive widget
-Fix: Don't show comments to inaccessible posts in WP-Admin. (Prohibits editing as well.)
-L10n: Polish localisation
+Improvement: Cache DB results
+Plugin API: Added filter: <code>wpaa_update_access_area_data</code>
+Plugin API: Added actions: <code>wpaa_grant_access</code>, <code>wpaa_grant_{$wpaa_capability}</code>, <code>wpaa_revoke_access</code>, <code>wpaa_revoke_{$wpaa_capability}</code>, <code>wpaa_create_access_area</code>, <code>wpaa_update_access_area</code>
+Plugin API: Added function: <code>wpaa_get_access_area( $identifier )</code>
+
 
 = 1.2.8 =
+Fix: Post Edit save 404 behaviour
 Fix: Hide inacessible posts in Recent Comments widget
 Fix: Hide inacessible posts in Latest posts widget
 Fix: Hide inacessible posts in Archive widget
