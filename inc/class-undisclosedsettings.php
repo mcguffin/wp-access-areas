@@ -160,7 +160,7 @@ class UndisclosedSettings {
 				?><td><?php
 					$action = 'post_view_cap';
 					$cap = isset($option_values[$post_type][$action] )?$option_values[$post_type][$action] : 'exist';
-					if ( $post_type_object->public )
+					if ( $post_type_object->public || $post_type_object->show_ui )
 						UndisclosedEditPost::access_area_dropdown(  $roles , $groups , 
 							wpaa_sanitize_access_cap( $cap ) , 
 							"wpaa_default_caps[$post_type][$action]"  );

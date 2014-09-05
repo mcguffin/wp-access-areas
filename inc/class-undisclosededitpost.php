@@ -245,7 +245,7 @@ class UndisclosedEditPost {
 			}
 		
 			?><option value="exist" <?php selected($selected_cap , 'exist') ?>><?php _e( 'WordPress default' , 'wpundisclosed' ) ?></option><?php
-			if ( strpos( 'post_edit_cap' , $fieldname ) !== false ) {
+			if ( strpos( $fieldname , 'post_edit_cap' ) === false ) {
 				?><option value="read" <?php selected($selected_cap , 'read') ?>><?php _e( 'Logged in Users' , 'wpundisclosed' ) ?></option><?php
 			}
 			
