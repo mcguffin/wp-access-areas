@@ -54,12 +54,17 @@ class UndisclosedSettings {
 
 		add_settings_section('wpaa_posts_section', __('Posts defaults','wpundisclosed'), '__return_false', 'wpaa');
 		add_settings_field('wpaa_default_post_status', __('Default Post Status','wpundisclosed'), array( __CLASS__ , 'select_post_status'), 'wpaa', 'wpaa_posts_section');
-		add_settings_field('wpaa_default_view_cap', __('Who can read','wpundisclosed'), array( __CLASS__ , 'select_default_cap'), 'wpaa', 'wpaa_posts_section','wpaa_default_view_cap');
-		add_settings_field('wpaa_default_edit_cap', __('Who can edit','wpundisclosed'), array( __CLASS__ , 'select_default_cap'), 'wpaa', 'wpaa_posts_section','wpaa_default_edit_cap');
-		add_settings_field('wpaa_default_comment_cap', __('Who can comment','wpundisclosed'), array( __CLASS__ , 'select_default_cap'), 'wpaa', 'wpaa_posts_section','wpaa_default_comment_cap');
+
+		add_settings_section('wpaa_post_access_section', __('Access Defaults for new Posts','wpundisclosed'), array( __CLASS__ , 'post_access_section_intro' ), 'wpaa');
+		add_settings_field('wpaa_default_view_cap', __('Who can read','wpundisclosed'), array( __CLASS__ , 'select_default_cap'), 'wpaa', 'wpaa_post_access_section','wpaa_default_view_cap');
+		add_settings_field('wpaa_default_edit_cap', __('Who can edit','wpundisclosed'), array( __CLASS__ , 'select_default_cap'), 'wpaa', 'wpaa_post_access_section','wpaa_default_edit_cap');
+		add_settings_field('wpaa_default_comment_cap', __('Who can comment','wpundisclosed'), array( __CLASS__ , 'select_default_cap'), 'wpaa', 'wpaa_post_access_section','wpaa_default_comment_cap');
 	}
 	static function main_section_intro() {
 		?><p class="small description"><?php _e('You can also set these Options for each post individually.' , 'wpundisclosed' ); ?></p><?php
+	}
+	static function post_access_section_intro() {
+		?><p class="small description"><?php _e('Default settings for newly created posts.' , 'wpundisclosed' ); ?></p><?php
 	}
 	static function settings_page() {
 		/*

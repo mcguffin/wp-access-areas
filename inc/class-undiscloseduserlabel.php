@@ -132,13 +132,13 @@ class UndisclosedUserlabel {
 		
 		// set back options
 		if ( get_option('wpaa_default_view_cap') == $userlabel->capability )
-			set_option( 'wpaa_default_view_cap' , 'exist' );
+			update_option( 'wpaa_default_view_cap' , 'exist' );
 			
 		if ( get_option('wpaa_default_edit_cap') == $userlabel->capability )
-			set_option( 'wpaa_default_edit_cap' , 'exist' );
+			update_option( 'wpaa_default_edit_cap' , 'exist' );
 			
 		if ( get_option('wpaa_default_comment_cap') == $userlabel->capability )
-			set_option( 'wpaa_default_comment_cap' , 'exist' );
+			update_option( 'wpaa_default_comment_cap' , 'exist' );
 		
 		if ( is_multisite() )
 			$current_blog_id = get_current_blog_id();
