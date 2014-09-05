@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WordPress Access Areas v1.2.6\n"
+"Project-Id-Version: WordPress Access Areas v1.2.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-08-09 13:52:38+0000\n"
+"PO-Revision-Date: 2014-09-05 14:27:21+0000\n"
 "Last-Translator: admin <joern@flyingletters.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -27,14 +27,14 @@ msgid "Manage Access Areas"
 msgstr "Zugangsbereiche verwalten"
 
 #: inc/class-undisclosedcaps.php:28
-#: inc/class-undisclosedusers.php:244
-#: inc/class-undisclosedusers.php:383
+#: inc/class-undisclosedusers.php:251
+#: inc/class-undisclosedusers.php:390
 #@ wpundisclosed
 msgid "Access Areas"
 msgstr "Zugangsbereiche"
 
 #: inc/class-undisclosedcaps.php:35
-#: inc/class-undisclosedusers.php:232
+#: inc/class-undisclosedusers.php:233
 #@ wpundisclosed
 msgid "You do not have permission to do this."
 msgstr "Sie haben nicht die erforderlichen Rechte."
@@ -99,76 +99,77 @@ msgid "An Access Area with that Name already exists."
 msgstr "Ein Zugangsbereich existiert schon unter diesem Namen."
 
 #: inc/class-undisclosedcaps.php:199
-#: inc/class-undisclosedusers.php:312
+#: inc/class-undisclosedusers.php:319
 #@ wpundisclosed
 msgctxt "access area"
 msgid "Add New"
 msgstr "Erstellen"
 
 #: inc/class-undisclosededitpost.php:80
-#: inc/class-undisclosededitpost.php:345
+#: inc/class-undisclosededitpost.php:361
 #@ wpundisclosed
 msgid "Access"
 msgstr "Zugang"
 
-#: inc/class-undisclosededitpost.php:232
+#: inc/class-undisclosededitpost.php:244
 #@ wpundisclosed
 msgid "WordPress default"
 msgstr "WordPress Standard"
 
-#: inc/class-undisclosededitpost.php:403
-#: inc/class-undisclosededitpost.php:409
+#: inc/class-undisclosededitpost.php:419
+#: inc/class-undisclosededitpost.php:425
 #@ wpundisclosed
 msgid "Blog users"
 msgstr "Blog-Benutzer"
 
-#: inc/class-undisclosededitpost.php:237
+#: inc/class-undisclosededitpost.php:249
 #@ wpundisclosed
 msgid "WordPress roles"
 msgstr "WordPress Rollen"
 
-#: inc/class-undisclosededitpost.php:184
+#: inc/class-undisclosededitpost.php:196
+#: inc/class-undisclosedsettings.php:61
 #@ wpundisclosed
 msgid "Who can comment:"
 msgstr "Wer darf kommentieren:"
 
-#: inc/class-undisclosededitpost.php:390
+#: inc/class-undisclosededitpost.php:406
 #@ wpundisclosed
 msgid "Visible to"
 msgstr "Sichtbar für"
 
-#: inc/class-undisclosededitpost.php:403
-#: inc/class-undisclosededitpost.php:409
+#: inc/class-undisclosededitpost.php:419
+#: inc/class-undisclosededitpost.php:425
 #@ wpundisclosed
 msgid "Everybody"
 msgstr "Jeder"
 
-#: inc/class-undiscloseduserlabel.php:74
+#: inc/class-undiscloseduserlabel.php:76
 #@ wpundisclosed
 msgid "(Network)"
 msgstr "(Netzwerk)"
 
-#: inc/class-undisclosedusers.php:257
+#: inc/class-undisclosedusers.php:264
 #@ wpundisclosed
 msgid "Grant Network-Wide Access"
 msgstr "Netzwerk-Zugang gewähren"
 
-#: inc/class-undisclosedusers.php:250
+#: inc/class-undisclosedusers.php:257
 #@ wpundisclosed
 msgid "Grant Access"
 msgstr "Zugang gewähren"
 
-#: inc/class-undisclosedusers.php:331
+#: inc/class-undisclosedusers.php:338
 #@ wpundisclosed
 msgid "Access Areas:"
 msgstr "Zugangsbereiche:"
 
-#: inc/class-undisclosedusers.php:343
+#: inc/class-undisclosedusers.php:350
 #@ default
 msgid "(None)"
 msgstr ""
 
-#: inc/class-undisclosedusers.php:395
+#: inc/class-undisclosedusers.php:402
 #@ default
 msgid "Everywhere"
 msgstr ""
@@ -183,7 +184,7 @@ msgstr "Name"
 msgid "Scope"
 msgstr "Gültigkeitsbereich"
 
-#: inc/class-undisclosedusers.php:365
+#: inc/class-undisclosedusers.php:372
 #: inc/class-userlabel_list_table.php:83
 #@ wpundisclosed
 msgid "Network"
@@ -201,17 +202,19 @@ msgstr ""
 msgid "Could not find the specified Access Area."
 msgstr "Der angegebene Zugangsbereich konnte nicht gefunden werden."
 
-#: inc/class-undisclosededitpost.php:246
+#: inc/class-undisclosededitpost.php:258
 #@ wpundisclosed
 msgid "Users with Access to"
 msgstr "Benutzer mit Zugang zu:"
 
-#: inc/class-undisclosededitpost.php:168
+#: inc/class-undisclosededitpost.php:180
+#: inc/class-undisclosedsettings.php:59
 #@ wpundisclosed
 msgid "Who can read:"
 msgstr "Wer darf lesen:"
 
-#: inc/class-undisclosededitpost.php:176
+#: inc/class-undisclosededitpost.php:188
+#: inc/class-undisclosedsettings.php:60
 #@ wpundisclosed
 msgid "Who can edit:"
 msgstr "Wer darf bearbeiten:"
@@ -240,12 +243,12 @@ msgstr "Fine-Tuning für Ihre WordPress-Inhalte. Definieren Sie Zugangsbereiche 
 msgid "https://github.com/mcguffin/"
 msgstr ""
 
-#: inc/class-undisclosededitpost.php:234
+#: inc/class-undisclosededitpost.php:246
 #@ wpundisclosed
 msgid "Logged in Users"
 msgstr "Eingeloggte Benutzer"
 
-#: inc/class-undisclosededitpost.php:391
+#: inc/class-undisclosededitpost.php:407
 #@ wpundisclosed
 msgid "Commentable to"
 msgstr "Kommentierbar"
@@ -266,29 +269,29 @@ msgstr "Ungenügende Rechte"
 msgid "Access Area exists."
 msgstr "Zugangsbereich existiert."
 
-#: inc/class-undisclosedusers.php:314
+#: inc/class-undisclosedusers.php:321
 #@ default
 msgid "+"
 msgstr ""
 
-#: inc/class-undisclosededitpost.php:352
-#: inc/class-undisclosededitpost.php:361
-#: inc/class-undisclosededitpost.php:370
+#: inc/class-undisclosededitpost.php:368
+#: inc/class-undisclosededitpost.php:377
+#: inc/class-undisclosededitpost.php:386
 #@ default
 msgid "&mdash; No Change &mdash;"
 msgstr ""
 
-#: inc/class-undisclosededitpost.php:350
+#: inc/class-undisclosededitpost.php:366
 #@ wpundisclosed
 msgid "Read:"
 msgstr "Lesen:"
 
-#: inc/class-undisclosededitpost.php:359
+#: inc/class-undisclosededitpost.php:375
 #@ wpundisclosed
 msgid "Edit:"
 msgstr "Bearbeiten:"
 
-#: inc/class-undisclosededitpost.php:368
+#: inc/class-undisclosededitpost.php:384
 #@ wpundisclosed
 msgid "Comment:"
 msgstr "Kommentieren:"
@@ -298,63 +301,63 @@ msgstr "Kommentieren:"
 msgid "Behaviour"
 msgstr "Verhalten"
 
-#: inc/class-undisclosededitpost.php:281
+#: inc/class-undisclosededitpost.php:297
 #@ wpundisclosed
 msgid "Show 404"
 msgstr "404 Seite zeigen"
 
-#: inc/class-undisclosededitpost.php:285
+#: inc/class-undisclosededitpost.php:301
 #@ wpundisclosed
 msgid "Redirect to the fallback page."
 msgstr "Zur Ausweichseite weiterleiten"
 
-#: inc/class-undisclosededitpost.php:202
-#: inc/class-undisclosedsettings.php:74
+#: inc/class-undisclosededitpost.php:214
+#: inc/class-undisclosedsettings.php:109
 #@ wpundisclosed
 msgid "If somebody tries to view a restricted post directly:"
 msgstr "Wenn jemand versucht, eine Geschützte Seite direkt aufzurufen:"
 
-#: inc/class-undisclosededitpost.php:210
+#: inc/class-undisclosededitpost.php:222
 #@ wpundisclosed
 msgid "Fallback Page"
 msgstr "Ausweichseite"
 
-#: inc/class-undisclosededitpost.php:289
+#: inc/class-undisclosededitpost.php:305
 #@ wpundisclosed
 msgid "If not logged in, redirect to login. Otherwise redirect to the fallback page."
 msgstr "Zum Login weiterleiten. Wenn schon eingeloggt, zur Ausweichseite weiterleiten."
 
-#: inc/class-undisclosedsettings.php:33
+#: inc/class-undisclosedsettings.php:38
 #@ wpundisclosed
 msgid "Access Settings"
 msgstr "Zugriffs Optionen"
 
-#: inc/class-undisclosedsettings.php:40
+#: inc/class-undisclosedsettings.php:50
 #@ wpundisclosed
 msgid "Restricted Access Behavior"
 msgstr "Verhalten bei Beschränktem Zugriff"
 
-#: inc/class-undisclosedsettings.php:41
+#: inc/class-undisclosedsettings.php:52
 #@ wpundisclosed
 msgid "Default Behaviour"
 msgstr "Standardverhalten"
 
-#: inc/class-undisclosedsettings.php:42
+#: inc/class-undisclosedsettings.php:53
 #@ wpundisclosed
 msgid "Default Fallback Page"
 msgstr "Standard-Ausweichseite"
 
-#: inc/class-undisclosedsettings.php:59
+#: inc/class-undisclosedsettings.php:78
 #@ wpundisclosed
 msgid "Access Areas Settings"
 msgstr "Zugangsbereiche"
 
-#: inc/class-undisclosedsettings.php:48
+#: inc/class-undisclosedsettings.php:64
 #@ wpundisclosed
 msgid "You can also set these Options for each post individually."
 msgstr "Du kannst diese Einstellungen auch für jeden Beitrag einzeln vornehmen."
 
-#: inc/class-undisclosedsettings.php:66
+#: inc/class-undisclosedsettings.php:85
 #@ default
 msgid "Save Changes"
 msgstr ""
@@ -389,47 +392,47 @@ msgstr "Entziehen"
 msgid "You can&#8217;t edit that user."
 msgstr ""
 
-#: inc/class-undisclosedusers.php:360
+#: inc/class-undisclosedusers.php:367
 #@ wpundisclosed
 msgid "Local"
 msgstr "Lokal"
 
-#: inc/class-undisclosedsettings.php:17
+#: inc/class-undisclosedsettings.php:18
 #@ wpundisclosed
 msgid "Don‘t change"
 msgstr "Nicht ändern"
 
-#: inc/class-undisclosedsettings.php:18
+#: inc/class-undisclosedsettings.php:19
 #@ default
 msgid "Public"
 msgstr ""
 
-#: inc/class-undisclosedsettings.php:19
+#: inc/class-undisclosedsettings.php:20
 #@ default
 msgid "Private"
 msgstr ""
 
-#: inc/class-undisclosedsettings.php:20
+#: inc/class-undisclosedsettings.php:21
 #@ default
 msgid "Draft"
 msgstr ""
 
-#: inc/class-undisclosedsettings.php:21
+#: inc/class-undisclosedsettings.php:22
 #@ default
 msgid "Pending Review"
 msgstr ""
 
-#: inc/class-undisclosedsettings.php:44
+#: inc/class-undisclosedsettings.php:55
 #@ wpundisclosed
 msgid "Posts defaults"
 msgstr "Standardwerte für Beiträge"
 
-#: inc/class-undisclosedsettings.php:45
+#: inc/class-undisclosedsettings.php:56
 #@ wpundisclosed
 msgid "Default Post Status"
 msgstr "Beitragsstatus"
 
-#: inc/class-undisclosedsettings.php:99
+#: inc/class-undisclosedsettings.php:143
 #@ wpundisclosed
 msgid "Set post status of assigned posts after an Access Area has been deleted."
 msgstr "Beitragsstatus wenn ein Zugangsbereich gelöscht wird."
@@ -440,9 +443,24 @@ msgstr "Beitragsstatus wenn ein Zugangsbereich gelöscht wird."
 msgid "Jörn Lund"
 msgstr ""
 
+#: inc/class-undisclosededitpost.php:289
+#@ default
+msgid "Front page"
+msgstr ""
+
+#: inc/class-undisclosedsettings.php:58
+#@ wpundisclosed
+msgid "Access Defaults for new Posts"
+msgstr "Zugriffsstandard für neue Beiträge"
+
+#: inc/class-undisclosedsettings.php:67
+#@ wpundisclosed
+msgid "Default settings for newly created posts."
+msgstr "Standardeinstellungen für neue Beiträge."
+
 #. translators: plugin header field 'Version'
 #: wp-access-areas.php:0
 #@ wpundisclosed
-msgid "1.2.6"
+msgid "1.2.8"
 msgstr ""
 
