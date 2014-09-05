@@ -89,7 +89,7 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 
 == Changelog ==
 
-= 1.2.9 =
+= 1.3.0 =
  - WordPress 4.0 compatibility
  - Feature: Select default access for new posts.
  - Improvement: Cache DB results
