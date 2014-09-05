@@ -88,19 +88,17 @@ class UndisclosedEditPost {
 	// --------------------------------------------------
 	static function edit_post( $data, $postarr ) {
 
-		if ( $data['post_status'] == 'auto-draft' ) {
-			if ( ! $postarr['ID'] ) {
-				$data['post_view_cap']		= get_option( 'wpaa_default_view_cap' );
-				$data['post_edit_cap']		= get_option( 'wpaa_default_edit_cap' );
-				$data['post_comment_cap']	= get_option( 'wpaa_default_comment_cap' );
-			}
-			return $data;
-		}
 		$post_type_object 	= get_post_type_object($data["post_type"]);
-		if ( ! isset($data['ID']) && ( ! isset( $postarr['ID'] ) || ! $postarr['ID'] ) ) { // new post
-			echo "now post";exit();
-			
+		
+		if ( ! $postarr['ID'] ) {
+			$default_caps = get_option( 'wpaa_default_caps' );
+			$data['post_view_cap']		= wpaa_sanitize_access_cap( @$default_caps[$data["post_type"]]['view'] );
+			$data['post_edit_cap']		= wpaa_sanitize_access_cap( @$default_caps[$data["post_type"]]['edit'] );
+			$data['post_comment_cap']	= wpaa_sanitize_access_cap( @$default_caps[$data["post_type"]]['comment'] );
 		}
+		if ( $data['post_status'] == 'auto-draft' )
+			return $data;
+
 		
 		if (  ( $post_type_object->public || $post_type_object->show_ui ) && isset($postarr['post_view_cap']) && $postarr['post_view_cap'] )
 			$data['post_view_cap']	= $postarr['post_view_cap'];

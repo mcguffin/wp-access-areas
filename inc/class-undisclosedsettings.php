@@ -24,13 +24,17 @@ class UndisclosedSettings {
 		add_option( 'wpaa_default_behavior' , '404' );
 		add_option( 'wpaa_fallback_page' , 0 );
 		
-		add_option( 'wpaa_default_view_cap' , 'exist' );
-		add_option( 'wpaa_default_edit_cap' , 'exist' );
-		add_option( 'wpaa_default_comment_cap' , 'exist' );
+		add_option( 'wpaa_default_caps' , array( ) );
 
 		add_action( 'admin_menu', array( __CLASS__ , 'create_menu' ));
 		add_action( 'admin_init', array( __CLASS__ , 'register_settings' ) );
+
+		add_action( 'load-settings_page_wpaa_settings' , array( __CLASS__ , 'load_style' ) );
 	}
+	static function load_style() {
+		wp_enqueue_style( 'disclosure-admin' );
+	}
+
 	static function get_post_stati() {
 		return array_filter( array_keys( self::$post_stati ) );
 	}
@@ -43,9 +47,7 @@ class UndisclosedSettings {
 		register_setting( 'wpaa_settings' , 'wpaa_fallback_page' , array(__CLASS__,'sanitize_fallbackpage') );
 		register_setting( 'wpaa_settings' , 'wpaa_default_post_status' , array(__CLASS__,'sanitize_poststatus') );
 
-		register_setting( 'wpaa_settings' , 'wpaa_default_view_cap' , array(__CLASS__,'sanitize_access_cap') );
-		register_setting( 'wpaa_settings' , 'wpaa_default_edit_cap' , array(__CLASS__,'sanitize_access_cap') );
-		register_setting( 'wpaa_settings' , 'wpaa_default_comment_cap' , array(__CLASS__,'sanitize_access_cap') );
+		register_setting( 'wpaa_settings' , 'wpaa_default_caps' , array(__CLASS__,'sanitize_access_caps') );
 
 		add_settings_section('wpaa_main_section', __('Restricted Access Behavior','wpundisclosed'), array(__CLASS__,'main_section_intro'), 'wpaa');
 		
@@ -56,9 +58,7 @@ class UndisclosedSettings {
 		add_settings_field('wpaa_default_post_status', __('Default Post Status','wpundisclosed'), array( __CLASS__ , 'select_post_status'), 'wpaa', 'wpaa_posts_section');
 
 		add_settings_section('wpaa_post_access_section', __('Access Defaults for new Posts','wpundisclosed'), array( __CLASS__ , 'post_access_section_intro' ), 'wpaa');
-		add_settings_field('wpaa_default_view_cap', __('Who can read:','wpundisclosed'), array( __CLASS__ , 'select_default_cap'), 'wpaa', 'wpaa_post_access_section','wpaa_default_view_cap');
-		add_settings_field('wpaa_default_edit_cap', __('Who can edit:','wpundisclosed'), array( __CLASS__ , 'select_default_cap'), 'wpaa', 'wpaa_post_access_section','wpaa_default_edit_cap');
-		add_settings_field('wpaa_default_comment_cap', __('Who can comment:','wpundisclosed'), array( __CLASS__ , 'select_default_cap'), 'wpaa', 'wpaa_post_access_section','wpaa_default_comment_cap');
+		add_settings_field( 'wpaa_default_caps', __('Default Access:','wpundisclosed'), array( __CLASS__ , 'select_default_caps'), 'wpaa', 'wpaa_post_access_section');
 	}
 	static function main_section_intro() {
 		?><p class="small description"><?php _e('You can also set these Options for each post individually.' , 'wpundisclosed' ); ?></p><?php
@@ -88,8 +88,12 @@ class UndisclosedSettings {
 		</div>
 		<?php
 	}
-	static function select_default_cap( $option_name ){
-		$selected_cap = get_option( $option_name );
+	static function select_default_caps( ) {
+		$option_values = get_option('wpaa_default_caps');
+		$post_types = get_post_types(array(
+			'show_ui' => true,
+		));
+
 		global $wp_roles;
 		$roles = $wp_roles->get_names();
 		$user_role_caps = wpaa_get_user_role_caps();
@@ -99,10 +103,80 @@ class UndisclosedSettings {
 				$rolenames[$role] = $rolename;
 			}
 		}
-
-		$groups = UndisclosedUserlabel::get_label_array( );
 		
-		UndisclosedEditPost::access_area_dropdown(  $roles , $groups , $selected_cap , $option_name  );
+		$groups = UndisclosedUserlabel::get_label_array( );
+		?><table class="wp-list-table widefat set-default-caps"><?php
+			?><thead><?php
+				?><tr><?php
+				
+					?><th class="manage-column"><?php
+						_e('Post Types');
+					?></th><?php
+					?><th class="manage-column"><?php
+						_e('Reading');
+					?></th><?php
+					?><th class="manage-column"><?php
+						_e('Edit');
+					?></th><?php
+					?><th class="manage-column"><?php
+						_e('Post Comment');
+					?></th><?php
+				?></tr><?php
+			?></thead><?php
+			?><tfoot><?php
+				?><tr><?php
+				
+					?><th class="manage-column"><?php
+						_e('Post Types');
+					?></th><?php
+					?><th class="manage-column"><?php
+						_e('Reading');
+					?></th><?php
+					?><th class="manage-column"><?php
+						_e('Edit');
+					?></th><?php
+					?><th class="manage-column"><?php
+						_e('Post Comment');
+					?></th><?php
+				?></tr><?php
+			?></tfoot><?php
+			?><tbody><?php
+		$alternate = false;
+		foreach ( $post_types as $post_type ) {
+			$post_type_object = get_post_type_object( $post_type );
+			$alternate = !$alternate;
+			?><tr class="post-select <?php if ( $alternate ) echo "alternate" ?>"><?php
+				?><th><?php
+					echo $post_type_object->labels->name;
+				?></th><?php
+				?><td><?php
+					$action = 'view';
+					$cap = isset($option_values[$post_type][$action] )?$option_values[$post_type][$action] : 'exist';
+					if ( $post_type_object->public )
+						UndisclosedEditPost::access_area_dropdown(  $roles , $groups , 
+							wpaa_sanitize_access_cap( $cap ) , 
+							"wpaa_default_caps[$post_type][$action]"  );
+				?></td><?php
+				?><td><?php
+					$action = 'edit';
+					$cap = isset($option_values[$post_type][$action] )?$option_values[$post_type][$action] : 'exist';
+					UndisclosedEditPost::access_area_dropdown(  $roles , $groups , 
+						wpaa_sanitize_access_cap( $cap ) , 
+						"wpaa_default_caps[$post_type][$action]"  );
+				?></td><?php
+				?><td><?php
+					$action = 'comment';
+					$cap = isset($option_values[$post_type][$action] )?$option_values[$post_type][$action] : 'exist';
+					if ( post_type_supports( $post_type , 'comments' ) )
+						UndisclosedEditPost::access_area_dropdown(  $roles , $groups , 
+							wpaa_sanitize_access_cap( $cap ) , 
+							"wpaa_default_caps[$post_type][$action]"  );
+				?></td><?php
+			?></tr><?php
+		}
+			?></tbody><?php
+		?></table><?php
+		
 	}
 	static function select_behavior() {
 		$behavior = get_option('wpaa_default_behavior');
@@ -120,16 +194,22 @@ class UndisclosedSettings {
 	}
 	static function sanitize_fallbackpage($fallback_page_id) {
 		$page = get_post( $fallback_page_id );
-		if ( $page->post_status != 'publish' || $page->post_type != 'page' || $page->post_view_cap != 'exist' )
+		if ( !$page || $page->post_status != 'publish' || $page->post_type != 'page' || $page->post_view_cap != 'exist' )
 			$fallback_page_id = 0;
 		return $fallback_page_id;
 	}
-	static function sanitize_access_cap( $cap ) {
-		global $wp_roles;
-		if ( $cap == 'exist' || $wp_roles->is_role( $cap ) || wpaa_access_area_exists( $cap ) )
-			return $cap;
-		return 'exist';
-			
+	static function sanitize_access_caps( $caps ) {
+		$return_caps = array();
+		foreach ( $caps as $post_type => $post_type_caps ) {
+			/// check is_post_type()
+			if ( ! isset( $return_caps[$post_type] ) && post_type_exists( $post_type ) ) {
+				$return_caps[$post_type] = array();
+			}
+			foreach ($post_type_caps as $action => $cap ) {
+				$return_caps[$post_type][$action] = wpaa_sanitize_access_cap( $cap );
+			}
+		}
+		return $return_caps;
 	}
 	static function select_post_status() {
 		$default_post_status = get_option('wpaa_default_post_status');
