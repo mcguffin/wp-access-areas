@@ -58,21 +58,21 @@
 }
 
 
-.set-default-caps tfoot th,
-.set-default-caps thead th {
+#wpaa-options .set-default-caps tfoot th,
+#wpaa-options .set-default-caps thead th {
 	font-weight:400;
 	border-left-style:none;
 }
-.set-default-caps tfoot th:first-child,
-.set-default-caps thead th:first-child {
+#wpaa-options .set-default-caps tfoot th:first-child,
+#wpaa-options .set-default-caps thead th:first-child {
 	border-left-style:none;
 }
-.set-default-caps td {
+#wpaa-options .set-default-caps td {
 	font-weight:400;
 	padding:5px;
 	border-left:1px solid #ccc;
 }
-.set-default-caps th {
+#wpaa-options .set-default-caps th {
 	padding:5px 7px;
 }
 

@@ -77,7 +77,7 @@ class UndisclosedSettings {
 		<div class="wrap">
 			<h2><?php _e('Access Areas Settings','wpundisclosed') ?></h2>
 			
-			<form id="github-options" method="post" action="options.php">
+			<form id="wpaa-options" method="post" action="options.php">
 				<?php 
 					settings_fields( 'wpaa_settings' );
 				?>
