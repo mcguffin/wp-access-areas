@@ -152,7 +152,7 @@ class UndisclosedEditPost {
 	static function disclosure_box_info() {
 		global $wp_roles;
 		$post 				= get_post(get_the_ID());
-		var_dump($post);
+
 		$post_type_object 	= get_post_type_object($post->post_type);
 		$editing_cap 		= $post_type_object->cap->edit_posts;
 		
