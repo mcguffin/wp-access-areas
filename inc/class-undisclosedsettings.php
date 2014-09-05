@@ -110,7 +110,7 @@ class UndisclosedSettings {
 				?><tr><?php
 				
 					?><th class="manage-column"><?php
-						_e('Post Types');
+						_e('Post Type' , 'wpundisclosed' );
 					?></th><?php
 					?><th class="manage-column"><?php
 						_e('Reading');
@@ -127,7 +127,7 @@ class UndisclosedSettings {
 				?><tr><?php
 				
 					?><th class="manage-column"><?php
-						_e('Post Types');
+						_e('Post Type', 'wpundisclosed');
 					?></th><?php
 					?><th class="manage-column"><?php
 						_e('Reading');
