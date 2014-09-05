@@ -130,6 +130,16 @@ class UndisclosedUserlabel {
 		$query = $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_edit_cap='exist' WHERE post_edit_cap=%s" , $userlabel->capability ) ); // back to default
 		$query = $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_comment_cap='exist',comment_status='closed' WHERE post_comment_cap=%s" , $userlabel->capability ) ); // back to default
 		
+		// set back options
+		if ( get_option('wpaa_default_view_cap') == $userlabel->capability )
+			set_option( 'wpaa_default_view_cap' , 'exist' );
+			
+		if ( get_option('wpaa_default_edit_cap') == $userlabel->capability )
+			set_option( 'wpaa_default_edit_cap' , 'exist' );
+			
+		if ( get_option('wpaa_default_comment_cap') == $userlabel->capability )
+			set_option( 'wpaa_default_comment_cap' , 'exist' );
+		
 		if ( is_multisite() )
 			$current_blog_id = get_current_blog_id();
 

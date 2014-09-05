@@ -24,6 +24,10 @@ class UndisclosedSettings {
 		add_option( 'wpaa_default_behavior' , '404' );
 		add_option( 'wpaa_fallback_page' , 0 );
 		
+		add_option( 'wpaa_default_view_cap' , 'exist' );
+		add_option( 'wpaa_default_edit_cap' , 'exist' );
+		add_option( 'wpaa_default_comment_cap' , 'exist' );
+
 		add_action( 'admin_menu', array( __CLASS__ , 'create_menu' ));
 		add_action( 'admin_init', array( __CLASS__ , 'register_settings' ) );
 	}
@@ -39,12 +43,20 @@ class UndisclosedSettings {
 		register_setting( 'wpaa_settings' , 'wpaa_fallback_page' , array(__CLASS__,'sanitize_fallbackpage') );
 		register_setting( 'wpaa_settings' , 'wpaa_default_post_status' , array(__CLASS__,'sanitize_poststatus') );
 
+		register_setting( 'wpaa_settings' , 'wpaa_default_view_cap' , array(__CLASS__,'sanitize_access_cap') );
+		register_setting( 'wpaa_settings' , 'wpaa_default_edit_cap' , array(__CLASS__,'sanitize_access_cap') );
+		register_setting( 'wpaa_settings' , 'wpaa_default_comment_cap' , array(__CLASS__,'sanitize_access_cap') );
+
 		add_settings_section('wpaa_main_section', __('Restricted Access Behavior','wpundisclosed'), array(__CLASS__,'main_section_intro'), 'wpaa');
+		
 		add_settings_field('wpaa_default_behavior', __('Default Behaviour','wpundisclosed'), array( __CLASS__ , 'select_behavior'), 'wpaa', 'wpaa_main_section');
 		add_settings_field('wpaa_fallback_page', __('Default Fallback Page','wpundisclosed'), array( __CLASS__ , 'select_fallback_page'), 'wpaa', 'wpaa_main_section');
 
 		add_settings_section('wpaa_posts_section', __('Posts defaults','wpundisclosed'), '__return_false', 'wpaa');
 		add_settings_field('wpaa_default_post_status', __('Default Post Status','wpundisclosed'), array( __CLASS__ , 'select_post_status'), 'wpaa', 'wpaa_posts_section');
+		add_settings_field('wpaa_default_view_cap', __('Who can read','wpundisclosed'), array( __CLASS__ , 'select_default_cap'), 'wpaa', 'wpaa_posts_section','wpaa_default_view_cap');
+		add_settings_field('wpaa_default_edit_cap', __('Who can edit','wpundisclosed'), array( __CLASS__ , 'select_default_cap'), 'wpaa', 'wpaa_posts_section','wpaa_default_edit_cap');
+		add_settings_field('wpaa_default_comment_cap', __('Who can comment','wpundisclosed'), array( __CLASS__ , 'select_default_cap'), 'wpaa', 'wpaa_posts_section','wpaa_default_comment_cap');
 	}
 	static function main_section_intro() {
 		?><p class="small description"><?php _e('You can also set these Options for each post individually.' , 'wpundisclosed' ); ?></p><?php
@@ -71,6 +83,22 @@ class UndisclosedSettings {
 		</div>
 		<?php
 	}
+	static function select_default_cap( $option_name ){
+		$selected_cap = get_option( $option_name );
+		global $wp_roles;
+		$roles = $wp_roles->get_names();
+		$user_role_caps = wpaa_get_user_role_caps();
+		$rolenames = array();
+		foreach ( $roles as $role => $rolename ) {
+			if ( wpaa_user_can_role( $role , $user_role_caps ) ) {
+				$rolenames[$role] = $rolename;
+			}
+		}
+
+		$groups = UndisclosedUserlabel::get_label_array( );
+		
+		UndisclosedEditPost::access_area_dropdown(  $roles , $groups , $selected_cap , $option_name  );
+	}
 	static function select_behavior() {
 		$behavior = get_option('wpaa_default_behavior');
 		?><p><?php _e('If somebody tries to view a restricted post directly:' , 'wpundisclosed' ); ?></p><?php
@@ -90,6 +118,13 @@ class UndisclosedSettings {
 		if ( $page->post_status != 'publish' || $page->post_type != 'page' || $page->post_view_cap != 'exist' )
 			$fallback_page_id = 0;
 		return $fallback_page_id;
+	}
+	static function sanitize_access_cap( $cap ) {
+		global $wp_roles;
+		if ( $cap == 'exist' || $wp_roles->is_role( $cap ) || wpaa_access_area_exists( $cap ) )
+			return $cap;
+		return 'exist';
+			
 	}
 	static function select_post_status() {
 		$default_post_status = get_option('wpaa_default_post_status');

@@ -87,9 +87,20 @@ class UndisclosedEditPost {
 	// saving post
 	// --------------------------------------------------
 	static function edit_post( $data, $postarr ) {
-		if ( $data['post_status'] == 'auto-draft' )
+
+		if ( $data['post_status'] == 'auto-draft' ) {
+			if ( ! $postarr['ID'] ) {
+				$data['post_view_cap']		= get_option( 'wpaa_default_view_cap' );
+				$data['post_edit_cap']		= get_option( 'wpaa_default_edit_cap' );
+				$data['post_comment_cap']	= get_option( 'wpaa_default_comment_cap' );
+			}
 			return $data;
+		}
 		$post_type_object 	= get_post_type_object($data["post_type"]);
+		if ( ! isset($data['ID']) && ( ! isset( $postarr['ID'] ) || ! $postarr['ID'] ) ) { // new post
+			echo "now post";exit();
+			
+		}
 		
 		if (  ( $post_type_object->public || $post_type_object->show_ui ) && isset($postarr['post_view_cap']) && $postarr['post_view_cap'] )
 			$data['post_view_cap']	= $postarr['post_view_cap'];
@@ -141,6 +152,7 @@ class UndisclosedEditPost {
 	static function disclosure_box_info() {
 		global $wp_roles;
 		$post 				= get_post(get_the_ID());
+		var_dump($post);
 		$post_type_object 	= get_post_type_object($post->post_type);
 		$editing_cap 		= $post_type_object->cap->edit_posts;
 		
