@@ -98,10 +98,9 @@ class UndisclosedSettings {
 		$roles = $wp_roles->get_names();
 		$user_role_caps = wpaa_get_user_role_caps();
 		$rolenames = array();
+		$edit_rolenames = array();
 		foreach ( $roles as $role => $rolename ) {
-			if ( wpaa_user_can_role( $role , $user_role_caps ) ) {
-				$rolenames[$role] = $rolename;
-			}
+			$rolenames[$role] = $rolename;
 		}
 		
 		$groups = UndisclosedUserlabel::get_label_array( );
@@ -144,13 +143,22 @@ class UndisclosedSettings {
 		$alternate = false;
 		foreach ( $post_types as $post_type ) {
 			$post_type_object = get_post_type_object( $post_type );
+			$editing_cap = $post_type_object->cap->edit_posts;
+			
 			$alternate = !$alternate;
+			$edit_rolenames = array();
+			foreach ( $roles as $role => $rolename ) {
+				if ( get_role( $role )->has_cap( $editing_cap ) ) {
+					$edit_rolenames[$role] = $rolename;
+				}
+			}
+			
 			?><tr class="post-select <?php if ( $alternate ) echo "alternate" ?>"><?php
 				?><th><?php
 					echo $post_type_object->labels->name;
 				?></th><?php
 				?><td><?php
-					$action = 'view';
+					$action = 'post_view_cap';
 					$cap = isset($option_values[$post_type][$action] )?$option_values[$post_type][$action] : 'exist';
 					if ( $post_type_object->public )
 						UndisclosedEditPost::access_area_dropdown(  $roles , $groups , 
@@ -158,14 +166,14 @@ class UndisclosedSettings {
 							"wpaa_default_caps[$post_type][$action]"  );
 				?></td><?php
 				?><td><?php
-					$action = 'edit';
+					$action = 'post_edit_cap';
 					$cap = isset($option_values[$post_type][$action] )?$option_values[$post_type][$action] : 'exist';
-					UndisclosedEditPost::access_area_dropdown(  $roles , $groups , 
+					UndisclosedEditPost::access_area_dropdown(  $edit_rolenames , $groups , 
 						wpaa_sanitize_access_cap( $cap ) , 
 						"wpaa_default_caps[$post_type][$action]"  );
 				?></td><?php
 				?><td><?php
-					$action = 'comment';
+					$action = 'post_comment_cap';
 					$cap = isset($option_values[$post_type][$action] )?$option_values[$post_type][$action] : 'exist';
 					if ( post_type_supports( $post_type , 'comments' ) )
 						UndisclosedEditPost::access_area_dropdown(  $roles , $groups , 

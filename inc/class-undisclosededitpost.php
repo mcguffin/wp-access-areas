@@ -91,10 +91,15 @@ class UndisclosedEditPost {
 		$post_type_object 	= get_post_type_object($data["post_type"]);
 		
 		if ( ! $postarr['ID'] ) {
-			$default_caps = get_option( 'wpaa_default_caps' );
-			$data['post_view_cap']		= wpaa_sanitize_access_cap( @$default_caps[$data["post_type"]]['view'] );
-			$data['post_edit_cap']		= wpaa_sanitize_access_cap( @$default_caps[$data["post_type"]]['edit'] );
-			$data['post_comment_cap']	= wpaa_sanitize_access_cap( @$default_caps[$data["post_type"]]['comment'] );
+			$caps = array( 
+				'post_view_cap' => 'exist',
+				'post_edit_cap' => 'exist',
+				'post_comment_cap' => 'exist',
+			);
+			
+			if ( ( $default_caps = get_option( 'wpaa_default_caps' )) && isset( $default_caps[$data["post_type"]] ) )
+				$caps = wp_parse_args( $default_caps[$data["post_type"]] , $caps );
+			$data = wp_parse_args( $data , $caps );
 		}
 		if ( $data['post_status'] == 'auto-draft' )
 			return $data;
@@ -234,7 +239,7 @@ class UndisclosedEditPost {
 		if ( ! $selected_cap )
 			$selected_cap = 'exist';
 		?>
-		<select id="<?php echo $fieldname ?>-select" name="<?php echo $fieldname ?>"><?php
+		<select id="<?php echo sanitize_title($fieldname) ?>-select" name="<?php echo $fieldname ?>"><?php
 			if ( ! is_null( $first_item_value ) && ! is_null( $first_item_label ) ) {
 				?><option value="<?php $first_item_value ?>"><?php echo $first_item_label ?></option><?php
 			}

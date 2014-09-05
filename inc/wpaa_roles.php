@@ -34,7 +34,7 @@ function wpaa_get_access_area( $identifier ) {
 
 function wpaa_sanitize_access_cap( $cap ) {
 	global $wp_roles;
-	if ( $cap == 'exist' || $wp_roles->is_role( $cap ) || wpaa_access_area_exists( $cap ) )
+	if ( $cap == 'exist' || $cap == 'read' || $wp_roles->is_role( $cap ) || wpaa_access_area_exists( $cap ) )
 		return $cap;
 	return 'exist';
 }
