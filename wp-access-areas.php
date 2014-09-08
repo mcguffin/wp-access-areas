@@ -43,12 +43,12 @@ function is_accessareas_active_for_network( ) {
 	return is_plugin_active_for_network( basename(dirname(__FILE__)).'/'.basename(__FILE__) );
 }
 
+// autoload
 function wpaa_autoload( $classname ) {
 	$class_path = dirname(__FILE__). sprintf('/inc/class-%s.php' , strtolower( $classname ) ) ; 
 	if ( file_exists($class_path) )
 		require_once $class_path;
 }
-
 spl_autoload_register( 'wpaa_autoload' );
 
 // function library
@@ -57,8 +57,6 @@ require_once( dirname(__FILE__). '/inc/wpaa_roles.php' );
 // common plugin functions
 UndisclosedCore::init();
 UndisclosedPosts::init();
-
-//require_once( dirname(__FILE__). '/inc/class-undisclosedcore.php' );
 
 
 // installation hooks
@@ -73,7 +71,6 @@ function accessareas_uninstall() {
 }
 
 // access area data model 
-//require_once( dirname(__FILE__). '/inc/class-undiscloseduserlabel.php' );
 if ( is_admin() ) {
 	UndisclosedCaps::init();
 	UndisclosedUsers::init();
