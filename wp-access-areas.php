@@ -43,7 +43,11 @@ function is_accessareas_active_for_network( ) {
 	return is_plugin_active_for_network( basename(dirname(__FILE__)).'/'.basename(__FILE__) );
 }
 
-// autoload
+/**
+ * Autoload WPAA Classes
+ *
+ * @param string $classname
+ */
 function wpaa_autoload( $classname ) {
 	$class_path = dirname(__FILE__). sprintf('/inc/class-%s.php' , strtolower( $classname ) ) ; 
 	if ( file_exists($class_path) )
@@ -59,13 +63,23 @@ UndisclosedCore::init();
 UndisclosedPosts::init();
 
 
-// installation hooks
+/**
+ * Activation hook
+ */
 function accessareas_activate() {
 	UndisclosedInstall::activate();
 }
+
+/**
+ * Deactivation hook
+ */
 function accessareas_deactivate() {
 	UndisclosedInstall::deactivate();
 }
+
+/**
+ * Uninstall hook
+ */
 function accessareas_uninstall() {
 	UndisclosedInstall::uninstall();
 }

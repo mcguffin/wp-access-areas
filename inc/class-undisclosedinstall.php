@@ -68,6 +68,7 @@ class UndisclosedInstall {
 	function activate_for_blog( $blog_id ) {
 		switch_to_blog( $blog_id );
 		self::_install_posts_table( );
+		self::install_role_caps();
 		restore_current_blog();
 	}
 	private static function _remove_options() {
