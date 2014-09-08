@@ -62,16 +62,13 @@ UndisclosedPosts::init();
 
 
 // installation hooks
-function accessareas_activate(){
-	require_once( dirname(__FILE__). '/inc/class-undisclosedinstall.php' );
+function accessareas_activate() {
 	UndisclosedInstall::activate();
 }
 function accessareas_deactivate() {
-	require_once( dirname(__FILE__). '/inc/class-undisclosedinstall.php' );
 	UndisclosedInstall::deactivate();
 }
-function accessareas_uninstall(){
-	require_once( dirname(__FILE__). '/inc/class-undisclosedinstall.php' );
+function accessareas_uninstall() {
 	UndisclosedInstall::uninstall();
 }
 

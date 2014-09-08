@@ -95,9 +95,6 @@
 	box-shadow: 3px 3px 10px #666;
 	-ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=10, Direction=135, Color='#6666')";
 
-
-
-
 	border-width:0;
 	-webkit-box-shadow: none;
 	-moz-box-shadow: none;
@@ -154,10 +151,7 @@
 	width:auto;
 }
 
-
-
-
-/* axax add */
+/* ajax add */
 .cap-add {
 	width:9em;
 }

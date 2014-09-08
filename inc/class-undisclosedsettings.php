@@ -23,9 +23,9 @@ class UndisclosedSettings {
 			'pending' => __('Pending Review'),
 		);
 		self::$role_caps = array( 
-			'wpaa_set_view_cap'		=> __( 'Assign View Access' , 'wpundisclosed'),
-			'wpaa_set_edit_cap'		=> __( 'Assign Edit Access' , 'wpundisclosed'),
-			'wpaa_set_comment_cap'	=> __( 'Assign Comment Access' , 'wpundisclosed'),
+			'wpaa_set_view_cap'		=> __( 'Change View Access' , 'wpundisclosed'),
+			'wpaa_set_edit_cap'		=> __( 'Change Edit Access' , 'wpundisclosed'),
+			'wpaa_set_comment_cap'	=> __( 'Change Comment Access' , 'wpundisclosed'),
 		);
 		add_option( 'wpaa_default_behavior' , '404' );
 		add_option( 'wpaa_fallback_page' , 0 );
@@ -276,7 +276,7 @@ class UndisclosedSettings {
 			?><button name="wpaa_enable_assign_cap" value="0" type="submit" class="button-secondary" /><?php _e('Disable Access Area Capabilities' , 'wpundisclosed'); ?></button><?php
 		} else {
 			?><button name="wpaa_enable_assign_cap" value="1" type="submit" class="button-secondary" /><?php _e('Enable Access Area Capabilities' , 'wpundisclosed'); ?></button><?php
-			?><p class="description"><?php _e('By default everybody who can publish an entry can also edit it‘s access properties such as ‘Who can view’ or ‘Who can edit’. To enable or disable access editing for certain roles click on the button above.','wpundisclosed') ?></p><?php
+			?><p class="description"><?php _e('By default everybody who can publish an entry can also edit access properties such as ‘Who can view’ or ‘Who can edit’. If you want to adjust access editing for certain roles click on the button above.','wpundisclosed') ?></p><?php
 		}
 	}
 	static function select_behavior() {

@@ -92,6 +92,7 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 = 1.3.0 =
  - WordPress 4.0 compatibility
  - Feature: Select default access for new posts.
+ - Feature: Role Caps. Set which roles can edit post access properties
  - Improvement: Cache DB results
  - Plugin API: Added filter: <code>wpaa_update_access_area_data</code>
  - Plugin API: Added actions: <code>wpaa_grant_access</code>, <code>wpaa_grant_{$wpaa_capability}</code>, <code>wpaa_revoke_access</code>, <code>wpaa_revoke_{$wpaa_capability}</code>, <code>wpaa_create_access_area</code>, <code>wpaa_update_access_area</code>

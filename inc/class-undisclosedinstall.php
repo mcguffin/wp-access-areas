@@ -6,7 +6,7 @@
 
 // ----------------------------------------
 //	This class provides install and uninstall 
-//	routines for the WP undisclosed plugin.
+//	routines for the WP Access Areas plugin.
 // ----------------------------------------
 
 if ( ! class_exists('UndisclosedInstall') ) :
@@ -21,7 +21,7 @@ class UndisclosedInstall {
 
 		if ( ! current_user_can( 'activate_plugins' ) )
 			return;
-
+		
 		self::_install_capabilities_table( );
 		
 		if ( is_multisite() && is_network_admin() ) {
@@ -29,9 +29,11 @@ class UndisclosedInstall {
 			foreach ( $blogids as $blog_id) {
 				switch_to_blog($blog_id);
 				self::_install_posts_table( );
+				self::install_role_caps();
 			}
 		} else {
 			self::_install_posts_table( );
+			self::install_role_caps();
 		}
 	}
 	static function deactivate( $networkwide ) {
@@ -53,11 +55,13 @@ class UndisclosedInstall {
 				switch_to_blog($blog_id);
 				self::_uninstall_posts_table( );
 				self::_remove_options();
+				self::uninstall_role_caps();
 				restore_current_blog();
 			}
 		} else {
 			self::_uninstall_posts_table( );
 			self::_remove_options();
+			self::uninstall_role_caps();
 		}
 	}
 	
@@ -67,9 +71,11 @@ class UndisclosedInstall {
 		restore_current_blog();
 	}
 	private static function _remove_options() {
-		delete_option('wpaa_default_behavior' );
-		delete_option('wpaa_fallback_page' );
-		delete_option('wpaa_default_post_status' );
+		delete_option( 'wpaa_default_behavior' );
+		delete_option( 'wpaa_fallback_page' );
+		delete_option( 'wpaa_default_post_status' );
+		delete_option( 'wpaa_default_caps' );
+		delete_option( 'wpaa_enable_assign_cap' );
 	}
 
 	// --------------------------------------------------
