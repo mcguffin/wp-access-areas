@@ -76,11 +76,13 @@ class UndisclosedEditPost {
 	// --------------------------------------------------
 	static function add_meta_boxes() {
 		global $wp_post_types;
-		foreach ( array_keys($wp_post_types) as $post_type ) {
-			add_meta_box( 'post-disclosure' , __('Access','wpundisclosed') , array(__CLASS__,'disclosure_box_info') , $post_type , 'side' , 'high' );
-			$post_type_object 	= get_post_type_object( $post_type );
-			if ( $post_type_object->public && $post_type != 'attachment' )
-				add_meta_box( 'post-disclosure-behavior' , __('Behaviour','wpundisclosed') , array(__CLASS__,'disclosure_box_behavior') , $post_type , 'side' , 'high' );
+		if ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_view_cap' ) || current_user_can( 'wpaa_set_edit_cap' ) || current_user_can( 'wpaa_set_comment_cap' ) ) {
+			foreach ( array_keys($wp_post_types) as $post_type ) {
+				add_meta_box( 'post-disclosure' , __('Access','wpundisclosed') , array(__CLASS__,'disclosure_box_info') , $post_type , 'side' , 'high' );
+				$post_type_object 	= get_post_type_object( $post_type );
+				if ( $post_type_object->public && $post_type != 'attachment' )
+					add_meta_box( 'post-disclosure-behavior' , __('Behaviour','wpundisclosed') , array(__CLASS__,'disclosure_box_behavior') , $post_type , 'side' , 'high' );
+			}
 		}
 	}
 	// --------------------------------------------------
@@ -178,23 +180,23 @@ class UndisclosedEditPost {
 			}
 		}
 		
-		if ( ( $post_type_object->public || $post_type_object->show_ui ) && $post->post_type != 'attachment' ) { 
+		if ( ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_view_cap' ) ) && ( $post_type_object->public || $post_type_object->show_ui ) && $post->post_type != 'attachment' ) { 
 			?><div class="disclosure-view-select misc-pub-section">
 				<label for="post_view_cap-select"><strong><?php _e( 'Who can read:' , 'wpundisclosed') ?></strong></label><br />
 				<?php 
 					self::access_area_dropdown( $rolenames , $groups , $post->post_view_cap , 'post_view_cap' );
 				?>
 			</div><?php
-			
 		}
-		?><div class="disclosure-edit-select misc-pub-section">
-			<label for="post_edit_cap-select"><strong><?php _e( 'Who can edit:' , 'wpundisclosed') ?></strong></label><br />
-			<?php 
-				self::access_area_dropdown( $edit_rolenames , $groups , $post->post_edit_cap , 'post_edit_cap' );
-			?>
-		</div><?php
-		
-		if ( post_type_supports( $post->post_type , 'comments' ) && wpaa_user_can( $post->post_comment_cap ) ) {
+		if ( ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_edit_cap' ) ) ) {
+			?><div class="disclosure-edit-select misc-pub-section">
+				<label for="post_edit_cap-select"><strong><?php _e( 'Who can edit:' , 'wpundisclosed') ?></strong></label><br />
+				<?php 
+					self::access_area_dropdown( $edit_rolenames , $groups , $post->post_edit_cap , 'post_edit_cap' );
+				?>
+			</div><?php
+		}
+		if ( ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_comment_cap' ) ) && post_type_supports( $post->post_type , 'comments' ) && wpaa_user_can( $post->post_comment_cap ) ) {
 			?><div class="disclosure-comment-select misc-pub-section">
 				<label for="post_comment_cap-select"><strong><?php _e( 'Who can comment:' , 'wpundisclosed') ?></strong></label><br />
 				<?php 
@@ -434,5 +436,4 @@ class UndisclosedEditPost {
 	}
 
 }
-UndisclosedEditPost::init();
 endif;

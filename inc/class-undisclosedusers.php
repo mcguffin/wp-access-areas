@@ -406,6 +406,5 @@ class UndisclosedUsers {
 		return '';
 	}
 }
-UndisclosedUsers::init();
 endif;
 

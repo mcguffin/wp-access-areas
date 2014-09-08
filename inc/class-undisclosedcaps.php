@@ -226,5 +226,4 @@ class UndisclosedCaps {
 	
 
 }
-UndisclosedCaps::init();
 endif;

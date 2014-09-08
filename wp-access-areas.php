@@ -18,10 +18,14 @@ Domain Path: /lang/
 
 /*
 Next:
+UX:
 - put note when fallback page is access restricted | private | draft
 - remove view access control + fallback behavior from fallback page edit
 - Pages list: show fallback page note
+FEATURE:
 - set fallback page per local access area (manage page deletions!)
+- add cap wpaa_restrict_access to Administrator + Editor role (or any other role with editing capabilities)
+- UI: add / revoke access restricting cap for role
 */
 
 // table name for userlabels
@@ -39,18 +43,30 @@ function is_accessareas_active_for_network( ) {
 	return is_plugin_active_for_network( basename(dirname(__FILE__)).'/'.basename(__FILE__) );
 }
 
-// common plugin functions
-require_once( dirname(__FILE__). '/inc/class-undisclosedcore.php' );
+function wpaa_autoload( $classname ) {
+	$class_path = dirname(__FILE__). sprintf('/inc/class-%s.php' , strtolower( $classname ) ) ; 
+	if ( file_exists($class_path) )
+		require_once $class_path;
+}
+
+spl_autoload_register( 'wpaa_autoload' );
 
 // function library
 require_once( dirname(__FILE__). '/inc/wpaa_roles.php' );
+
+// common plugin functions
+UndisclosedCore::init();
+UndisclosedPosts::init();
+
+//require_once( dirname(__FILE__). '/inc/class-undisclosedcore.php' );
+
 
 // installation hooks
 function accessareas_activate(){
 	require_once( dirname(__FILE__). '/inc/class-undisclosedinstall.php' );
 	UndisclosedInstall::activate();
 }
-function accessareas_deactivate(){
+function accessareas_deactivate() {
 	require_once( dirname(__FILE__). '/inc/class-undisclosedinstall.php' );
 	UndisclosedInstall::deactivate();
 }
@@ -60,19 +76,13 @@ function accessareas_uninstall(){
 }
 
 // access area data model 
-require_once( dirname(__FILE__). '/inc/class-undiscloseduserlabel.php' );
+//require_once( dirname(__FILE__). '/inc/class-undiscloseduserlabel.php' );
 if ( is_admin() ) {
-	require_once( dirname(__FILE__). '/inc/class-undisclosedcaps.php' );
-	require_once( dirname(__FILE__). '/inc/class-userlabel_list_table.php' );
-	require_once( dirname(__FILE__). '/inc/class-undisclosedusers.php' );
-	require_once( dirname(__FILE__). '/inc/class-undisclosededitpost.php' );
-	require_once( dirname(__FILE__). '/inc/class-undisclosedsettings.php' );
-
-	register_activation_hook( __FILE__ , 'accessareas_activate' );
-	register_deactivation_hook( __FILE__ , 'accessareas_deactivate' );
-	register_uninstall_hook( __FILE__ , 'accessareas_uninstall' );
-	
+	UndisclosedCaps::init();
+	UndisclosedUsers::init();
+	UndisclosedEditPost::init();
+	UndisclosedSettings::init();
 }
-
-// frontend output
-require_once( dirname(__FILE__). '/inc/class-undisclosedposts.php' );
+register_activation_hook( __FILE__ , 'accessareas_activate' );
+register_deactivation_hook( __FILE__ , 'accessareas_deactivate' );
+register_uninstall_hook( __FILE__ , 'accessareas_uninstall' );

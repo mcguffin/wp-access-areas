@@ -62,5 +62,5 @@ class UndisclosedCore {
 	}
 
 }
-UndisclosedCore::init();
+
 endif;

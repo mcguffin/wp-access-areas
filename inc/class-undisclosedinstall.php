@@ -104,7 +104,32 @@ class UndisclosedInstall {
 		}
 	}
 	
-	
+	// --------------------------------------------------
+	// Role caps
+	// --------------------------------------------------
+	public static function install_role_caps() {
+		global $wp_roles;
+		$roles = get_editable_roles();
+		foreach ( array_keys($roles) as $role_slug ) {
+			$role = get_role($role_slug);
+			if ( $role->has_cap( 'publish_posts' ) ) {
+				$role->add_cap( 'wpaa_set_view_cap' );
+				$role->add_cap( 'wpaa_set_comment_cap' );
+			}
+			if ( $role->has_cap( 'edit_others_posts' ) ) {
+				$role->add_cap( 'wpaa_set_edit_cap' );
+			}
+		}
+	}
+	public static function uninstall_role_caps() {
+		$roles = get_editable_roles();
+		foreach ( array_keys($roles) as $role_slug ) {
+			$role = get_role($role_slug);
+			$role->remove_cap( 'wpaa_set_view_cap' );
+			$role->remove_cap( 'wpaa_set_edit_cap' );
+			$role->remove_cap( 'wpaa_set_comment_cap' );
+		}
+	}
 	// --------------------------------------------------
 	// capabilities table
 	// --------------------------------------------------
