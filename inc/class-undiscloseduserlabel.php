@@ -11,7 +11,8 @@
 if ( ! class_exists('UndisclosedUserlabel') ):
 class UndisclosedUserlabel {
 	
-	private static $_what_went_wrong=0;
+	private static $_what_went_wrong = 0;
+	private static $_query_cache = array();
 	
 	static function get_count_available_userlabels( ) {
 		global $wpdb;
@@ -22,7 +23,7 @@ class UndisclosedUserlabel {
 			$blog_id = get_current_blog_id();
 			$query .= "OR blog_id=$blog_id";
 		}
-		return $wpdb->get_var($query);
+		return self::_get_cached_result( $query , 'get_var' );
 	}
 	static function get_available_userlabels( $limit = 0 , $order = 'blog_id DESC,cap_title ASC'  ) {
 		global $wpdb;
@@ -43,7 +44,8 @@ class UndisclosedUserlabel {
 			array_unshift($query_param,$query);
 			$query = call_user_func_array( array($wpdb,'prepare') , $query_param);
 		}
-		return $wpdb->get_results($query);
+
+		return self::_get_cached_result( $query );
 	}
 	static function get_blog_userlabels( $blog_id = 0 , $order_by = 'cap_title' , $order = 'ASC' ) {
 		global $wpdb;
@@ -53,8 +55,8 @@ class UndisclosedUserlabel {
 		$query = 'SELECT * FROM '.$table_name.' WHERE blog_id=%s ';
 		if ( $sql_orderby = sanitize_sql_orderby("$order_by $order") )
 			$query .= " ORDER BY $sql_orderby";
-		
-		return $wpdb->get_results( $wpdb->prepare( $query , $blog_id ) );
+		$query = $wpdb->prepare( $query , $blog_id );
+		return self::_get_cached_result( $query );
 	}
 	static function get_network_userlabels(  $order_by = 'cap_title' , $order = 'ASC' ) {
 		global $wpdb;
@@ -63,7 +65,7 @@ class UndisclosedUserlabel {
 		if ( $sql_orderby = sanitize_sql_orderby("$order_by $order") )
 			$query .= " ORDER BY $sql_orderby";
 		
-		return $wpdb->get_results( $query );
+		return self::_get_cached_result( $query );
 	}
 	static function get_label_array( ) {
 		$labels = self::get_available_userlabels( );
@@ -112,6 +114,7 @@ class UndisclosedUserlabel {
 		} else {
 			self::_delete_userlabel_from_blog( $userlabel );
 		}
+		self::_clear_cache();
 		return $wpdb->query( $wpdb->prepare( "DELETE FROM $table_name WHERE ID=%d",$id ) );
 	}
 	
@@ -127,6 +130,16 @@ class UndisclosedUserlabel {
 		$query = $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_edit_cap='exist' WHERE post_edit_cap=%s" , $userlabel->capability ) ); // back to default
 		$query = $wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_comment_cap='exist',comment_status='closed' WHERE post_comment_cap=%s" , $userlabel->capability ) ); // back to default
 		
+		// set back options
+		if ( get_option('wpaa_default_view_cap') == $userlabel->capability )
+			update_option( 'wpaa_default_view_cap' , 'exist' );
+			
+		if ( get_option('wpaa_default_edit_cap') == $userlabel->capability )
+			update_option( 'wpaa_default_edit_cap' , 'exist' );
+			
+		if ( get_option('wpaa_default_comment_cap') == $userlabel->capability )
+			update_option( 'wpaa_default_comment_cap' , 'exist' );
+		
 		if ( is_multisite() )
 			$current_blog_id = get_current_blog_id();
 
@@ -138,6 +151,7 @@ class UndisclosedUserlabel {
 				$user->for_blog( $current_blog_id );
 			$user->remove_cap( $userlabel->capability );
 		}
+		self::_clear_cache();
 	}
 	private static function is_not_custom_cap( $capname ) {
 		return strpos( $capname , WPUND_USERLABEL_PREFIX ) !== 0;
@@ -145,8 +159,14 @@ class UndisclosedUserlabel {
 	static function get_userlabel( $id ) {
 		global $wpdb;
 		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
-
-		return $wpdb->get_row( $wpdb->prepare("SELECT * FROM $table_name WHERE ID = %d",$id) );
+		$query = $wpdb->prepare("SELECT * FROM $table_name WHERE ID = %d",$id);
+		return self::_get_cached_result( $query , 'get_row' );
+	}
+	static function get_userlabel_by_cap( $cap_name ) {
+		global $wpdb;
+		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
+		$query = $wpdb->prepare("SELECT * FROM $table_name WHERE capability = %s",$cap_name);
+		return self::_get_cached_result( $query , 'get_row' );
 	}
 	static function what_went_wrong( ) {
 		$ret = self::$_what_went_wrong;
@@ -175,14 +195,21 @@ class UndisclosedUserlabel {
 			$blog_id
 		);
 		$wpdb->query( $query );
-		return $wpdb->insert_id;
+		self::_clear_cache();
+		$insert_id = $wpdb->insert_id;
+		do_action( 'wpaa_create_access_area' , $capability , $cap_title , $blog_id , $insert_id );
+		return $insert_id;
 	}
-	static function update_userlabel( $data ) {
+	static function update_userlabel( $update_data ) {
 		global $wpdb;
+		$update_data = apply_filters( 'wpaa_update_access_area_data' , $update_data );
+		if ( empty( $update_data ) )
+			return false;
+		
 		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
+		extract( $data , EXTR_SKIP ); // cap_title, blog_id, id
 
-		extract( $data , EXTR_SKIP );
-
+		
 		if ( self::title_exists( $cap_title , $blog_id ) ) {
 			self::$_what_went_wrong = 4;
 			return false;
@@ -195,17 +222,38 @@ class UndisclosedUserlabel {
 			$id
 		);
 		$wpdb->query( $query );
+		self::_clear_cache();
+		do_action( 'wpaa_update_access_area' , $id , $update_data );
 		return $id;
 	}
 	static function title_exists( $cap_title , $blog_id ) {
 		global $wpdb;
 		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
-		return $wpdb->get_var( $wpdb->prepare( "SELECT id FROM $table_name WHERE cap_title=%s AND blog_id=%d" , $cap_title , $blog_id) );
+		$query = $wpdb->prepare( "SELECT id FROM $table_name WHERE cap_title=%s AND blog_id=%d" , $cap_title , $blog_id);
+		return self::_get_cached_result( $query , 'get_var' );
 	}
 	static function capability_exists( $cap ) {
 		global $wpdb;
 		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
-		return $wpdb->get_var( $wpdb->prepare( "SELECT id FROM $table_name WHERE capability=%s" , $cap) );
+		$query =  $wpdb->prepare( "SELECT id FROM $table_name WHERE capability=%s" , $cap);
+		return self::_get_cached_result( $query , 'get_var' );
+	}
+	private static function _get_cached_result( $query , $retrieval_function = 'get_results' ) {
+		global $wpdb;
+		if ( ! is_callable( array( $wpdb , $retrieval_function ) ) )
+			$retrieval_function = 'get_results';
+			
+		$query_key = md5( $query );
+		if ( ! isset( self::$_query_cache[$retrieval_function] ) )
+			self::$_query_cache[$retrieval_function] = array();
+			
+		if ( ! isset( self::$_query_cache[$retrieval_function][$query_key] ) ) {	
+			self::$_query_cache[$retrieval_function][$query_key] = $wpdb->$retrieval_function($query);
+		}
+		return self::$_query_cache[$retrieval_function][$query_key];
+	}
+	private static function _clear_cache() {	
+		self::$_query_cache = array();
 	}
 }
 endif;

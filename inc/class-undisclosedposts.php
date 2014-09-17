@@ -270,8 +270,6 @@ class UndisclosedPosts {
 	}
 	static function get_posts_join( $join , &$wp_query ) {
 		global $wpdb;
-// 		if ( is_singular() )
-// 			$join .= " LEFT JOIN $wpdb->postmeta AS wpaa_postmeta ON wpaa_postmeta.meta_key = '_wpaa_post_behavior' AND wpaa_postmeta.meta_value IS NOT NULL";
 		return $join;
 	}
 	
@@ -322,5 +320,4 @@ class UndisclosedPosts {
 	}
 
 }
-UndisclosedPosts::init();
 endif;

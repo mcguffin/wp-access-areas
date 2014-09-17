@@ -22,23 +22,77 @@ class UndisclosedEditPost {
 			
 			add_action('add_meta_boxes' , array( __CLASS__ , 'add_meta_boxes' ) );
 
-			// list views
-			add_filter('manage_posts_columns' , array(__CLASS__ , 'add_disclosure_column'));
-			add_filter('manage_posts_custom_column' , array(__CLASS__ , 'manage_disclosure_column') , 10 ,2 );
-
-			add_filter('manage_pages_columns' , array(__CLASS__ , 'add_disclosure_column'));
-			add_filter('manage_pages_custom_column' , array(__CLASS__ , 'manage_disclosure_column') , 10 ,2 );
+			
+			
 			add_action('bulk_edit_custom_box' , array(__CLASS__,'bulk_edit_fields') , 10 , 2 );
 			add_action('quick_edit_custom_box' , array(__CLASS__,'quick_edit_fields') , 10 , 2 );
 
 			add_action( 'wp_ajax_get_accessarea_values', array( __CLASS__ , 'ajax_get_accessarea_values' ) );
+			
+			add_action( 'admin_init' , array( __CLASS__ , 'add_post_type_columns' ) );
 		}
 		add_action( 'load-edit.php' , array( __CLASS__ , 'enqueue_script_style' ) );
 		add_action( 'load-edit.php' , array( __CLASS__ , 'enqueue_style' ) );
 		
 		add_action( 'load-post.php' , array( __CLASS__ , 'enqueue_style' ) );
 		add_action( 'load-post-new.php' , array( __CLASS__ , 'enqueue_style' ) );
+		
 	}
+	
+	static function add_post_type_columns() {
+		$can_edit_edit_cap		=  ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_edit_cap' ) ;//current_user_can( 'manage_options' );
+		$can_edit_view_cap		= ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_view_cap' ) );
+		$can_edit_comment_cap	= ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_comment_cap' ) );
+
+		// posts
+		if ( post_type_supports( 'post' , 'comments' ) )
+			add_filter('manage_posts_columns' , array( __CLASS__ , 'add_disclosure_columns') );
+		else 
+			add_filter('manage_posts_columns' , array( __CLASS__ , 'add_disclosure_column_view') );
+		add_action('manage_posts_custom_column' , array( __CLASS__ , 'manage_disclosure_column') , 10 ,2 );
+
+		// pages
+		if ( post_type_supports( 'page' , 'comments' ) )
+			add_filter('manage_pages_columns' , array( __CLASS__ , 'add_disclosure_columns') );
+		else 
+			add_filter('manage_pages_columns' , array( __CLASS__ , 'add_disclosure_column_view') );
+		add_action('manage_pages_custom_column' , array( __CLASS__ , 'manage_disclosure_column') , 10 ,2 );
+
+		// media library
+		if ( post_type_supports( 'attachment' , 'comments' ) )
+			add_filter('manage_media_columns' , array( __CLASS__ , 'add_disclosure_column_comment'));
+		add_action('manage_media_custom_column' , array( __CLASS__ , 'manage_disclosure_column') , 10 ,2 );
+
+		if ( $can_edit_edit_cap ) {
+			add_filter( 'manage_posts_columns' , array( __CLASS__ , 'add_disclosure_column_edit'));
+			add_filter( 'manage_pages_columns' , array( __CLASS__ , 'add_disclosure_column_edit'));
+			add_filter( 'manage_media_columns' , array( __CLASS__ , 'add_disclosure_column_edit'));
+		}
+
+		$post_types = get_post_types(array(
+			'show_ui' => true,
+			'_builtin' => false,
+		));
+		$post_types['attachment'] = 'attachment';
+		
+		// custom post types
+		foreach ( $post_types as $post_type ) {
+			$post_type_object = get_post_type_object( $post_type );
+			$view_col 		= $can_edit_view_cap && $post_type_object->public || $post_type_object->show_ui;
+			$comment_col	= $can_edit_comment_cap && post_type_supports( $post_type , 'comments' );
+
+			if ( $view_col && $comment_col ) 
+				add_filter( "manage_{$post_type}_posts_columns" , array( __CLASS__ , 'add_disclosure_columns'));
+			else if ( $view_col && ! $comment_col )
+				add_filter( "manage_{$post_type}_posts_columns" , array( __CLASS__ , 'add_disclosure_column_view'));
+			else if ( ! $view_col &&  $comment_col )
+				add_filter( "manage_{$post_type}_posts_columns" , array( __CLASS__ , 'add_disclosure_column_comment'));
+
+			if ( $can_edit_edit_cap )
+				add_filter( "manage_{$post_type}_posts_columns" , array( __CLASS__ , 'add_disclosure_column_edit'));
+		}
+	}
+	
 	
 	static function ajax_get_accessarea_values() {
 		if ( isset( $_POST['post_ID'] ) && current_user_can( 'edit_post' , $_POST['post_ID'] ) ) {
@@ -76,20 +130,36 @@ class UndisclosedEditPost {
 	// --------------------------------------------------
 	static function add_meta_boxes() {
 		global $wp_post_types;
-		foreach ( array_keys($wp_post_types) as $post_type ) {
-			add_meta_box( 'post-disclosure' , __('Access','wpundisclosed') , array(__CLASS__,'disclosure_box_info') , $post_type , 'side' , 'high' );
-			$post_type_object 	= get_post_type_object( $post_type );
-			if ( $post_type_object->public && $post_type != 'attachment' )
-				add_meta_box( 'post-disclosure-behavior' , __('Behaviour','wpundisclosed') , array(__CLASS__,'disclosure_box_behavior') , $post_type , 'side' , 'high' );
+		if ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_view_cap' ) || current_user_can( 'wpaa_set_edit_cap' ) || current_user_can( 'wpaa_set_comment_cap' ) ) {
+			foreach ( array_keys($wp_post_types) as $post_type ) {
+				add_meta_box( 'post-disclosure' , __('Access','wpundisclosed') , array(__CLASS__,'disclosure_box_info') , $post_type , 'side' , 'high' );
+				$post_type_object 	= get_post_type_object( $post_type );
+				if ( $post_type_object->public && $post_type != 'attachment' )
+					add_meta_box( 'post-disclosure-behavior' , __('Behaviour','wpundisclosed') , array(__CLASS__,'disclosure_box_behavior') , $post_type , 'side' , 'high' );
+			}
 		}
 	}
 	// --------------------------------------------------
 	// saving post
 	// --------------------------------------------------
 	static function edit_post( $data, $postarr ) {
+
+		$post_type_object 	= get_post_type_object($data["post_type"]);
+		
+		if ( ! $postarr['ID'] ) {
+			$caps = array( 
+				'post_view_cap' => 'exist',
+				'post_edit_cap' => 'exist',
+				'post_comment_cap' => 'exist',
+			);
+			
+			if ( ( $default_caps = get_option( 'wpaa_default_caps' )) && isset( $default_caps[$data["post_type"]] ) )
+				$caps = wp_parse_args( $default_caps[$data["post_type"]] , $caps );
+			$data = wp_parse_args( $data , $caps );
+		}
 		if ( $data['post_status'] == 'auto-draft' )
 			return $data;
-		$post_type_object 	= get_post_type_object($data["post_type"]);
+
 		
 		if (  ( $post_type_object->public || $post_type_object->show_ui ) && isset($postarr['post_view_cap']) && $postarr['post_view_cap'] )
 			$data['post_view_cap']	= $postarr['post_view_cap'];
@@ -141,6 +211,7 @@ class UndisclosedEditPost {
 	static function disclosure_box_info() {
 		global $wp_roles;
 		$post 				= get_post(get_the_ID());
+
 		$post_type_object 	= get_post_type_object($post->post_type);
 		$editing_cap 		= $post_type_object->cap->edit_posts;
 		
@@ -163,23 +234,23 @@ class UndisclosedEditPost {
 			}
 		}
 		
-		if ( ( $post_type_object->public || $post_type_object->show_ui ) && $post->post_type != 'attachment' ) { 
+		if ( ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_view_cap' ) ) && ( $post_type_object->public || $post_type_object->show_ui ) && $post->post_type != 'attachment' ) { 
 			?><div class="disclosure-view-select misc-pub-section">
 				<label for="post_view_cap-select"><strong><?php _e( 'Who can read:' , 'wpundisclosed') ?></strong></label><br />
 				<?php 
 					self::access_area_dropdown( $rolenames , $groups , $post->post_view_cap , 'post_view_cap' );
 				?>
 			</div><?php
-			
 		}
-		?><div class="disclosure-edit-select misc-pub-section">
-			<label for="post_edit_cap-select"><strong><?php _e( 'Who can edit:' , 'wpundisclosed') ?></strong></label><br />
-			<?php 
-				self::access_area_dropdown( $edit_rolenames , $groups , $post->post_edit_cap , 'post_edit_cap' );
-			?>
-		</div><?php
-		
-		if ( post_type_supports( $post->post_type , 'comments' ) && wpaa_user_can( $post->post_comment_cap ) ) {
+		if ( ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_edit_cap' ) ) ) {
+			?><div class="disclosure-edit-select misc-pub-section">
+				<label for="post_edit_cap-select"><strong><?php _e( 'Who can edit:' , 'wpundisclosed') ?></strong></label><br />
+				<?php 
+					self::access_area_dropdown( $edit_rolenames , $groups , $post->post_edit_cap , 'post_edit_cap' );
+				?>
+			</div><?php
+		}
+		if ( ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_comment_cap' ) ) && post_type_supports( $post->post_type , 'comments' ) && wpaa_user_can( $post->post_comment_cap ) ) {
 			?><div class="disclosure-comment-select misc-pub-section">
 				<label for="post_comment_cap-select"><strong><?php _e( 'Who can comment:' , 'wpundisclosed') ?></strong></label><br />
 				<?php 
@@ -224,13 +295,13 @@ class UndisclosedEditPost {
 		if ( ! $selected_cap )
 			$selected_cap = 'exist';
 		?>
-		<select id="<?php echo $fieldname ?>-select" name="<?php echo $fieldname ?>"><?php
+		<select id="<?php echo sanitize_title($fieldname) ?>-select" name="<?php echo $fieldname ?>"><?php
 			if ( ! is_null( $first_item_value ) && ! is_null( $first_item_label ) ) {
 				?><option value="<?php $first_item_value ?>"><?php echo $first_item_label ?></option><?php
 			}
 		
 			?><option value="exist" <?php selected($selected_cap , 'exist') ?>><?php _e( 'WordPress default' , 'wpundisclosed' ) ?></option><?php
-			if ( $fieldname != 'post_edit_cap' ) {
+			if ( strpos( $fieldname , 'post_edit_cap' ) === false ) {
 				?><option value="read" <?php selected($selected_cap , 'read') ?>><?php _e( 'Logged in Users' , 'wpundisclosed' ) ?></option><?php
 			}
 			
@@ -386,11 +457,16 @@ class UndisclosedEditPost {
 	// --------------------------------------------------
 	// admin list views
 	// --------------------------------------------------
-	static function add_disclosure_column($columns) {
+	static function add_disclosure_columns($columns) {
 		$cols = array();
+		$afters = array('author','title','cb');
+		foreach ( $afters as $after )
+			if ( isset($columns[$after] ) )
+				break;
+
 		foreach ($columns as $k=>$v) {
 			$cols[$k] = $v;
-			if ($k=='author') {
+			if ($k == $after ) {
 				$cols['view_cap'] = __('Visible to','wpundisclosed');
 				$cols['comment_cap'] = __('Commentable to','wpundisclosed');
 			}
@@ -398,10 +474,66 @@ class UndisclosedEditPost {
 		return $cols;
 	}
 	// --------------------------------------------------
+	// admin list views
+	// --------------------------------------------------
+	static function add_disclosure_column_view( $columns ) {
+		$cols = array();
+		$afters = array('author','title','cb');
+		foreach ( $afters as $after )
+			if ( isset($columns[$after]) )
+				break;
+
+		foreach ($columns as $k=>$v) {
+			$cols[$k] = $v;
+			if ( $k == $after ) {
+				$cols['view_cap'] = __('Visible to','wpundisclosed');
+			}
+		}
+		return $cols;
+	}
+	// --------------------------------------------------
+	// admin list views
+	// --------------------------------------------------
+	static function add_disclosure_column_comment($columns) {
+		$cols = array();
+		$afters = array('view_cap','author','title','cb');
+		foreach ( $afters as $after )
+			if ( isset($columns[$after]) )
+				break;
+
+		foreach ($columns as $k=>$v) {
+			$cols[$k] = $v;
+			if ( $k == $after ) {
+				$cols['comment_cap'] = __('Commentable to','wpundisclosed');
+			}
+		}
+		return $cols;
+	}
+	// --------------------------------------------------
+	// admin list views
+	// --------------------------------------------------
+	static function add_disclosure_column_edit( $columns ) {
+		$cols = array();
+		$afters = array('comment_cap','view_cap','author','title','cb');
+		foreach ( $afters as $after )
+			if ( isset($columns[$after]) )
+				break;
+
+		foreach ($columns as $k=>$v) {
+			$cols[$k] = $v;
+			if ( $k == $after ) {
+				$cols['edit_cap'] = __('Editable for','wpundisclosed');
+			}
+		}
+		return $cols;
+	}
+
+	// --------------------------------------------------
 	// admin list view column
 	// --------------------------------------------------
 	static function manage_disclosure_column($column, $post_ID) {
 		global $wp_roles;
+// 		var_dump($column,current_filter());
 		switch ( $column ) {
 			case 'view_cap':
 				$names = array_merge(array('exist' => __( 'Everybody' , 'wpundisclosed' ), 'read' => __( 'Blog users' , 'wpundisclosed' )) , UndisclosedUserlabel::get_label_array( ), $wp_roles->get_names());
@@ -415,9 +547,14 @@ class UndisclosedEditPost {
 				$val = get_post($post_ID)->post_comment_cap;
 				_e($names[$val]);
 				break;
+			case 'edit_cap':
+				$names = array_merge(array('exist' => __( 'Everybody' , 'wpundisclosed' ), 'read' => __( 'Blog users' , 'wpundisclosed' )) , UndisclosedUserlabel::get_label_array( ), $wp_roles->get_names());
+				$names[''] = $names['exist'];
+				$val = get_post($post_ID)->post_edit_cap;
+				_e($names[$val]);
+				break;
 		}
 	}
 
 }
-UndisclosedEditPost::init();
 endif;

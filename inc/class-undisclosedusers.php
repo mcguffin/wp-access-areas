@@ -39,11 +39,13 @@ class UndisclosedUsers {
 			add_action( 'show_user_profile' , array( __CLASS__ , 'personal_options' ) );
 			
 			// css
-			add_action( 'load-users.php' , array( __CLASS__ , 'enqueue_style' ) );
+			add_action( 'load-users.php' , array( __CLASS__ , 'load_style' ) );
+			add_action( 'load-profile.php' , array( __CLASS__ , 'load_style' ) );
+			add_action( 'load-user-edit.php' , array( __CLASS__ , 'load_style' ) );
 			
-			// css + js
-			add_action( 'load-profile.php' , array( __CLASS__ , 'enqueue_script_style' ) );
-			add_action( 'load-user-edit.php' , array( __CLASS__ , 'enqueue_script_style' ) );
+			// js
+			add_action( 'load-profile.php' , array( __CLASS__ , 'load_edit_script' ) );
+			add_action( 'load-user-edit.php' , array( __CLASS__ , 'load_edit_script' ) );
 
 //			add_action( 'admin_enqueue_scripts', array( __CLASS__ , 'admin_enqueue_user_scripts' ) );
 			// ajax
@@ -54,16 +56,6 @@ class UndisclosedUsers {
 		add_filter( 'additional_capabilities_display' , '__return_false' );
 	}
 	
-	static function enqueue_script_style() {
-		self::enqueue_style();
-		self::enqueue_script();
-	}
-	static function enqueue_style() {
-		add_action('admin_enqueue_scripts' , array(__CLASS__,'load_style'));
-	}
-	static function enqueue_script() {
-		add_action('admin_enqueue_scripts' , array(__CLASS__,'load_edit_script'));
-	}
 	static function load_edit_script() {
 		wp_enqueue_script( 'disclosure-admin-user-ajax');
 	} 
@@ -228,12 +220,19 @@ class UndisclosedUsers {
 		$can_grant = current_user_can( $capability ) || ! $network;
 		$has_cap = $user->has_cap( $capability );
 		$is_change = ($add && ! $has_cap) || (!$add && $has_cap);
-		if ( ! $can_grant && $is_change )
-			wp_die( __('You do not have permission to do this.' , 'wpundisclosed' ) );
-		if ( $add && $is_change ) 
-			$user->add_cap( $capability , true );
-		else if ( ! $add && $is_change ) 
-			$user->remove_cap( $capability );
+		if ( $is_change ) {
+			if ( ! $can_grant )
+				wp_die( __('You do not have permission to do this.' , 'wpundisclosed' ) );
+			if ( $add ) {
+				$user->add_cap( $capability , true );
+				do_action( 'wpaa_grant_access' , $user , $capability );
+				do_action( "wpaa_grant_{$capability}" , $user );
+			} else if ( ! $add ) {
+				$user->remove_cap( $capability );
+				do_action( 'wpaa_revoke_access' , $user , $capability );
+				do_action( "wpaa_revoke_{$capability}" , $user );
+			}
+		}
 	}
 	static function personal_options( $profileuser ) {
 		// IS_PROFILE_PAGE : self or other
@@ -407,6 +406,5 @@ class UndisclosedUsers {
 		return '';
 	}
 }
-UndisclosedUsers::init();
 endif;
 

@@ -14,6 +14,10 @@
 
 if ( ! class_exists('UndisclosedCore') ) :
 class UndisclosedCore {
+
+	/**
+	 * Init Plugin
+	 */
 	static function init() {
 		add_action( 'plugins_loaded' , array( __CLASS__, 'plugin_loaded' ) );
 		if ( is_multisite() ) {
@@ -27,11 +31,19 @@ class UndisclosedCore {
 		add_option('wpaa_fallback_page' , 0 );
 		add_option('wpaa_default_post_status' , 'private' );
 	}
+
+	/**
+	 * Register Admin styles and scripts
+	 */
 	static function admin_register_scripts() {
 		wp_register_script( 'disclosure-admin-user-ajax' , plugins_url('js/disclosure-admin-user-ajax.js', dirname(__FILE__)) );
 		wp_register_script( 'disclosure-quick-edit' , plugins_url('js/disclosure-quick-edit.js', dirname(__FILE__)) );
 		wp_register_style( 'disclosure-admin' , plugins_url('css/disclosure-admin.css', dirname(__FILE__)) );
 	}
+
+	/**
+	 * Add admin body classname according to WP version
+	 */
 	static function admin_body_class_gte_38( $admin_body_class ) {
 		if ( version_compare(get_bloginfo('version'),'3.8.0','>=') )
 			$admin_body_class .= ' wp-gte-38';
@@ -39,16 +51,25 @@ class UndisclosedCore {
 			$admin_body_class .= ' wp-lt-38';
 		return $admin_body_class;
 	}
-	// translation ready.
+
+	/**
+	 * Load Textdomain, chcek version
+	 */
 	static function plugin_loaded() {
 		self::check_version();
 		load_plugin_textdomain( 'wpundisclosed' , false, dirname(dirname( plugin_basename( __FILE__ ))) . '/lang');
 	}
 	
+	/**
+	 * Setup for multisite blog
+	 */
 	static function set_network_roles_for_blog( $blog_id /*, $user_id, $domain, $path, $site_id, $meta */ ) {
 		require_once( dirname(__FILE__). '/class-undisclosedinstall.php' );
 		UndisclosedInstall::activate_for_blog( $blog_id );
 	}
+	/**
+	 * Upgrade DB after plugin version
+	 */
 	static function check_version( ) {
 		if ( is_multisite( ) ) {
 			$installed_version = get_site_option('accessareas_version');
@@ -57,10 +78,17 @@ class UndisclosedCore {
 			$installed_version = get_option('accessareas_version');
 			update_option( 'accessareas_version' , WPUND_VERSION );
 		}
-		if ( ! $installed_version || version_compare( WPUND_VERSION , $installed_version ) )
+		if ( ! $installed_version || version_compare( WPUND_VERSION , $installed_version ) ) {
 			accessareas_activate();
+			if ( is_multisite( ) ) {
+				update_site_option( 'accessareas_version' , WPUND_VERSION );
+			} else {
+				update_option( 'accessareas_version' , WPUND_VERSION );
+			}
+		}
+		
 	}
 
 }
-UndisclosedCore::init();
+
 endif;

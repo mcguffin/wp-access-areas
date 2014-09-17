@@ -3,8 +3,8 @@ Contributors: podpirate
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WF4Z3HU93XYJA
 Tags: access, role, capability, user, security, editor
 Requires at least: 3.5
-Tested up to: 4.0-RC1
-Stable tag: trunk
+Tested up to: 4.0
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,7 +27,7 @@ even custom Access Areas.
 Latest files on [GitHub](https://github.com/mcguffin/wp-access-areas).
 
 = Known Limitations =
-- WordPress calendar Widget still shows dates where even restricted posts have been created. When clicked on such a date a 404 will occur.
+- WordPress calendar Widget still shows dates where even restricted posts have been created. When clicked on such a date a 404 will occur. 
 - Taxonomy menus (e.g. Tags / Categories) also count restricted posts when the total number of posts in a taxonomy is ascertained. See [this post](http://wordpress.org/support/topic/archive-recents-posts-last-comments-show-restricted-content?replies=5#post-5929330) for details.
 
 == Installation ==
@@ -89,109 +89,119 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 
 == Changelog ==
 
+= 1.3.0 =
+ - WordPress 4.0 compatibility
+ - Feature: Show Access Columns on Media and Custom Post type list views
+ - Feature: Select default access for new posts.
+ - Feature: Role Caps. Set which roles can edit post access properties
+ - Improvement: Cache DB results
+ - Plugin API: Added filter: <code>wpaa_update_access_area_data</code>
+ - Plugin API: Added actions: <code>wpaa_grant_access</code>, <code>wpaa_grant_{$wpaa_capability}</code>, <code>wpaa_revoke_access</code>, <code>wpaa_revoke_{$wpaa_capability}</code>, <code>wpaa_create_access_area</code>, <code>wpaa_update_access_area</code>
+ - Plugin API: Added function: <code>wpaa_get_access_area( $identifier )</code>
+
 = 1.2.9 =
 Fixing that one: http://wordpress.org/support/topic/plugin-causing-crash-post-woocommerce-update-today?replies=5
 
 = 1.2.8 =
-Fix: Hide inacessible posts in Recent Comments widget
-Fix: Hide inacessible posts in Latest posts widget
-Fix: Hide inacessible posts in Archive widget
-Fix: Don't show comments to inaccessible posts in WP-Admin. (Prohibits editing as well.)
-L10n: Polish localisation
-
+ - Fix: Post Edit save 404 behaviour
+ - Fix: Hide inacessible posts in Recent Comments widget
+ - Fix: Hide inacessible posts in Latest posts widget
+ - Fix: Hide inacessible posts in Archive widget
+ - Fix: Don't show comments to inaccessible posts in WP-Admin. (Prohibits editing as well.)
+ - L10n: Polish localisation
 
 = 1.2.7 =
-Feature: Explicitly select Front page as Fallback page.
-Feature: Edit view cap now available for backend-only posts as well.
-Fix: 404 behaviour not saving when default behaviour is other than 404
-API: added function `wpaa_is_post_public( $post )`
+ - Feature: Explicitly select Front page as Fallback page.
+ - Feature: Edit view cap now available for backend-only posts as well.
+ - Fix: 404 behaviour not saving when default behaviour is other than 404
+ - API: added function `wpaa_is_post_public( $post )`
 
 = 1.2.6 =
-Feature: Option to select post status after deleting access area
-Fix: Wrong viewing permissions after delete access area
-Fix: remove options upon uninstall
-Swedish localization
+ - Feature: Option to select post status after deleting access area
+ - Fix: Wrong viewing permissions after delete access area
+ - Fix: remove options upon uninstall
+ - Swedish localization
 
 = 1.2.5 =
-Feature: Bulk edit users: Grant and revoke access.
-Fix: Was able to create access areas with empty names.
-Fix: Ignores WP's Comments closed status
+ - Feature: Bulk edit users: Grant and revoke access.
+ - Fix: Was able to create access areas with empty names.
+ - Fix: Ignores WP's Comments closed status
 
 = 1.2.4 =
-Fix: User list table column
+ - Fix: User list table column
 
 = 1.2.3 =
-Check WP 3.9 compatibility
-Fix: With no AAs present add Access Area didn't show up on profile edit page
+ - Check WP 3.9 compatibility
+ - Fix: With no AAs present add Access Area didn't show up on profile edit page
 
 = 1.2.2 =
-Fix: Used wrong option name on edit post
-Fix: Embarrassing wrong var name on edit post
-L10n: Added one more italian string
+ - Fix: Used wrong option name on edit post
+ - Fix: Embarrassing wrong var name on edit post
+ - L10n: Added one more italian string
 
 = 1.2.1 =
-Feature: Option to redirect to wp-login or to fallback page.
-Feature: action hook an filter on access attempt for a restricted post. (see GitHub Repo for details)
-Feature: post classes
-CSS: use dashicons
-Italian localization
+ - Feature: Option to redirect to wp-login or to fallback page.
+ - Feature: action hook an filter on access attempt for a restricted post. (see GitHub Repo for details)
+ - Feature: post classes
+ - CSS: use dashicons
+ - Italian localization
 
 = 1.2.0 =
-Feature: Bulk edit Posts
-Feature: Ajax-Add AAs on User edit screen
-Debug: Fix invalid HMTL on user list table
-Debug: Remove edit post link from frontend
-Debug: Invisible posts are now also excluded from editing
-Debug: Remove "Who can read"-Select from non-public post types
+ - Feature: Bulk edit Posts
+ - Feature: Ajax-Add AAs on User edit screen
+ - Debug: Fix invalid HMTL on user list table
+ - Debug: Remove edit post link from frontend
+ - Debug: Invisible posts are now also excluded from editing
+ - Debug: Remove "Who can read"-Select from non-public post types
 
 = 1.1.11 =
-Debug: Fix Comment issue. Selecting "WordPress default" now does what it is supposed to: handling over the comment responsibility to WordPress.
+ - Debug: Fix Comment issue. Selecting "WordPress default" now does what it is supposed to: handling over the comment responsibility to WordPress.
 
 = 1.1.10 =
-Debug: Fix missing file issue
+ - Debug: Fix missing file issue
 
 = 1.1.9 =
-Feature/Debug: Network admins now have access to all areas on all blogs. Blog admins have access to all areas on their own blog(s).
-Code: put general use processes into function
+ - Feature/Debug: Network admins now have access to all areas on all blogs. Blog admins have access to all areas on their own blog(s).
+ - Code: put general use processes into function
 
 = 1.1.9 =
-Feature/Debug: Network admins now have access to all areas on all blogs. Blog admins have access to all areas on their own blog(s).
-Code: put general use processes into function
+ - Feature/Debug: Network admins now have access to all areas on all blogs. Blog admins have access to all areas on their own blog(s).
+ - Code: put general use processes into function
 
 = 1.1.8 =
-Fixed: Fixed issue, where access areas where not shown on user editing in single-site installs.
+ - Fixed: Fixed issue, where access areas where not shown on user editing in single-site installs.
 
 = 1.1.7 =
-Fixed: Fixed issue, where posts table was not modified after creating new blog. Use WP's upgrade network function to fix all posts tables.
+ - Fixed: Fixed issue, where posts table was not modified after creating new blog. Use WP's upgrade network function to fix all posts tables.
 
 = 1.1.6 =
-Feature: WP-Capability column in Access Areas table view
-Fixed: Commenting was still possible after switching off comments and setting comment capabilities to 'use WP defaults'.
+ - Feature: WP-Capability column in Access Areas table view
+ - Fixed: Commenting was still possible after switching off comments and setting comment capabilities to 'use WP defaults'.
 
 = 1.1.5 =
-Fix [uninstall issue](http://wordpress.org/support/topic/cant-delete-the-plugin)
+ - Fix [uninstall issue](http://wordpress.org/support/topic/cant-delete-the-plugin)
 
 = 1.1.4 =
-Fix: issue where WP-comment settings were not applied while saving post
-Improve DE Localization
+ - Fix: issue where WP-comment settings were not applied while saving post
+ - Improve DE Localization
 
 = 1.1.3 =
-Fix: post tables did not update on wpmu_new_blog
-Fix: [deletion issue](http://wordpress.org/support/topic/bug-report-cant-delete-area?replies=1)
-Localize Plugin description
+ - Fix: post tables did not update on wpmu_new_blog
+ - Fix: [deletion issue](http://wordpress.org/support/topic/bug-report-cant-delete-area?replies=1)
+ - Localize Plugin description
 
 = 1.1.2 =
-Added versioncheck
+ - Added versioncheck
 
 = 1.1.1 =
-Improve loading behaviour
+ - Improve loading behaviour
 
 = 1.1.0 =
-Added editing restrictions.
-Several fixes.
+ - Added editing restrictions.
+ - Several fixes.
 
 = 1.0.0 =
-Initial Release
+ - Initial Release
 
 == Upgrade notice ==
 

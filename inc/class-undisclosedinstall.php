@@ -6,7 +6,7 @@
 
 // ----------------------------------------
 //	This class provides install and uninstall 
-//	routines for the WP undisclosed plugin.
+//	routines for the WP Access Areas plugin.
 // ----------------------------------------
 
 if ( ! class_exists('UndisclosedInstall') ) :
@@ -21,7 +21,7 @@ class UndisclosedInstall {
 
 		if ( ! current_user_can( 'activate_plugins' ) )
 			return;
-
+		
 		self::_install_capabilities_table( );
 		
 		if ( is_multisite() && is_network_admin() ) {
@@ -29,9 +29,11 @@ class UndisclosedInstall {
 			foreach ( $blogids as $blog_id) {
 				switch_to_blog($blog_id);
 				self::_install_posts_table( );
+				self::install_role_caps();
 			}
 		} else {
 			self::_install_posts_table( );
+			self::install_role_caps();
 		}
 	}
 	static function deactivate( $networkwide ) {
@@ -53,23 +55,28 @@ class UndisclosedInstall {
 				switch_to_blog($blog_id);
 				self::_uninstall_posts_table( );
 				self::_remove_options();
+				self::uninstall_role_caps();
 				restore_current_blog();
 			}
 		} else {
 			self::_uninstall_posts_table( );
 			self::_remove_options();
+			self::uninstall_role_caps();
 		}
 	}
 	
 	function activate_for_blog( $blog_id ) {
 		switch_to_blog( $blog_id );
 		self::_install_posts_table( );
+		self::install_role_caps();
 		restore_current_blog();
 	}
 	private static function _remove_options() {
-		delete_option('wpaa_default_behavior' );
-		delete_option('wpaa_fallback_page' );
-		delete_option('wpaa_default_post_status' );
+		delete_option( 'wpaa_default_behavior' );
+		delete_option( 'wpaa_fallback_page' );
+		delete_option( 'wpaa_default_post_status' );
+		delete_option( 'wpaa_default_caps' );
+		delete_option( 'wpaa_enable_assign_cap' );
 	}
 
 	// --------------------------------------------------
@@ -104,7 +111,32 @@ class UndisclosedInstall {
 		}
 	}
 	
-	
+	// --------------------------------------------------
+	// Role caps
+	// --------------------------------------------------
+	public static function install_role_caps() {
+		global $wp_roles;
+		$roles = get_editable_roles();
+		foreach ( array_keys($roles) as $role_slug ) {
+			$role = get_role($role_slug);
+			if ( $role->has_cap( 'publish_posts' ) ) {
+				$role->add_cap( 'wpaa_set_view_cap' );
+				$role->add_cap( 'wpaa_set_comment_cap' );
+			}
+			if ( $role->has_cap( 'edit_others_posts' ) ) {
+				$role->add_cap( 'wpaa_set_edit_cap' );
+			}
+		}
+	}
+	public static function uninstall_role_caps() {
+		$roles = get_editable_roles();
+		foreach ( array_keys($roles) as $role_slug ) {
+			$role = get_role($role_slug);
+			$role->remove_cap( 'wpaa_set_view_cap' );
+			$role->remove_cap( 'wpaa_set_edit_cap' );
+			$role->remove_cap( 'wpaa_set_comment_cap' );
+		}
+	}
 	// --------------------------------------------------
 	// capabilities table
 	// --------------------------------------------------

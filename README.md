@@ -59,17 +59,106 @@ function my_deny( $forbidden_post_id , $forbidden_post ) {
 add_action('wpaa_view_restricted_post','my_deny' , 10 , 2 );
 ```
 
+### Action hook `wpaa_grant_access` ###
+
+Fired each time access is granted.
+```
+// Example:
+function my_grant_access( $user , $capability ) {
+	// do something 
+}
+add_action('wpaa_grant_access','my_grant_access' , 10 , 2 );
+```
+
+### Action hook `wpaa_grant_{$wpaa_capability}` ###
+
+Fired each time access is granted for `$wpaa_capability`.
+```
+// Example:
+function my_grant_special_access( $user ) {
+	// do something
+}
+$wpaa_capability = 'userlabel_1_foobar',
+add_action('wpaa_grant_{$wpaa_capability}','my_grant_special_access' );
+```
+
+### Action hook `wpaa_revoke_access` ###
+
+Fired each time access is revoked.
+```
+// Example:
+function my_revoke_access( $user , $capability ) {
+	// do something 
+}
+add_action('wpaa_revoke_access','my_revoke_access' , 10 , 2 );
+```
+
+### Action hook `wpaa_revoke_{$wpaa_capability}` ###
+
+Fired each time access is revoked for `$wpaa_capability`.
+```
+// Example:
+function my_revoke_special_access( $user ) {
+	// do something
+}
+$wpaa_capability = 'userlabel_1_foobar',
+add_action('wpaa_revoke_{$wpaa_capability}','my_revoke_special_access' );
+```
+
+### Action hook `wpaa_create_access_area` ###
+
+Fired each time an access area is created
+```
+// Example:
+function my_create_access_area( $capability , $cap_title , $blog_id , $insert_id ) {
+	// do something upon create
+}
+add_action( 'wpaa_create_access_area','my_deny' , 10 , 4 );
+```
+
+### Action hook `wpaa_update_access_area` ###
+
+Fired each time an access area is changed.
+```
+// Example:
+function my_update_access_area( $access_area_id , $update_data ) {
+	// do something upon update
+}
+add_action('wpaa_update_access_area','my_update_access_area' , 10 , 2 );
+```
+
+### Filter `wpaa_update_access_area_data` ####
+
+Alternative redirect for access restricted posts.
+
+```
+// Example:
+function my_update_data( $update_data ) {
+	$update_data['cap_title'] .= ' and stuff...';
+	return $update_data;
+}
+add_filter('wpaa_update_access_area_data','my_update_data' );
+```
+
+
 ### Filter `wpaa_restricted_post_redirect` ####
 
 Alternative redirect for access restricted posts.
 
 ```
 // Example:
-function my_deny( $redirect , $forbidden_post_id , $forbidden_post ) {
+function my_redirect( $redirect , $forbidden_post_id , $forbidden_post ) {
 	return "http://jump-in-a-lake.org/";
 }
 add_filter('wpaa_restricted_post_redirect','my_redirect' , 10 , 3 );
 ```
+
+
+$update_data = apply_filters( 'wpaa_update_access_area_data' , $update_data );
+
+				do_action( 'wpaa_revoke_access' , $user , $capability );
+				do_action( "wpaa_revoke_{$capability}" , $user );
+
 
 Function reference
 ------------------
@@ -95,6 +184,30 @@ wpaa_user_can( 'edit_post' , array( $post_ID ) );
 // check for a WP role
 wpaa_user_can( 'contributor' );
 // will be true, if current user is contributor or above
+```
+
+#### `wpaa_get_access_area( $identifier )` ####
+
+Returns the access area object assiciated with `$identifier`. 
+`$identifier` can be numeric database id or a capability name.
+
+Example return:
+
+```
+$aa = wpaa_get_access_area( 'userlabel_1_foobar' );
+var_dump($aa);
+/* output:
+object(stdClass)#4 (4) {
+  ["ID"]=>
+  string(1) "123"
+  ["cap_title"]=>
+  string(5) "Foo Bar for everybody"
+  ["capability"]=>
+  string(17) "userlabel_1_foobar"
+  ["blog_id"]=>
+  string(1) "1"
+}
+*/
 ```
 
 #### `wpaa_is_access_area( $cap )` ####
