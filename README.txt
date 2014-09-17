@@ -89,6 +89,9 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 
 == Changelog ==
 
+= 1.2.9 =
+Fixing that one: http://wordpress.org/support/topic/plugin-causing-crash-post-woocommerce-update-today?replies=5
+
 = 1.2.8 =
 Fix: Hide inacessible posts in Recent Comments widget
 Fix: Hide inacessible posts in Latest posts widget

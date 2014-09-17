@@ -140,6 +140,7 @@ class UndisclosedPosts {
 				'trash' => 0,
 			);
 		}
+		$stats = (array) $stats;
 		$clauses = self::comments_query_clauses( array(
 			'join' => '',
 			'where' => '',
