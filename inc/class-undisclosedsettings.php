@@ -230,6 +230,9 @@ class UndisclosedSettings {
 		?><input type="hidden" name="wpaa_enable_assign_cap" value="<?php echo $enabled ?>" /><?php
 		if ( $enabled ) {
 			$roles = get_editable_roles();
+			?><p class="description"><?php 
+				_e('This table shows which Roles are allowed to set the ‘Who can view’, ‘Who can edit’ and ‘Who can comment’ properties.','wpundisclosed');
+			?></p><?php
 			?><table class="wp-list-table widefat set-default-caps"><?php
 				?><thead><?php
 					?><tr><?php
@@ -273,10 +276,18 @@ class UndisclosedSettings {
 					}
 				?></tbody><?php
 			?></table><?php
-			?><button name="wpaa_enable_assign_cap" value="0" type="submit" class="button-secondary" /><?php _e('Disable Access Area Capabilities' , 'wpundisclosed'); ?></button><?php
+			?><p class="description"><?php 
+				_e('If you are running a role editor plugin such as <a href="https://wordpress.org/plugins/user-role-editor/">User Role editor by Vladimir Garagulya</a> or <a href="https://wordpress.org/plugins/wpfront-user-role-editor/">WPFront User Role Editor by Syam Mohan</a> you can do the same as here by assigning the custom capabilites <code>wpaa_set_view_cap</code>, <code>wpaa_set_edit_cap</code> and <code>wpaa_set_comment_cap</code>.','wpundisclosed');
+			?></p><?php
+			?><p class="description"><?php 
+				_e('By disabling the role capabilities feature you will allow everybody who can at least publish a post to edit the access properties as well.','wpundisclosed');
+			?></p><?php
+			?><button name="wpaa_enable_assign_cap" value="0" type="submit" class="button-secondary" /><?php _e('Disable Role Capabilities' , 'wpundisclosed'); ?></button><?php
 		} else {
-			?><button name="wpaa_enable_assign_cap" value="1" type="submit" class="button-secondary" /><?php _e('Enable Access Area Capabilities' , 'wpundisclosed'); ?></button><?php
-			?><p class="description"><?php _e('By default everybody who can publish an entry can also edit access properties such as ‘Who can view’ or ‘Who can edit’. If you want to adjust access editing for certain roles click on the button above.','wpundisclosed') ?></p><?php
+			?><p class="description"><?php 
+				_e('By default everybody who can publish an entry can also edit the access properties such as ‘Who can view’ or ‘Who can edit’.<br /> If this is too generous for you then click on the button below.','wpundisclosed');
+			?></p><?php
+			?><button name="wpaa_enable_assign_cap" value="1" type="submit" class="button-secondary" /><?php _e('Enable Role Capabilities' , 'wpundisclosed'); ?></button><?php
 		}
 	}
 	static function select_behavior() {

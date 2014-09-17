@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WordPress Access Areas v1.2.8\n"
+"Project-Id-Version: WordPress Access Areas v1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-09-05 15:46:29+0000\n"
+"PO-Revision-Date: 2014-09-17 10:58:58+0000\n"
 "Last-Translator: admin <joern@flyingletters.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -105,40 +105,43 @@ msgctxt "access area"
 msgid "Add New"
 msgstr "Erstellen"
 
-#: inc/class-undisclosededitpost.php:80
-#: inc/class-undisclosededitpost.php:359
+#: inc/class-undisclosededitpost.php:135
+#: inc/class-undisclosededitpost.php:420
 #@ wpundisclosed
 msgid "Access"
 msgstr "Zugang"
 
-#: inc/class-undisclosededitpost.php:242
+#: inc/class-undisclosededitpost.php:303
 #@ wpundisclosed
 msgid "WordPress default"
 msgstr "WordPress Standard"
 
-#: inc/class-undisclosededitpost.php:417
-#: inc/class-undisclosededitpost.php:423
+#: inc/class-undisclosededitpost.php:539
+#: inc/class-undisclosededitpost.php:545
+#: inc/class-undisclosededitpost.php:551
 #@ wpundisclosed
 msgid "Blog users"
 msgstr "Blog-Benutzer"
 
-#: inc/class-undisclosededitpost.php:247
+#: inc/class-undisclosededitpost.php:308
 #@ wpundisclosed
 msgid "WordPress roles"
 msgstr "WordPress Rollen"
 
-#: inc/class-undisclosededitpost.php:194
+#: inc/class-undisclosededitpost.php:255
 #@ wpundisclosed
 msgid "Who can comment:"
 msgstr "Wer darf kommentieren:"
 
-#: inc/class-undisclosededitpost.php:404
+#: inc/class-undisclosededitpost.php:470
+#: inc/class-undisclosededitpost.php:489
 #@ wpundisclosed
 msgid "Visible to"
 msgstr "Sichtbar für"
 
-#: inc/class-undisclosededitpost.php:417
-#: inc/class-undisclosededitpost.php:423
+#: inc/class-undisclosededitpost.php:539
+#: inc/class-undisclosededitpost.php:545
+#: inc/class-undisclosededitpost.php:551
 #@ wpundisclosed
 msgid "Everybody"
 msgstr "Jeder"
@@ -201,17 +204,17 @@ msgstr ""
 msgid "Could not find the specified Access Area."
 msgstr "Der angegebene Zugangsbereich konnte nicht gefunden werden."
 
-#: inc/class-undisclosededitpost.php:256
+#: inc/class-undisclosededitpost.php:317
 #@ wpundisclosed
 msgid "Users with Access to"
 msgstr "Benutzer mit Zugang zu:"
 
-#: inc/class-undisclosededitpost.php:178
+#: inc/class-undisclosededitpost.php:239
 #@ wpundisclosed
 msgid "Who can read:"
 msgstr "Wer darf lesen:"
 
-#: inc/class-undisclosededitpost.php:186
+#: inc/class-undisclosededitpost.php:247
 #@ wpundisclosed
 msgid "Who can edit:"
 msgstr "Wer darf bearbeiten:"
@@ -240,12 +243,13 @@ msgstr "Fine-Tuning für Ihre WordPress-Inhalte. Definieren Sie Zugangsbereiche 
 msgid "https://github.com/mcguffin/"
 msgstr ""
 
-#: inc/class-undisclosededitpost.php:244
+#: inc/class-undisclosededitpost.php:305
 #@ wpundisclosed
 msgid "Logged in Users"
 msgstr "Eingeloggte Benutzer"
 
-#: inc/class-undisclosededitpost.php:405
+#: inc/class-undisclosededitpost.php:471
+#: inc/class-undisclosededitpost.php:507
 #@ wpundisclosed
 msgid "Commentable to"
 msgstr "Kommentierbar"
@@ -271,90 +275,90 @@ msgstr "Zugangsbereich existiert."
 msgid "+"
 msgstr ""
 
-#: inc/class-undisclosededitpost.php:366
-#: inc/class-undisclosededitpost.php:375
-#: inc/class-undisclosededitpost.php:384
+#: inc/class-undisclosededitpost.php:427
+#: inc/class-undisclosededitpost.php:436
+#: inc/class-undisclosededitpost.php:445
 #@ default
 msgid "&mdash; No Change &mdash;"
 msgstr ""
 
-#: inc/class-undisclosededitpost.php:364
+#: inc/class-undisclosededitpost.php:425
 #@ wpundisclosed
 msgid "Read:"
 msgstr "Lesen:"
 
-#: inc/class-undisclosededitpost.php:373
+#: inc/class-undisclosededitpost.php:434
 #@ wpundisclosed
 msgid "Edit:"
 msgstr "Bearbeiten:"
 
-#: inc/class-undisclosededitpost.php:382
+#: inc/class-undisclosededitpost.php:443
 #@ wpundisclosed
 msgid "Comment:"
 msgstr "Kommentieren:"
 
-#: inc/class-undisclosededitpost.php:83
+#: inc/class-undisclosededitpost.php:138
 #@ wpundisclosed
 msgid "Behaviour"
 msgstr "Verhalten"
 
-#: inc/class-undisclosededitpost.php:295
+#: inc/class-undisclosededitpost.php:356
 #@ wpundisclosed
 msgid "Show 404"
 msgstr "404 Seite zeigen"
 
-#: inc/class-undisclosededitpost.php:299
+#: inc/class-undisclosededitpost.php:360
 #@ wpundisclosed
 msgid "Redirect to the fallback page."
 msgstr "Zur Ausweichseite weiterleiten"
 
-#: inc/class-undisclosededitpost.php:212
-#: inc/class-undisclosedsettings.php:183
+#: inc/class-undisclosededitpost.php:273
+#: inc/class-undisclosedsettings.php:295
 #@ wpundisclosed
 msgid "If somebody tries to view a restricted post directly:"
 msgstr "Wenn jemand versucht, eine Geschützte Seite direkt aufzurufen:"
 
-#: inc/class-undisclosededitpost.php:220
+#: inc/class-undisclosededitpost.php:281
 #@ wpundisclosed
 msgid "Fallback Page"
 msgstr "Ausweichseite"
 
-#: inc/class-undisclosededitpost.php:303
+#: inc/class-undisclosededitpost.php:364
 #@ wpundisclosed
 msgid "If not logged in, redirect to login. Otherwise redirect to the fallback page."
 msgstr "Zum Login weiterleiten. Wenn schon eingeloggt, zur Ausweichseite weiterleiten."
 
-#: inc/class-undisclosedsettings.php:42
+#: inc/class-undisclosedsettings.php:79
 #@ wpundisclosed
 msgid "Access Settings"
-msgstr "Zugriffs Optionen"
+msgstr "Zugangsbereiche"
 
-#: inc/class-undisclosedsettings.php:52
+#: inc/class-undisclosedsettings.php:89
 #@ wpundisclosed
 msgid "Restricted Access Behavior"
 msgstr "Verhalten bei Beschränktem Zugriff"
 
-#: inc/class-undisclosedsettings.php:54
+#: inc/class-undisclosedsettings.php:91
 #@ wpundisclosed
 msgid "Default Behaviour"
 msgstr "Standardverhalten"
 
-#: inc/class-undisclosedsettings.php:55
+#: inc/class-undisclosedsettings.php:92
 #@ wpundisclosed
 msgid "Default Fallback Page"
 msgstr "Standard-Ausweichseite"
 
-#: inc/class-undisclosedsettings.php:78
+#: inc/class-undisclosedsettings.php:116
 #@ wpundisclosed
 msgid "Access Areas Settings"
 msgstr "Zugangsbereiche"
 
-#: inc/class-undisclosedsettings.php:64
+#: inc/class-undisclosedsettings.php:102
 #@ wpundisclosed
 msgid "You can also set these Options for each post individually."
 msgstr "Du kannst diese Einstellungen auch für jeden Beitrag einzeln vornehmen."
 
-#: inc/class-undisclosedsettings.php:85
+#: inc/class-undisclosedsettings.php:123
 #@ default
 msgid "Save Changes"
 msgstr ""
@@ -394,42 +398,42 @@ msgstr ""
 msgid "Local"
 msgstr "Lokal"
 
-#: inc/class-undisclosedsettings.php:18
+#: inc/class-undisclosedsettings.php:19
 #@ wpundisclosed
 msgid "Don‘t change"
 msgstr "Nicht ändern"
 
-#: inc/class-undisclosedsettings.php:19
+#: inc/class-undisclosedsettings.php:20
 #@ default
 msgid "Public"
 msgstr ""
 
-#: inc/class-undisclosedsettings.php:20
+#: inc/class-undisclosedsettings.php:21
 #@ default
 msgid "Private"
 msgstr ""
 
-#: inc/class-undisclosedsettings.php:21
+#: inc/class-undisclosedsettings.php:22
 #@ default
 msgid "Draft"
 msgstr ""
 
-#: inc/class-undisclosedsettings.php:22
+#: inc/class-undisclosedsettings.php:23
 #@ default
 msgid "Pending Review"
 msgstr ""
 
-#: inc/class-undisclosedsettings.php:57
+#: inc/class-undisclosedsettings.php:97
 #@ wpundisclosed
 msgid "Posts defaults"
 msgstr "Standardwerte für Beiträge"
 
-#: inc/class-undisclosedsettings.php:58
+#: inc/class-undisclosedsettings.php:98
 #@ wpundisclosed
 msgid "Default Post Status"
 msgstr "Beitragsstatus"
 
-#: inc/class-undisclosedsettings.php:223
+#: inc/class-undisclosedsettings.php:335
 #@ wpundisclosed
 msgid "Set post status of assigned posts after an Access Area has been deleted."
 msgstr "Beitragsstatus wenn ein Zugangsbereich gelöscht wird."
@@ -440,53 +444,123 @@ msgstr "Beitragsstatus wenn ein Zugangsbereich gelöscht wird."
 msgid "Jörn Lund"
 msgstr ""
 
-#: inc/class-undisclosededitpost.php:287
+#: inc/class-undisclosededitpost.php:348
 #@ default
 msgid "Front page"
 msgstr ""
 
-#: inc/class-undisclosedsettings.php:60
+#: inc/class-undisclosedsettings.php:94
 #@ wpundisclosed
 msgid "Access Defaults for new Posts"
 msgstr "Zugriffsstandard für neue Beiträge"
 
-#: inc/class-undisclosedsettings.php:67
+#: inc/class-undisclosedsettings.php:105
 #@ wpundisclosed
 msgid "Default settings for newly created posts."
 msgstr "Standardeinstellungen für neue Beiträge."
 
-#. translators: plugin header field 'Version'
-#: wp-access-areas.php:0
-#@ wpundisclosed
-msgid "1.2.8"
-msgstr ""
-
-#: inc/class-undisclosedsettings.php:61
+#: inc/class-undisclosedsettings.php:95
 #@ wpundisclosed
 msgid "Default Access:"
 msgstr "Standardzugriff"
 
-#: inc/class-undisclosedsettings.php:113
-#: inc/class-undisclosedsettings.php:130
+#: inc/class-undisclosedsettings.php:150
+#: inc/class-undisclosedsettings.php:167
 #@ wpundisclosed
 msgid "Post Type"
 msgstr "Inhaltstyp"
 
-#: inc/class-undisclosedsettings.php:116
-#: inc/class-undisclosedsettings.php:133
+#: inc/class-undisclosedsettings.php:153
+#: inc/class-undisclosedsettings.php:170
 #@ default
 msgid "Reading"
 msgstr ""
 
-#: inc/class-undisclosedsettings.php:119
-#: inc/class-undisclosedsettings.php:136
+#: inc/class-undisclosedsettings.php:156
+#: inc/class-undisclosedsettings.php:173
 #@ default
 msgid "Edit"
 msgstr ""
 
-#: inc/class-undisclosedsettings.php:122
-#: inc/class-undisclosedsettings.php:139
+#: inc/class-undisclosedsettings.php:159
+#: inc/class-undisclosedsettings.php:176
 #@ default
 msgid "Post Comment"
 msgstr ""
+
+#: inc/class-undisclosededitpost.php:525
+#@ wpundisclosed
+msgid "Editable for"
+msgstr "Bearbeitbar für"
+
+#: inc/class-undisclosedsettings.php:26
+#@ wpundisclosed
+msgid "Change View Access"
+msgstr "Lesezugriff ändern"
+
+#: inc/class-undisclosedsettings.php:27
+#@ wpundisclosed
+msgid "Change Edit Access"
+msgstr "Schreibzugriff ändern"
+
+#: inc/class-undisclosedsettings.php:28
+#@ wpundisclosed
+msgid "Change Comment Access"
+msgstr "Kommentarzugriff ändern"
+
+#: inc/class-undisclosedsettings.php:99
+#@ wpundisclosed
+msgid "Role Capabilities"
+msgstr "Rollen Berechtigungen"
+
+#: inc/class-undisclosedsettings.php:234
+#@ wpundisclosed
+msgid "This table shows which Roles are allowed to set the ‘Who can view’, ‘Who can edit’ and ‘Who can comment’ properties."
+msgstr "Die Tabelle zeigt welche Rollen die Eigenschaften „Wer darf lesen“, „Wer darf bearbeiten“ und „Wer darf kommentieren“ bearbeiten dürfen."
+
+#: inc/class-undisclosedsettings.php:241
+#@ wpundisclosed
+msgid "Role"
+msgstr "Rolle"
+
+#: inc/class-undisclosedsettings.php:266
+#@ wpundisclosed
+msgid "Forbid"
+msgstr "Verbieten"
+
+#: inc/class-undisclosedsettings.php:268
+#@ wpundisclosed
+msgid "Allow"
+msgstr "Erlauben"
+
+#: inc/class-undisclosedsettings.php:280
+#@ wpundisclosed
+msgid "If you are running a role editor plugin such as <a href=\"https://wordpress.org/plugins/user-role-editor/\">User Role editor by Vladimir Garagulya</a> or <a href=\"https://wordpress.org/plugins/wpfront-user-role-editor/\">WPFront User Role Editor by Syam Mohan</a> you can do the same as here by assigning the custom capabilites <code>wpaa_set_view_cap</code>, <code>wpaa_set_edit_cap</code> and <code>wpaa_set_comment_cap</code>."
+msgstr "Falls Du ein Rollen-Management-Plugin wie <a href=\"https://wordpress.org/plugins/user-role-editor/\">User Role editor von Vladimir Garagulya</a> oder <a href=\"https://wordpress.org/plugins/wpfront-user-role-editor/\">WPFront User Role Editor von Syam Mohan</a> installiert hast, kannst Du die Rechte auch durch Setzen der Benutzerdefinierten Berechtigungen <code>wpaa_set_view_cap</code>, <code>wpaa_set_edit_cap</code> und <code>wpaa_set_comment_cap</code> einstellen."
+
+#: inc/class-undisclosedsettings.php:283
+#@ wpundisclosed
+msgid "By disabling the role capabilities feature you will allow everybody who can at least publish a post to edit the access properties as well."
+msgstr "Wenn die Rollen-Berechtigungen deaktiviert sind, darf jeder, der einen Beitrag veröffentlichen kann auch dessen Zugriffs-Eigenschaften bearbeiten."
+
+#: inc/class-undisclosedsettings.php:285
+#@ wpundisclosed
+msgid "Disable Role Capabilities"
+msgstr "Rollen-Berechtigungen deaktivieren"
+
+#: inc/class-undisclosedsettings.php:290
+#@ wpundisclosed
+msgid "Enable Role Capabilities"
+msgstr "Rollen-Berechtigungen aktivieren"
+
+#. translators: plugin header field 'Version'
+#: wp-access-areas.php:0
+#@ wpundisclosed
+msgid "1.3.0"
+msgstr ""
+
+#: inc/class-undisclosedsettings.php:288
+#@ wpundisclosed
+msgid "By default everybody who can publish an entry can also edit the access properties such as ‘Who can view’ or ‘Who can edit’.<br /> If this is too generous for you then click on the button below."
+msgstr "Normalerweise darf jeder, der einen Beitrag erstellen kann, auch dessen Zugriffs-Eigenschaften bearbeiten. Wenn Dir das zu großzügig ist, dann klicke auf „Rollen-Berechtigungen aktivieren“"
 
