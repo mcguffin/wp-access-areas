@@ -91,6 +91,7 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 
 = 1.3.0 =
  - WordPress 4.0 compatibility
+ - Feature: Show Access Columns on Media and Custom Post type list views
  - Feature: Select default access for new posts.
  - Feature: Role Caps. Set which roles can edit post access properties
  - Improvement: Cache DB results
