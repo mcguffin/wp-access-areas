@@ -40,9 +40,8 @@ class UndisclosedEditPost {
 	}
 	
 	static function add_post_type_columns() {
-		$can_edit_edit_cap		=  ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_edit_cap' ) ;//current_user_can( 'manage_options' );
-		$can_edit_view_cap		= ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_view_cap' ) );
-		$can_edit_comment_cap	= ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_comment_cap' ) );
+		
+		$can_edit_edit_cap		=  self::can_edit_edit_cap();
 
 		// posts
 		if ( post_type_supports( 'post' , 'comments' ) )
@@ -78,8 +77,8 @@ class UndisclosedEditPost {
 		// custom post types
 		foreach ( $post_types as $post_type ) {
 			$post_type_object = get_post_type_object( $post_type );
-			$view_col 		= $can_edit_view_cap && $post_type_object->public || $post_type_object->show_ui;
-			$comment_col	= $can_edit_comment_cap && post_type_supports( $post_type , 'comments' );
+			$view_col 		= self::can_edit_view_cap( $post_type , $post_type_object );
+			$comment_col	= self::can_edit_comment_cap( $post_type );
 
 			if ( $view_col && $comment_col ) 
 				add_filter( "manage_{$post_type}_posts_columns" , array( __CLASS__ , 'add_disclosure_columns'));
