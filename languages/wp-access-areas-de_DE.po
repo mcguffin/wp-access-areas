@@ -22,147 +22,147 @@ msgstr ""
 
 #: inc/class-undisclosedcaps.php:28
 #: inc/class-undisclosedcaps.php:198
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Manage Access Areas"
 msgstr "Zugangsbereiche verwalten"
 
 #: inc/class-undisclosedcaps.php:28
 #: inc/class-undisclosedusers.php:243
 #: inc/class-undisclosedusers.php:382
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Areas"
 msgstr "Zugangsbereiche"
 
 #: inc/class-undisclosedcaps.php:35
 #: inc/class-undisclosedusers.php:225
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "You do not have permission to do this."
 msgstr "Sie haben nicht die erforderlichen Rechte."
 
 #: inc/class-undisclosedcaps.php:48
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Please enter a Label."
 msgstr "Bitte geben Sie ein Namen ein"
 
 #: inc/class-undisclosedcaps.php:51
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "You do not have permission to edit network wide user labels."
 msgstr "Sie haben nicht die erforderlichen Rechte Netzwerk weite Zugriffsbereiche zu bearbeiten."
 
 #: inc/class-undisclosedcaps.php:126
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Edit Access Area"
 msgstr "Zugangsbereich bearbeiten"
 
 #: inc/class-undisclosedcaps.php:128
 #: inc/class-undisclosedcaps.php:153
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Create Access Area"
 msgstr "Zugangsbereich erstellen"
 
 #: inc/class-undisclosedcaps.php:143
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Area"
 msgstr "Zugangsbereich"
 
 #: inc/class-undisclosedcaps.php:144
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "New Access Area"
 msgstr "Neuer Zugangsbereich"
 
 #: inc/class-undisclosedcaps.php:151
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Save changes"
 msgstr "Änderungen sichern"
 
 #: inc/class-undisclosedcaps.php:169
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Area created."
 msgstr "Zugangsbereich wurde erstellt."
 
 #: inc/class-undisclosedcaps.php:172
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Area updated."
 msgstr "Zugangsbereich wurde aktualisiert."
 
 #: inc/class-undisclosedcaps.php:175
 #, php-format
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Area deleted."
 msgid_plural "%d Access Areas deleted."
 msgstr[0] "Zugangsbereich gelöscht."
 msgstr[1] "Es wurden %d Zugangsbereiche gelöscht."
 
 #: inc/class-undisclosedcaps.php:178
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "An Access Area with that Name already exists."
 msgstr "Ein Zugangsbereich existiert schon unter diesem Namen."
 
 #: inc/class-undisclosedcaps.php:199
 #: inc/class-undisclosedusers.php:311
-#@ wpundisclosed
+#@ wp-access-areas
 msgctxt "access area"
 msgid "Add New"
 msgstr "Erstellen"
 
 #: inc/class-undisclosededitpost.php:135
 #: inc/class-undisclosededitpost.php:420
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access"
 msgstr "Zugang"
 
 #: inc/class-undisclosededitpost.php:303
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "WordPress default"
 msgstr "WordPress Standard"
 
 #: inc/class-undisclosededitpost.php:539
 #: inc/class-undisclosededitpost.php:545
 #: inc/class-undisclosededitpost.php:551
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Blog users"
 msgstr "Blog-Benutzer"
 
 #: inc/class-undisclosededitpost.php:308
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "WordPress roles"
 msgstr "WordPress Rollen"
 
 #: inc/class-undisclosededitpost.php:255
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Who can comment:"
 msgstr "Wer darf kommentieren:"
 
 #: inc/class-undisclosededitpost.php:470
 #: inc/class-undisclosededitpost.php:489
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Visible to"
 msgstr "Sichtbar für"
 
 #: inc/class-undisclosededitpost.php:539
 #: inc/class-undisclosededitpost.php:545
 #: inc/class-undisclosededitpost.php:551
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Everybody"
 msgstr "Jeder"
 
 #: inc/class-undiscloseduserlabel.php:76
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "(Network)"
 msgstr "(Netzwerk)"
 
 #: inc/class-undisclosedusers.php:256
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Grant Network-Wide Access"
 msgstr "Netzwerk-Zugang gewähren"
 
 #: inc/class-undisclosedusers.php:249
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Grant Access"
 msgstr "Zugang gewähren"
 
 #: inc/class-undisclosedusers.php:330
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Areas:"
 msgstr "Zugangsbereiche:"
 
@@ -177,18 +177,18 @@ msgid "Everywhere"
 msgstr ""
 
 #: inc/class-userlabel_list_table.php:42
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Name"
 msgstr "Name"
 
 #: inc/class-userlabel_list_table.php:45
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Scope"
 msgstr "Gültigkeitsbereich"
 
 #: inc/class-undisclosedusers.php:364
 #: inc/class-userlabel_list_table.php:83
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Network"
 msgstr "Netzwerk"
 
@@ -200,73 +200,73 @@ msgid "Delete"
 msgstr ""
 
 #: inc/class-undisclosedcaps.php:181
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Could not find the specified Access Area."
 msgstr "Der angegebene Zugangsbereich konnte nicht gefunden werden."
 
 #: inc/class-undisclosededitpost.php:317
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Users with Access to"
 msgstr "Benutzer mit Zugang zu:"
 
 #: inc/class-undisclosededitpost.php:239
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Who can read:"
 msgstr "Wer darf lesen:"
 
 #: inc/class-undisclosededitpost.php:247
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Who can edit:"
 msgstr "Wer darf bearbeiten:"
 
 #. translators: plugin header field 'Name'
 #: wp-access-areas.php:0
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "WordPress Access Areas"
 msgstr "WordPress Zugangsbereiche"
 
 #. translators: plugin header field 'PluginURI'
 #: wp-access-areas.php:0
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "http://wordpress.org/plugins/wp-access-areas/"
 msgstr ""
 
 #. translators: plugin header field 'Description'
 #: wp-access-areas.php:0
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Lets you define Access Areas and assign them to Posts, Pages and Custom Post types. Through Access Areas you can fine-tune who can view, edit or comment on your posts."
 msgstr "Fine-Tuning für Ihre WordPress-Inhalte. Definieren Sie Zugangsbereiche und bestimmen Sie für jeden Inhalt, wer ihn lesen, bearbeiten oder Kommentieren darf."
 
 #. translators: plugin header field 'AuthorURI'
 #: wp-access-areas.php:0
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "https://github.com/mcguffin/"
 msgstr ""
 
 #: inc/class-undisclosededitpost.php:305
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Logged in Users"
 msgstr "Eingeloggte Benutzer"
 
 #: inc/class-undisclosededitpost.php:471
 #: inc/class-undisclosededitpost.php:507
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Commentable to"
 msgstr "Kommentierbar"
 
 #: inc/class-userlabel_list_table.php:47
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "WP Capability"
 msgstr "WordPress Berechtigung"
 
 #: inc/class-undisclosedusers.php:79
 #: inc/class-undisclosedusers.php:97
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Insufficient privileges."
 msgstr "Ungenügende Rechte"
 
 #: inc/class-undisclosedusers.php:91
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Area exists."
 msgstr "Zugangsbereich existiert."
 
@@ -283,78 +283,78 @@ msgid "&mdash; No Change &mdash;"
 msgstr ""
 
 #: inc/class-undisclosededitpost.php:425
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Read:"
 msgstr "Lesen:"
 
 #: inc/class-undisclosededitpost.php:434
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Edit:"
 msgstr "Bearbeiten:"
 
 #: inc/class-undisclosededitpost.php:443
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Comment:"
 msgstr "Kommentieren:"
 
 #: inc/class-undisclosededitpost.php:138
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Behaviour"
 msgstr "Verhalten"
 
 #: inc/class-undisclosededitpost.php:356
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Show 404"
 msgstr "404 Seite zeigen"
 
 #: inc/class-undisclosededitpost.php:360
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Redirect to the fallback page."
 msgstr "Zur Ausweichseite weiterleiten"
 
 #: inc/class-undisclosededitpost.php:273
 #: inc/class-undisclosedsettings.php:295
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "If somebody tries to view a restricted post directly:"
 msgstr "Wenn jemand versucht, eine Geschützte Seite direkt aufzurufen:"
 
 #: inc/class-undisclosededitpost.php:281
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Fallback Page"
 msgstr "Ausweichseite"
 
 #: inc/class-undisclosededitpost.php:364
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "If not logged in, redirect to login. Otherwise redirect to the fallback page."
 msgstr "Zum Login weiterleiten. Wenn schon eingeloggt, zur Ausweichseite weiterleiten."
 
 #: inc/class-undisclosedsettings.php:79
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Settings"
 msgstr "Zugangsbereiche"
 
 #: inc/class-undisclosedsettings.php:89
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Restricted Access Behavior"
 msgstr "Verhalten bei Beschränktem Zugriff"
 
 #: inc/class-undisclosedsettings.php:91
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Default Behaviour"
 msgstr "Standardverhalten"
 
 #: inc/class-undisclosedsettings.php:92
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Default Fallback Page"
 msgstr "Standard-Ausweichseite"
 
 #: inc/class-undisclosedsettings.php:116
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Areas Settings"
 msgstr "Zugangsbereiche"
 
 #: inc/class-undisclosedsettings.php:102
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "You can also set these Options for each post individually."
 msgstr "Du kannst diese Einstellungen auch für jeden Beitrag einzeln vornehmen."
 
@@ -364,27 +364,27 @@ msgid "Save Changes"
 msgstr ""
 
 #: inc/class-undisclosedusers.php:81
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Empty name."
 msgstr "Leerer Name"
 
 #: inc/class-undisclosedusers.php:109
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Grant Access … "
 msgstr "Zugriff erteilen"
 
 #: inc/class-undisclosedusers.php:110
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Grant"
 msgstr "Erteilen"
 
 #: inc/class-undisclosedusers.php:117
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Revoke Access … "
 msgstr "Zugriff entziehen"
 
 #: inc/class-undisclosedusers.php:118
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Revoke"
 msgstr "Entziehen"
 
@@ -394,12 +394,12 @@ msgid "You can&#8217;t edit that user."
 msgstr ""
 
 #: inc/class-undisclosedusers.php:359
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Local"
 msgstr "Lokal"
 
 #: inc/class-undisclosedsettings.php:19
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Don‘t change"
 msgstr "Nicht ändern"
 
@@ -424,23 +424,23 @@ msgid "Pending Review"
 msgstr ""
 
 #: inc/class-undisclosedsettings.php:97
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Posts defaults"
 msgstr "Standardwerte für Beiträge"
 
 #: inc/class-undisclosedsettings.php:98
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Default Post Status"
 msgstr "Beitragsstatus"
 
 #: inc/class-undisclosedsettings.php:335
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Set post status of assigned posts after an Access Area has been deleted."
 msgstr "Beitragsstatus wenn ein Zugangsbereich gelöscht wird."
 
 #. translators: plugin header field 'Author'
 #: wp-access-areas.php:0
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Jörn Lund"
 msgstr ""
 
@@ -450,23 +450,23 @@ msgid "Front page"
 msgstr ""
 
 #: inc/class-undisclosedsettings.php:94
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Defaults for new Posts"
 msgstr "Zugriffsstandard für neue Beiträge"
 
 #: inc/class-undisclosedsettings.php:105
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Default settings for newly created posts."
 msgstr "Standardeinstellungen für neue Beiträge."
 
 #: inc/class-undisclosedsettings.php:95
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Default Access:"
 msgstr "Standardzugriff"
 
 #: inc/class-undisclosedsettings.php:150
 #: inc/class-undisclosedsettings.php:167
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Post Type"
 msgstr "Inhaltstyp"
 
@@ -489,78 +489,78 @@ msgid "Post Comment"
 msgstr ""
 
 #: inc/class-undisclosededitpost.php:525
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Editable for"
 msgstr "Bearbeitbar für"
 
 #: inc/class-undisclosedsettings.php:26
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Change View Access"
 msgstr "Lesezugriff ändern"
 
 #: inc/class-undisclosedsettings.php:27
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Change Edit Access"
 msgstr "Schreibzugriff ändern"
 
 #: inc/class-undisclosedsettings.php:28
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Change Comment Access"
 msgstr "Kommentarzugriff ändern"
 
 #: inc/class-undisclosedsettings.php:99
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Role Capabilities"
 msgstr "Rollen Berechtigungen"
 
 #: inc/class-undisclosedsettings.php:234
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "This table shows which Roles are allowed to set the ‘Who can view’, ‘Who can edit’ and ‘Who can comment’ properties."
 msgstr "Die Tabelle zeigt welche Rollen die Eigenschaften „Wer darf lesen“, „Wer darf bearbeiten“ und „Wer darf kommentieren“ bearbeiten dürfen."
 
 #: inc/class-undisclosedsettings.php:241
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Role"
 msgstr "Rolle"
 
 #: inc/class-undisclosedsettings.php:266
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Forbid"
 msgstr "Verbieten"
 
 #: inc/class-undisclosedsettings.php:268
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Allow"
 msgstr "Erlauben"
 
 #: inc/class-undisclosedsettings.php:280
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "If you are running a role editor plugin such as <a href=\"https://wordpress.org/plugins/user-role-editor/\">User Role editor by Vladimir Garagulya</a> or <a href=\"https://wordpress.org/plugins/wpfront-user-role-editor/\">WPFront User Role Editor by Syam Mohan</a> you can do the same as here by assigning the custom capabilites <code>wpaa_set_view_cap</code>, <code>wpaa_set_edit_cap</code> and <code>wpaa_set_comment_cap</code>."
 msgstr "Falls Du ein Rollen-Management-Plugin wie <a href=\"https://wordpress.org/plugins/user-role-editor/\">User Role editor von Vladimir Garagulya</a> oder <a href=\"https://wordpress.org/plugins/wpfront-user-role-editor/\">WPFront User Role Editor von Syam Mohan</a> installiert hast, kannst Du die Rechte auch durch Setzen der Benutzerdefinierten Berechtigungen <code>wpaa_set_view_cap</code>, <code>wpaa_set_edit_cap</code> und <code>wpaa_set_comment_cap</code> einstellen."
 
 #: inc/class-undisclosedsettings.php:283
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "By disabling the role capabilities feature you will allow everybody who can at least publish a post to edit the access properties as well."
 msgstr "Wenn die Rollen-Berechtigungen deaktiviert sind, darf jeder, der einen Beitrag veröffentlichen kann auch dessen Zugriffs-Eigenschaften bearbeiten."
 
 #: inc/class-undisclosedsettings.php:285
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Disable Role Capabilities"
 msgstr "Rollen-Berechtigungen deaktivieren"
 
 #: inc/class-undisclosedsettings.php:290
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Enable Role Capabilities"
 msgstr "Rollen-Berechtigungen aktivieren"
 
 #. translators: plugin header field 'Version'
 #: wp-access-areas.php:0
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "1.3.0"
 msgstr ""
 
 #: inc/class-undisclosedsettings.php:288
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "By default everybody who can publish an entry can also edit the access properties such as ‘Who can view’ or ‘Who can edit’.<br /> If this is too generous for you then click on the button below."
 msgstr "Normalerweise darf jeder, der einen Beitrag erstellen kann, auch dessen Zugriffs-Eigenschaften bearbeiten. Wenn Dir das zu großzügig ist, dann klicke auf „Rollen-Berechtigungen aktivieren“"
 

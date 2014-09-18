@@ -25,14 +25,14 @@ class UndisclosedCaps {
 		if ( (is_network_admin() && ! current_user_can( 'manage_network_users' )) || ( ! current_user_can( 'promote_users' ) ) )
 			return;
 		
-		add_users_page(__('Manage Access Areas','wpundisclosed'), __('Access Areas','wpundisclosed'), 'promote_users', 'user_labels', array(__CLASS__,'manage_userlabels_page'));
+		add_users_page(__('Manage Access Areas','wp-access-areas'), __('Access Areas','wp-access-areas'), 'promote_users', 'user_labels', array(__CLASS__,'manage_userlabels_page'));
 		add_action( 'load-users_page_user_labels' , array( __CLASS__ , 'do_userlabel_actions' ) );
 	}
 	
 	static function do_userlabel_actions() {
 	
 		if ( ! current_user_can( 'promote_users' ) ) 
-			wp_die( __('You do not have permission to do this.' , 'wpundisclosed' ) );
+			wp_die( __('You do not have permission to do this.' , 'wp-access-areas' ) );
 		
 		wp_enqueue_style( 'disclosure-admin' );
 		
@@ -45,10 +45,10 @@ class UndisclosedCaps {
 			
 			// integrity check.
 			if ( !empty($_POST) && ! $data['cap_title'] ) 
-				wp_die( __('Please enter a Label.' , 'wpundisclosed' ) );
+				wp_die( __('Please enter a Label.' , 'wp-access-areas' ) );
 			if (( ! empty( $_POST ) && ! wp_verify_nonce(@$_REQUEST['_wpnonce'],'userlabel-'.$_REQUEST['action'] ) ) ||
 			 		( ! $data['blog_id'] && ! current_user_can('manage_network_users') ))
-				wp_die( __('You do not have permission to edit network wide user labels.' , 'wpundisclosed' ) );
+				wp_die( __('You do not have permission to edit network wide user labels.' , 'wp-access-areas' ) );
 			
 			switch ( $_REQUEST['action'] ) {
 				case 'new':
@@ -123,9 +123,9 @@ class UndisclosedCaps {
 		?><div id="icon-undisclosed-userlabel" class="icon32"><br></div><?php
 		?><h2><?php
 			if ( $userlabel_id ) { 
-				_e('Edit Access Area','wpundisclosed');
+				_e('Edit Access Area','wp-access-areas');
 			} else {
-				_e('Create Access Area','wpundisclosed');
+				_e('Create Access Area','wp-access-areas');
 			}
 		?></h2>
 		<?php self::_put_message( ) ?>
@@ -140,17 +140,17 @@ class UndisclosedCaps {
 				<table class="form-table">
 					<tbody>
 						<tr>
-							<th scope="row"><label for="title"><?php _e('Access Area','wpundisclosed') ?></label></th>
-							<td><input class="regular-text" maxlength="64" type="text" name="cap_title" value="<?php echo $cap_title ?>" id="cap_title" placeholder="<?php _e('New Access Area','wpundisclosed') ?>" autocomplete="off" /></td>
+							<th scope="row"><label for="title"><?php _e('Access Area','wp-access-areas') ?></label></th>
+							<td><input class="regular-text" maxlength="64" type="text" name="cap_title" value="<?php echo $cap_title ?>" id="cap_title" placeholder="<?php _e('New Access Area','wp-access-areas') ?>" autocomplete="off" /></td>
 						</tr>
 					</tbody>
 				</table>
 				
 				<button type="submit" class="button button-primary button-large"><?php 
 			if ( $userlabel_id ) { 
-				_e('Save changes','wpundisclosed');
+				_e('Save changes','wp-access-areas');
 			}  else {
-				_e( 'Create Access Area' , 'wpundisclosed' );
+				_e( 'Create Access Area' , 'wp-access-areas' );
 			}
 				
 				
@@ -166,19 +166,19 @@ class UndisclosedCaps {
 		$message_wrap = '<div id="message" class="updated"><p>%s</p></div>';
 		switch( $_REQUEST['message'] ) {
 			case 1: // created
-				$message = __('Access Area created.','wpundisclosed');
+				$message = __('Access Area created.','wp-access-areas');
 				break;
 			case 2: // updated
-				$message = __('Access Area updated.','wpundisclosed');
+				$message = __('Access Area updated.','wp-access-areas');
 				break;
 			case 3: // deleted
-				$message = sprintf(_n('Access Area deleted.' , '%d Access Areas deleted.' , $_REQUEST['deleted'] , 'wpundisclosed') , $_REQUEST['deleted'] );
+				$message = sprintf(_n('Access Area deleted.' , '%d Access Areas deleted.' , $_REQUEST['deleted'] , 'wp-access-areas') , $_REQUEST['deleted'] );
 				break;
 			case 4: // exists
-				$message = __('An Access Area with that Name already exists.','wpundisclosed');
+				$message = __('An Access Area with that Name already exists.','wp-access-areas');
 				break;
 			case 5: // not found
-				$message = __('Could not find the specified Access Area.','wpundisclosed');
+				$message = __('Could not find the specified Access Area.','wp-access-areas');
 				break;
 			default:
 				$message = '';
@@ -195,8 +195,8 @@ class UndisclosedCaps {
 
 		?><div class="wrap"><?php
 		?><div id="icon-undisclosed-userlabel" class="icon32"><br></div><?php
-		?><h2><?php _e('Manage Access Areas','wpundisclosed') ?>
-			<a href="<?php echo remove_query_arg('message',add_query_arg(array('action'=>'new'))) ?>" class="add-new-h2"><?php _ex('Add New','access area','wpundisclosed') ?></a>
+		?><h2><?php _e('Manage Access Areas','wp-access-areas') ?>
+			<a href="<?php echo remove_query_arg('message',add_query_arg(array('action'=>'new'))) ?>" class="add-new-h2"><?php _ex('Add New','access area','wp-access-areas') ?></a>
 		</h2>
 		<?php self::_put_message( ) ?>
 		<?php

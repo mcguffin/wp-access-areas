@@ -73,7 +73,7 @@ class UndisclosedUserlabel {
 		foreach ( $labels as $item ) {
 			$label_map[$item->capability] = $item->cap_title;
 			if ( is_multisite() && ! $item->blog_id ) 
-				$label_map[$item->capability] .= ' '.__('(Network)','wpundisclosed');
+				$label_map[$item->capability] .= ' '.__('(Network)','wp-access-areas');
 		}
 		return $label_map;
 	}

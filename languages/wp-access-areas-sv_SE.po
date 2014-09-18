@@ -22,144 +22,144 @@ msgstr ""
 
 #: inc/class-undisclosedcaps.php:28
 #: inc/class-undisclosedcaps.php:198
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Manage Access Areas"
 msgstr "Redigera Användarzoner"
 
 #: inc/class-undisclosedcaps.php:28
 #: inc/class-undisclosedusers.php:244
 #: inc/class-undisclosedusers.php:383
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Areas"
 msgstr "Användarzoner"
 
 #: inc/class-undisclosedcaps.php:35
 #: inc/class-undisclosedusers.php:232
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "You do not have permission to do this."
 msgstr "Du har inte behörighet för detta."
 
 #: inc/class-undisclosedcaps.php:48
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Please enter a Label."
 msgstr "Ge zonen ett namn"
 
 #: inc/class-undisclosedcaps.php:51
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "You do not have permission to edit network wide user labels."
 msgstr "Du saknar behörighet att ändra i de nätverksvida användaretiketterna."
 
 #: inc/class-undisclosedcaps.php:126
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Edit Access Area"
 msgstr "Redigera användarzon"
 
 #: inc/class-undisclosedcaps.php:128
 #: inc/class-undisclosedcaps.php:153
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Create Access Area"
 msgstr "Skapa användarzon"
 
 #: inc/class-undisclosedcaps.php:143
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Area"
 msgstr "Användarzon"
 
 #: inc/class-undisclosedcaps.php:144
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "New Access Area"
 msgstr "Ny användarzon"
 
 #: inc/class-undisclosedcaps.php:151
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Save changes"
 msgstr "Spara ändringar"
 
 #: inc/class-undisclosedcaps.php:169
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Area created."
 msgstr "Användarzon har skapats."
 
 #: inc/class-undisclosedcaps.php:172
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Area updated."
 msgstr "Användarzonen har uppdaterats."
 
 #: inc/class-undisclosedcaps.php:175
 #, php-format
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Area deleted."
 msgid_plural "%d Access Areas deleted."
 msgstr[0] "Användarzonen har raderats"
 msgstr[1] "%d användarzoner raderades."
 
 #: inc/class-undisclosedcaps.php:178
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "An Access Area with that Name already exists."
 msgstr "En användarzon med det namnet finns redan."
 
 #: inc/class-undisclosedcaps.php:199
 #: inc/class-undisclosedusers.php:312
-#@ wpundisclosed
+#@ wp-access-areas
 msgctxt "access area"
 msgid "Add New"
 msgstr "Ny Zon"
 
 #: inc/class-undisclosededitpost.php:80
 #: inc/class-undisclosededitpost.php:345
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access"
 msgstr "Användarzoner"
 
 #: inc/class-undisclosededitpost.php:232
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "WordPress default"
 msgstr "WP Förvalt"
 
 #: inc/class-undisclosededitpost.php:403
 #: inc/class-undisclosededitpost.php:409
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Blog users"
 msgstr "Inloggade"
 
 #: inc/class-undisclosededitpost.php:237
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "WordPress roles"
 msgstr "Webbplatsroller"
 
 #: inc/class-undisclosededitpost.php:184
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Who can comment:"
 msgstr "Kan kommentera:"
 
 #: inc/class-undisclosededitpost.php:390
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Visible to"
 msgstr "Ses av"
 
 #: inc/class-undisclosededitpost.php:403
 #: inc/class-undisclosededitpost.php:409
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Everybody"
 msgstr "WP Förvalt"
 
 #: inc/class-undiscloseduserlabel.php:74
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "(Network)"
 msgstr "(nätverk)"
 
 #: inc/class-undisclosedusers.php:257
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Grant Network-Wide Access"
 msgstr "Ge behörighet över hela nätverket"
 
 #: inc/class-undisclosedusers.php:250
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Grant Access"
 msgstr "Behörighet"
 
 #: inc/class-undisclosedusers.php:331
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Areas:"
 msgstr "Användarzoner:"
 
@@ -174,18 +174,18 @@ msgid "Everywhere"
 msgstr "Globalt"
 
 #: inc/class-userlabel_list_table.php:42
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Name"
 msgstr "Namn"
 
 #: inc/class-userlabel_list_table.php:45
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Scope"
 msgstr "Räckvidd"
 
 #: inc/class-undisclosedusers.php:365
 #: inc/class-userlabel_list_table.php:83
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Network"
 msgstr "Namn"
 
@@ -197,78 +197,78 @@ msgid "Delete"
 msgstr "Radera"
 
 #: inc/class-undisclosedcaps.php:181
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Could not find the specified Access Area."
 msgstr "Specificerad användarzon finns inte."
 
 #: inc/class-undisclosededitpost.php:246
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Users with Access to"
 msgstr "Användare med access till"
 
 #: inc/class-undisclosededitpost.php:168
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Who can read:"
 msgstr "Kan läsa"
 
 #: inc/class-undisclosededitpost.php:176
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Who can edit:"
 msgstr "Kan ändra:"
 
 #. translators: plugin header field 'Name'
 #: wp-access-areas.php:0
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "WordPress Access Areas"
 msgstr "Användarzoner"
 
 #. translators: plugin header field 'PluginURI'
 #: wp-access-areas.php:0
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "http://wordpress.org/plugins/wp-access-areas/"
 msgstr ""
 
 #. translators: plugin header field 'Description'
 #: wp-access-areas.php:0
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Lets you define Access Areas and assign them to Posts, Pages and Custom Post types. Through Access Areas you can fine-tune who can view, edit or comment on your posts."
 msgstr "Låter dig skapa och tilldela användarzoner till inlägg, sidor och Custom Post Types. Med hjälp av Access Areas får du kontroll över vem som kan se, ändra och kommentera på hemsidan."
 
 #. translators: plugin header field 'Author'
 #: wp-access-areas.php:0
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Joern Lund"
 msgstr ""
 
 #. translators: plugin header field 'AuthorURI'
 #: wp-access-areas.php:0
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "https://github.com/mcguffin/"
 msgstr ""
 
 #: inc/class-undisclosededitpost.php:234
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Logged in Users"
 msgstr "Inloggade användare"
 
 #: inc/class-undisclosededitpost.php:391
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Commentable to"
 msgstr "Kommenterar"
 
 #: inc/class-userlabel_list_table.php:47
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "WP Capability"
 msgstr "WP Behörighet"
 
 #: inc/class-undisclosedusers.php:87
 #: inc/class-undisclosedusers.php:105
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Insufficient privileges."
 msgstr "Otillräcklig behörighet."
 
 #: inc/class-undisclosedusers.php:99
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Area exists."
 msgstr "Användarzon existerar."
 
@@ -285,78 +285,78 @@ msgid "&mdash; No Change &mdash;"
 msgstr "&mdash; Inget ändrat &mdash;"
 
 #: inc/class-undisclosededitpost.php:350
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Read:"
 msgstr "Läsa:"
 
 #: inc/class-undisclosededitpost.php:359
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Edit:"
 msgstr "Ändra:"
 
 #: inc/class-undisclosededitpost.php:368
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Comment:"
 msgstr "Kommentera:"
 
 #: inc/class-undisclosededitpost.php:83
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Behaviour"
 msgstr "Omdirigering"
 
 #: inc/class-undisclosededitpost.php:281
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Show 404"
 msgstr "Visa 404 (sidan kunde inte hittas)."
 
 #: inc/class-undisclosededitpost.php:285
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Redirect to the fallback page."
 msgstr "Skicka till sida för ej inloggade."
 
 #: inc/class-undisclosededitpost.php:202
 #: inc/class-undisclosedsettings.php:59
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "If somebody tries to view a restricted post directly:"
 msgstr "Vid försök till direktåtkomst av sida med begränsad behörighet:"
 
 #: inc/class-undisclosededitpost.php:210
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Fallback Page"
 msgstr "Sida för ej inloggade"
 
 #: inc/class-undisclosededitpost.php:289
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "If not logged in, redirect to login. Otherwise redirect to the fallback page."
 msgstr "Om ej inloggad, skicka till inloggningssida. Annars skicka till sida för ej inloggade."
 
 #: inc/class-undisclosedsettings.php:24
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Settings"
 msgstr "Behörigheter"
 
 #: inc/class-undisclosedsettings.php:29
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Restricted Access Behavior"
 msgstr "Inställning av omdirigering"
 
 #: inc/class-undisclosedsettings.php:30
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Default Behaviour"
 msgstr "Förvald omdirigering"
 
 #: inc/class-undisclosedsettings.php:31
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Default Fallback Page"
 msgstr "Förvald sida för ej inloggade"
 
 #: inc/class-undisclosedsettings.php:43
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Areas Settings"
 msgstr "Användarzoner"
 
 #: inc/class-undisclosedsettings.php:50
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "You can also set these Options for each post individually."
 msgstr "OBS: Dessa inställningar finns även på varje enskild sida. (inställningspanelen tillhör tillägget wp-access-areas)."
 
@@ -366,27 +366,27 @@ msgid "Save Changes"
 msgstr "Spara ändringar"
 
 #: inc/class-undisclosedusers.php:89
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Empty name."
 msgstr ""
 
 #: inc/class-undisclosedusers.php:117
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Grant Access … "
 msgstr ""
 
 #: inc/class-undisclosedusers.php:118
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Grant"
 msgstr ""
 
 #: inc/class-undisclosedusers.php:125
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Revoke Access … "
 msgstr ""
 
 #: inc/class-undisclosedusers.php:126
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Revoke"
 msgstr ""
 
@@ -396,13 +396,13 @@ msgid "You can&#8217;t edit that user."
 msgstr ""
 
 #: inc/class-undisclosedusers.php:360
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Local"
 msgstr ""
 
 #. translators: plugin header field 'Version'
 #: wp-access-areas.php:0
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "1.2.5"
 msgstr ""
 

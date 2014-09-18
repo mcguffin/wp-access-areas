@@ -57,7 +57,7 @@ class UndisclosedCore {
 	 */
 	static function plugin_loaded() {
 		self::check_version();
-		load_plugin_textdomain( 'wpundisclosed' , false, dirname(dirname( plugin_basename( __FILE__ ))) . '/lang');
+		load_plugin_textdomain( 'wp-access-areas' , false, dirname(dirname( plugin_basename( __FILE__ ))) . '/languages/' );
 	}
 	
 	/**

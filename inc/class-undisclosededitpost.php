@@ -131,9 +131,9 @@ class UndisclosedEditPost {
 		global $wp_post_types;
 		if ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_view_cap' ) || current_user_can( 'wpaa_set_edit_cap' ) || current_user_can( 'wpaa_set_comment_cap' ) ) {
 			foreach ( array_keys($wp_post_types) as $post_type ) {
-				add_meta_box( 'post-disclosure' , __('Access','wpundisclosed') , array(__CLASS__,'disclosure_box_info') , $post_type , 'side' , 'high' );
+				add_meta_box( 'post-disclosure' , __('Access','wp-access-areas') , array(__CLASS__,'disclosure_box_info') , $post_type , 'side' , 'high' );
 				if ( self::can_edit_view_cap( $post_type ) )
-					add_meta_box( 'post-disclosure-behavior' , __('Behaviour','wpundisclosed') , array(__CLASS__,'disclosure_box_behavior') , $post_type , 'side' , 'high' );
+					add_meta_box( 'post-disclosure-behavior' , __('Behaviour','wp-access-areas') , array(__CLASS__,'disclosure_box_behavior') , $post_type , 'side' , 'high' );
 			}
 		}
 	}
@@ -242,7 +242,7 @@ class UndisclosedEditPost {
 		
 		if ( self::can_edit_view_cap( $post->post_type , $post_type_object ) ) { 
 			?><div class="disclosure-view-select misc-pub-section">
-				<label for="post_view_cap-select"><strong><?php _e( 'Who can read:' , 'wpundisclosed') ?></strong></label><br />
+				<label for="post_view_cap-select"><strong><?php _e( 'Who can read:' , 'wp-access-areas') ?></strong></label><br />
 				<?php 
 					self::access_area_dropdown( $rolenames , $groups , $post->post_view_cap , 'post_view_cap' );
 				?>
@@ -250,7 +250,7 @@ class UndisclosedEditPost {
 		}
 		if ( self::can_edit_edit_cap() ) {
 			?><div class="disclosure-edit-select misc-pub-section">
-				<label for="post_edit_cap-select"><strong><?php _e( 'Who can edit:' , 'wpundisclosed') ?></strong></label><br />
+				<label for="post_edit_cap-select"><strong><?php _e( 'Who can edit:' , 'wp-access-areas') ?></strong></label><br />
 				<?php 
 					self::access_area_dropdown( $edit_rolenames , $groups , $post->post_edit_cap , 'post_edit_cap' );
 				?>
@@ -258,7 +258,7 @@ class UndisclosedEditPost {
 		}
 		if ( self::can_edit_comment_cap( $post->post_type ) && wpaa_user_can( $post->post_comment_cap ) ) {
 			?><div class="disclosure-comment-select misc-pub-section">
-				<label for="post_comment_cap-select"><strong><?php _e( 'Who can comment:' , 'wpundisclosed') ?></strong></label><br />
+				<label for="post_comment_cap-select"><strong><?php _e( 'Who can comment:' , 'wp-access-areas') ?></strong></label><br />
 				<?php 
 					self::access_area_dropdown( $rolenames , $groups , $post->post_comment_cap , 'post_comment_cap' );
 				?>
@@ -289,7 +289,7 @@ class UndisclosedEditPost {
 			$post_fallback_page = get_option('wpaa_fallback_page');
 
 		?><div class="disclosure-view-select misc-pub-section"><?php
-			?><p class="description"><?php _e('If somebody tries to view a restricted post directly:' , 'wpundisclosed' ); ?></p><?php
+			?><p class="description"><?php _e('If somebody tries to view a restricted post directly:' , 'wp-access-areas' ); ?></p><?php
 		
 		self::behavior_select( $post_behavior );
 		
@@ -297,7 +297,7 @@ class UndisclosedEditPost {
 		
 		?><div class="disclosure-view-select misc-pub-section"><?php
 		?><label for="_wpaa_fallback_page"><?php
-		_e('Fallback Page','wpundisclosed');
+		_e('Fallback Page','wp-access-areas');
 		?></label><?php
 		// only offer non-restricted pages
 		
@@ -319,12 +319,12 @@ class UndisclosedEditPost {
 				?><option value="<?php $first_item_value ?>"><?php echo $first_item_label ?></option><?php
 			}
 		
-			?><option value="exist" <?php selected($selected_cap , 'exist') ?>><?php _e( 'WordPress default' , 'wpundisclosed' ) ?></option><?php
+			?><option value="exist" <?php selected($selected_cap , 'exist') ?>><?php _e( 'WordPress default' , 'wp-access-areas' ) ?></option><?php
 			if ( strpos( $fieldname , 'post_edit_cap' ) === false ) {
-				?><option value="read" <?php selected($selected_cap , 'read') ?>><?php _e( 'Logged in Users' , 'wpundisclosed' ) ?></option><?php
+				?><option value="read" <?php selected($selected_cap , 'read') ?>><?php _e( 'Logged in Users' , 'wp-access-areas' ) ?></option><?php
 			}
 			
-			?><optgroup label="<?php _e( 'WordPress roles' , 'wpundisclosed') ?>">
+			?><optgroup label="<?php _e( 'WordPress roles' , 'wp-access-areas') ?>">
 			<?php foreach ($roles as $role => $rolename) {
 				if ( ! wpaa_user_can_role( $role ) )
 					continue;
@@ -333,12 +333,12 @@ class UndisclosedEditPost {
 			<?php } ?>
 			</optgroup>
 			<?php if ( count($groups) ) { ?>
-				<optgroup label="<?php _e( 'Users with Access to' , 'wpundisclosed') ?>">
+				<optgroup label="<?php _e( 'Users with Access to' , 'wp-access-areas') ?>">
 				<?php foreach ($groups as $group=>$groupname) { 
 					if ( ! wpaa_user_can_accessarea($group) )
 						continue;
 					?>
-					<option value="<?php echo $group ?>" <?php selected($selected_cap , $group) ?>><?php _e( $groupname , 'wpundisclosed' ) ?></option>
+					<option value="<?php echo $group ?>" <?php selected($selected_cap , $group) ?>><?php _e( $groupname , 'wp-access-areas' ) ?></option>
 				<?php } /* foreach( $groups ) */ ?>
 				</optgroup>
 			<?php }  /* if count( $groups ) */ ?>
@@ -372,15 +372,15 @@ class UndisclosedEditPost {
 		$behaviors = array(
 			array( 
 				'value'	=> '404',
-				'label' => __( 'Show 404' , 'wpundisclosed'),
+				'label' => __( 'Show 404' , 'wp-access-areas'),
 			),
 			array(
 				'value'	=> 'page',
-				'label' => __( 'Redirect to the fallback page.' , 'wpundisclosed'),
+				'label' => __( 'Redirect to the fallback page.' , 'wp-access-areas'),
 			),
 			array(
 				'value'	=> 'login',
-				'label' => __( 'If not logged in, redirect to login. Otherwise redirect to the fallback page.' , 'wpundisclosed'),
+				'label' => __( 'If not logged in, redirect to login. Otherwise redirect to the fallback page.' , 'wp-access-areas'),
 			),
 		);
 
@@ -439,12 +439,12 @@ class UndisclosedEditPost {
 				}
 			}
 			?><fieldset class="inline-edit-col-access-areas inline-edit-col-left">
-				<h3><?php _e('Access','wpundisclosed') ?></h3>
+				<h3><?php _e('Access','wp-access-areas') ?></h3>
 				<div class="inline-edit-col"><?php
 					if ( self::can_edit_view_cap( $post_type , $post_type_object ) ) {
 						?><div class="inline-edit-group">
 							<label>
-								<span class="title"><?php _e( 'Read:' , 'wpundisclosed') ?></span>
+								<span class="title"><?php _e( 'Read:' , 'wp-access-areas') ?></span>
 								<?php 
 								self::access_area_dropdown( $rolenames , $groups , $view_cap , 'post_view_cap' , $first_item_value , __( '&mdash; No Change &mdash;' ) );
 								?>
@@ -454,7 +454,7 @@ class UndisclosedEditPost {
 					if ( self::can_edit_edit_cap() ) {
 						?><div class="inline-edit-group">
 							<label>
-								<span class="title"><?php _e( 'Edit:' , 'wpundisclosed') ?></span>
+								<span class="title"><?php _e( 'Edit:' , 'wp-access-areas') ?></span>
 								<?php 
 								self::access_area_dropdown( $edit_rolenames , $groups , $edit_cap , 'post_edit_cap'  , $first_item_value , __( '&mdash; No Change &mdash;' )  );
 								?>
@@ -464,7 +464,7 @@ class UndisclosedEditPost {
 					if ( self::can_edit_comment_cap( $post_type ) ) {
 						?><div class="inline-edit-group">
 							<label>
-								<span class="title"><?php _e( 'Comment:' , 'wpundisclosed') ?></span>
+								<span class="title"><?php _e( 'Comment:' , 'wp-access-areas') ?></span>
 								<?php 
 								self::access_area_dropdown( $rolenames , $groups , $comment_cap , 'post_comment_cap'  , $first_item_value , __( '&mdash; No Change &mdash;' ) );
 								?>
@@ -491,8 +491,8 @@ class UndisclosedEditPost {
 		foreach ($columns as $k=>$v) {
 			$cols[$k] = $v;
 			if ($k == $after ) {
-				$cols['view_cap'] = __('Visible to','wpundisclosed');
-				$cols['comment_cap'] = __('Commentable to','wpundisclosed');
+				$cols['view_cap'] = __('Visible to','wp-access-areas');
+				$cols['comment_cap'] = __('Commentable to','wp-access-areas');
 			}
 		}
 		return $cols;
@@ -510,7 +510,7 @@ class UndisclosedEditPost {
 		foreach ($columns as $k=>$v) {
 			$cols[$k] = $v;
 			if ( $k == $after ) {
-				$cols['view_cap'] = __('Visible to','wpundisclosed');
+				$cols['view_cap'] = __('Visible to','wp-access-areas');
 			}
 		}
 		return $cols;
@@ -528,7 +528,7 @@ class UndisclosedEditPost {
 		foreach ($columns as $k=>$v) {
 			$cols[$k] = $v;
 			if ( $k == $after ) {
-				$cols['comment_cap'] = __('Commentable to','wpundisclosed');
+				$cols['comment_cap'] = __('Commentable to','wp-access-areas');
 			}
 		}
 		return $cols;
@@ -546,7 +546,7 @@ class UndisclosedEditPost {
 		foreach ($columns as $k=>$v) {
 			$cols[$k] = $v;
 			if ( $k == $after ) {
-				$cols['edit_cap'] = __('Editable for','wpundisclosed');
+				$cols['edit_cap'] = __('Editable for','wp-access-areas');
 			}
 		}
 		return $cols;
@@ -560,19 +560,19 @@ class UndisclosedEditPost {
 // 		var_dump($column,current_filter());
 		switch ( $column ) {
 			case 'view_cap':
-				$names = array_merge(array('exist' => __( 'Everybody' , 'wpundisclosed' ), 'read' => __( 'Blog users' , 'wpundisclosed' )) , UndisclosedUserlabel::get_label_array( ), $wp_roles->get_names());
+				$names = array_merge(array('exist' => __( 'Everybody' , 'wp-access-areas' ), 'read' => __( 'Blog users' , 'wp-access-areas' )) , UndisclosedUserlabel::get_label_array( ), $wp_roles->get_names());
 				$names[''] = $names['exist'];
 				$val = get_post($post_ID)->post_view_cap;
 				_e($names[$val]);
 				break;
 			case 'comment_cap':
-				$names = array_merge(array('exist' => __( 'Everybody' , 'wpundisclosed' ), 'read' => __( 'Blog users' , 'wpundisclosed' )) , UndisclosedUserlabel::get_label_array( ), $wp_roles->get_names());
+				$names = array_merge(array('exist' => __( 'Everybody' , 'wp-access-areas' ), 'read' => __( 'Blog users' , 'wp-access-areas' )) , UndisclosedUserlabel::get_label_array( ), $wp_roles->get_names());
 				$names[''] = $names['exist'];
 				$val = get_post($post_ID)->post_comment_cap;
 				_e($names[$val]);
 				break;
 			case 'edit_cap':
-				$names = array_merge(array('exist' => __( 'Everybody' , 'wpundisclosed' ), 'read' => __( 'Blog users' , 'wpundisclosed' )) , UndisclosedUserlabel::get_label_array( ), $wp_roles->get_names());
+				$names = array_merge(array('exist' => __( 'Everybody' , 'wp-access-areas' ), 'read' => __( 'Blog users' , 'wp-access-areas' )) , UndisclosedUserlabel::get_label_array( ), $wp_roles->get_names());
 				$names[''] = $names['exist'];
 				$val = get_post($post_ID)->post_edit_cap;
 				_e($names[$val]);

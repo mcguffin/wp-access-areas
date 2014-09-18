@@ -39,12 +39,12 @@ class UserLabel_List_Table extends WP_List_Table {
     function get_columns() {
     	$columns = array(
 			'cb'			=> '<input type="checkbox" />', //Render a checkbox instead of text
-			'cap_title'		=> __('Name','wpundisclosed'),
+			'cap_title'		=> __('Name','wp-access-areas'),
     	);
     	if ( is_multisite() )
-    		$columns['blog'] =  __('Scope','wpundisclosed');
+    		$columns['blog'] =  __('Scope','wp-access-areas');
     	
-		$columns['capability'] = __('WP Capability','wpundisclosed');
+		$columns['capability'] = __('WP Capability','wp-access-areas');
     	return $columns;
     }
     function get_sortable_columns() {
@@ -80,7 +80,7 @@ class UserLabel_List_Table extends WP_List_Table {
         	case 'capability':
         		return "<code>$output</code>";
         	case 'blog':
-        		return $item->blog_id ? get_blog_details( $item->blog_id , true )->siteurl : __('Network','wpundisclosed');
+        		return $item->blog_id ? get_blog_details( $item->blog_id , true )->siteurl : __('Network','wp-access-areas');
         	case 'blog_id':
         		return $output;
         	case 'actions':

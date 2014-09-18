@@ -22,144 +22,144 @@ msgstr ""
 
 #: inc/class-undisclosedcaps.php:28
 #: inc/class-undisclosedcaps.php:198
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Manage Access Areas"
 msgstr "Zarządzaj obszarami dostępu"
 
 #: inc/class-undisclosedcaps.php:28
 #: inc/class-undisclosedusers.php:244
 #: inc/class-undisclosedusers.php:383
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Areas"
 msgstr "Obszary dostępu"
 
 #: inc/class-undisclosedcaps.php:35
 #: inc/class-undisclosedusers.php:232
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "You do not have permission to do this."
 msgstr "Nie masz wystarczających uprawnień."
 
 #: inc/class-undisclosedcaps.php:48
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Please enter a Label."
 msgstr "Uzupełnij etykietę."
 
 #: inc/class-undisclosedcaps.php:51
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "You do not have permission to edit network wide user labels."
 msgstr "Nie masz uprawnień by edytować etykietę użytkowników w sieci."
 
 #: inc/class-undisclosedcaps.php:126
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Edit Access Area"
 msgstr "Edytuj obszar dostępu"
 
 #: inc/class-undisclosedcaps.php:128
 #: inc/class-undisclosedcaps.php:153
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Create Access Area"
 msgstr "Dodaj obszar dostępu"
 
 #: inc/class-undisclosedcaps.php:143
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Area"
 msgstr "Obszar dostępu"
 
 #: inc/class-undisclosedcaps.php:144
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "New Access Area"
 msgstr "Nowy obszar dostępu"
 
 #: inc/class-undisclosedcaps.php:151
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Save changes"
 msgstr "Zapisz zmiany"
 
 #: inc/class-undisclosedcaps.php:169
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Area created."
 msgstr "Obszar dostępu utworzony."
 
 #: inc/class-undisclosedcaps.php:172
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Area updated."
 msgstr "Obszar dostępu został zaktualizowany."
 
 #: inc/class-undisclosedcaps.php:175
 #, php-format
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Area deleted."
 msgid_plural "%d Access Areas deleted."
 msgstr[0] "Obszar dostępu został usunięty."
 msgstr[1] "Es wurden %d Zugangsbereiche gelöscht."
 
 #: inc/class-undisclosedcaps.php:178
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "An Access Area with that Name already exists."
 msgstr "Obszar dostępu o takiej nazwie już istnieje."
 
 #: inc/class-undisclosedcaps.php:199
 #: inc/class-undisclosedusers.php:312
-#@ wpundisclosed
+#@ wp-access-areas
 msgctxt "access area"
 msgid "Add New"
 msgstr "Dodaj nowy"
 
 #: inc/class-undisclosededitpost.php:80
 #: inc/class-undisclosededitpost.php:349
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access"
 msgstr "Dostęp"
 
 #: inc/class-undisclosededitpost.php:232
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "WordPress default"
 msgstr "Domyślny"
 
 #: inc/class-undisclosededitpost.php:407
 #: inc/class-undisclosededitpost.php:413
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Blog users"
 msgstr "Użytkownicy"
 
 #: inc/class-undisclosededitpost.php:237
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "WordPress roles"
 msgstr "Role"
 
 #: inc/class-undisclosededitpost.php:184
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Who can comment:"
 msgstr "Publikacja komentarzy:"
 
 #: inc/class-undisclosededitpost.php:394
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Visible to"
 msgstr "Widoczne dla"
 
 #: inc/class-undisclosededitpost.php:407
 #: inc/class-undisclosededitpost.php:413
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Everybody"
 msgstr "Wszyscy"
 
 #: inc/class-undiscloseduserlabel.php:74
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "(Network)"
 msgstr "(Sieć)"
 
 #: inc/class-undisclosedusers.php:257
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Grant Network-Wide Access"
 msgstr "Dostęp w sieci"
 
 #: inc/class-undisclosedusers.php:250
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Grant Access"
 msgstr "Pełen dostęp"
 
 #: inc/class-undisclosedusers.php:331
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Areas:"
 msgstr "Obszary dostępu"
 
@@ -174,18 +174,18 @@ msgid "Everywhere"
 msgstr "Wszędzie"
 
 #: inc/class-userlabel_list_table.php:42
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Name"
 msgstr "Nazwa"
 
 #: inc/class-userlabel_list_table.php:45
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Scope"
 msgstr "Zakres"
 
 #: inc/class-undisclosedusers.php:365
 #: inc/class-userlabel_list_table.php:83
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Network"
 msgstr "Sieć"
 
@@ -197,72 +197,72 @@ msgid "Delete"
 msgstr "Usuń"
 
 #: inc/class-undisclosedcaps.php:181
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Could not find the specified Access Area."
 msgstr "Nie można znaleźć określonego obszaru dostępu."
 
 #: inc/class-undisclosededitpost.php:246
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Users with Access to"
 msgstr "Użytkownicy z dostępem do"
 
 #: inc/class-undisclosededitpost.php:168
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Who can read:"
 msgstr "Czytanie:"
 
 #: inc/class-undisclosededitpost.php:176
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Who can edit:"
 msgstr "Edycja:"
 
 #. translators: plugin header field 'Name'
 #: wp-access-areas.php:0
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "WordPress Access Areas"
 msgstr "Obszary dostępu Wordpress"
 
 #. translators: plugin header field 'PluginURI'
 #: wp-access-areas.php:0
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "http://wordpress.org/plugins/wp-access-areas/"
 msgstr ""
 
 #. translators: plugin header field 'Description'
 #: wp-access-areas.php:0
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Lets you define Access Areas and assign them to Posts, Pages and Custom Post types. Through Access Areas you can fine-tune who can view, edit or comment on your posts."
 msgstr "Wtyczka pozwala na definiowanie obszarów dostępowych i przypisywanie ich do wpisów, stron i formatów wpisu. Za pomocą obszarów dostępowych decydujesz kto może przeglądać, edytować i komentować Twoje wpisy."
 
 #. translators: plugin header field 'AuthorURI'
 #: wp-access-areas.php:0
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "https://github.com/mcguffin/"
 msgstr ""
 
 #: inc/class-undisclosededitpost.php:234
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Logged in Users"
 msgstr "Zalogowani użytkownicy"
 
 #: inc/class-undisclosededitpost.php:395
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Commentable to"
 msgstr "Komentować mogą:"
 
 #: inc/class-userlabel_list_table.php:47
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "WP Capability"
 msgstr "Uprawnienia WP"
 
 #: inc/class-undisclosedusers.php:87
 #: inc/class-undisclosedusers.php:105
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Insufficient privileges."
 msgstr "Niewystarczające uprawnienia."
 
 #: inc/class-undisclosedusers.php:99
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Area exists."
 msgstr "Taki obszar dostępu już istnieje."
 
@@ -279,78 +279,78 @@ msgid "&mdash; No Change &mdash;"
 msgstr ""
 
 #: inc/class-undisclosededitpost.php:354
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Read:"
 msgstr "Czytanie:"
 
 #: inc/class-undisclosededitpost.php:363
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Edit:"
 msgstr "Edycja:"
 
 #: inc/class-undisclosededitpost.php:372
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Comment:"
 msgstr "Komentowanie:"
 
 #: inc/class-undisclosededitpost.php:83
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Behaviour"
 msgstr "Działania"
 
 #: inc/class-undisclosededitpost.php:285
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Show 404"
 msgstr "Pokaż błąd 404"
 
 #: inc/class-undisclosededitpost.php:289
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Redirect to the fallback page."
 msgstr "Przekieruj na stronę"
 
 #: inc/class-undisclosededitpost.php:202
 #: inc/class-undisclosedsettings.php:76
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "If somebody tries to view a restricted post directly:"
 msgstr "Gdy ktoś próbuje podejrzeć stronę bezpośrednio:"
 
 #: inc/class-undisclosededitpost.php:210
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Fallback Page"
 msgstr "Strona przekierowania"
 
 #: inc/class-undisclosededitpost.php:293
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "If not logged in, redirect to login. Otherwise redirect to the fallback page."
 msgstr "Gdy niezalogowany, przekieruj na ekran logowania. W innym wypadku przenieś na stronę przekierowania."
 
 #: inc/class-undisclosedsettings.php:34
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Settings"
 msgstr "Opcje dostępu"
 
 #: inc/class-undisclosedsettings.php:42
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Restricted Access Behavior"
 msgstr "Działania - obszar niedostępny."
 
 #: inc/class-undisclosedsettings.php:43
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Default Behaviour"
 msgstr "Domyślne działanie"
 
 #: inc/class-undisclosedsettings.php:44
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Default Fallback Page"
 msgstr "Domyślna strona przekierowania"
 
 #: inc/class-undisclosedsettings.php:61
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Access Areas Settings"
 msgstr "Ustawienia obszaru dostępu"
 
 #: inc/class-undisclosedsettings.php:50
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "You can also set these Options for each post individually."
 msgstr "Te opcje możesz również ustawić indywidualnie dla każdego wpisu/podstrony."
 
@@ -360,27 +360,27 @@ msgid "Save Changes"
 msgstr "Zapisz zmiany"
 
 #: inc/class-undisclosedusers.php:89
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Empty name."
 msgstr "Uzupełnij imię."
 
 #: inc/class-undisclosedusers.php:117
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Grant Access … "
 msgstr "Pełen dostęp"
 
 #: inc/class-undisclosedusers.php:118
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Grant"
 msgstr "Przyznaj"
 
 #: inc/class-undisclosedusers.php:125
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Revoke Access … "
 msgstr "Odbierz dostęp"
 
 #: inc/class-undisclosedusers.php:126
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Revoke"
 msgstr "Odbierz"
 
@@ -390,12 +390,12 @@ msgid "You can&#8217;t edit that user."
 msgstr ""
 
 #: inc/class-undisclosedusers.php:360
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Local"
 msgstr "Lokalny"
 
 #: inc/class-undisclosedsettings.php:18
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Don‘t change"
 msgstr "Nie zmieniaj."
 
@@ -420,23 +420,23 @@ msgid "Pending Review"
 msgstr "Oczekuje na publikację"
 
 #: inc/class-undisclosedsettings.php:46
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Posts defaults"
 msgstr "Domyślne wpisy"
 
 #: inc/class-undisclosedsettings.php:47
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Default Post Status"
 msgstr "Domyślny status wpisu"
 
 #: inc/class-undisclosedsettings.php:103
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Set post status of assigned posts after an Access Area has been deleted."
 msgstr "Ustaw status przypisanego wpisu po usunięciu obszaru dostępowego."
 
 #. translators: plugin header field 'Author'
 #: wp-access-areas.php:0
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "Jörn Lund"
 msgstr ""
 
@@ -447,7 +447,7 @@ msgstr ""
 
 #. translators: plugin header field 'Version'
 #: wp-access-areas.php:0
-#@ wpundisclosed
+#@ wp-access-areas
 msgid "1.2.7"
 msgstr ""
 

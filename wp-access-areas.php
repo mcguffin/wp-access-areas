@@ -11,9 +11,6 @@ Description: Lets you define Access Areas and assign them to Posts, Pages and Cu
 Author: Jörn Lund
 Version: 1.3.1
 Author URI: https://github.com/mcguffin/
-
-Text Domain: wpundisclosed
-Domain Path: /lang/
 */
 
 /*
