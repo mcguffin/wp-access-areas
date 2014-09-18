@@ -133,19 +133,20 @@ class UndisclosedEditPost {
 		if ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_view_cap' ) || current_user_can( 'wpaa_set_edit_cap' ) || current_user_can( 'wpaa_set_comment_cap' ) ) {
 			foreach ( array_keys($wp_post_types) as $post_type ) {
 				add_meta_box( 'post-disclosure' , __('Access','wpundisclosed') , array(__CLASS__,'disclosure_box_info') , $post_type , 'side' , 'high' );
-				$post_type_object 	= get_post_type_object( $post_type );
-				if ( $post_type_object->public && $post_type != 'attachment' )
+				if ( self::can_edit_view_cap( $post_type ) )
 					add_meta_box( 'post-disclosure-behavior' , __('Behaviour','wpundisclosed') , array(__CLASS__,'disclosure_box_behavior') , $post_type , 'side' , 'high' );
 			}
 		}
 	}
 	// --------------------------------------------------
-	// saving post
+	// saving posts
 	// --------------------------------------------------
 	static function edit_post( $data, $postarr ) {
-
-		$post_type_object 	= get_post_type_object($data["post_type"]);
+	
+		$post_type = $data["post_type"];
+		$post_type_object 	= get_post_type_object( $post_type );
 		
+		// set default values
 		if ( ! $postarr['ID'] ) {
 			$caps = array( 
 				'post_view_cap' => 'exist',
@@ -161,40 +162,46 @@ class UndisclosedEditPost {
 			return $data;
 
 		
-		if (  ( $post_type_object->public || $post_type_object->show_ui ) && isset($postarr['post_view_cap']) && $postarr['post_view_cap'] )
-			$data['post_view_cap']	= $postarr['post_view_cap'];
+		// process user input. 
+		if ( self::can_edit_view_cap( $post_type , $post_type_object ) && isset($postarr['post_view_cap']) && $postarr['post_view_cap'] )
+			$data['post_view_cap']	= wpaa_sanitize_access_cap(  $postarr['post_view_cap'] );
 		
-		if (isset($postarr['post_edit_cap']) && $postarr['post_edit_cap']) 
-			$data['post_edit_cap']	= $postarr['post_edit_cap'];
+		if ( self::can_edit_edit_cap() && isset($postarr['post_edit_cap']) && $postarr['post_edit_cap']) 
+			$data['post_edit_cap']	= wpaa_sanitize_access_cap( $postarr['post_edit_cap'] );
 	
-		if ( post_type_supports( $data["post_type"] , 'comments' ) && isset($postarr['post_comment_cap']) && $postarr['post_comment_cap'] )
-			$data['post_comment_cap']	= $postarr['post_comment_cap'];
+		if (  self::can_edit_comment_cap( $post_type ) && isset($postarr['post_comment_cap']) && $postarr['post_comment_cap'] )
+			$data['post_comment_cap']	= wpaa_sanitize_access_cap( $postarr['post_comment_cap'] );
 		
 		return $data;
 	}
 	
+	// --------------------------------------------------
+	// saving posts, 
+	// --------------------------------------------------
 	static function set_post_behavior(  $post_ID , $post , $update ) {
-		// set page
-		if ( isset( $_POST['_wpaa_fallback_page'] ) )
-			update_post_meta( $post_ID , '_wpaa_fallback_page' , intval( $_POST['_wpaa_fallback_page'] ) );
+		// should only happen if edit_view_cap is true
+		if ( self::can_edit_view_cap( $post->post_type ) ) {
+			if ( isset( $_POST['_wpaa_fallback_page'] ) )
+				update_post_meta( $post_ID , '_wpaa_fallback_page' , intval( $_POST['_wpaa_fallback_page'] ) );
 		
-		if ( isset( $_POST['_wpaa_post_behavior'] ) ) {
-			$meta = $_POST['_wpaa_post_behavior'];
+			if ( isset( $_POST['_wpaa_post_behavior'] ) ) {
+				$meta = $_POST['_wpaa_post_behavior'];
 		
-			if ( $meta === '' ) {
-				delete_post_meta( $post_ID , '_wpaa_post_behavior' );
-			} else if ( in_array( $meta , array( '404' , 'page' , 'login' ) ) ) {
-				update_post_meta( $post_ID , '_wpaa_post_behavior' , $meta );
+				if ( $meta === '' ) {
+					delete_post_meta( $post_ID , '_wpaa_post_behavior' );
+				} else if ( in_array( $meta , array( '404' , 'page' , 'login' ) ) ) {
+					update_post_meta( $post_ID , '_wpaa_post_behavior' , $meta );
+				}
 			}
 		}
 	}
 	
 	static function edit_attachment( $attachment_ID ) {
-		$attachment = get_post($attachment_ID);
-		$post_edit_cap = isset($_POST['post_edit_cap']) ? sanitize_title($_POST['post_edit_cap']) : $attachment->post_edit_cap;
-		$post_comment_cap = isset($_POST['post_comment_cap']) ? sanitize_title($_POST['post_comment_cap']) : $attachment->post_comment_cap;
+		$attachment			= get_post($attachment_ID);
+		$post_edit_cap 		= isset($_POST['post_edit_cap']) ? wpaa_sanitize_access_cap( $_POST['post_edit_cap'] ) : $attachment->post_edit_cap;
+		$post_comment_cap	= isset($_POST['post_comment_cap']) ? wpaa_sanitize_access_cap( $_POST['post_comment_cap'] ) : $attachment->post_comment_cap;
 	
-		if ( $post_edit_cap != $attachment->post_edit_cap || $post_comment_cap != $attachment->post_comment_cap ) {
+		if ( $attachment && $post_edit_cap != $attachment->post_edit_cap || $post_comment_cap != $attachment->post_comment_cap ) {
 			// use $wpdb instead of wp_update_post to avoid inifinite do_action
 			global $wpdb;
 			$data = array(
@@ -234,7 +241,7 @@ class UndisclosedEditPost {
 			}
 		}
 		
-		if ( ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_view_cap' ) ) && ( $post_type_object->public || $post_type_object->show_ui ) && $post->post_type != 'attachment' ) { 
+		if ( self::can_edit_view_cap( $post->post_type , $post_type_object ) ) { 
 			?><div class="disclosure-view-select misc-pub-section">
 				<label for="post_view_cap-select"><strong><?php _e( 'Who can read:' , 'wpundisclosed') ?></strong></label><br />
 				<?php 
@@ -242,7 +249,7 @@ class UndisclosedEditPost {
 				?>
 			</div><?php
 		}
-		if ( ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_edit_cap' ) ) ) {
+		if ( self::can_edit_edit_cap() ) {
 			?><div class="disclosure-edit-select misc-pub-section">
 				<label for="post_edit_cap-select"><strong><?php _e( 'Who can edit:' , 'wpundisclosed') ?></strong></label><br />
 				<?php 
@@ -250,7 +257,7 @@ class UndisclosedEditPost {
 				?>
 			</div><?php
 		}
-		if ( ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_comment_cap' ) ) && post_type_supports( $post->post_type , 'comments' ) && wpaa_user_can( $post->post_comment_cap ) ) {
+		if ( self::can_edit_comment_cap( $post->post_type ) && wpaa_user_can( $post->post_comment_cap ) ) {
 			?><div class="disclosure-comment-select misc-pub-section">
 				<label for="post_comment_cap-select"><strong><?php _e( 'Who can comment:' , 'wpundisclosed') ?></strong></label><br />
 				<?php 
@@ -259,8 +266,21 @@ class UndisclosedEditPost {
 			</div><?php
 		}
 	}
+	
+	private static function can_edit_view_cap( $post_type , $post_type_object = null ) {
+		if ( is_null( $post_type_object ) )
+			$post_type_object = get_post_type_object( $post_type );
+		return ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_view_cap' ) ) && ( $post_type_object->public || $post_type_object->show_ui ) && $post_type != 'attachment';
+	}
+	private static function can_edit_edit_cap() {
+		return ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_edit_cap' ) );
+	}
+	private static function can_edit_comment_cap( $post_type ) {
+		 return ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_comment_cap' ) ) && post_type_supports( $post_type , 'comments' );
+	}
+	
 	static function disclosure_box_behavior( ) {
-		$post 				= get_post(get_the_ID());
+		$post 			= get_post(get_the_ID());
 		$post_behavior 	= get_post_meta( $post->ID , '_wpaa_post_behavior' , true );
 		if ( ! $post_behavior )
 			$post_behavior = get_option('wpaa_default_behavior');
@@ -373,6 +393,7 @@ class UndisclosedEditPost {
 			<br /></label><?php
 		}
 	}
+	
 	// --------------------------------------------------
 	// Quick Edit hook callback
 	// --------------------------------------------------
@@ -381,12 +402,14 @@ class UndisclosedEditPost {
 		// enqueue
 		self::_edit_fields( $column_name, $post_type , $post , null );
 	}
+	
 	// --------------------------------------------------
 	// Bulk Edit hook callback
 	// --------------------------------------------------
 	static function bulk_edit_fields( $column_name, $post_type ) {
 		self::_edit_fields( $column_name, $post_type );
 	}
+	
 	// --------------------------------------------------
 	// Quick/Bulk Edit html
 	// --------------------------------------------------
@@ -419,7 +442,7 @@ class UndisclosedEditPost {
 			?><fieldset class="inline-edit-col-access-areas inline-edit-col-left">
 				<h3><?php _e('Access','wpundisclosed') ?></h3>
 				<div class="inline-edit-col"><?php
-					if ( $post_type_object->public ) {
+					if ( self::can_edit_view_cap( $post_type , $post_type_object ) ) {
 						?><div class="inline-edit-group">
 							<label>
 								<span class="title"><?php _e( 'Read:' , 'wpundisclosed') ?></span>
@@ -429,15 +452,17 @@ class UndisclosedEditPost {
 							</label>
 						</div><?php
 					}
-					?><div class="inline-edit-group">
-						<label>
-							<span class="title"><?php _e( 'Edit:' , 'wpundisclosed') ?></span>
-							<?php 
-							self::access_area_dropdown( $edit_rolenames , $groups , $edit_cap , 'post_edit_cap'  , $first_item_value , __( '&mdash; No Change &mdash;' )  );
-							?>
-						</label>
-					</div><?php
-					if ( post_type_supports( $post_type , 'comments' ) ) {
+					if ( self::can_edit_edit_cap() ) {
+						?><div class="inline-edit-group">
+							<label>
+								<span class="title"><?php _e( 'Edit:' , 'wpundisclosed') ?></span>
+								<?php 
+								self::access_area_dropdown( $edit_rolenames , $groups , $edit_cap , 'post_edit_cap'  , $first_item_value , __( '&mdash; No Change &mdash;' )  );
+								?>
+							</label>
+						</div><?php
+					}
+					if ( self::can_edit_comment_cap( $post_type ) ) {
 						?><div class="inline-edit-group">
 							<label>
 								<span class="title"><?php _e( 'Comment:' , 'wpundisclosed') ?></span>
