@@ -92,6 +92,9 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 
 == Changelog ==
 
+= 1.3.2 =
+- Security Fix: Exclude restricted posts from comment feeds
+
 = 1.3.1 =
 - Fix: Possible vulnerability where unauthorized users could change post access settings
 - L10n: change plugin textdomain from 'wpundisclosed' to 'wp-access-areas' (= Plugin slug). Rename lang/ > languages/.

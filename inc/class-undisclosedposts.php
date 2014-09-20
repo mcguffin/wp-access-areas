@@ -15,20 +15,20 @@ class UndisclosedPosts {
 
 		// viewing restrictions on posts lists
 		add_action( 'get_pages' , array( __CLASS__ , 'skip_undisclosed_items' ) , 10 , 1 ); // needed by nav menus
-		add_filter( "posts_where" , array( __CLASS__ , "get_posts_where" ) , 10 , 2 );
-		add_filter( "getarchives_where" , array( __CLASS__ , "get_archiveposts_where" ) , 10 , 2 );
+		add_filter( 'posts_where' , array( __CLASS__ , 'get_posts_where' ) , 10 , 2 );
+		add_filter( 'getarchives_where' , array( __CLASS__ , 'get_archiveposts_where' ) , 10 , 2 );
 		/*
 		// activate as soon as patch @ https://core.trac.wordpress.org/attachment/ticket/29319/general-template.diff makes it into core.
-		add_filter( "getcalendar_where" , array( __CLASS__ , "get_archiveposts_where" ) , 10 , 1 );
-		add_filter( "getcalendar_next_where" , array( __CLASS__ , "get_archiveposts_where" ) , 10 , 1 );
-		add_filter( "getcalendar_previous_where" , array( __CLASS__ , "get_archiveposts_where" ) , 10 , 1 );
+		add_filter( 'getcalendar_where' , array( __CLASS__ , 'get_archiveposts_where' ) , 10 , 1 );
+		add_filter( 'getcalendar_next_where' , array( __CLASS__ , 'get_archiveposts_where' ) , 10 , 1 );
+		add_filter( 'getcalendar_previous_where' , array( __CLASS__ , 'get_archiveposts_where' ) , 10 , 1 );
 		//*/
-		add_filter( "posts_join" , array( __CLASS__ , "get_posts_join" ) , 10 , 2 );
+		add_filter( 'posts_join' , array( __CLASS__ , 'get_posts_join' ) , 10 , 2 );
 
-		add_filter( "get_next_post_where" , array( __CLASS__ , "get_adjacent_post_where" ) , 10 , 3 );
-		add_filter( "get_previous_post_where" , array( __CLASS__ , "get_adjacent_post_where" ) , 10 , 3 );
-		add_filter( "get_next_post_join" , array( __CLASS__ , "get_adjacent_post_join" ) , 10 , 3 );
-		add_filter( "get_previous_post_join" , array( __CLASS__ , "get_adjacent_post_join" ) , 10 , 3 );
+		add_filter( 'get_next_post_where' , array( __CLASS__ , 'get_adjacent_post_where' ) , 10 , 3 );
+		add_filter( 'get_previous_post_where' , array( __CLASS__ , 'get_adjacent_post_where' ) , 10 , 3 );
+		add_filter( 'get_next_post_join' , array( __CLASS__ , 'get_adjacent_post_join' ) , 10 , 3 );
+		add_filter( 'get_previous_post_join' , array( __CLASS__ , 'get_adjacent_post_join' ) , 10 , 3 );
 		
 		// behavior
 		add_action('template_redirect',array(__CLASS__,'template_redirect')); // or wp
@@ -38,6 +38,7 @@ class UndisclosedPosts {
 		add_filter( 'comments_clauses' , array( __CLASS__ , 'comments_query_clauses' ) , 10 , 2 );
 		add_filter( 'wp_count_comments' , array( __CLASS__ , 'count_comments' ) , 10 , 2 );
 		
+		add_filter( 'comment_feed_where' , array( __CLASS__ , 'get_archiveposts_where' ) , 10 , 2 );
 		//misc
 		add_filter( 'edit_post_link' , array(__CLASS__,'edit_post_link') , 10 , 2 );
 		add_filter( 'post_class' , array( __CLASS__ , 'post_class' ) , 10 , 3 );
