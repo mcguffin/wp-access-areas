@@ -46,5 +46,5 @@ Compatibility
 
 Plugin API
 ----------
-See the [Project Wiki](./wiki/) for details.
+See the [Project Wiki](../../wiki/) for details.
 
