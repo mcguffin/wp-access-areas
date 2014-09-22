@@ -26,6 +26,8 @@ even custom Access Areas.
 
 Latest files on [GitHub](https://github.com/mcguffin/wp-access-areas).
 
+Developers might like to have a look at [the project wiki](https://github.com/mcguffin/wp-access-areas/wiki).
+
 = Known Limitations =
 - WordPress calendar Widget still shows dates where even restricted posts have been created. When clicked on such a date a 404 will occur. 
 - Taxonomy menus (e.g. Tags / Categories) also count restricted posts when the total number of posts in a taxonomy is ascertained. See [this post](http://wordpress.org/support/topic/archive-recents-posts-last-comments-show-restricted-content?replies=5#post-5929330) for details.
@@ -40,11 +42,14 @@ Latest files on [GitHub](https://github.com/mcguffin/wp-access-areas).
 
 = What does it exactly do? =
 
-For each Post it stores a capabilty the user needs to have in order to view, edit or comment on a post. By defining Access Areas You create nothing more than custom capabilities. 
+For each Post it stores a capabilty the user needs to have in order to view, edit or comment on a post. 
+By defining an Access Area you create nothing more than a custom capability. 
 
 = Why didn't you use post_meta to store permissions? WordPress already provides an API for this! =
 
-I did this mainly for performance reason. For detecting the reading-permission on specific content, the plugin mainly affects the WHERE clause used to retrieve posts. In most cases, using post_meta would mean to add a JOIN clause to the database query, which would slow down your site's performance.
+I did this mainly for performance reason. For detecting the reading-permission on specific content, 
+the plugin mainly affects the WHERE clause used to retrieve posts. In most cases, using post_meta 
+would mean to add lots of JOIN clauses to the database query, slowing down your site's performance.
 
 = Does it mess up my database? =
 
@@ -52,12 +57,12 @@ It makes changes to your database, but it won't make a mess out of it. Upon inst
 1. It creates a table named ´{$wp_prefix}_disclosure_userlabels´. The access areas you define are here.
 2. It adds three columns to Your Posts tables: post_view_cap and post_comment_cap. 
 
-Upon uninstall these changes will be removed completely, as well as it will remove any custom generated capability from Your user's profiles.
+Upon uninstall these changes will be removed completely, as well as it will remove any custom generated 
+capability from your user's profiles.
 
-= I'd like to do some magic / science when a user tries to view a restricted post. And yes: I can code! =
+= I'd like to do some more magic / science with it. And yes: I can code! =
 
-Check out the `wpaa_view_restricted_post` action hook and the `wpaa_restricted_post_redirect` filter. 
-Theres some documentation in the [GitHub Repo](https://github.com/mcguffin/wp-access-areas)
+Developer documentation can be found in [the project wiki](https://github.com/mcguffin/wp-access-areas/wiki).
 
 = I found a bug. Where should I post it? =
 
@@ -82,6 +87,15 @@ the official WP plugin repository first.
 = I found a bug and fixed it. How can I contribute? =
 
 Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if you are working on a cloned repository—send me a pull request.
+
+= Will you accept translations? =
+
+Yep sure! (And a warm thankyou in advance.) It might take some time until your localization 
+will appear in an official plugin release, and it is not unlikely that I will have added 
+or removed some strings in the meantime. 
+
+As soon as there is a [public centralized repository for WordPress plugin translations](https://translate.wordpress.org/projects/wp-plugins) 
+I will migrate all the translation stuff there.
 
 == Screenshots ==
 
