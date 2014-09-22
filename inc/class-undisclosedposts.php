@@ -38,6 +38,7 @@ class UndisclosedPosts {
 		add_filter( 'comments_clauses' , array( __CLASS__ , 'comments_query_clauses' ) , 10 , 2 );
 		add_filter( 'wp_count_comments' , array( __CLASS__ , 'count_comments' ) , 10 , 2 );
 		
+		add_filter( 'comment_feed_join' , array( __CLASS__ , 'get_comment_feed_join' ) , 10 , 2 );
 		add_filter( 'comment_feed_where' , array( __CLASS__ , 'get_archiveposts_where' ) , 10 , 2 );
 		//misc
 		add_filter( 'edit_post_link' , array(__CLASS__,'edit_post_link') , 10 , 2 );
@@ -84,7 +85,8 @@ class UndisclosedPosts {
 					}
 				} else if ( $behavior == 'login' ) {
 					// get user to login and return him to the requested page.
-					$redirect = wp_login_url( get_permalink() );
+					$redirect = wp_login_url( site_url( $_SERVER["REQUEST_URI"]) );
+						// used to be get_permalink(), was not working on feeds...
 				} else if ( $behavior == '404' ) { // 404
 					global $wp_query;
 					$wp_query->set_404();
@@ -105,11 +107,14 @@ class UndisclosedPosts {
 	static function comments_query_clauses( $clauses , $wp_comment_query ) {
 		global $wpdb;
 		if ( strpos( $clauses['join'] , $wpdb->posts ) === false )
-			$clauses['join'] = "JOIN {$wpdb->posts} ON {$wpdb->posts}.ID = {$wpdb->comments}.comment_post_ID";
+			$clauses['join'] = self::get_comment_feed_join($clauses['join']);
 		$clauses['where'] = self::_get_where( $clauses['where'] , $wpdb->posts );
 		return $clauses;
 	}
-	
+	static function get_comment_feed_join( $join , $wp_comment_query ) {
+		global $wpdb;
+		return $join . " JOIN {$wpdb->posts} ON {$wpdb->posts}.ID = {$wpdb->comments}.comment_post_ID";
+	}
 	
 	// --------------------------------------------------
 	// comment restrictions
@@ -270,7 +275,7 @@ class UndisclosedPosts {
 		return $where;
 	}
 	static function get_posts_join( $join , &$wp_query ) {
-		global $wpdb;
+// 		global $wpdb;
 		return $join;
 	}
 	
