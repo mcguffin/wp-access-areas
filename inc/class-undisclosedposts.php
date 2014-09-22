@@ -38,7 +38,7 @@ class UndisclosedPosts {
 		add_filter( 'comments_clauses' , array( __CLASS__ , 'comments_query_clauses' ) , 10 , 2 );
 		add_filter( 'wp_count_comments' , array( __CLASS__ , 'count_comments' ) , 10 , 2 );
 		
-		add_filter( 'comment_feed_join' , array( __CLASS__ , 'get_comment_feed_join' ) , 10 , 2 );
+		add_filter( 'comment_feed_join' , array( __CLASS__ , 'get_comment_feed_join' ) );
 		add_filter( 'comment_feed_where' , array( __CLASS__ , 'get_archiveposts_where' ) , 10 , 2 );
 		//misc
 		add_filter( 'edit_post_link' , array(__CLASS__,'edit_post_link') , 10 , 2 );
@@ -106,14 +106,15 @@ class UndisclosedPosts {
 	// --------------------------------------------------
 	static function comments_query_clauses( $clauses , $wp_comment_query ) {
 		global $wpdb;
-		if ( strpos( $clauses['join'] , $wpdb->posts ) === false )
-			$clauses['join'] = self::get_comment_feed_join($clauses['join']);
+		$clauses['join'] = self::get_comment_feed_join($clauses['join']);
 		$clauses['where'] = self::_get_where( $clauses['where'] , $wpdb->posts );
 		return $clauses;
 	}
-	static function get_comment_feed_join( $join , $wp_comment_query ) {
+	static function get_comment_feed_join( $join ) {
 		global $wpdb;
-		return $join . " JOIN {$wpdb->posts} ON {$wpdb->posts}.ID = {$wpdb->comments}.comment_post_ID";
+		if ( strpos( $join , $wpdb->posts ) === false )
+			$join .= " JOIN {$wpdb->posts} ON {$wpdb->posts}.ID = {$wpdb->comments}.comment_post_ID";
+		return $join;
 	}
 	
 	// --------------------------------------------------
