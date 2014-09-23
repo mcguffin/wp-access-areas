@@ -106,6 +106,10 @@ I will migrate all the translation stuff there.
 
 == Changelog ==
 
+= 1.3.3 =
+- Fix: Database error on comment feeds. Hiding or redirecting from comment feeds should work now.
+- Fix: Crash during update (function `get_editable_roles` not found)
+
 = 1.3.2 =
 - Security Fix: Exclude restricted posts from comment feeds
 
