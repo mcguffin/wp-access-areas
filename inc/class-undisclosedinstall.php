@@ -117,6 +117,8 @@ class UndisclosedInstall {
 	// --------------------------------------------------
 	public static function install_role_caps() {
 		global $wp_roles;
+		if ( ! function_exists( 'get_editable_roles' ) )
+			require_once( ABSPATH . '/wp-admin/includes/user.php' );
 		$roles = get_editable_roles();
 		foreach ( array_keys($roles) as $role_slug ) {
 			$role = get_role($role_slug);
@@ -132,6 +134,8 @@ class UndisclosedInstall {
 		}
 	}
 	public static function uninstall_role_caps() {
+		if ( ! function_exists( 'get_editable_roles' ) )
+			require_once( ABSPATH . '/wp-admin/includes/user.php' );
 		$roles = get_editable_roles();
 		foreach ( array_keys($roles) as $role_slug ) {
 			$role = get_role($role_slug);
