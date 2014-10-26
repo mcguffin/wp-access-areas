@@ -106,9 +106,10 @@ I will migrate all the translation stuff there.
 
 == Changelog ==
 
-= 1.3.4 =
+= 1.4.0 =
  - UI: Explicitly enable / disable Post custom behaviour.
  - UI: Combine columns in Posts list table
+ - Drop support for WP < 3.8
 
 = 1.3.3 =
  - Fix: Database error on comment feeds. Hiding or redirecting from comment feeds should work now.
