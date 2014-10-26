@@ -398,7 +398,6 @@ class WPAA_Users {
 		$user = new WP_User( $user_ID );
 		if ( ( is_multisite() && is_super_admin( $user_ID ) ) || ( ! is_multisite() && $user->has_cap( 'administrator' )) )
 			return WPAA_Template::access_area( __('Everywhere') , true );
-//			return '<div class="disclosure-labels"><span class="disclosure-label-item access-all-areas"><span class="icon-undisclosed-network icon16"></span>' . __('Everywhere') . '</span></div>';
 		
 		
 		foreach ($labels as $label) {

@@ -37,61 +37,6 @@ class WPAA_EditPost {
 		add_action( 'load-post-new.php' , array( __CLASS__ , 'enqueue_script_style' ) );
 		
 	}
-	/*
-	static function add_post_type_columns() {
-		
-		$can_edit_edit_cap		=  self::can_edit_edit_cap();
-
-		// posts
-		if ( post_type_supports( 'post' , 'comments' ) )
-			add_filter('manage_posts_columns' , array( __CLASS__ , 'add_disclosure_columns') );
-		else 
-			add_filter('manage_posts_columns' , array( __CLASS__ , 'add_disclosure_column_view') );
-		add_action('manage_posts_custom_column' , array( __CLASS__ , 'manage_disclosure_column') , 10 ,2 );
-
-		// pages
-		if ( post_type_supports( 'page' , 'comments' ) )
-			add_filter('manage_pages_columns' , array( __CLASS__ , 'add_disclosure_columns') );
-		else 
-			add_filter('manage_pages_columns' , array( __CLASS__ , 'add_disclosure_column_view') );
-		add_action('manage_pages_custom_column' , array( __CLASS__ , 'manage_disclosure_column') , 10 ,2 );
-
-		// media library
-		if ( post_type_supports( 'attachment' , 'comments' ) )
-			add_filter('manage_media_columns' , array( __CLASS__ , 'add_disclosure_column_comment'));
-		add_action('manage_media_custom_column' , array( __CLASS__ , 'manage_disclosure_column') , 10 ,2 );
-
-		if ( $can_edit_edit_cap ) {
-			add_filter( 'manage_posts_columns' , array( __CLASS__ , 'add_disclosure_column_edit'));
-			add_filter( 'manage_pages_columns' , array( __CLASS__ , 'add_disclosure_column_edit'));
-			add_filter( 'manage_media_columns' , array( __CLASS__ , 'add_disclosure_column_edit'));
-		}
-
-		$post_types = get_post_types(array(
-			'show_ui' => true,
-			'_builtin' => false,
-		));
-		// Why?
-		$post_types['attachment'] = 'attachment';
-		
-		// custom post types
-		foreach ( $post_types as $post_type ) {
-			$post_type_object = get_post_type_object( $post_type );
-			$view_col 		= self::can_edit_view_cap( $post_type , $post_type_object );
-			$comment_col	= self::can_edit_comment_cap( $post_type );
-
-			if ( $view_col && $comment_col ) 
-				add_filter( "manage_{$post_type}_posts_columns" , array( __CLASS__ , 'add_disclosure_columns'));
-			else if ( $view_col && ! $comment_col )
-				add_filter( "manage_{$post_type}_posts_columns" , array( __CLASS__ , 'add_disclosure_column_view'));
-			else if ( ! $view_col &&  $comment_col )
-				add_filter( "manage_{$post_type}_posts_columns" , array( __CLASS__ , 'add_disclosure_column_comment'));
-
-			if ( $can_edit_edit_cap )
-				add_filter( "manage_{$post_type}_posts_columns" , array( __CLASS__ , 'add_disclosure_column_edit'));
-		}
-	}
-	/*/
 	static function add_post_type_columns() {
 		// posts
 		add_filter('manage_posts_columns' , array( __CLASS__ , 'add_disclosure_column') );
@@ -116,7 +61,6 @@ class WPAA_EditPost {
 			add_filter( "manage_{$post_type}_posts_columns" , array( __CLASS__ , 'add_disclosure_column'));
 		}
 	}
-	//*/
 	
 	static function ajax_get_accessarea_values() {
 		$result = false;
@@ -442,7 +386,7 @@ class WPAA_EditPost {
 			}
 		}
 	}
-	//*
+
 	static function add_disclosure_column( $columns ) {
 		global $post_type;
 		$post_type_object = get_post_type_object( $post_type );
@@ -517,108 +461,5 @@ class WPAA_EditPost {
 			}
 		}
 	}
-	/*/
-	// --------------------------------------------------
-	// admin list views
-	// --------------------------------------------------
-	static function add_disclosure_columns($columns) {
-		$cols = array();
-		$afters = array('author','title','cb');
-		foreach ( $afters as $after )
-			if ( isset($columns[$after] ) )
-				break;
-
-		foreach ($columns as $k=>$v) {
-			$cols[$k] = $v;
-			if ($k == $after ) {
-				$cols['view_cap'] = __('Visible to','wp-access-areas');
-				$cols['comment_cap'] = __('Commentable to','wp-access-areas');
-			}
-		}
-		return $cols;
-	}
-	// --------------------------------------------------
-	// admin list views
-	// --------------------------------------------------
-	static function add_disclosure_column_view( $columns ) {
-		$cols = array();
-		$afters = array('author','title','cb');
-		foreach ( $afters as $after )
-			if ( isset($columns[$after]) )
-				break;
-
-		foreach ($columns as $k=>$v) {
-			$cols[$k] = $v;
-			if ( $k == $after ) {
-				$cols['view_cap'] = __('Visible to','wp-access-areas');
-			}
-		}
-		return $cols;
-	}
-	// --------------------------------------------------
-	// admin list views
-	// --------------------------------------------------
-	static function add_disclosure_column_comment($columns) {
-		$cols = array();
-		$afters = array('view_cap','author','title','cb');
-		foreach ( $afters as $after )
-			if ( isset($columns[$after]) )
-				break;
-
-		foreach ($columns as $k=>$v) {
-			$cols[$k] = $v;
-			if ( $k == $after ) {
-				$cols['comment_cap'] = __('Commentable to','wp-access-areas');
-			}
-		}
-		return $cols;
-	}
-	// --------------------------------------------------
-	// admin list views
-	// --------------------------------------------------
-	static function add_disclosure_column_edit( $columns ) {
-		$cols = array();
-		$afters = array('comment_cap','view_cap','author','title','cb');
-		foreach ( $afters as $after )
-			if ( isset($columns[$after]) )
-				break;
-
-		foreach ($columns as $k=>$v) {
-			$cols[$k] = $v;
-			if ( $k == $after ) {
-				$cols['edit_cap'] = __('Editable for','wp-access-areas');
-			}
-		}
-		return $cols;
-	}
-
-	// --------------------------------------------------
-	// admin list view column
-	// --------------------------------------------------
-	static function manage_disclosure_column($column, $post_ID) {
-		global $wp_roles;
-// 		var_dump($column,current_filter());
-		switch ( $column ) {
-			case 'view_cap':
-				$names = array_merge(array('exist' => __( 'Everybody' , 'wp-access-areas' ), 'read' => __( 'Blog users' , 'wp-access-areas' )) , WPAA_AccessArea::get_label_array( ), $wp_roles->get_names());
-				$names[''] = $names['exist'];
-				$val = get_post($post_ID)->post_view_cap;
-				_e($names[$val]);
-				break;
-			case 'comment_cap':
-				$names = array_merge(array('exist' => __( 'Everybody' , 'wp-access-areas' ), 'read' => __( 'Blog users' , 'wp-access-areas' )) , WPAA_AccessArea::get_label_array( ), $wp_roles->get_names());
-				$names[''] = $names['exist'];
-				$val = get_post($post_ID)->post_comment_cap;
-				_e($names[$val]);
-				break;
-			case 'edit_cap':
-				$names = array_merge(array('exist' => __( 'Everybody' , 'wp-access-areas' ), 'read' => __( 'Blog users' , 'wp-access-areas' )) , WPAA_AccessArea::get_label_array( ), $wp_roles->get_names());
-				$names[''] = $names['exist'];
-				$val = get_post($post_ID)->post_edit_cap;
-				_e($names[$val]);
-				break;
-		}
-	}
-	//*/
 }
 endif;
