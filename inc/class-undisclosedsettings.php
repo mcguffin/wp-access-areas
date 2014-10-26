@@ -199,14 +199,14 @@ class UndisclosedSettings {
 					$action = 'post_view_cap';
 					$cap = isset($option_values[$post_type][$action] )?$option_values[$post_type][$action] : 'exist';
 					if ( $post_type != 'attachment' && ( $post_type_object->public || $post_type_object->show_ui)  )
-						UndisclosedEditPost::access_area_dropdown(  $roles , $groups , 
+						WPAA_Template::access_area_dropdown(  $roles , $groups , 
 							wpaa_sanitize_access_cap( $cap ) , 
 							"wpaa_default_caps[$post_type][$action]"  );
 				?></td><?php
 				?><td><?php
 					$action = 'post_edit_cap';
 					$cap = isset($option_values[$post_type][$action] )?$option_values[$post_type][$action] : 'exist';
-					UndisclosedEditPost::access_area_dropdown(  $edit_rolenames , $groups , 
+					WPAA_Template::access_area_dropdown(  $edit_rolenames , $groups , 
 						wpaa_sanitize_access_cap( $cap ) , 
 						"wpaa_default_caps[$post_type][$action]"  );
 				?></td><?php
@@ -214,7 +214,7 @@ class UndisclosedSettings {
 					$action = 'post_comment_cap';
 					$cap = isset($option_values[$post_type][$action] )?$option_values[$post_type][$action] : 'exist';
 					if ( post_type_supports( $post_type , 'comments' ) )
-						UndisclosedEditPost::access_area_dropdown(  $roles , $groups , 
+						WPAA_Template::access_area_dropdown(  $roles , $groups , 
 							wpaa_sanitize_access_cap( $cap ) , 
 							"wpaa_default_caps[$post_type][$action]"  );
 				?></td><?php

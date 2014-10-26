@@ -314,7 +314,7 @@ class UndisclosedPosts {
 				$caps[] = $role;
 			
 			// user's custom caps
-			foreach( UndisclosedUserlabel::get_label_array( ) as $cap => $capname)
+			foreach( array_keys(UndisclosedUserlabel::get_label_array( ) ) as $cap)
 				if ( wpaa_user_can_accessarea( $cap ) )
 					$caps[] = $cap;
 		}

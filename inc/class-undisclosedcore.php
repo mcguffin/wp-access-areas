@@ -92,7 +92,6 @@ class UndisclosedCore {
 		}
 		
 	}
-
 }
 
 endif;

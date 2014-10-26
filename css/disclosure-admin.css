@@ -5,24 +5,35 @@
 .wpaa-select-behaviour.custom .wpaa-behaviour-controls {
 	display:block;
 }
-
-
 #post-disclosure .inside {
 	padding:0;
 	margin:0;
 }
 
-.undisclosed-network th,
-.undisclosed-network td {
+/* list posts */
+.wpaa-default-permission {
+	display:none;
+}
+
+.wpaa-access-area {
+	display:inline-block;
+	padding:0.25em 0.5em;
+	margin:0.25em;
+	background:#f0f0f0;
+	border:1px dotted #bbb;
+}
+.wpaa-access-area:before {
+	margin-right:0.25em
+}
+
+/* edit user assign aa  */
+.wpaa-section th,
+.wpaa-section td {
 	border-top:1px solid #f0f0f0;
 	border-bottom:1px solid #dfdfdf;
 }
-.undisclosed-local th,
-.undisclosed-local td {
-	border-top:1px solid #f0f0f0;
-	border-bottom:1px solid #dfdfdf;
-}
-/* oldstyle icons */
+
+/* oldstyle icons pre WP 3.8 */
 .wp-lt-38 #icon-undisclosed-network {
 	background-image:url('../images/undisclosed-icons-32.png');
 	background-position:-5px -5px;
@@ -47,26 +58,9 @@
 .wp-lt-38 .icon-undisclosed-local.icon16 {
 	background-position:-26px -1px;
 }
-/* wp3.8+ dashicon */
-.wp-gte-38 .icon-undisclosed-local.icon16:before,
-.wp-gte-38 .icon-undisclosed-network.icon16:before {
-	font-family:dashicons;
-	font-size:1.5em;
-	line-height:0.5em;
-}
-.wp-gte-38 .icon-undisclosed-local.icon16:before {
-	content:'\f102';
-}
-.wp-gte-38 .icon-undisclosed-network.icon16:before {
-	content:'\f319';
-}
-/* h2 icons on admin pages are deprecated as of WP 3.8 */
-.wp-gte-38 #icon-undisclosed-network,
-.wp-gte-38 #icon-undisclosed-userlabel {
-	display:none;
-}
 
 
+/* options page */
 #wpaa-options .set-default-caps tfoot th,
 #wpaa-options .set-default-caps thead th {
 	font-weight:400;

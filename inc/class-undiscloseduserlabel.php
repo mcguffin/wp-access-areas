@@ -71,9 +71,12 @@ class UndisclosedUserlabel {
 		$labels = self::get_available_userlabels( );
 		$label_map = array();
 		foreach ( $labels as $item ) {
-			$label_map[$item->capability] = $item->cap_title;
-			if ( is_multisite() && ! $item->blog_id ) 
-				$label_map[$item->capability] .= ' '.__('(Network)','wp-access-areas');
+			$label_map[$item->capability] = array(
+				'title' => $item->cap_title,
+				'global' => is_multisite() && ! $item->blog_id,
+			);
+// 			if ( is_multisite() && ! $item->blog_id ) 
+// 				$label_map[$item->capability] .= ' '.__('(Network)','wp-access-areas');
 		}
 		return $label_map;
 	}
