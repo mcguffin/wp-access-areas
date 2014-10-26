@@ -3,8 +3,8 @@ Contributors: podpirate
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WF4Z3HU93XYJA
 Tags: access, role, capability, user, security, editor
 Requires at least: 3.5
-Tested up to: 4.0
-Stable tag: 1.3.3
+Tested up to: 4.1
+Stable tag: 1.3.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -105,6 +105,9 @@ I will migrate all the translation stuff there.
 4. Post Access Behaviour
 
 == Changelog ==
+
+= 1.3.4 =
+- UI: Explicitly enable / disable Post custom behaviour.
 
 = 1.3.3 =
 - Fix: Database error on comment feeds. Hiding or redirecting from comment feeds should work now.

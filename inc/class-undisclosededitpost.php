@@ -34,8 +34,8 @@ class UndisclosedEditPost {
 		add_action( 'load-edit.php' , array( __CLASS__ , 'enqueue_script_style' ) );
 		add_action( 'load-edit.php' , array( __CLASS__ , 'enqueue_style' ) );
 		
-		add_action( 'load-post.php' , array( __CLASS__ , 'enqueue_style' ) );
-		add_action( 'load-post-new.php' , array( __CLASS__ , 'enqueue_style' ) );
+		add_action( 'load-post.php' , array( __CLASS__ , 'enqueue_script_style' ) );
+		add_action( 'load-post-new.php' , array( __CLASS__ , 'enqueue_script_style' ) );
 		
 	}
 	
@@ -118,6 +118,7 @@ class UndisclosedEditPost {
 	}
 
 	static function load_edit_script() {
+		wp_enqueue_script( 'disclosure-edit' );
 		wp_enqueue_script( 'disclosure-quick-edit' );
 	} 
 	static function load_style() {
@@ -179,18 +180,23 @@ class UndisclosedEditPost {
 	// --------------------------------------------------
 	static function set_post_behavior(  $post_ID , $post , $update ) {
 		// should only happen if edit_view_cap is true
-		if ( self::can_edit_view_cap( $post->post_type ) ) {
-			if ( isset( $_POST['_wpaa_fallback_page'] ) )
-				update_post_meta( $post_ID , '_wpaa_fallback_page' , intval( $_POST['_wpaa_fallback_page'] ) );
-		
-			if ( isset( $_POST['_wpaa_post_behavior'] ) ) {
-				$meta = $_POST['_wpaa_post_behavior'];
-		
-				if ( $meta === '' ) {
-					delete_post_meta( $post_ID , '_wpaa_post_behavior' );
-				} else if ( in_array( $meta , array( '404' , 'page' , 'login' ) ) ) {
-					update_post_meta( $post_ID , '_wpaa_post_behavior' , $meta );
+		if ( self::can_edit_view_cap( $post->post_type ) &&  isset( $_POST['_wpaa_enable_custom_behaviour'] ) ) {
+			if ( (bool) $_POST['_wpaa_enable_custom_behaviour'] ) {
+				if ( isset( $_POST['_wpaa_fallback_page'] ) )
+					update_post_meta( $post_ID , '_wpaa_fallback_page' , intval( $_POST['_wpaa_fallback_page'] ) );
+	
+				if ( isset( $_POST['_wpaa_post_behavior'] ) ) {
+					$meta = $_POST['_wpaa_post_behavior'];
+	
+					if ( $meta === '' ) {
+						delete_post_meta( $post_ID , '_wpaa_post_behavior' );
+					} else if ( in_array( $meta , array( '404' , 'page' , 'login' ) ) ) {
+						update_post_meta( $post_ID , '_wpaa_post_behavior' , $meta );
+					}
 				}
+			} else {
+				delete_post_meta( $post_ID , '_wpaa_post_behavior' );
+				delete_post_meta( $post_ID , '_wpaa_fallback_page' );
 			}
 		}
 	}
@@ -241,28 +247,22 @@ class UndisclosedEditPost {
 		}
 		
 		if ( self::can_edit_view_cap( $post->post_type , $post_type_object ) ) { 
-			?><div class="disclosure-view-select misc-pub-section">
-				<label for="post_view_cap-select"><strong><?php _e( 'Who can read:' , 'wp-access-areas') ?></strong></label><br />
-				<?php 
-					self::access_area_dropdown( $rolenames , $groups , $post->post_view_cap , 'post_view_cap' );
-				?>
-			</div><?php
+			?><div class="disclosure-view-select misc-pub-section"><?php
+				?><label for="post_view_cap-select"><strong><?php _e( 'Who can read:' , 'wp-access-areas') ?></strong></label><br /><?php
+				self::access_area_dropdown( $rolenames , $groups , $post->post_view_cap , 'post_view_cap' );
+			?></div><?php
 		}
 		if ( self::can_edit_edit_cap() ) {
-			?><div class="disclosure-edit-select misc-pub-section">
-				<label for="post_edit_cap-select"><strong><?php _e( 'Who can edit:' , 'wp-access-areas') ?></strong></label><br />
-				<?php 
-					self::access_area_dropdown( $edit_rolenames , $groups , $post->post_edit_cap , 'post_edit_cap' );
-				?>
-			</div><?php
+			?><div class="disclosure-edit-select misc-pub-section"><?php
+				?><label for="post_edit_cap-select"><strong><?php _e( 'Who can edit:' , 'wp-access-areas') ?></strong></label><br /><?php 
+				self::access_area_dropdown( $edit_rolenames , $groups , $post->post_edit_cap , 'post_edit_cap' );
+			?></div><?php
 		}
 		if ( self::can_edit_comment_cap( $post->post_type ) && wpaa_user_can( $post->post_comment_cap ) ) {
-			?><div class="disclosure-comment-select misc-pub-section">
-				<label for="post_comment_cap-select"><strong><?php _e( 'Who can comment:' , 'wp-access-areas') ?></strong></label><br />
-				<?php 
-					self::access_area_dropdown( $rolenames , $groups , $post->post_comment_cap , 'post_comment_cap' );
-				?>
-			</div><?php
+			?><div class="disclosure-comment-select misc-pub-section"><?php
+				?><label for="post_comment_cap-select"><strong><?php _e( 'Who can comment:' , 'wp-access-areas') ?></strong></label><br /><?php
+				self::access_area_dropdown( $rolenames , $groups , $post->post_comment_cap , 'post_comment_cap' );
+			?></div><?php
 		}
 	}
 	
@@ -280,28 +280,49 @@ class UndisclosedEditPost {
 	
 	static function disclosure_box_behavior( ) {
 		$post 			= get_post(get_the_ID());
+		$is_custom_behaviour = true;
+		$is_custom_fallback  = true;
+
 		$post_behavior 	= get_post_meta( $post->ID , '_wpaa_post_behavior' , true );
-		if ( ! $post_behavior )
-			$post_behavior = get_option('wpaa_default_behavior');
-
+		if ( ! $post_behavior ) {
+			$post_behavior       = get_option('wpaa_default_behavior');
+			$is_custom_behaviour = false;
+		}
+		
 		$post_fallback_page	= get_post_meta( $post->ID , '_wpaa_fallback_page' , true );
-		if ( ! $post_fallback_page )
+		if ( ! $post_fallback_page ) {
 			$post_fallback_page = get_option('wpaa_fallback_page');
-
-		?><div class="disclosure-view-select misc-pub-section"><?php
-			?><p class="description"><?php _e('If somebody tries to view a restricted post directly:' , 'wp-access-areas' ); ?></p><?php
+			$is_custom_fallback = false;
+		}
 		
-		self::behavior_select( $post_behavior );
+		$is_custom = $is_custom_fallback && $is_custom_behaviour;
 		
-		?></div><?php
+		?><div class="wpaa-select-behaviour<?php echo $is_custom ? ' custom' : '' ; ?>"><?php
+			?><div class="misc-pub-section"><?php
+				?><label for="wpaa_enable_custom_behaviour"><?php
+					?><input name="_wpaa_enable_custom_behaviour" value="0" type="hidden" /><?php
+					?><input name="_wpaa_enable_custom_behaviour" value="1" type="checkbox" id="wpaa_enable_custom_behaviour" <?php checked( $is_custom ); ?> /><?php
+					_e( 'Custom Behaviour' ,  'wp-access-areas' );
+				?></label><?php
+			?></div><?php
+			?><div class="wpaa-behaviour-controls"><?php
+				?><div class="disclosure-view-select misc-pub-section"><?php
+					?><p class="description"><?php _e('If somebody tries to view a restricted post directly:' , 'wp-access-areas' ); ?></p><?php
 		
-		?><div class="disclosure-view-select misc-pub-section"><?php
-		?><label for="_wpaa_fallback_page"><?php
-		_e('Fallback Page','wp-access-areas');
-		?></label><?php
-		// only offer non-restricted pages
+					self::behavior_select( $post_behavior );
 		
-		self::fallback_page_dropdown( $post_fallback_page );
+				?></div><?php
+	
+				?><div class="disclosure-view-select misc-pub-section"><?php
+					?><label for="_wpaa_fallback_page"><?php
+					_e('Fallback Page','wp-access-areas');
+					?></label><?php
+					// only offer non-restricted pages
+		
+					self::fallback_page_dropdown( $post_fallback_page );
+				?></div><?php
+			
+			?></div><?php
 		?></div><?php
 
 	}
@@ -313,8 +334,7 @@ class UndisclosedEditPost {
 	static function access_area_dropdown( $roles , $groups , $selected_cap , $fieldname , $first_item_value = null , $first_item_label = ''  ) {
 		if ( ! $selected_cap )
 			$selected_cap = 'exist';
-		?>
-		<select id="<?php echo sanitize_title($fieldname) ?>-select" name="<?php echo $fieldname ?>"><?php
+		?><select id="<?php echo sanitize_title($fieldname) ?>-select" name="<?php echo $fieldname ?>"><?php
 			if ( ! is_null( $first_item_value ) && ! is_null( $first_item_label ) ) {
 				?><option value="<?php $first_item_value ?>"><?php echo $first_item_label ?></option><?php
 			}
@@ -324,26 +344,23 @@ class UndisclosedEditPost {
 				?><option value="read" <?php selected($selected_cap , 'read') ?>><?php _e( 'Logged in Users' , 'wp-access-areas' ) ?></option><?php
 			}
 			
-			?><optgroup label="<?php _e( 'WordPress roles' , 'wp-access-areas') ?>">
-			<?php foreach ($roles as $role => $rolename) {
+			?><optgroup label="<?php _e( 'WordPress roles' , 'wp-access-areas') ?>"><?php
+			foreach ($roles as $role => $rolename) {
 				if ( ! wpaa_user_can_role( $role ) )
 					continue;
-				?>
-				<option value="<?php echo $role ?>" <?php selected($selected_cap , $role) ?>><?php _ex( $rolename, 'User role' ) ?></option>
-			<?php } ?>
-			</optgroup>
-			<?php if ( count($groups) ) { ?>
-				<optgroup label="<?php _e( 'Users with Access to' , 'wp-access-areas') ?>">
-				<?php foreach ($groups as $group=>$groupname) { 
+				?><option value="<?php echo $role ?>" <?php selected($selected_cap , $role) ?>><?php _ex( $rolename, 'User role' ) ?></option><?php
+			} 
+			?></optgroup><?php
+			if ( count($groups) ) { 
+				?><optgroup label="<?php _e( 'Users with Access to' , 'wp-access-areas') ?>"><?php
+				foreach ($groups as $group=>$groupname) { 
 					if ( ! wpaa_user_can_accessarea($group) )
 						continue;
-					?>
-					<option value="<?php echo $group ?>" <?php selected($selected_cap , $group) ?>><?php _e( $groupname , 'wp-access-areas' ) ?></option>
-				<?php } /* foreach( $groups ) */ ?>
-				</optgroup>
-			<?php }  /* if count( $groups ) */ ?>
-		</select>
-		<?php
+					?><option value="<?php echo $group ?>" <?php selected($selected_cap , $group) ?>><?php _e( $groupname , 'wp-access-areas' ) ?></option><?php
+				 } /* foreach( $groups ) */ 
+				?></optgroup><?php 
+			}  /* if count( $groups ) */ 
+		?></select><?php
 	}
 	// --------------------------------------------------
 	// edit post - Fallback page dropdown menu
@@ -386,10 +403,10 @@ class UndisclosedEditPost {
 
 		foreach ( $behaviors as $item ) {
 			extract( $item );
-			?><label for="disclosure-view-post-behavior-<?php echo $value ?>">
-				<input name="<?php echo $fieldname ?>" <?php checked( $value , $post_behavior ); ?> class="wpaa-post-behavior" id="disclosure-view-post-behavior-<?php echo $value ?>" value="<?php echo $value ?>"  type="radio" />
-				<?php echo $label ?>
-			<br /></label><?php
+			?><label for="disclosure-view-post-behavior-<?php echo $value ?>"><?php
+				?><input name="<?php echo $fieldname ?>" <?php checked( $value , $post_behavior ); ?> class="wpaa-post-behavior" id="disclosure-view-post-behavior-<?php echo $value ?>" value="<?php echo $value ?>"  type="radio" /><?php
+				echo $label 
+			?><br /></label><?php
 		}
 	}
 	
@@ -421,58 +438,61 @@ class UndisclosedEditPost {
 			$comment_cap = ! is_null( $post ) ? $post->post_comment_cap : false;
 
 			$post_type_object	= get_post_type_object($post_type);
-			$editing_cap 		= $post_type_object->cap->edit_posts;
-			$current_user 		= wp_get_current_user();
-			$roles	 			= $wp_roles->get_names();
-			$groups 			= UndisclosedUserlabel::get_label_array( );
-		
-			$user_role_caps 	= wpaa_get_user_role_caps();
 
-			$rolenames 			= array();
-			$edit_rolenames		= array();
-			foreach ( $roles as $role => $rolename ) {
-				if ( wpaa_user_can_role( $role , $user_role_caps ) ) {
-					$rolenames[$role] = $rolename;
-					if ( get_role( $role )->has_cap( $editing_cap ) ) {
-						$edit_rolenames[$role] = $rolename;
+			$can_edit_view = self::can_edit_view_cap( $post_type , $post_type_object );
+			$can_edit_edit = self::can_edit_edit_cap( );
+			$can_edit_comment = self::can_edit_comment_cap( $post_type );
+			$can_edit = $can_edit_view || $can_edit_edit || $can_edit_comment;
+			
+			if ( $can_edit ) {
+				$editing_cap 		= $post_type_object->cap->edit_posts;
+				$current_user 		= wp_get_current_user();
+				$roles	 			= $wp_roles->get_names();
+				$groups 			= UndisclosedUserlabel::get_label_array( );
+		
+				$user_role_caps 	= wpaa_get_user_role_caps();
+			
+				$rolenames 			= array();
+				$edit_rolenames		= array();
+			
+				foreach ( $roles as $role => $rolename ) {
+					if ( wpaa_user_can_role( $role , $user_role_caps ) ) {
+						$rolenames[$role] = $rolename;
+						if ( get_role( $role )->has_cap( $editing_cap ) ) {
+							$edit_rolenames[$role] = $rolename;
+						}
 					}
 				}
+				?><fieldset class="inline-edit-col-access-areas inline-edit-col-left"><?php
+					?><h3><?php _e('Access','wp-access-areas') ?></h3><?php
+					?><div class="inline-edit-col"><?php
+						if ( $can_edit_view ) {
+							?><div class="inline-edit-group"><?php
+								?><label><?php
+									?><span class="title"><?php _e( 'Read:' , 'wp-access-areas') ?></span><?php
+									self::access_area_dropdown( $rolenames , $groups , $view_cap , 'post_view_cap' , $first_item_value , __( '&mdash; No Change &mdash;' ) );
+								?></label><?php
+							?></div><?php
+						}
+						if ( $can_edit_edit ) {
+							?><div class="inline-edit-group"><?php
+								?><label><?php
+									?><span class="title"><?php _e( 'Edit:' , 'wp-access-areas') ?></span><?php
+									self::access_area_dropdown( $edit_rolenames , $groups , $edit_cap , 'post_edit_cap'  , $first_item_value , __( '&mdash; No Change &mdash;' )  );
+								?></label><?php
+							?></div><?php
+						}
+						if ( $can_edit_comment ) {
+							?><div class="inline-edit-group"><?php
+								?><label><?php
+									?><span class="title"><?php _e( 'Comment:' , 'wp-access-areas') ?></span><?php
+									self::access_area_dropdown( $rolenames , $groups , $comment_cap , 'post_comment_cap'  , $first_item_value , __( '&mdash; No Change &mdash;' ) );
+								?></label><?php
+							?></div><?php
+						}
+					?></div><?php
+				?></fieldset><?php
 			}
-			?><fieldset class="inline-edit-col-access-areas inline-edit-col-left">
-				<h3><?php _e('Access','wp-access-areas') ?></h3>
-				<div class="inline-edit-col"><?php
-					if ( self::can_edit_view_cap( $post_type , $post_type_object ) ) {
-						?><div class="inline-edit-group">
-							<label>
-								<span class="title"><?php _e( 'Read:' , 'wp-access-areas') ?></span>
-								<?php 
-								self::access_area_dropdown( $rolenames , $groups , $view_cap , 'post_view_cap' , $first_item_value , __( '&mdash; No Change &mdash;' ) );
-								?>
-							</label>
-						</div><?php
-					}
-					if ( self::can_edit_edit_cap() ) {
-						?><div class="inline-edit-group">
-							<label>
-								<span class="title"><?php _e( 'Edit:' , 'wp-access-areas') ?></span>
-								<?php 
-								self::access_area_dropdown( $edit_rolenames , $groups , $edit_cap , 'post_edit_cap'  , $first_item_value , __( '&mdash; No Change &mdash;' )  );
-								?>
-							</label>
-						</div><?php
-					}
-					if ( self::can_edit_comment_cap( $post_type ) ) {
-						?><div class="inline-edit-group">
-							<label>
-								<span class="title"><?php _e( 'Comment:' , 'wp-access-areas') ?></span>
-								<?php 
-								self::access_area_dropdown( $rolenames , $groups , $comment_cap , 'post_comment_cap'  , $first_item_value , __( '&mdash; No Change &mdash;' ) );
-								?>
-							</label>
-						</div><?php
-					}
-				?></div>
-			</fieldset><?php
 		}
 	}
 		

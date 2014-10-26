@@ -79,11 +79,14 @@ function accessareas_uninstall() {
 	UndisclosedInstall::uninstall();
 }
 
-// access area data model 
 if ( is_admin() ) {
+	// access area data model 
 	UndisclosedCaps::init();
+	// access user profiles
 	UndisclosedUsers::init();
+	// access posts editing
 	UndisclosedEditPost::init();
+	// access options
 	UndisclosedSettings::init();
 }
 register_activation_hook( __FILE__ , 'accessareas_activate' );
