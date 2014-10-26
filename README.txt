@@ -2,7 +2,7 @@
 Contributors: podpirate
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WF4Z3HU93XYJA
 Tags: access, role, capability, user, security, editor
-Requires at least: 3.5
+Requires at least: 3.8
 Tested up to: 4.1
 Stable tag: 1.3.4
 License: GPLv2 or later

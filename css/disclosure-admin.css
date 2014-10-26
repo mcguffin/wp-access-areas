@@ -33,33 +33,6 @@
 	border-bottom:1px solid #dfdfdf;
 }
 
-/* oldstyle icons pre WP 3.8 */
-.wp-lt-38 #icon-undisclosed-network {
-	background-image:url('../images/undisclosed-icons-32.png');
-	background-position:-5px -5px;
-}
-.wp-lt-38 #icon-undisclosed-userlabel {
-	background-image:url('../images/undisclosed-icons-32.png');
-	background-position:-50px -5px;
-}
-
-.wp-lt-38 .icon-undisclosed-local.icon16,
-.wp-lt-38 .icon-undisclosed-network.icon16 {
-	background-image:url('../images/undisclosed-icons-16.png');
-	display:inline-block;
-	float:left;
-	clear:none;
-	margin:0 0.5em 0 0.5em;
-	padding:0;
-}
-.wp-lt-38 .icon-undisclosed-network.icon16 {
-	background-position:-5px -1px;
-}
-.wp-lt-38 .icon-undisclosed-local.icon16 {
-	background-position:-26px -1px;
-}
-
-
 /* options page */
 #wpaa-options .set-default-caps tfoot th,
 #wpaa-options .set-default-caps thead th {

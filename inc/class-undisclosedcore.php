@@ -25,7 +25,6 @@ class UndisclosedCore {
 			add_action('wpmu_upgrade_site' , array( __CLASS__ , 'set_network_roles_for_blog' ) , 10 ,1 );
 		}
 		add_action( 'init' , array(__CLASS__,'admin_register_scripts') );
-		add_filter( 'admin_body_class' , array( __CLASS__ , 'admin_body_class_gte_38' ) );
 		
 		add_option('wpaa_default_behavior' , '404' );
 		add_option('wpaa_fallback_page' , 0 );
@@ -43,17 +42,6 @@ class UndisclosedCore {
 			'ajax_nonce' => wp_create_nonce( 'get_accessarea_values' ),
 		) );
 		wp_register_style( 'disclosure-admin' , plugins_url('css/disclosure-admin.css', dirname(__FILE__)) );
-	}
-
-	/**
-	 * Add admin body classname according to WP version
-	 */
-	static function admin_body_class_gte_38( $admin_body_class ) {
-		if ( version_compare(get_bloginfo('version'),'3.8.0','>=') )
-			$admin_body_class .= ' wp-gte-38';
-		else
-			$admin_body_class .= ' wp-lt-38';
-		return $admin_body_class;
 	}
 
 	/**
