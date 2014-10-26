@@ -94,15 +94,18 @@ class UndisclosedEditPost {
 	
 	
 	static function ajax_get_accessarea_values() {
-		if ( isset( $_POST['post_ID'] ) && current_user_can( 'edit_post' , $_POST['post_ID'] ) ) {
-			header('Content-Type: application/json');
-			$result = wp_parse_args( get_post($_POST['post_ID'] , ARRAY_A ) , array(
-				'post_view_cap'		=> 'exist',
-				'post_edit_cap'		=> 'exist',
-				'post_comment_cap'	=> 'exist',
-			));
-			echo json_encode( $result );
+		$result = false;
+		if ( isset( $_POST['ajax_nonce'] ) && wp_verify_nonce( $_POST['ajax_nonce'], 'get_accessarea_values' ) ) {
+			if ( isset( $_POST['post_ID'] ) && current_user_can( 'edit_post' , $_POST['post_ID'] ) ) {
+				header('Content-Type: application/json');
+				$result = wp_parse_args( get_post($_POST['post_ID'] , ARRAY_A ) , array(
+					'post_view_cap'		=> 'exist',
+					'post_edit_cap'		=> 'exist',
+					'post_comment_cap'	=> 'exist',
+				));
+			}
 		}
+		echo json_encode( $result );
 		die;
 	}
 	

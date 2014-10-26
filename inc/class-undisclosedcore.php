@@ -39,6 +39,9 @@ class UndisclosedCore {
 		wp_register_script( 'disclosure-admin-user-ajax' , plugins_url('js/disclosure-admin-user-ajax.js', dirname(__FILE__)) );
 		wp_register_script( 'disclosure-quick-edit' , plugins_url('js/disclosure-quick-edit.js', dirname(__FILE__)) );
 		wp_register_script( 'disclosure-edit' , plugins_url('js/disclosure-edit.js', dirname(__FILE__)) );
+		wp_localize_script( 'disclosure-edit', 'wpaa_postedit', array(
+			'ajax_nonce' => wp_create_nonce( 'get_accessarea_values' ),
+		) );
 		wp_register_style( 'disclosure-admin' , plugins_url('css/disclosure-admin.css', dirname(__FILE__)) );
 	}
 
