@@ -107,18 +107,19 @@ I will migrate all the translation stuff there.
 == Changelog ==
 
 = 1.3.4 =
-- UI: Explicitly enable / disable Post custom behaviour.
+ - UI: Explicitly enable / disable Post custom behaviour.
+ - UI: Combine columns in Posts list table
 
 = 1.3.3 =
-- Fix: Database error on comment feeds. Hiding or redirecting from comment feeds should work now.
-- Fix: Crash during update (function `get_editable_roles` not found)
+ - Fix: Database error on comment feeds. Hiding or redirecting from comment feeds should work now.
+ - Fix: Crash during update (function `get_editable_roles` not found)
 
 = 1.3.2 =
-- Security Fix: Exclude restricted posts from comment feeds
+ - Security Fix: Exclude restricted posts from comment feeds
 
 = 1.3.1 =
-- Fix: Possible vulnerability where unauthorized users could change post access settings
-- L10n: change plugin textdomain from 'wpundisclosed' to 'wp-access-areas' (= Plugin slug). Rename lang/ > languages/.
+ - Fix: Possible vulnerability where unauthorized users could change post access settings
+ - L10n: change plugin textdomain from 'wpundisclosed' to 'wp-access-areas' (= Plugin slug). Rename lang/ > languages/.
 
 = 1.3.0 =
  - WordPress 4.0 compatibility

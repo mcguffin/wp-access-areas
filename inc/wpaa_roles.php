@@ -137,7 +137,6 @@ function wpaa_user_can_role( $role , $user_role_caps = null ) {
 	global $wp_roles;
 	if ( is_null( $user_role_caps ) )
 		$user_role_caps = wpaa_get_user_role_caps();
-		
 	if ( $wp_roles->is_role($role) )
 		return 0 == count(array_diff_assoc(  $wp_roles->get_role( $role )->capabilities , $user_role_caps ) );
 	return false;
