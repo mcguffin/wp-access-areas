@@ -8,9 +8,9 @@
 //	This class provides an interface for editing access areas
 // ----------------------------------------
 
-if ( ! class_exists('UndisclosedSettings' ) ) :
+if ( ! class_exists('WPAA_Settings' ) ) :
 
-class UndisclosedSettings {
+class WPAA_Settings {
 	private static $post_stati;
 	private static $role_caps;
 
@@ -52,7 +52,7 @@ class UndisclosedSettings {
 				! $admin_role->has_cap('wpaa_set_edit_cap')  ||
 				! $admin_role->has_cap('wpaa_set_comment_cap') ) {
 
-				UndisclosedInstall::install_role_caps();
+				WPAA_Install::install_role_caps();
 			}
 		}
 	}
@@ -141,7 +141,7 @@ class UndisclosedSettings {
 			$rolenames[$role] = $rolename;
 		}
 		
-		$groups = UndisclosedUserlabel::get_label_array( );
+		$groups = WPAA_AccessArea::get_label_array( );
 		?><table class="wp-list-table widefat set-default-caps"><?php
 			?><thead><?php
 				?><tr><?php
@@ -293,7 +293,7 @@ class UndisclosedSettings {
 	static function select_behavior() {
 		$behavior = get_option('wpaa_default_behavior');
 		?><p><?php _e('If somebody tries to view a restricted post directly:' , 'wp-access-areas' ); ?></p><?php
-		UndisclosedEditPost::behavior_select( $behavior , 'wpaa_default_behavior' );
+		WPAA_Template::behavior_select( $behavior , 'wpaa_default_behavior' );
 	}
 	static function sanitize_behavior( $behavior ) {
 		if ( ! preg_match('/^(404|page|login)$/',$behavior) )
@@ -302,7 +302,7 @@ class UndisclosedSettings {
 	}
 	static function select_fallback_page(){
 		$post_fallback_page = get_option('wpaa_fallback_page');
-		UndisclosedEditPost::fallback_page_dropdown( $post_fallback_page , 'wpaa_fallback_page' );
+		WPAA_Template::fallback_page_dropdown( $post_fallback_page , 'wpaa_fallback_page' );
 	}
 	static function sanitize_fallbackpage($fallback_page_id) {
 		$page = get_post( $fallback_page_id );

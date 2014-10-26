@@ -12,8 +12,8 @@
 // ----------------------------------------
 
 
-if ( ! class_exists('UndisclosedCore') ) :
-class UndisclosedCore {
+if ( ! class_exists('WPAA_Core') ) :
+class WPAA_Core {
 
 	/**
 	 * Init Plugin
@@ -56,8 +56,8 @@ class UndisclosedCore {
 	 * Setup for multisite blog
 	 */
 	static function set_network_roles_for_blog( $blog_id /*, $user_id, $domain, $path, $site_id, $meta */ ) {
-		require_once( dirname(__FILE__). '/class-undisclosedinstall.php' );
-		UndisclosedInstall::activate_for_blog( $blog_id );
+		require_once( dirname(__FILE__). '/class-WPAA_Install.php' );
+		WPAA_Install::activate_for_blog( $blog_id );
 	}
 	/**
 	 * Upgrade DB after plugin version

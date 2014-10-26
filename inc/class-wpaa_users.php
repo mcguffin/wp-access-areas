@@ -8,8 +8,8 @@
 //	This class provides an UI to assign Userlabels to Users.
 // ----------------------------------------
 
-if ( ! class_exists( 'UndisclosedUsers' ) ) :
-class UndisclosedUsers {
+if ( ! class_exists( 'WPAA_Users' ) ) :
+class WPAA_Users {
 
 	static function init( ) {
 		if ( is_admin() ) {
@@ -80,13 +80,13 @@ class UndisclosedUsers {
 			} else if (empty($cap_title)) {
 				?><span class="disclosure-label-item error"><?php _e('Empty name.','wp-access-areas'); ?></span><?php  // throw_error: empty name
 			} else {
-				$create_id = UndisclosedUserlabel::create_userlabel( array('cap_title' => $_POST['cap_title'], 'blog_id' => $_POST['blog_id'] ) );
+				$create_id = WPAA_AccessArea::create_userlabel( array('cap_title' => $_POST['cap_title'], 'blog_id' => $_POST['blog_id'] ) );
 			
 				if ( $create_id ) {
-					$label = UndisclosedUserlabel::get_userlabel( $create_id );
+					$label = WPAA_AccessArea::get_userlabel( $create_id );
 					self::_select_label_formitem( $label , true );
 				} else {
-					switch (UndisclosedUserlabel::what_went_wrong()) {
+					switch (WPAA_AccessArea::what_went_wrong()) {
 						case 4: // Error: area exists
 							?><span class="disclosure-label-item error"><?php _e('Access Area exists.','wp-access-areas'); ?></span><?php  // throw_error: insufficient privileges
 							break;
@@ -174,7 +174,7 @@ class UndisclosedUsers {
 		$user = new WP_User( $user_id );
 		$global_label_data = array();
 		foreach ($label_data as $label_id => $add) {
-			$label = UndisclosedUserLabel::get_userlabel( $label_id );
+			$label = WPAA_AccessArea::get_userlabel( $label_id );
 			if ( is_multisite() && ! $label->blog_id ) { // global
 				if ( $add )
 					$global_label_data[] = $label->capability;
@@ -238,7 +238,7 @@ class UndisclosedUsers {
 		// IS_PROFILE_PAGE : self or other
 		if ( ! current_user_can( 'promote_users' ) || (is_network_admin() && ! is_accessareas_active_for_network() ) ) 
 			return;
-		$labels = UndisclosedUserLabel::get_available_userlabels();
+		$labels = WPAA_AccessArea::get_available_userlabels();
 		
 		?><h3><?php _e( 'Access Areas' , 'wp-access-areas' ) ?></h3><?php
 		?><table class="form-table" id="disclosure-group-items"><?php
@@ -248,14 +248,14 @@ class UndisclosedUsers {
 		if ( ! is_network_admin() ) {
 			$labelrows[ __( 'Grant Access' , 'wp-access-areas' ) ] = array( 
 				'network' => false ,
-				'labels' => UndisclosedUserLabel::get_blog_userlabels() ,
+				'labels' => WPAA_AccessArea::get_blog_userlabels() ,
 				'can_ajax_add' => current_user_can( 'promote_users' ),
 			);
 		}
 		if ( ( is_network_admin() || is_super_admin() ) && is_accessareas_active_for_network() ) {
 			$labelrows[ __( 'Grant Network-Wide Access' , 'wp-access-areas' )] = array( 
 				'network' => true ,	
-				'labels' => UndisclosedUserLabel::get_network_userlabels()  , 
+				'labels' => WPAA_AccessArea::get_network_userlabels()  , 
 				'can_ajax_add' => is_network_admin() || is_super_admin(),
 			);
 		}
@@ -325,9 +325,9 @@ class UndisclosedUsers {
 	
 	static function table_views( $views ) {
 		$ret = '';
-		$ret .= self::_listtable_label_select( UndisclosedUserLabel::get_blog_userlabels() , 'local' );
+		$ret .= self::_listtable_label_select( WPAA_AccessArea::get_blog_userlabels() , 'local' );
 		if ( is_accessareas_active_for_network() )
-			$ret .= self::_listtable_label_select( UndisclosedUserLabel::get_network_userlabels() , 'network');
+			$ret .= self::_listtable_label_select( WPAA_AccessArea::get_network_userlabels() , 'network');
 		if ( $ret )
 			$views['labels'] = '<strong>'.__('Access Areas:','wp-access-areas').' </strong>' . $ret;
 		return $views;
@@ -359,12 +359,12 @@ class UndisclosedUsers {
 		
 		if ( $network )
 			$ret .= sprintf('<optgroup label="%s">',__('Local','wp-access-areas'));
-		$ret .= self::_label_select_options(UndisclosedUserLabel::get_blog_userlabels());
+		$ret .= self::_label_select_options(WPAA_AccessArea::get_blog_userlabels());
 		if ( $network ) {
 			$ret .= '</optgroup>';
 		
 			$ret .= sprintf('<optgroup label="%s">',__('Network','wp-access-areas'));
-			$ret .= self::_label_select_options(UndisclosedUserLabel::get_network_userlabels());
+			$ret .= self::_label_select_options(WPAA_AccessArea::get_network_userlabels());
 			$ret .= '</optgroup>';
 		}
 		$ret .= '</select>';
@@ -394,7 +394,7 @@ class UndisclosedUsers {
 		
 		$ugroups = array();
 		
-		$labels = UndisclosedUserLabel::get_available_userlabels( );
+		$labels = WPAA_AccessArea::get_available_userlabels( );
 		$user = new WP_User( $user_ID );
 		if ( ( is_multisite() && is_super_admin( $user_ID ) ) || ( ! is_multisite() && $user->has_cap( 'administrator' )) )
 			return WPAA_Template::access_area( __('Everywhere') , true );

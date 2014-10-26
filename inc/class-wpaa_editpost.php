@@ -9,8 +9,8 @@
 //	WP-Roles and user-labels to posts.
 // ----------------------------------------
 
-if ( ! class_exists('UndisclosedEditPost') ) :
-class UndisclosedEditPost {
+if ( ! class_exists('WPAA_EditPost') ) :
+class WPAA_EditPost {
 
 	static function init() {
 		if ( is_admin() ) {
@@ -260,7 +260,7 @@ class UndisclosedEditPost {
 
 		// <select> with - Evereybody, Logged-in only, list WP-Roles, list discosure-groups
 		$roles	 			= $wp_roles->get_names();
-		$groups 			= UndisclosedUserlabel::get_label_array( );
+		$groups 			= WPAA_AccessArea::get_label_array( );
 		$user_role_caps 	= wpaa_get_user_role_caps();
 
 		$rolenames 			= array();
@@ -337,7 +337,7 @@ class UndisclosedEditPost {
 				?><div class="disclosure-view-select misc-pub-section"><?php
 					?><p class="description"><?php _e('If somebody tries to view a restricted post directly:' , 'wp-access-areas' ); ?></p><?php
 		
-					self::behavior_select( $post_behavior );
+					WPAA_Template::behavior_select( $post_behavior );
 		
 				?></div><?php
 	
@@ -347,7 +347,7 @@ class UndisclosedEditPost {
 					?></label><?php
 					// only offer non-restricted pages
 		
-					self::fallback_page_dropdown( $post_fallback_page );
+					WPAA_Template::fallback_page_dropdown( $post_fallback_page );
 				?></div><?php
 			
 			?></div><?php
@@ -356,53 +356,6 @@ class UndisclosedEditPost {
 	}
 	
 	
-	// --------------------------------------------------
-	// edit post - Fallback page dropdown menu
-	// --------------------------------------------------
-	static function fallback_page_dropdown( $post_fallback_page = false , $fieldname = '_wpaa_fallback_page' ) {
-		global $wpdb;
-		if ( ! wpaa_is_post_public( $post_fallback_page ) )
-			$post_fallback_page = 0;
-		
-		// if not fallback page, use global fallback page
-		$restricted_pages = $wpdb->get_col($wpdb->prepare("SELECT id 
-			FROM $wpdb->posts 
-			WHERE 
-				post_type=%s AND 
-				post_status=%s AND
-				post_view_cap!=%s" , 'page','publish','exist' ));
-		wp_dropdown_pages(array(
-			'selected' 	=> $post_fallback_page,
-			'name'		=> $fieldname,
-			'exclude'	=> $restricted_pages,
-			'show_option_none' => __('Front page'),
-			'option_none_value' => 0,
-		));
-	}
-	static function behavior_select( $post_behavior = '' , $fieldname = '_wpaa_post_behavior' ) {
-		$behaviors = array(
-			array( 
-				'value'	=> '404',
-				'label' => __( 'Show 404' , 'wp-access-areas'),
-			),
-			array(
-				'value'	=> 'page',
-				'label' => __( 'Redirect to the fallback page.' , 'wp-access-areas'),
-			),
-			array(
-				'value'	=> 'login',
-				'label' => __( 'If not logged in, redirect to login. Otherwise redirect to the fallback page.' , 'wp-access-areas'),
-			),
-		);
-
-		foreach ( $behaviors as $item ) {
-			extract( $item );
-			?><label for="disclosure-view-post-behavior-<?php echo $value ?>"><?php
-				?><input name="<?php echo $fieldname ?>" <?php checked( $value , $post_behavior ); ?> class="wpaa-post-behavior" id="disclosure-view-post-behavior-<?php echo $value ?>" value="<?php echo $value ?>"  type="radio" /><?php
-				echo $label 
-			?><br /></label><?php
-		}
-	}
 	
 	// --------------------------------------------------
 	// Quick Edit hook callback
@@ -442,7 +395,7 @@ class UndisclosedEditPost {
 				$editing_cap 		= $post_type_object->cap->edit_posts;
 				$current_user 		= wp_get_current_user();
 				$roles	 			= $wp_roles->get_names();
-				$groups 			= UndisclosedUserlabel::get_label_array( );
+				$groups 			= WPAA_AccessArea::get_label_array( );
 		
 				$user_role_caps 	= wpaa_get_user_role_caps();
 			
@@ -534,7 +487,7 @@ class UndisclosedEditPost {
 		$column_segments = explode('-',$column);
 		$first = array_shift( $column_segments );
 		if ( 'wpaa' == $first ) {
-			$wpaa_names = UndisclosedUserlabel::get_label_array( );
+			$wpaa_names = WPAA_AccessArea::get_label_array( );
 			foreach ( $wpaa_names as $cap_name => $wpaa )
 				$wpaa_names[$cap_name] = $wpaa['title'] . ( $wpaa['global'] ? __( '(Network)' , 'wp-access-areas' ) : '' );
 			$names = array_merge(array('exist' => __( 'WP Default' , 'wp-access-areas' ), 'read' => __( 'Blog users' , 'wp-access-areas' )) , $wpaa_names , $wp_roles->get_names());
@@ -647,19 +600,19 @@ class UndisclosedEditPost {
 // 		var_dump($column,current_filter());
 		switch ( $column ) {
 			case 'view_cap':
-				$names = array_merge(array('exist' => __( 'Everybody' , 'wp-access-areas' ), 'read' => __( 'Blog users' , 'wp-access-areas' )) , UndisclosedUserlabel::get_label_array( ), $wp_roles->get_names());
+				$names = array_merge(array('exist' => __( 'Everybody' , 'wp-access-areas' ), 'read' => __( 'Blog users' , 'wp-access-areas' )) , WPAA_AccessArea::get_label_array( ), $wp_roles->get_names());
 				$names[''] = $names['exist'];
 				$val = get_post($post_ID)->post_view_cap;
 				_e($names[$val]);
 				break;
 			case 'comment_cap':
-				$names = array_merge(array('exist' => __( 'Everybody' , 'wp-access-areas' ), 'read' => __( 'Blog users' , 'wp-access-areas' )) , UndisclosedUserlabel::get_label_array( ), $wp_roles->get_names());
+				$names = array_merge(array('exist' => __( 'Everybody' , 'wp-access-areas' ), 'read' => __( 'Blog users' , 'wp-access-areas' )) , WPAA_AccessArea::get_label_array( ), $wp_roles->get_names());
 				$names[''] = $names['exist'];
 				$val = get_post($post_ID)->post_comment_cap;
 				_e($names[$val]);
 				break;
 			case 'edit_cap':
-				$names = array_merge(array('exist' => __( 'Everybody' , 'wp-access-areas' ), 'read' => __( 'Blog users' , 'wp-access-areas' )) , UndisclosedUserlabel::get_label_array( ), $wp_roles->get_names());
+				$names = array_merge(array('exist' => __( 'Everybody' , 'wp-access-areas' ), 'read' => __( 'Blog users' , 'wp-access-areas' )) , WPAA_AccessArea::get_label_array( ), $wp_roles->get_names());
 				$names[''] = $names['exist'];
 				$val = get_post($post_ID)->post_edit_cap;
 				_e($names[$val]);

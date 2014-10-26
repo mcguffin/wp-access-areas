@@ -9,9 +9,9 @@
 //	routines for the WP Access Areas plugin.
 // ----------------------------------------
 
-if ( ! class_exists('UndisclosedInstall') ) :
+if ( ! class_exists('WPAA_Install') ) :
 
-class UndisclosedInstall {
+class WPAA_Install {
 	
 	// --------------------------------------------------
 	// de-/activation/uninstall hooks

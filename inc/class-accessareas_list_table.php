@@ -12,8 +12,8 @@ if ( ! class_exists('WP_List_Table') ) {
 // ----------------------------------------
 //	Defines the List view table for Access Areas in the backend.
 // ----------------------------------------
-if ( ! class_exists( 'UserLabel_List_Table' ) ) :
-class UserLabel_List_Table extends WP_List_Table {
+if ( ! class_exists( 'AccessAreas_List_Table' ) ) :
+class AccessAreas_List_Table extends WP_List_Table {
 	
 	function __construct( $args = array() ) {
 		extract(wp_parse_args(
@@ -101,7 +101,7 @@ class UserLabel_List_Table extends WP_List_Table {
 		$current_page = $this->get_pagenum();
 		$per_page = 25;
 		$limit = (($current_page-1)*$per_page).",$per_page";
-		$total_items = UndisclosedUserlabel::get_count_available_userlabels( );
+		$total_items = WPAA_AccessArea::get_count_available_userlabels( );
 		
 		$columns = $this->get_columns();
 		$hidden = array();
@@ -120,7 +120,7 @@ class UserLabel_List_Table extends WP_List_Table {
 				$order .= ' ASC'; 
 		}
 		// use wpdb here!
-		$data = UndisclosedUserlabel::get_available_userlabels( $limit , $order );
+		$data = WPAA_AccessArea::get_available_userlabels( $limit , $order );
 
 		
 		
@@ -156,8 +156,8 @@ class UserLabel_List_Table extends WP_List_Table {
 			switch ($action) {
 				case 'delete':
 					foreach ($_REQUEST[$this->_args['plural']] as $ul_id) 
-						if ( $ul = UndisclosedUserlabel::get_userlabel( intval($ul_id) ) ) 
-							UndisclosedUserlabel::delete_userlabel( intval($ul_id) );
+						if ( $ul = WPAA_AccessArea::get_userlabel( intval($ul_id) ) ) 
+							WPAA_AccessArea::delete_userlabel( intval($ul_id) );
 					return wp_redirect( add_query_arg( array('page'=>'user_labels' , 'message'=>3 , 'deleted' => count($_REQUEST[$this->_args['plural']]) ) , $_SERVER['SCRIPT_NAME'] ) );
 				default:
 			}

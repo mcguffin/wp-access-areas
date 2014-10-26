@@ -8,8 +8,8 @@
 //	Frontend Post Filters
 // ----------------------------------------
 
-if ( ! class_exists('UndisclosedPosts') ):
-class UndisclosedPosts {
+if ( ! class_exists('WPAA_Posts') ):
+class WPAA_Posts {
 	
 	static function init() {
 
@@ -314,7 +314,7 @@ class UndisclosedPosts {
 				$caps[] = $role;
 			
 			// user's custom caps
-			foreach( array_keys(UndisclosedUserlabel::get_label_array( ) ) as $cap)
+			foreach( array_keys(WPAA_AccessArea::get_label_array( ) ) as $cap)
 				if ( wpaa_user_can_accessarea( $cap ) )
 					$caps[] = $cap;
 		}

@@ -41,4 +41,51 @@ class WPAA_Template {
 		?></select><?php
 	}
 
+	// --------------------------------------------------
+	// edit post - Fallback page dropdown menu
+	// --------------------------------------------------
+	static function fallback_page_dropdown( $post_fallback_page = false , $fieldname = '_wpaa_fallback_page' ) {
+		global $wpdb;
+		if ( ! wpaa_is_post_public( $post_fallback_page ) )
+			$post_fallback_page = 0;
+		
+		// if not fallback page, use global fallback page
+		$restricted_pages = $wpdb->get_col($wpdb->prepare("SELECT id 
+			FROM $wpdb->posts 
+			WHERE 
+				post_type=%s AND 
+				post_status=%s AND
+				post_view_cap!=%s" , 'page','publish','exist' ));
+		wp_dropdown_pages(array(
+			'selected' 	=> $post_fallback_page,
+			'name'		=> $fieldname,
+			'exclude'	=> $restricted_pages,
+			'show_option_none' => __('Front page'),
+			'option_none_value' => 0,
+		));
+	}
+	static function behavior_select( $post_behavior = '' , $fieldname = '_wpaa_post_behavior' ) {
+		$behaviors = array(
+			array( 
+				'value'	=> '404',
+				'label' => __( 'Show 404' , 'wp-access-areas'),
+			),
+			array(
+				'value'	=> 'page',
+				'label' => __( 'Redirect to the fallback page.' , 'wp-access-areas'),
+			),
+			array(
+				'value'	=> 'login',
+				'label' => __( 'If not logged in, redirect to login. Otherwise redirect to the fallback page.' , 'wp-access-areas'),
+			),
+		);
+
+		foreach ( $behaviors as $item ) {
+			extract( $item );
+			?><label for="disclosure-view-post-behavior-<?php echo $value ?>"><?php
+				?><input name="<?php echo $fieldname ?>" <?php checked( $value , $post_behavior ); ?> class="wpaa-post-behavior" id="disclosure-view-post-behavior-<?php echo $value ?>" value="<?php echo $value ?>"  type="radio" /><?php
+				echo $label 
+			?><br /></label><?php
+		}
+	}
 }

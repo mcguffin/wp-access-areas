@@ -54,40 +54,40 @@ spl_autoload_register( 'wpaa_autoload' );
 require_once( dirname(__FILE__). '/inc/wpaa_roles.php' );
 
 // common plugin functions
-UndisclosedCore::init();
-UndisclosedPosts::init();
+WPAA_Core::init();
+WPAA_Posts::init();
 
 
 /**
  * Activation hook
  */
 function accessareas_activate() {
-	UndisclosedInstall::activate();
+	WPAA_Install::activate();
 }
 
 /**
  * Deactivation hook
  */
 function accessareas_deactivate() {
-	UndisclosedInstall::deactivate();
+	WPAA_Install::deactivate();
 }
 
 /**
  * Uninstall hook
  */
 function accessareas_uninstall() {
-	UndisclosedInstall::uninstall();
+	WPAA_Install::uninstall();
 }
 
 if ( is_admin() ) {
 	// access area data model 
-	UndisclosedCaps::init();
+	WPAA_Caps::init();
 	// access user profiles
-	UndisclosedUsers::init();
+	WPAA_Users::init();
 	// access posts editing
-	UndisclosedEditPost::init();
+	WPAA_EditPost::init();
 	// access options
-	UndisclosedSettings::init();
+	WPAA_Settings::init();
 }
 register_activation_hook( __FILE__ , 'accessareas_activate' );
 register_deactivation_hook( __FILE__ , 'accessareas_deactivate' );

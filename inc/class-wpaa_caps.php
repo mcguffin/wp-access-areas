@@ -8,9 +8,9 @@
 //	This class provides an interface for editing access areas
 // ----------------------------------------
 
-if ( ! class_exists('UndisclosedCaps' ) ) :
+if ( ! class_exists('WPAA_Caps' ) ) :
 
-class UndisclosedCaps {
+class WPAA_Caps {
 	
 	static function init( ) {
 		if ( is_admin() ) {
@@ -36,7 +36,7 @@ class UndisclosedCaps {
 		
 		wp_enqueue_style( 'disclosure-admin' );
 		
-		$table = new UserLabel_List_Table();
+		$table = new AccessAreas_List_Table();
 		$table->process_bulk_action();
 		$redirect_url = false;
 		if (isset($_REQUEST['action'])) {
@@ -54,20 +54,20 @@ class UndisclosedCaps {
 				case 'new':
 					// do create action
 					if ( ! empty( $_POST ) )  {
-						if ( $edit_id = UndisclosedUserlabel::create_userlabel( $data ) )
+						if ( $edit_id = WPAA_AccessArea::create_userlabel( $data ) )
 							$redirect_url =  add_query_arg( array('page'=>'user_labels' , 'action' => 'new' , 'message' => 1 ) , $_SERVER['SCRIPT_NAME'] );
 							// $redirect_url = add_query_arg(array('page'=>'user_labels' , 'message' => 1 ),$_SERVER['SCRIPT_NAME']);
 						else 
-							$redirect_url = add_query_arg(array('page'=>'user_labels' , 'action' => 'new' , 'message' => UndisclosedUserlabel::what_went_wrong() , 'cap_title'=>$_POST['cap_title'] ),$_SERVER['SCRIPT_NAME']);
+							$redirect_url = add_query_arg(array('page'=>'user_labels' , 'action' => 'new' , 'message' => WPAA_AccessArea::what_went_wrong() , 'cap_title'=>$_POST['cap_title'] ),$_SERVER['SCRIPT_NAME']);
 					}
 					break;
 				case 'edit':
 					// update and redirect
 					if ( ! empty( $_POST ) ) {
-						if ( $edit_id = UndisclosedUserlabel::update_userlabel( $data ) )
+						if ( $edit_id = WPAA_AccessArea::update_userlabel( $data ) )
 							$redirect_url = add_query_arg( array('id' => $edit_id , 'message' => 2 ) );
 						else 
-							$redirect_url = add_query_arg( array('id' => $edit_id , 'message' => UndisclosedUserlabel::what_went_wrong() , 'cap_title'=>$_POST['cap_title'] ) );
+							$redirect_url = add_query_arg( array('id' => $edit_id , 'message' => WPAA_AccessArea::what_went_wrong() , 'cap_title'=>$_POST['cap_title'] ) );
 					}
 					if ( ! isset( $_GET['id'] ) ) 
 						$redirect_url = add_query_arg( array('page'=>'user_labels' ) , $_SERVER['SCRIPT_NAME'] );
@@ -76,10 +76,10 @@ class UndisclosedCaps {
 				case 'delete':
 					// delete and redirect
 					if ( isset( $_REQUEST['id'] )  ) {
-						if ( $deleted = UndisclosedUserlabel::delete_userlabel( $_REQUEST['id'] ) ) {
+						if ( $deleted = WPAA_AccessArea::delete_userlabel( $_REQUEST['id'] ) ) {
 							$redirect_url = add_query_arg(array('page'=>'user_labels' , 'message' => 3 , 'deleted' => $deleted ) , $_SERVER['SCRIPT_NAME'] );
 						} else {
-							$redirect_url = add_query_arg(array('page'=>'user_labels' , 'message' => UndisclosedUserlabel::what_went_wrong() ) , $_SERVER['SCRIPT_NAME'] );
+							$redirect_url = add_query_arg(array('page'=>'user_labels' , 'message' => WPAA_AccessArea::what_went_wrong() ) , $_SERVER['SCRIPT_NAME'] );
 						}
 					}
 						
@@ -109,7 +109,7 @@ class UndisclosedCaps {
 	static function edit_userlabels_screen( $userlabel_id = 0 ) {
 		global $wpdb;
 		if ( $userlabel_id ) 
-			$userlabel = UndisclosedUserlabel::get_userlabel( $userlabel_id );
+			$userlabel = WPAA_AccessArea::get_userlabel( $userlabel_id );
 		else
 			$userlabel = (object) array(
 				'cap_title' => '',
@@ -189,7 +189,7 @@ class UndisclosedCaps {
 	}
 	
 	static function list_userlabels_screen() {
-		$listTable = new UserLabel_List_Table( array() );
+		$listTable = new AccessAreas_List_Table( array() );
 		$listTable->prepare_items();
 
 
