@@ -5,7 +5,7 @@
 .wpaa-select-behaviour.custom .wpaa-behaviour-controls {
 	display:block;
 }
-#post-disclosure .inside {
+#post-wpaa .inside {
 	padding:0;
 	margin:0;
 }
@@ -52,7 +52,7 @@
 	padding:5px 7px;
 }
 
-.disclosure-label-item {
+.wpaa-label-item {
 	display:inline-block;
 	width:12em;
 	border:1px solid #aaa;
@@ -91,7 +91,7 @@
 }
 .wp-list-table .column-labels {
 }
-.wp-list-table .disclosure-label-item {
+.wp-list-table .wpaa-label-item {
 	font-size:0.85em;
 	float:left;
 	padding:0.125em;
@@ -105,17 +105,17 @@
 	-moz-border-radius:0;
 	border-radius:0;
 }
-.disclosure-label-item.error {
+.wpaa-label-item.error {
 	background:#faa;
 	color:#600;
 }
-.disclosure-label-item input[type='checkbox'] {
+.wpaa-label-item input[type='checkbox'] {
 }
-.disclosure-label-item label {
+.wpaa-label-item label {
 	font-weight:bold;
 	color:333;
 }
-.disclosure-label-item.disabled label {
+.wpaa-label-item.disabled label {
 	color:#999;
 }
 

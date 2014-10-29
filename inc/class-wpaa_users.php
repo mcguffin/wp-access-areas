@@ -57,10 +57,10 @@ class WPAA_Users {
 	}
 	
 	static function load_edit_script() {
-		wp_enqueue_script( 'disclosure-admin-user-ajax');
+		wp_enqueue_script( 'wpaa-admin-user-ajax');
 	} 
 	static function load_style() {
-		wp_enqueue_style( 'disclosure-admin' );
+		wp_enqueue_style( 'wpaa-admin' );
 	}
 	
 	
@@ -76,9 +76,9 @@ class WPAA_Users {
 		if ( wp_verify_nonce(@$_POST['_wp_ajax_nonce'] , 'userlabel-new' ) && current_user_can( 'promote_users' ) ) {
 			$cap_title = trim($_POST['cap_title']);
 			if ( ( !$_POST['blog_id'] && !is_super_admin() ) || ( $_POST['blog_id'] && $_POST['blog_id'] != get_current_blog_id() ) ) {
-				?><span class="disclosure-label-item error"><?php _e('Insufficient privileges.','wp-access-areas'); ?></span><?php  // throw_error: insufficient privileges
+				?><span class="wpaa-label-item error"><?php _e('Insufficient privileges.','wp-access-areas'); ?></span><?php  // throw_error: insufficient privileges
 			} else if (empty($cap_title)) {
-				?><span class="disclosure-label-item error"><?php _e('Empty name.','wp-access-areas'); ?></span><?php  // throw_error: empty name
+				?><span class="wpaa-label-item error"><?php _e('Empty name.','wp-access-areas'); ?></span><?php  // throw_error: empty name
 			} else {
 				$create_id = WPAA_AccessArea::create_userlabel( array('cap_title' => $_POST['cap_title'], 'blog_id' => $_POST['blog_id'] ) );
 			
@@ -88,13 +88,13 @@ class WPAA_Users {
 				} else {
 					switch (WPAA_AccessArea::what_went_wrong()) {
 						case 4: // Error: area exists
-							?><span class="disclosure-label-item error"><?php _e('Access Area exists.','wp-access-areas'); ?></span><?php  // throw_error: insufficient privileges
+							?><span class="wpaa-label-item error"><?php _e('Access Area exists.','wp-access-areas'); ?></span><?php  // throw_error: insufficient privileges
 							break;
 					};
 				}
 			}
 		} else {
-			?><span class="disclosure-label-item error"><?php _e('Insufficient privileges.','wp-access-areas'); ?></span><?php  // throw_error: insufficient privileges
+			?><span class="wpaa-label-item error"><?php _e('Insufficient privileges.','wp-access-areas'); ?></span><?php  // throw_error: insufficient privileges
 		}
 		die();
 	}
@@ -241,7 +241,7 @@ class WPAA_Users {
 		$labels = WPAA_AccessArea::get_available_userlabels();
 		
 		?><h3><?php _e( 'Access Areas' , 'wp-access-areas' ) ?></h3><?php
-		?><table class="form-table" id="disclosure-group-items"><?php
+		?><table class="form-table" id="wpaa-group-items"><?php
 		
 		$labelrows = array();
 		// wtf happens on single install?
@@ -284,7 +284,7 @@ class WPAA_Users {
 	}
 	private static function _select_label_formitem( $label , $checked , $enabled = true ) {
 		$attr_disabled = $enabled ? '' : ' disabled="disabled" ';
-		$item_class = array('disclosure-label-item');
+		$item_class = array('wpaa-label-item');
 		if (!$enabled)
 			$item_class[] = 'disabled';
 		?><span class="<?php echo  implode(' ',$item_class)?>"><?php
@@ -300,7 +300,7 @@ class WPAA_Users {
 	}
 	
 	private static function _ajax_add_area_formitem( $blog_id ) {
-		?><span class="disclosure-label-item ajax-add-item"><?php
+		?><span class="wpaa-label-item ajax-add-item"><?php
 			wp_nonce_field( 'userlabel-new' , '_wp_ajax_nonce' );
 			?><input type="hidden" name="blog_id" value="<?php echo $blog_id; ?>" /><?php
 			?><input class="cap-add" type="text" name="cap_title" placeholder="<?php _ex('Add New','access area','wp-access-areas') ?>" /><?php
@@ -399,7 +399,7 @@ class WPAA_Users {
 			}
 		}
 		if ( count( $ugroups ) )
-			return '<div class="disclosure-labels">' . implode("", $ugroups) . '</div>';
+			return '<div class="wpaa-labels">' . implode("", $ugroups) . '</div>';
 
 		return '';
 	}

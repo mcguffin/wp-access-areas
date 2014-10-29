@@ -34,7 +34,7 @@ class WPAA_Caps {
 		if ( ! current_user_can( 'promote_users' ) ) 
 			wp_die( __('You do not have permission to do this.' , 'wp-access-areas' ) );
 		
-		wp_enqueue_style( 'disclosure-admin' );
+		wp_enqueue_style( 'wpaa-admin' );
 		
 		$table = new AccessAreas_List_Table();
 		$table->process_bulk_action();

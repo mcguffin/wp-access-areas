@@ -82,8 +82,8 @@ class WPAA_Template {
 
 		foreach ( $behaviors as $item ) {
 			extract( $item );
-			?><label for="disclosure-view-post-behavior-<?php echo $value ?>"><?php
-				?><input name="<?php echo $fieldname ?>" <?php checked( $value , $post_behavior ); ?> class="wpaa-post-behavior" id="disclosure-view-post-behavior-<?php echo $value ?>" value="<?php echo $value ?>"  type="radio" /><?php
+			?><label for="wpaa-view-post-behavior-<?php echo $value ?>"><?php
+				?><input name="<?php echo $fieldname ?>" <?php checked( $value , $post_behavior ); ?> class="wpaa-post-behavior" id="wpaa-view-post-behavior-<?php echo $value ?>" value="<?php echo $value ?>"  type="radio" /><?php
 				echo $label 
 			?><br /></label><?php
 		}

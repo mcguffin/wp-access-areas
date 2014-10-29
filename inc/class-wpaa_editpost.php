@@ -90,11 +90,11 @@ class WPAA_EditPost {
 	}
 
 	static function load_edit_script() {
-		wp_enqueue_script( 'disclosure-edit' );
-		wp_enqueue_script( 'disclosure-quick-edit' );
+		wp_enqueue_script( 'wpaa-edit' );
+		wp_enqueue_script( 'wpaa-quick-edit' );
 	} 
 	static function load_style() {
-		wp_enqueue_style( 'disclosure-admin' );
+		wp_enqueue_style( 'wpaa-admin' );
 	}
 	
 	// --------------------------------------------------
@@ -104,9 +104,9 @@ class WPAA_EditPost {
 		global $wp_post_types;
 		if ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_view_cap' ) || current_user_can( 'wpaa_set_edit_cap' ) || current_user_can( 'wpaa_set_comment_cap' ) ) {
 			foreach ( array_keys($wp_post_types) as $post_type ) {
-				add_meta_box( 'post-disclosure' , __('Access','wp-access-areas') , array(__CLASS__,'disclosure_box_info') , $post_type , 'side' , 'high' );
+				add_meta_box( 'post-wpaa' , __('Access','wp-access-areas') , array(__CLASS__,'disclosure_box_info') , $post_type , 'side' , 'high' );
 				if ( self::can_edit_view_cap( $post_type ) )
-					add_meta_box( 'post-disclosure-behavior' , __('Behaviour','wp-access-areas') , array(__CLASS__,'disclosure_box_behavior') , $post_type , 'side' , 'high' );
+					add_meta_box( 'post-wpaa-behavior' , __('Behaviour','wp-access-areas') , array(__CLASS__,'disclosure_box_behavior') , $post_type , 'side' , 'high' );
 			}
 		}
 	}
@@ -219,19 +219,19 @@ class WPAA_EditPost {
 		}
 		
 		if ( self::can_edit_view_cap( $post->post_type , $post_type_object ) ) { 
-			?><div class="disclosure-view-select misc-pub-section"><?php
+			?><div class="wpaa-view-select misc-pub-section"><?php
 				?><label for="post_view_cap-select"><strong><?php _e( 'Who can read:' , 'wp-access-areas') ?></strong></label><br /><?php
 				WPAA_Template::access_area_dropdown( $rolenames , $groups , $post->post_view_cap , 'post_view_cap' );
 			?></div><?php
 		}
 		if ( self::can_edit_edit_cap() ) {
-			?><div class="disclosure-edit-select misc-pub-section"><?php
+			?><div class="wpaa-edit-select misc-pub-section"><?php
 				?><label for="post_edit_cap-select"><strong><?php _e( 'Who can edit:' , 'wp-access-areas') ?></strong></label><br /><?php 
 				WPAA_Template::access_area_dropdown( $edit_rolenames , $groups , $post->post_edit_cap , 'post_edit_cap' );
 			?></div><?php
 		}
 		if ( self::can_edit_comment_cap( $post->post_type ) && wpaa_user_can( $post->post_comment_cap ) ) {
-			?><div class="disclosure-comment-select misc-pub-section"><?php
+			?><div class="wpaa-comment-select misc-pub-section"><?php
 				?><label for="post_comment_cap-select"><strong><?php _e( 'Who can comment:' , 'wp-access-areas') ?></strong></label><br /><?php
 				WPAA_Template::access_area_dropdown( $rolenames , $groups , $post->post_comment_cap , 'post_comment_cap' );
 			?></div><?php
@@ -278,14 +278,14 @@ class WPAA_EditPost {
 				?></label><?php
 			?></div><?php
 			?><div class="wpaa-behaviour-controls"><?php
-				?><div class="disclosure-view-select misc-pub-section"><?php
+				?><div class="wpaa-view-select misc-pub-section"><?php
 					?><p class="description"><?php _e('If somebody tries to view a restricted post directly:' , 'wp-access-areas' ); ?></p><?php
 		
 					WPAA_Template::behavior_select( $post_behavior );
 		
 				?></div><?php
 	
-				?><div class="disclosure-view-select misc-pub-section"><?php
+				?><div class="wpaa-view-select misc-pub-section"><?php
 					?><label for="_wpaa_fallback_page"><?php
 					_e('Fallback Page','wp-access-areas');
 					?></label><?php

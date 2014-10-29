@@ -13,7 +13,7 @@
 				function( data, textStatus, jqXHR ) {
 					$(data).insertBefore($parent);
 					$parent.find("input[name='cap_title']").val('');
-					$('.disclosure-label-item.error').fadeOut(5000,function(){$(this).remove()});
+					$('.wpaa-label-item.error').fadeOut(5000,function(){$(this).remove()});
 				}
 			);
 			return false;

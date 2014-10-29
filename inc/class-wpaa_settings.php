@@ -42,7 +42,7 @@ class WPAA_Settings {
 		add_action( 'load-settings_page_wpaa_settings' , array( __CLASS__ , 'load_style' ) );
 	}
 	static function load_style() {
-		wp_enqueue_style( 'disclosure-admin' );
+		wp_enqueue_style( 'wpaa-admin' );
 	}
 	static function enable_assign_cap( $old_value , $new_value ) {
 		if ( $new_value && ! $old_value  ) {

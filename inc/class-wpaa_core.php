@@ -35,13 +35,13 @@ class WPAA_Core {
 	 * Register Admin styles and scripts
 	 */
 	static function admin_register_scripts() {
-		wp_register_script( 'disclosure-admin-user-ajax' , plugins_url('js/disclosure-admin-user-ajax.js', dirname(__FILE__)) );
-		wp_register_script( 'disclosure-quick-edit' , plugins_url('js/disclosure-quick-edit.js', dirname(__FILE__)) );
-		wp_register_script( 'disclosure-edit' , plugins_url('js/disclosure-edit.js', dirname(__FILE__)) );
-		wp_localize_script( 'disclosure-edit', 'wpaa_postedit', array(
+		wp_register_script( 'wpaa-admin-user-ajax' , plugins_url('js/wpaa-admin-user-ajax.js', dirname(__FILE__)) );
+		wp_register_script( 'wpaa-quick-edit' , plugins_url('js/wpaa-quick-edit.js', dirname(__FILE__)) );
+		wp_register_script( 'wpaa-edit' , plugins_url('js/wpaa-edit.js', dirname(__FILE__)) );
+		wp_localize_script( 'wpaa-edit', 'wpaa_postedit', array(
 			'ajax_nonce' => wp_create_nonce( 'get_accessarea_values' ),
 		) );
-		wp_register_style( 'disclosure-admin' , plugins_url('css/disclosure-admin.css', dirname(__FILE__)) );
+		wp_register_style( 'wpaa-admin' , plugins_url('css/wpaa-admin.css', dirname(__FILE__)) );
 	}
 
 	/**
