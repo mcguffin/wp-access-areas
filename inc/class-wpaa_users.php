@@ -73,29 +73,37 @@ class WPAA_Users {
 	// ajax adding access areas
 	// --------------------------------------------------
 	static function ajax_add_access_area() {
+		$success = false;
 		if ( wp_verify_nonce(@$_POST['_wp_ajax_nonce'] , 'userlabel-new' ) && current_user_can( 'promote_users' ) ) {
 			$cap_title = trim($_POST['cap_title']);
 			if ( ( !$_POST['blog_id'] && !is_super_admin() ) || ( $_POST['blog_id'] && $_POST['blog_id'] != get_current_blog_id() ) ) {
-				?><span class="wpaa-label-item error"><?php _e('Insufficient privileges.','wp-access-areas'); ?></span><?php  // throw_error: insufficient privileges
+				$message = __('Insufficient privileges.','wp-access-areas');
 			} else if (empty($cap_title)) {
-				?><span class="wpaa-label-item error"><?php _e('Empty name.','wp-access-areas'); ?></span><?php  // throw_error: empty name
+				$message = __('Empty name.','wp-access-areas');
 			} else {
 				$create_id = WPAA_AccessArea::create_userlabel( array('cap_title' => $_POST['cap_title'], 'blog_id' => $_POST['blog_id'] ) );
 			
 				if ( $create_id ) {
 					$label = WPAA_AccessArea::get_userlabel( $create_id );
+					$success = true;
 					self::_select_label_formitem( $label , true );
 				} else {
 					switch (WPAA_AccessArea::what_went_wrong()) {
 						case 4: // Error: area exists
-							?><span class="wpaa-label-item error"><?php _e('Access Area exists.','wp-access-areas'); ?></span><?php  // throw_error: insufficient privileges
+							$message = __('Access Area exists.','wp-access-areas');
 							break;
 					};
 				}
 			}
 		} else {
-			?><span class="wpaa-label-item error"><?php _e('Insufficient privileges.','wp-access-areas'); ?></span><?php  // throw_error: insufficient privileges
+			$message = __('Insufficient privileges.','wp-access-areas');
+			  // throw_error: insufficient privileges
 		}
+		
+		if ( ! $success ) {
+			printf( '<span class="wpaa-label-item error dashicons-before dashicons-no">%s</span>' , $message );
+		}
+		
 		die();
 	}
 	// --------------------------------------------------
