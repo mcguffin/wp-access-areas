@@ -264,14 +264,7 @@ class WPAA_Users {
 			
 			?><tr class="wpaa-section">
 				<th><?php
-
-				printf( '<span class="dashicons-before dashicons-admin-%s">%s</span>' , $global ? 'site' : 'home', $row_title );
-
-				if ($network) {
-					?><span class="icon-undisclosed-network icon16"></span><?php
-				} else {
-					?><span class="icon-undisclosed-local icon16"></span><?php
-				}
+				printf( '<span class="dashicons-before dashicons-admin-%s">%s</span>' , $network ? 'site' : 'home', $row_title );
 
 				?></th>
 				<td><?php
@@ -325,23 +318,23 @@ class WPAA_Users {
 	
 	static function table_views( $views ) {
 		$ret = '';
-		$ret .= self::_listtable_label_select( WPAA_AccessArea::get_blog_userlabels() , 'local' );
+		$ret .= self::_listtable_label_select( WPAA_AccessArea::get_blog_userlabels() );
 		if ( is_accessareas_active_for_network() )
-			$ret .= self::_listtable_label_select( WPAA_AccessArea::get_network_userlabels() , 'network');
+			$ret .= self::_listtable_label_select( WPAA_AccessArea::get_network_userlabels() , true );
 		if ( $ret )
 			$views['labels'] = '<strong>'.__('Access Areas:','wp-access-areas').' </strong>' . $ret;
 		return $views;
 	}
-	private static function _listtable_label_select( $labels , $slug ) {
+	private static function _listtable_label_select( $labels , $global = false ) {
 		if (! count( $labels ) )
 			return '';
+		$slug = $global ? 'netowrk' : 'local';
 		$ret = '';
 		$current_label = isset($_GET['role']) ? $_GET['role'] : '';
-		$ret .= '<form class="select-user-label-form" method="get">';
-		$ret .= '<label for="select-user-label-'.$slug.'">';
-		$ret .= '<span class="icon-undisclosed-'.$slug.' icon16"></span>';
-		$ret .= '<select id="select-user-label-'.$slug.'" onchange="this.form.submit()" name="role">';
-		$ret .= sprintf('<option value="%s">%s</option>' , '' , __('(None)'));
+		$ret .= sprintf('<form class="wpaa-access-area dashicons-before dashicons-admin-%s select-accessarea-form" method="get">', $global ? 'site' : 'home' );
+		$ret .= sprintf('<label for="select-accessarea-%s">' , $slug );
+		$ret .= sprintf('<select id="select-accessarea-%s" onchange="this.form.submit()" name="role">' , $slug );
+		$ret .= sprintf('<option value="%s">%s</option>' , '' , __('-- Select --'));
 		$ret .= self::_label_select_options( $labels , $current_label );
 		$ret .= '</select>';
 		$ret .= '</label>';

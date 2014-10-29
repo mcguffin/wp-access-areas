@@ -79,9 +79,15 @@
 
 	-webkit-border-radius:0;
 	-moz-border-radius:0;
-	border-radius:0;}
-.select-user-label-form {
+	border-radius:0;
+}
+
+.select-accessarea-form {
 	display:inline-block;
+}
+.select-accessarea-form.dashicons-before:before {
+	vertical-align:middle;
+	margin-right:0.25em;
 }
 .wp-list-table .column-labels {
 }

@@ -194,8 +194,8 @@ class WPAA_Caps {
 
 
 		?><div class="wrap"><?php
-		?><div id="icon-undisclosed-userlabel" class="icon32"><br></div><?php
-		?><h2><?php _e('Manage Access Areas','wp-access-areas') ?>
+		?><h2><?php 
+			_e('Manage Access Areas','wp-access-areas') ?>
 			<a href="<?php echo remove_query_arg('message',add_query_arg(array('action'=>'new'))) ?>" class="add-new-h2"><?php _ex('Add New','access area','wp-access-areas') ?></a>
 		</h2>
 		<?php self::_put_message( ) ?>
@@ -209,7 +209,8 @@ class WPAA_Caps {
 		
 		
 
-		?></div><?php
+		?></div><!-- .wrap -->
+		<?php
 
 	}
 	static function _sanitize_userlabel_data( $data ) {

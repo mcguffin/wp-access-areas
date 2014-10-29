@@ -58,25 +58,19 @@ class AccessAreas_List_Table extends WP_List_Table {
     	$output = isset($item->$column_name) ? $item->$column_name : '';
         switch($column_name) {
         	case 'cap_title':
-				if ( ! $item->blog_id ) 
-					$ret = '<span title="Network" class="icon-undisclosed-network icon16"></span>';
-				else 
-					$ret = '<span title="Local" class="icon-undisclosed-local icon16"></span>';
-
+				$ret = WPAA_Template::access_area( $output , ! $item->blog_id );
         		if ( is_network_admin() ^ $item->blog_id ) {
 					$url = add_query_arg( array( 'action'=>'edit','id'=>$item->ID ) );
 					$url = remove_query_arg('message',$url);
 					$url = remove_query_arg('deleted',$url);
-					$ret .= sprintf( '<strong><a href="%s">%s</a></strong>' , $url , $output );
+					$ret = sprintf( '<a href="%s">%s</a>' , $url , $ret );
 					
 					$del_url = add_query_arg( array('action'=>'delete','id'=>$item->ID,'_wpnonce'=>wp_create_nonce('userlabel-delete')) );
 					$del_url = remove_query_arg('message',$del_url);
 					$del_url = remove_query_arg('deleted',$del_url);
 					$ret .= sprintf('<br /><div class="row-actions"><span class="remove"><a href="%s" class="submitdelete">%s</a></span></div>',$del_url,__('Delete'));
-					return $ret;
-				} else {
-					return $ret.$output;
 				}
+				return $ret;
         	case 'capability':
         		return "<code>$output</code>";
         	case 'blog':
