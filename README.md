@@ -32,7 +32,7 @@ Finally activate it in the GUI.
 
 Compatibility
 -------------
-- WP 3.8 through 4.1 
+- WP 3.8 through 4.1-beta
 - The plugin ist still functional in WP < 3.8, but some items may not be displayed correctly.
 
 Plugin API
