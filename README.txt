@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: access, role, capability, user, security, editor
 Requires at least: 3.8
 Tested up to: 4.1
-Stable tag: 1.3.4
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,7 +66,7 @@ Developer documentation can be found in [the project wiki](https://github.com/mc
 
 = I found a bug. Where should I post it? =
 
-I personally prefer GitHub. The plugin code is here: [GitHub](https://github.com/mcguffin/wp-access-areas)
+I personally prefer GitHub but you can post it in the forum as well. The plugin code is here: [GitHub](https://github.com/mcguffin/wp-access-areas)
 
 = I want to use the latest files. How can I do this? =
 
@@ -110,7 +110,7 @@ I will migrate all the translation stuff there.
  - Feature: Explicitly enable / disable custom behaviour on posts.
  - UI: Combine columns in Posts list table
  - Compatibility: Drop support for WP < 3.8
- - Some code refactoring
+ - Code refactoring, switched classname prefixes
 
 = 1.3.3 =
  - Fix: Database error on comment feeds. Hiding or redirecting from comment feeds should work now.
