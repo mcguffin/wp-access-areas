@@ -22,13 +22,12 @@ even custom Access Areas.
 - define global access areas on a network
 - Supports bulk editing
 - German, Italian, Polish and Swedish localization (Huge Thankyou @ all translators!)
-- Clean uninstall
 
 Latest files on [GitHub](https://github.com/mcguffin/wp-access-areas).
 
 Developers might like to have a look at [the project wiki](https://github.com/mcguffin/wp-access-areas/wiki).
 
-= Known Limitations =
+= Known Issues =
 - WordPress calendar Widget still shows dates where even restricted posts have been created. 
   When clicked on such a date a 404 will occur. There already is a 
   [WordPress Core ticket on that issue](https://core.trac.wordpress.org/ticket/29319) but the 
