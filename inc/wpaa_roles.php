@@ -211,9 +211,10 @@ function wpaa_role_contains( $container , $contained ) {
 	if ( $container == $contained ) {
 		$contains = true;
 	} else if ( $wp_roles->is_role( $container ) && $wp_roles->is_role( $contained ) ) {
-		$contains = 0 < count(array_diff_assoc(  
-			$wp_roles->get_role( $container )->capabilities , 
-			$wp_roles->get_role( $contained )->capabilities
+
+		$contains = 0 == count(array_diff_assoc(  
+			$wp_roles->get_role( $contained )->capabilities ,
+			$wp_roles->get_role( $container )->capabilities 
 		));
 		
 	}

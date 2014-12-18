@@ -388,12 +388,15 @@ class WPAA_EditPost {
 	}
 
 	static function add_disclosure_column( $columns ) {
-		global $post_type;
-		$post_type_object = get_post_type_object( $post_type );
+		global $post,$post_type;
+		$_post_type = $post_type;
+		if ( is_null( $_post_type) && $post ) 
+			$_post_type = $post->post_type;
+		$post_type_object = get_post_type_object( $_post_type );
 		
-		$show_view = self::can_edit_view_cap( $post_type , $post_type_object );
+		$show_view = self::can_edit_view_cap( $_post_type , $post_type_object );
 		$show_edit =  self::can_edit_edit_cap();
-		$show_comment = post_type_supports( $post_type , 'comments' ) && self::can_edit_comment_cap( $post_type );
+		$show_comment = post_type_supports( $_post_type , 'comments' ) && self::can_edit_comment_cap( $_post_type );
 
 		// show only if needed
 		if ( $show_view || $show_edit || $show_comment ) {

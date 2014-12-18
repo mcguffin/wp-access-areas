@@ -114,6 +114,8 @@ I will migrate all the translation stuff there.
 = 1.4.0 =
  - Feature: Explicitly enable / disable custom behaviour on posts.
  - UI: Combine columns in Posts list table
+ - Fix: Contained roles were not assumed correctly
+ - Fix: QuickEdit did not show Access after save
  - Compatibility: Drop support for WP < 3.8
  - Code refactoring, switched classname prefixes
 
