@@ -253,28 +253,27 @@ class WPAA_Settings {
 				$alternate = false;
 				foreach ( $roles as $role_slug => $role_details ) {
 					$role = get_role( $role_slug );
-					$alternate = !$alternate;
-					?><tr class="role-select <?php if ( $alternate ) echo "alternate" ?>"><?php
-					?><th><?php
-						echo translate_user_role( $role_details['name'] );
-					?></th><?php
-					foreach ( array_keys( self::$role_caps ) as $cap ) {
-						?><td><?php
-						if ( $role->has_cap( 'edit_posts' ) || $role->has_cap( 'edit_pages' ) ) {
-							$attr = $role_slug == 'administrator'?'disabled':'';
-							if ( $role->has_cap( $cap ) ) {
-								?><button <?php echo $attr ?> name="revoke_cap[<?php echo $role_slug ?>]" value="<?php echo $cap ?>" type="submit" class="button-secondary" /><?php _e('Forbid' , 'wp-access-areas') ?></button><?php
-							} else {
-								?><button name="grant_cap[<?php echo $role_slug ?>]" value="<?php echo $cap ?>" type="submit" class="button-primary" /><?php _e('Allow'  , 'wp-access-areas') ?></button><?php
-							}
+					if ( $role->has_cap( 'edit_posts' ) || $role->has_cap( 'edit_pages' ) ) {
+						$alternate = !$alternate;
+						?><tr class="role-select <?php if ( $alternate ) echo "alternate" ?>"><?php
+						?><th><?php
+							echo translate_user_role( $role_details['name'] );
+						?></th><?php
+						foreach ( array_keys( self::$role_caps ) as $cap ) {
+							?><td><?php
+								$attr = $role_slug == 'administrator'?'disabled':'';
+								if ( $role->has_cap( $cap ) ) {
+									?><button <?php echo $attr ?> name="revoke_cap[<?php echo $role_slug ?>]" value="<?php echo $cap ?>" type="submit" class="button-secondary" /><?php _e('Forbid' , 'wp-access-areas') ?></button><?php
+								} else {
+									?><button name="grant_cap[<?php echo $role_slug ?>]" value="<?php echo $cap ?>" type="submit" class="button-primary" /><?php _e('Allow'  , 'wp-access-areas') ?></button><?php
+								}
 					
-						} else {
+							?></td><?php
 						}
-						?></td><?php
+						?><tr><?php
 					}
-					?><tr><?php
-					}
-				?></tbody><?php
+				}
+			?></tbody><?php
 			?></table><?php
 			?><p class="description"><?php 
 				_e('If you are running a role editor plugin such as <a href="https://wordpress.org/plugins/user-role-editor/">User Role editor by Vladimir Garagulya</a> or <a href="https://wordpress.org/plugins/wpfront-user-role-editor/">WPFront User Role Editor by Syam Mohan</a> you can do the same as here by assigning the custom capabilites <code>wpaa_set_view_cap</code>, <code>wpaa_set_edit_cap</code> and <code>wpaa_set_comment_cap</code>.','wp-access-areas');

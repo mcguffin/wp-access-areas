@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: access, role, capability, user, security, editor
 Requires at least: 3.8
 Tested up to: 4.1
-Stable tag: 1.4.0
+Stable tag: 1.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,8 +29,13 @@ Latest files on [GitHub](https://github.com/mcguffin/wp-access-areas).
 Developers might like to have a look at [the project wiki](https://github.com/mcguffin/wp-access-areas/wiki).
 
 = Known Limitations =
-- WordPress calendar Widget still shows dates where even restricted posts have been created. When clicked on such a date a 404 will occur. 
-- Taxonomy menus (e.g. Tags / Categories) also count restricted posts when the total number of posts in a taxonomy is ascertained. See [this post](http://wordpress.org/support/topic/archive-recents-posts-last-comments-show-restricted-content?replies=5#post-5929330) for details.
+- WordPress calendar Widget still shows dates where even restricted posts have been created. 
+  When clicked on such a date a 404 will occur. There already is a 
+  [WordPress Core ticket on that issue](https://core.trac.wordpress.org/ticket/29319) but the 
+  proposed patch will not make it into WP 4.1. Lets put some hope into 4.2.
+- Taxonomy menus (e.g. Tags / Categories) also count restricted posts when the total number 
+  of posts in a taxonomy is ascertained. 
+  See [this post](http://wordpress.org/support/topic/archive-recents-posts-last-comments-show-restricted-content?replies=5#post-5929330) for details.
 
 == Installation ==
 
