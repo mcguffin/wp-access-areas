@@ -219,19 +219,19 @@ class WPAA_EditPost {
 		}
 		
 		if ( self::can_edit_view_cap( $post->post_type , $post_type_object ) ) { 
-			?><div class="wpaa-view-select misc-pub-section"><?php
+			?><div class="wpaa-view-select misc-pub-section dashicons-before dashicons-visibility"><?php
 				?><label for="post_view_cap-select"><strong><?php _e( 'Who can read:' , 'wp-access-areas') ?></strong></label><br /><?php
 				WPAA_Template::access_area_dropdown( $rolenames , $groups , $post->post_view_cap , 'post_view_cap' );
 			?></div><?php
 		}
 		if ( self::can_edit_edit_cap() ) {
-			?><div class="wpaa-edit-select misc-pub-section"><?php
+			?><div class="wpaa-edit-select misc-pub-section dashicons-before dashicons-edit"><?php
 				?><label for="post_edit_cap-select"><strong><?php _e( 'Who can edit:' , 'wp-access-areas') ?></strong></label><br /><?php 
 				WPAA_Template::access_area_dropdown( $edit_rolenames , $groups , $post->post_edit_cap , 'post_edit_cap' );
 			?></div><?php
 		}
 		if ( self::can_edit_comment_cap( $post->post_type ) && wpaa_user_can( $post->post_comment_cap ) ) {
-			?><div class="wpaa-comment-select misc-pub-section"><?php
+			?><div class="wpaa-comment-select misc-pub-section dashicons-before dashicons-admin-comments"><?php
 				?><label for="post_comment_cap-select"><strong><?php _e( 'Who can comment:' , 'wp-access-areas') ?></strong></label><br /><?php
 				WPAA_Template::access_area_dropdown( $rolenames , $groups , $post->post_comment_cap , 'post_comment_cap' );
 			?></div><?php
@@ -360,7 +360,7 @@ class WPAA_EditPost {
 						if ( $can_edit_view ) {
 							?><div class="inline-edit-group"><?php
 								?><label><?php
-									?><span class="title"><?php _e( 'Read:' , 'wp-access-areas') ?></span><?php
+									?><span class="title"><?php _e( 'Read:' , 'wp-access-areas') ?></span><span class=" dashicons-before dashicons-visibility"></span><?php
 									WPAA_Template::access_area_dropdown( $rolenames , $groups , $view_cap , 'post_view_cap' , $first_item_value , __( '&mdash; No Change &mdash;' ) );
 								?></label><?php
 							?></div><?php
@@ -368,7 +368,7 @@ class WPAA_EditPost {
 						if ( $can_edit_edit ) {
 							?><div class="inline-edit-group"><?php
 								?><label><?php
-									?><span class="title"><?php _e( 'Edit:' , 'wp-access-areas') ?></span><?php
+									?><span class="title"><?php _e( 'Edit:' , 'wp-access-areas') ?></span><span class=" dashicons-before dashicons-edit"></span><?php
 									WPAA_Template::access_area_dropdown( $edit_rolenames , $groups , $edit_cap , 'post_edit_cap'  , $first_item_value , __( '&mdash; No Change &mdash;' )  );
 								?></label><?php
 							?></div><?php
@@ -376,7 +376,7 @@ class WPAA_EditPost {
 						if ( $can_edit_comment ) {
 							?><div class="inline-edit-group"><?php
 								?><label><?php
-									?><span class="title"><?php _e( 'Comment:' , 'wp-access-areas') ?></span><?php
+									?><span class="title"><?php _e( 'Comment:' , 'wp-access-areas') ?></span><span class=" dashicons-before dashicons-admin-comments"></span><?php
 									WPAA_Template::access_area_dropdown( $rolenames , $groups , $comment_cap , 'post_comment_cap'  , $first_item_value , __( '&mdash; No Change &mdash;' ) );
 								?></label><?php
 							?></div><?php

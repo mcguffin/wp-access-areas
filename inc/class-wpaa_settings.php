@@ -143,40 +143,25 @@ class WPAA_Settings {
 		
 		$groups = WPAA_AccessArea::get_label_array( );
 		?><table class="wp-list-table widefat set-default-caps"><?php
-			?><thead><?php
-				?><tr><?php
-				
-					?><th class="manage-column"><?php
-						_e('Post Type' , 'wp-access-areas' );
-					?></th><?php
-					?><th class="manage-column"><?php
-						_e('Reading');
-					?></th><?php
-					?><th class="manage-column"><?php
-						_e('Edit');
-					?></th><?php
-					?><th class="manage-column"><?php
-						_e('Post Comment');
-					?></th><?php
-				?></tr><?php
-			?></thead><?php
-			?><tfoot><?php
+			foreach ( array( 'thead' , 'tfoot' ) as $tag ) {
+			?><<?php echo $tag; ?>><?php
 				?><tr><?php
 				
 					?><th class="manage-column"><?php
 						_e('Post Type', 'wp-access-areas');
 					?></th><?php
-					?><th class="manage-column"><?php
+					?><th class="manage-column"><span class=" dashicons-before dashicons-visibility"> </span><?php
 						_e('Reading');
 					?></th><?php
-					?><th class="manage-column"><?php
+					?><th class="manage-column"><span class=" dashicons-before dashicons-edit"> </span><?php
 						_e('Edit');
 					?></th><?php
-					?><th class="manage-column"><?php
+					?><th class="manage-column"><span class=" dashicons-before dashicons-admin-comments"> </span><?php
 						_e('Post Comment');
 					?></th><?php
 				?></tr><?php
-			?></tfoot><?php
+			?></<?php echo $tag; ?>><?php
+			}
 			?><tbody><?php
 		$alternate = false;
 		foreach ( $post_types as $post_type ) {
