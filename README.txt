@@ -110,6 +110,9 @@ I will migrate all the translation stuff there.
 
 == Changelog ==
 
+= 1.4.1 =
+ - Fix: set suppress_filters to false on get_posts
+
 = 1.4.0 =
  - Feature: Explicitly enable / disable custom behaviour on posts.
  - UI: Combine columns in Posts list table
