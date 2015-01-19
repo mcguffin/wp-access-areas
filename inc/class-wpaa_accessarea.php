@@ -210,7 +210,7 @@ class WPAA_AccessArea {
 			return false;
 		
 		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
-		extract( $data , EXTR_SKIP ); // cap_title, blog_id, id
+		extract( $update_data , EXTR_SKIP ); // cap_title, blog_id, id
 
 		
 		if ( self::title_exists( $cap_title , $blog_id ) ) {
