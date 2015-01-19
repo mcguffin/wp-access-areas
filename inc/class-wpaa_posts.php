@@ -18,7 +18,7 @@ class WPAA_Posts {
 		add_filter( 'posts_where' , array( __CLASS__ , 'get_posts_where' ) , 10 , 2 );
 		add_filter( 'getarchives_where' , array( __CLASS__ , 'get_archiveposts_where' ) , 10 , 2 );
 		/*
-		// activate as soon as patch @ https://core.trac.wordpress.org/attachment/ticket/29319/general-template.diff makes it into core.
+		// see calendar wiget issue: https://core.trac.wordpress.org/ticket/29319
 		add_filter( 'getcalendar_where' , array( __CLASS__ , 'get_archiveposts_where' ) , 10 , 1 );
 		add_filter( 'getcalendar_next_where' , array( __CLASS__ , 'get_archiveposts_where' ) , 10 , 1 );
 		add_filter( 'getcalendar_previous_where' , array( __CLASS__ , 'get_archiveposts_where' ) , 10 , 1 );
