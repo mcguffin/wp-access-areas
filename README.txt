@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: access, role, capability, user, security, editor
 Requires at least: 3.8
 Tested up to: 4.1
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -112,6 +112,7 @@ I will migrate all the translation stuff there.
 
 = 1.4.1 =
  - Fix: set suppress_filters to false on get_posts
+ - Fix: Saving Access Area Name
 
 = 1.4.0 =
  - Feature: Explicitly enable / disable custom behaviour on posts.
