@@ -16,7 +16,7 @@ class WPAA_EditPost {
 		if ( is_admin() ) {
 			// edit post
 			add_filter('wp_insert_post_data', array(__CLASS__ , 'edit_post') , 10 , 2 );
-			add_filter('save_post', array(__CLASS__ , 'set_post_behavior') , 10 , 3 );
+			add_action('save_post', array(__CLASS__ , 'set_post_behavior') , 10 , 3 );
 			add_action('edit_attachment',array(__CLASS__ , 'edit_attachment') );
 			add_action('add_attachment',array(__CLASS__ , 'edit_attachment') );
 			
