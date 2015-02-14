@@ -65,7 +65,7 @@ class WPAA_Posts {
 	// --------------------------------------------------
 	static function template_redirect() {
 		if ( is_singular() && $restricted_post = get_post() ) {
-			if ( ! wpaa_user_can( $restricted_post->post_view_cap ) ) {
+			if ( $restricted_post->ID !== 0 && ! wpaa_user_can( $restricted_post->post_view_cap ) ) {
 				do_action( 'wpaa_view_restricted_post' , $restricted_post->ID , $restricted_post );
 				$redirect			= false;
 				$behavior 			= get_post_meta($restricted_post->ID,'_wpaa_post_behavior',true);
@@ -73,28 +73,30 @@ class WPAA_Posts {
 				// no behavior? take default value
 				if ( ! $behavior )
 					$behavior = get_option( 'wpaa_default_behavior' );
-
-				if ( $behavior == 'page' || is_user_logged_in() ) {
-					
-					// no fallback? take default value
-					if ( ! $fallback_page_id )
-						$fallback_page_id = get_option( 'wpaa_fallback_page' );
-										
-					if ( $fallback_page_id && wpaa_is_post_public( $fallback_page_id ) ) {
-						// if accessable take user to the fallback page
-						$redirect = get_permalink( $fallback_page_id );
-					} else {
-						// last resort: send him home
-						$redirect = home_url();
-					}
-				} else if ( $behavior == 'login' ) {
+				
+				if ( $behavior == 'login' && ! is_user_logged_in() ) {
 					// get user to login and return him to the requested page.
 					$redirect = wp_login_url( site_url( $_SERVER["REQUEST_URI"]) );
-						// used to be get_permalink(), was not working on feeds...
-				} else if ( $behavior == '404' ) { // 404
-					global $wp_query;
-					$wp_query->set_404();
-					status_header(404);
+				} else {
+					if ( $behavior == 'page' ) {
+					
+						// no fallback? take default value
+						if ( ! $fallback_page_id )
+							$fallback_page_id = get_option( 'wpaa_fallback_page' );
+										
+						if ( $fallback_page_id && wpaa_is_post_public( $fallback_page_id ) ) {
+							// if accessable take user to the fallback page
+							$redirect = get_permalink( $fallback_page_id );
+						} else {
+							// last resort: send him home
+							$redirect = home_url();
+						}
+					} else { // assume 404
+						global $wp_query;
+						$wp_query->set_404();
+						status_header(404);
+						return;
+					}
 				}
 				$redirect = apply_filters( 'wpaa_restricted_post_redirect' , $redirect , $restricted_post->ID , $restricted_post );
 				if ( $redirect ) {

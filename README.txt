@@ -110,6 +110,10 @@ I will migrate all the translation stuff there.
 
 == Changelog ==
 
+= 1.4.2 =
+ - Fix: no restrictions for empty post objects (fixes buddypress profile page issue)
+ - Fix: wrong redirection behavior for logged in users
+
 = 1.4.1 =
  - Fix: set suppress_filters to false on get_posts
  - Fix: Saving Access Area Name
