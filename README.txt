@@ -111,7 +111,8 @@ I will migrate all the translation stuff there.
 == Changelog ==
 
 = 1.4.3 =
- - Fix: invalid login redirect URI
+ - Fix: Post Custom behavior not dispalying in metabox when fallback page is default fb page
+ - Fix: invalid login redirect URI in subdirectory installs
 
 = 1.4.2 =
  - Fix: no restrictions for empty post objects (fixes buddypress profile page issue)

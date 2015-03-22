@@ -266,9 +266,9 @@ class WPAA_EditPost {
 			$post_fallback_page = get_option('wpaa_fallback_page');
 			$is_custom_fallback = false;
 		}
-		
-		$is_custom = $is_custom_fallback && $is_custom_behaviour;
-		
+
+		$is_custom = $is_custom_fallback || $is_custom_behaviour;
+
 		?><div class="wpaa-select-behaviour<?php echo $is_custom ? ' custom' : '' ; ?>"><?php
 			?><div class="misc-pub-section"><?php
 				?><label for="wpaa_enable_custom_behaviour"><?php
