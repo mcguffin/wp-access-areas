@@ -110,6 +110,9 @@ I will migrate all the translation stuff there.
 
 == Changelog ==
 
+= 1.4.3 =
+ - Fix: invalid login redirect URI
+
 = 1.4.2 =
  - Fix: no restrictions for empty post objects (fixes buddypress profile page issue)
  - Fix: wrong redirection behavior for logged in users
