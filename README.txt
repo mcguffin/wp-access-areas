@@ -121,6 +121,9 @@ I will migrate all the translation stuff there.
 
 == Changelog ==
 
+= 1.4.4 =
+ - Fix: Multisite install procedere
+
 = 1.4.3 =
  - Fix: Post Custom behavior not dispalying in metabox when fallback page is default fb page
  - Fix: invalid login redirect URI in subdirectory installs
