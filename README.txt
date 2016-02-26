@@ -123,6 +123,7 @@ I will migrate all the translation stuff there.
 
 = 1.4.4 =
  - Fix: Multisite install procedere
+ - Fix: Add self repair functionality (Ass missing posts table columns)
 
 = 1.4.3 =
  - Fix: Post Custom behavior not dispalying in metabox when fallback page is default fb page
