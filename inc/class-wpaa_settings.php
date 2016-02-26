@@ -40,6 +40,53 @@ class WPAA_Settings {
 		add_action( 'admin_init', array( __CLASS__ , 'register_settings' ) );
 
 		add_action( 'load-settings_page_wpaa_settings' , array( __CLASS__ , 'load_style' ) );
+		
+		add_action( 'admin_notices', array( __CLASS__ , 'selftest' ) );
+		add_action( 'admin_init', array( __CLASS__ , 'selfrepair' ) );
+	}
+	static function selftest() {
+		if ( current_user_can('manage_options') ) {
+			global $wpdb;
+			$result = $wpdb->get_results( "SHOW COLUMNS FROM $wpdb->posts" );
+			$view_cap_okay = false;
+			$edit_cap_okay = false;
+			$comment_cap_okay = false;
+			foreach ( $result as $col ) {
+				if ( $col->Field == 'post_view_cap' ) {
+					$view_cap_okay = true;
+				} else if ( $col->Field == 'post_edit_cap' ) {
+					$edit_cap_okay = true;
+				} else if ( $col->Field == 'post_comment_cap' ) {
+					$comment_cap_okay = true;
+				}
+			}
+			if ( ! ( $view_cap_okay && $edit_cap_okay && $comment_cap_okay ) ) {
+				?><div class="updated settings-error error"><?php 
+					?><p><?php
+						_e('<strong>WP Access Areas:</strong> Something looks wrong with your Posts table.','wp-access-areas');
+						// admin url with:
+						/*
+						nonce,
+						redirect,
+						action: wpaa-repair
+						*/
+						?><br /><?php
+						$repair_url = add_query_arg(array(
+							'nonce' => wp_create_nonce('wpaa-selfrepair'),
+							'action' => 'wpaa-selfrepair',
+						) );
+						?><a class="button button-secondary" href="<?php echo $repair_url ?>"><?php _e('Please fix it for me','wp-access-areas') ?></a><?php
+					?></p><?php
+				?></div><?php
+			}
+		}
+	}
+	static function selfrepair() {
+		if ( isset( $_GET['action'] ) && $_GET['action'] == 'wpaa-selfrepair' && current_user_can('manage_options') && isset( $_GET['nonce'] ) && wp_verify_nonce($_GET['nonce'],'wpaa-selfrepair') ) {
+			WPAA_Install::install_posts_table();
+			$redirect_url = remove_query_arg(array('nonce', 'action' ) );
+			wp_safe_redirect( $redirect_url );
+		}
 	}
 	static function load_style() {
 		wp_enqueue_style( 'wpaa-admin' );

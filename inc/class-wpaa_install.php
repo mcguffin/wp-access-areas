@@ -28,12 +28,12 @@ class WPAA_Install {
 			$blogids = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
 			foreach ( $blogids as $blog_id) {
 				switch_to_blog($blog_id);
-				self::_install_posts_table( );
+				self::install_posts_table( );
 				self::install_role_caps();
 				restore_current_blog();
 			}
 		} else {
-			self::_install_posts_table( );
+			self::install_posts_table( );
 			self::install_role_caps();
 		}
 	}
@@ -68,7 +68,7 @@ class WPAA_Install {
 	
 	function activate_for_blog( $blog_id ) {
 		switch_to_blog( $blog_id );
-		self::_install_posts_table( );
+		self::install_posts_table( );
 		// will break during install, wp-admin/includes/users.php not loaded.
 		// self::install_role_caps();
 		restore_current_blog();
@@ -84,7 +84,7 @@ class WPAA_Install {
 	// --------------------------------------------------
 	// posts table
 	// --------------------------------------------------
-	private static function _install_posts_table( ) {
+	public static function install_posts_table( ) {
 		global $wpdb;
 		// , 'edit_cap'=>'post_edit_cap' will be used later.
 		$cols = array( 'comment_cap'=>'post_comment_cap' , 'edit_cap'=>'post_edit_cap' , 'view_cap'=>'post_view_cap' );
