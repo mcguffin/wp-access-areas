@@ -30,6 +30,7 @@ class WPAA_Install {
 				switch_to_blog($blog_id);
 				self::_install_posts_table( );
 				self::install_role_caps();
+				restore_current_blog();
 			}
 		} else {
 			self::_install_posts_table( );
