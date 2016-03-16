@@ -64,7 +64,8 @@ class WPAA_Posts {
 	// template redirect
 	// --------------------------------------------------
 	static function template_redirect() {
-		if ( is_singular() && $restricted_post = get_post() ) {
+		global $wp_query;
+		if ( isset( $wp_query ) && is_singular() && $restricted_post = get_post() ) {
 			if ( $restricted_post->ID !== 0 && ! wpaa_user_can( $restricted_post->post_view_cap ) ) {
 				do_action( 'wpaa_view_restricted_post' , $restricted_post->ID , $restricted_post );
 				$redirect			= false;
@@ -92,7 +93,6 @@ class WPAA_Posts {
 							$redirect = home_url();
 						}
 					} else { // assume 404
-						global $wp_query;
 						$wp_query->set_404();
 						status_header(404);
 						return;
@@ -297,9 +297,9 @@ class WPAA_Posts {
 
 
 	private static function _get_where( $where , $table_name = 'p' ) {
-		global $wpdb;
+		global $wpdb, $wp_query;
 		// disable filtering: on queries for single posts/pages and for single blog administrators
-		if ( ( is_singular() && preg_match( "/{$wpdb->posts}.(post_name|ID)\s?=/" , $where ) ) || ( ! is_multisite() && current_user_can('administrator') ) ) {
+		if ( ( isset( $wp_query ) && is_singular() && preg_match( "/{$wpdb->posts}.(post_name|ID)\s?=/" , $where ) ) || ( ! is_multisite() && current_user_can('administrator') ) ) {
 			return $where;
 		}
 		if ( $table_name && substr($table_name,-1) !== '.' )
