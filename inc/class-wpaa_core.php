@@ -56,7 +56,7 @@ class WPAA_Core {
 	 * Setup for multisite blog
 	 */
 	static function set_network_roles_for_blog( $blog_id /*, $user_id, $domain, $path, $site_id, $meta */ ) {
-		require_once( dirname(__FILE__). '/class-WPAA_Install.php' );
+		require_once( dirname(__FILE__). '/class-wpaa_install.php' );
 		WPAA_Install::activate_for_blog( $blog_id );
 	}
 	/**
