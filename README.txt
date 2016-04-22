@@ -121,6 +121,9 @@ I will migrate all the translation stuff there.
 
 == Changelog ==
 
+= 1.4.8 =
+ - Fix: PHP crash on plugin options page
+
 = 1.4.7 =
  - Fix: PHP deprecated warning during install + network upgrade
  - Fix: Incorrect Post Classes 
