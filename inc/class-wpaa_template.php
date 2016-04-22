@@ -2,7 +2,7 @@
 
 class WPAA_Template {
 
-	static function access_area( $name , $global = false , $return = true ) {
+	static function access_area( $name , $global = false ) {
 		return sprintf( '<span class="wpaa-access-area dashicons-before dashicons-admin-%s">%s</span>' , $global ? 'site' : 'home' , $name );
 	}
 
