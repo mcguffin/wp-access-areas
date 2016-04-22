@@ -66,7 +66,7 @@ class WPAA_Install {
 		}
 	}
 	
-	function activate_for_blog( $blog_id ) {
+	public static function activate_for_blog( $blog_id ) {
 		switch_to_blog( $blog_id );
 		self::install_posts_table( );
 		// will break during install, wp-admin/includes/users.php not loaded.
