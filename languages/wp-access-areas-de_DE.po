@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: WordPress Access Areas v1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-04-30 11:51+0100\n"
-"PO-Revision-Date: 2016-04-30 16:50+0100\n"
+"PO-Revision-Date: 2016-04-30 17:48+0100\n"
 "Last-Translator: Jörn Lund <joern@podpirate.org>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -65,7 +65,7 @@ msgstr "Du hast nicht die erforderlichen Rechte."
 # @ wp-access-areas
 #: inc/class-wpaa_caps.php:48
 msgid "Please enter a Label."
-msgstr "Bitte gib einen Namen ein"
+msgstr "Bitte gib einen Namen ein."
 
 # @ wp-access-areas
 #: inc/class-wpaa_caps.php:51
@@ -272,7 +272,7 @@ msgstr "Zugriffsstandard für neue Beiträge"
 # @ wp-access-areas
 #: inc/class-wpaa_settings.php:141
 msgid "Default Access:"
-msgstr "Standardzugriff"
+msgstr "Standardzugriff:"
 
 # @ wp-access-areas
 #: inc/class-wpaa_settings.php:143
@@ -313,7 +313,7 @@ msgstr "Änderungen speichern"
 # @ wp-access-areas
 #: inc/class-wpaa_settings.php:197
 msgid "Post Type"
-msgstr "Inhaltstyp"
+msgstr "Beitragstyp"
 
 # @ default
 #: inc/class-wpaa_settings.php:200
@@ -459,12 +459,12 @@ msgstr ""
 # @ wp-access-areas
 #: inc/class-wpaa_users.php:80 inc/class-wpaa_users.php:99
 msgid "Insufficient privileges."
-msgstr "Ungenügende Rechte"
+msgstr "Ungenügende Rechte."
 
 # @ wp-access-areas
 #: inc/class-wpaa_users.php:82
 msgid "Empty name."
-msgstr "Leerer Name"
+msgstr "Leerer Name."
 
 # @ wp-access-areas
 #: inc/class-wpaa_users.php:93
@@ -474,7 +474,7 @@ msgstr "Zugangsbereich existiert."
 # @ wp-access-areas
 #: inc/class-wpaa_users.php:117
 msgid "Grant Access … "
-msgstr "Zugriff erteilen"
+msgstr "Zugriff erteilen …"
 
 # @ wp-access-areas
 #: inc/class-wpaa_users.php:118
@@ -484,7 +484,7 @@ msgstr "Erteilen"
 # @ wp-access-areas
 #: inc/class-wpaa_users.php:125
 msgid "Revoke Access … "
-msgstr "Zugriff entziehen"
+msgstr "Zugriff entziehen …"
 
 # @ wp-access-areas
 #: inc/class-wpaa_users.php:126
