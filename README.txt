@@ -125,6 +125,7 @@ I will migrate all the translation stuff there.
  - Plugin settings: Use WP Post statuses in favor of hard coded status list (allows use of custom post statuses now)
  - Introduce filter: 'wpaa_allowed_post_stati'
  - Localization: Rework strings
+ - Localization: Introduce de_DE_formal
  - Localization: consistent use of plugin textdomain
 
 = 1.4.7 =
