@@ -99,11 +99,11 @@ class WPAA_Users {
 			$message = __('Insufficient privileges.','wp-access-areas');
 			  // throw_error: insufficient privileges
 		}
-		
+
 		if ( ! $success ) {
 			printf( '<span class="wpaa-label-item error dashicons-before dashicons-no">%s</span>' , $message );
 		}
-		
+
 		die();
 	}
 	// --------------------------------------------------
@@ -132,8 +132,9 @@ class WPAA_Users {
 			
 			check_admin_referer( 'bulk-access-areas' , '_wpaanonce' );
 
-			if ( ! current_user_can( 'promote_users' ) )
-				wp_die( __( 'You can&#8217;t edit that user.' ) );
+			if ( ! current_user_can( 'promote_users' ) ) {
+				wp_die( __( 'You can&#8217;t edit that user.', 'wp-access-areas' ) );
+			}
 			
 			$grant = isset( $_REQUEST['grant_access_area'] ) && ! empty( $_REQUEST['grantit'] );
 			
@@ -230,7 +231,7 @@ class WPAA_Users {
 		$is_change = ($add && ! $has_cap) || (!$add && $has_cap);
 		if ( $is_change ) {
 			if ( ! $can_grant )
-				wp_die( __('You do not have permission to do this.' , 'wp-access-areas' ) );
+				wp_die( __('You do not have permission to do this.', 'wp-access-areas' ) );
 			if ( $add ) {
 				$user->add_cap( $capability , true );
 				do_action( 'wpaa_grant_access' , $user , $capability );
@@ -313,7 +314,7 @@ class WPAA_Users {
 			?><input type="hidden" name="blog_id" value="<?php echo $blog_id; ?>" /><?php
 			?><input class="cap-add" type="text" name="cap_title" placeholder="<?php _ex('Add New','access area','wp-access-areas') ?>" /><?php
 			
-			?><a href="#" class="cap-add-submit button" disabled><?php _e('+') ?></a><?php
+			?><a href="#" class="cap-add-submit button" disabled><span class=" dashicons dashicons-plus"></span><span class="screen-reader-text"><?php _ex('Add New','access area','wp-access-areas') ?></span></a><?php
 		?></span><?php
 	}
 	
@@ -342,7 +343,7 @@ class WPAA_Users {
 		$ret .= sprintf('<form class="wpaa-access-area dashicons-before dashicons-admin-%s select-accessarea-form" method="get">', $global ? 'site' : 'home' );
 		$ret .= sprintf('<label for="select-accessarea-%s">' , $slug );
 		$ret .= sprintf('<select id="select-accessarea-%s" onchange="this.form.submit()" name="role">' , $slug );
-		$ret .= sprintf('<option value="%s">%s</option>' , '' , __('-- Select --'));
+		$ret .= sprintf('<option value="%s">%s</option>' , '' , __('&mdash; Select &mdash;', 'wp-access-areas' ));
 		$ret .= self::_label_select_options( $labels , $current_label );
 		$ret .= '</select>';
 		$ret .= '</label>';
@@ -398,7 +399,7 @@ class WPAA_Users {
 		$labels = WPAA_AccessArea::get_available_userlabels( );
 		$user = new WP_User( $user_ID );
 		if ( ( is_multisite() && is_super_admin( $user_ID ) ) || ( ! is_multisite() && $user->has_cap( 'administrator' )) )
-			return WPAA_Template::access_area( __('Everywhere') , true );
+			return WPAA_Template::access_area( __('Everywhere', 'wp-access-areas' ) , true );
 		
 		
 		foreach ($labels as $label) {

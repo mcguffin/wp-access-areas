@@ -360,8 +360,8 @@ class WPAA_EditPost {
 						if ( $can_edit_view ) {
 							?><div class="inline-edit-group"><?php
 								?><label><?php
-									?><span class="title"><?php _e( 'Read:' , 'wp-access-areas') ?></span><span class=" dashicons-before dashicons-visibility"></span><?php
-									WPAA_Template::access_area_dropdown( $rolenames , $groups , $view_cap , 'post_view_cap' , $first_item_value , __( '&mdash; No Change &mdash;' ) );
+									?><span class="title"><?php _e( 'Read:', 'wp-access-areas' ) ?></span><span class=" dashicons-before dashicons-visibility"></span><?php
+									WPAA_Template::access_area_dropdown( $rolenames , $groups , $view_cap , 'post_view_cap' , $first_item_value , __( '&mdash; No Change &mdash;', 'wp-access-areas'  ) );
 								?></label><?php
 							?></div><?php
 						}

@@ -166,7 +166,7 @@ class WPAA_Settings {
 					settings_fields( 'wpaa_settings' );
 				?>
 				<?php do_settings_sections( 'wpaa' );  
-				?><input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" /><?php
+				?><input type="submit" class="button-primary" value="<?php _e('Save Changes', 'wp-access-areas' ) ?>" /><?php
 				
 			?></form>
 		</div>
@@ -197,13 +197,13 @@ class WPAA_Settings {
 						_e('Post Type', 'wp-access-areas');
 					?></th><?php
 					?><th class="manage-column"><span class=" dashicons-before dashicons-visibility"> </span><?php
-						_e('Reading');
+						_e('Reading', 'wp-access-areas' );
 					?></th><?php
 					?><th class="manage-column"><span class=" dashicons-before dashicons-edit"> </span><?php
-						_e('Edit');
+						_e('Edit', 'wp-access-areas' );
 					?></th><?php
 					?><th class="manage-column"><span class=" dashicons-before dashicons-admin-comments"> </span><?php
-						_e('Post Comment');
+						_e('Post Comment', 'wp-access-areas' );
 					?></th><?php
 				?></tr><?php
 			?></<?php echo $tag; ?>><?php

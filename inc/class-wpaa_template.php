@@ -60,7 +60,7 @@ class WPAA_Template {
 			'selected' 	=> $post_fallback_page,
 			'name'		=> $fieldname,
 			'exclude'	=> $restricted_pages,
-			'show_option_none' => __('Front page'),
+			'show_option_none' => __( 'Front page', 'wp-access-areas' ),
 			'option_none_value' => 0,
 		));
 	}

@@ -68,7 +68,7 @@ class AccessAreas_List_Table extends WP_List_Table {
 					$del_url = add_query_arg( array('action'=>'delete','id'=>$item->ID,'_wpnonce'=>wp_create_nonce('userlabel-delete')) );
 					$del_url = remove_query_arg('message',$del_url);
 					$del_url = remove_query_arg('deleted',$del_url);
-					$ret .= sprintf('<br /><div class="row-actions"><span class="remove"><a href="%s" class="submitdelete">%s</a></span></div>',$del_url,__('Delete'));
+					$ret .= sprintf('<br /><div class="row-actions"><span class="remove"><a href="%s" class="submitdelete">%s</a></span></div>',$del_url,__( 'Delete', 'wp-access-areas' ));
 				}
 				return $ret;
         	case 'capability':
@@ -82,7 +82,7 @@ class AccessAreas_List_Table extends WP_List_Table {
 					$url = add_query_arg( array('action'=>'delete','id'=>$item->ID,'_wpnonce'=>wp_create_nonce('userlabel-delete')) );
 					$url = remove_query_arg('message',$url);
 					$url = remove_query_arg('deleted',$url);
-					return sprintf('<a href="%s" class="button">%s</button>',$url,__('Delete'));
+					return sprintf('<a href="%s" class="button">%s</button>',$url,__( 'Delete', 'wp-access-areas' ));
 				} else {
 					return '';
 				}
@@ -136,7 +136,7 @@ class AccessAreas_List_Table extends WP_List_Table {
 	}
 	function get_bulk_actions() {
 		$actions = array(
-			'delete'    => __('Delete'),
+			'delete'    => __( 'Delete', 'wp-access-areas' ),
 		);
 		return $actions;
 	}

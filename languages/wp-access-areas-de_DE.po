@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Access Areas v1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-30 11:30+0100\n"
-"PO-Revision-Date: 2016-04-30 11:31+0100\n"
+"POT-Creation-Date: 2016-04-30 11:51+0100\n"
+"PO-Revision-Date: 2016-04-30 11:51+0100\n"
 "Last-Translator: Jörn Lund <joern@podpirate.org>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -39,10 +39,10 @@ msgstr "WordPress Berechtigung"
 #: inc/class-accessareas_list_table.php:85
 #: inc/class-accessareas_list_table.php:139
 msgid "Delete"
-msgstr ""
+msgstr "Löschen"
 
 # @ wp-access-areas
-#: inc/class-accessareas_list_table.php:77 inc/class-wpaa_users.php:367
+#: inc/class-accessareas_list_table.php:77 inc/class-wpaa_users.php:368
 msgid "Network"
 msgstr "Netzwerk"
 
@@ -52,13 +52,13 @@ msgid "Manage Access Areas"
 msgstr "Zugangsbereiche verwalten"
 
 # @ wp-access-areas
-#: inc/class-wpaa_caps.php:28 inc/class-wpaa_users.php:251
-#: inc/class-wpaa_users.php:389
+#: inc/class-wpaa_caps.php:28 inc/class-wpaa_users.php:252
+#: inc/class-wpaa_users.php:390
 msgid "Access Areas"
 msgstr "Zugangsbereiche"
 
 # @ wp-access-areas
-#: inc/class-wpaa_caps.php:35 inc/class-wpaa_users.php:233
+#: inc/class-wpaa_caps.php:35 inc/class-wpaa_users.php:234
 msgid "You do not have permission to do this."
 msgstr "Sie haben nicht die erforderlichen Rechte."
 
@@ -128,7 +128,8 @@ msgid "Could not find the specified Access Area."
 msgstr "Der angegebene Zugangsbereich konnte nicht gefunden werden."
 
 # @ wp-access-areas
-#: inc/class-wpaa_caps.php:199 inc/class-wpaa_users.php:314
+#: inc/class-wpaa_caps.php:199 inc/class-wpaa_users.php:315
+#: inc/class-wpaa_users.php:317
 msgctxt "access area"
 msgid "Add New"
 msgstr "Erstellen"
@@ -161,7 +162,7 @@ msgstr "Wer darf kommentieren:"
 
 #: inc/class-wpaa_editpost.php:277
 msgid "Custom Behaviour"
-msgstr ""
+msgstr "Verhalten anpassen"
 
 # @ wp-access-areas
 #: inc/class-wpaa_editpost.php:282 inc/class-wpaa_settings.php:325
@@ -182,7 +183,7 @@ msgstr "Lesen:"
 #: inc/class-wpaa_editpost.php:364 inc/class-wpaa_editpost.php:372
 #: inc/class-wpaa_editpost.php:380
 msgid "&mdash; No Change &mdash;"
-msgstr ""
+msgstr "&ndash; Keine Änderung &ndash;"
 
 # @ wp-access-areas
 #: inc/class-wpaa_editpost.php:371
@@ -201,7 +202,7 @@ msgstr "(Netzwerk)"
 
 #: inc/class-wpaa_editpost.php:440
 msgid "WP Default"
-msgstr ""
+msgstr "WP Standard"
 
 # @ wp-access-areas
 #: inc/class-wpaa_editpost.php:440
@@ -210,11 +211,11 @@ msgstr "Blog-Benutzer"
 
 #: inc/class-wpaa_editpost.php:447 inc/class-wpaa_editpost.php:459
 msgid "Who can read"
-msgstr ""
+msgstr "Wer darf lesen"
 
 #: inc/class-wpaa_editpost.php:453
 msgid "Who can comment"
-msgstr ""
+msgstr "Wer darf kommentieren"
 
 # @ wp-access-areas
 #: inc/class-wpaa_settings.php:19
@@ -236,10 +237,12 @@ msgid ""
 "<strong>WP Access Areas:</strong> Something looks wrong with your Posts "
 "table."
 msgstr ""
+"<strong>WP Zugangsbereiche:</strong> Mit Deiner Posts-Tabelle stimmt etwas "
+"nicht."
 
 #: inc/class-wpaa_settings.php:71
 msgid "Please fix it for me"
-msgstr ""
+msgstr "Bitte reparier das für mich"
 
 # @ wp-access-areas
 #: inc/class-wpaa_settings.php:125
@@ -305,7 +308,7 @@ msgstr "Zugangsbereiche"
 # @ default
 #: inc/class-wpaa_settings.php:169
 msgid "Save Changes"
-msgstr ""
+msgstr "Änderungen speichern"
 
 # @ wp-access-areas
 #: inc/class-wpaa_settings.php:197
@@ -315,17 +318,17 @@ msgstr "Inhaltstyp"
 # @ default
 #: inc/class-wpaa_settings.php:200
 msgid "Reading"
-msgstr ""
+msgstr "Lesen"
 
 # @ default
 #: inc/class-wpaa_settings.php:203
 msgid "Edit"
-msgstr ""
+msgstr "Bearbeiten"
 
 # @ default
 #: inc/class-wpaa_settings.php:206
 msgid "Post Comment"
-msgstr ""
+msgstr "Kommentieren"
 
 # @ wp-access-areas
 #: inc/class-wpaa_settings.php:265
@@ -433,7 +436,7 @@ msgstr "Benutzer mit Zugang zu:"
 # @ default
 #: inc/class-wpaa_template.php:63
 msgid "Front page"
-msgstr ""
+msgstr "Startseite"
 
 # @ wp-access-areas
 #: inc/class-wpaa_template.php:71
@@ -491,41 +494,36 @@ msgstr "Entziehen"
 # @ default
 #: inc/class-wpaa_users.php:136
 msgid "You can&#8217;t edit that user."
-msgstr ""
+msgstr "Du kannst diesen Benutzer nicht bearbeiten."
 
 # @ wp-access-areas
-#: inc/class-wpaa_users.php:257
+#: inc/class-wpaa_users.php:258
 msgid "Grant Access"
 msgstr "Zugang gewähren"
 
 # @ wp-access-areas
-#: inc/class-wpaa_users.php:264
+#: inc/class-wpaa_users.php:265
 msgid "Grant Network-Wide Access"
 msgstr "Netzwerk-Zugang gewähren"
 
-# @ default
-#: inc/class-wpaa_users.php:316
-msgid "+"
-msgstr ""
-
 # @ wp-access-areas
-#: inc/class-wpaa_users.php:333
+#: inc/class-wpaa_users.php:334
 msgid "Access Areas:"
 msgstr "Zugangsbereiche:"
 
-#: inc/class-wpaa_users.php:345
-msgid "-- Select --"
-msgstr ""
+#: inc/class-wpaa_users.php:346
+msgid "&mdash; Select &mdash;"
+msgstr "&mdash; Wähle &mdash;"
 
 # @ wp-access-areas
-#: inc/class-wpaa_users.php:362
+#: inc/class-wpaa_users.php:363
 msgid "Local"
 msgstr "Lokal"
 
 # @ default
-#: inc/class-wpaa_users.php:401
+#: inc/class-wpaa_users.php:402
 msgid "Everywhere"
-msgstr ""
+msgstr "Überall"
 
 # @ wp-access-areas
 #~ msgid "Visible to"
