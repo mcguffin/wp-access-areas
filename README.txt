@@ -122,7 +122,7 @@ I will migrate all the translation stuff there.
 
 = 1.5.0 =
  - Fix: A network admin without blog role could not edit post access by WP Roles
- - Plugin settings: Use WP Post statuses in favor of hard coded status list (allows custom post statuses now)
+ - Plugin settings: Use WP Post statuses in favor of hard coded status list (allows use of custom post statuses now)
  - Introduce filter: 'wpaa_allowed_post_stati'
  - Localization: Rework strings
  - Localization: consistent use of plugin textdomain
