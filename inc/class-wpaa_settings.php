@@ -11,17 +11,10 @@
 if ( ! class_exists('WPAA_Settings' ) ) :
 
 class WPAA_Settings {
-	private static $post_stati;
 	private static $role_caps;
 
 	static function init( ) {
-		self::$post_stati = array(
-			'' => __('Don‘t change','wp-access-areas'),
-			'publish' => __('Public'),
-			'private' => __('Private'),
-			'draft' => __('Draft'),
-			'pending' => __('Pending Review'),
-		);
+		global $wp_post_statuses;
 		self::$role_caps = array( 
 			'wpaa_set_view_cap'		=> __( 'Change View Access' , 'wp-access-areas'),
 			'wpaa_set_edit_cap'		=> __( 'Change Edit Access' , 'wp-access-areas'),
@@ -120,7 +113,13 @@ class WPAA_Settings {
 		return $value;
 	}
 	static function get_post_stati() {
-		return array_filter( array_keys( self::$post_stati ) );
+		$stati = array();
+		foreach ( get_post_stati() as $post_status ) {
+			if ( $post_status !== 'future' && ( $status_obj = get_post_status_object( $post_status ) ) && $status_obj->internal === false ) {
+				$stati[ $post_status ] = $status_obj;
+			}
+		}
+		return apply_filters( 'wpaa_allowed_post_stati', $stati );
 	}
 	static function create_menu() { // @ admin_menu
 		add_options_page(__('Access Settings','wp-access-areas'), __('Access Settings','wp-access-areas'), 'promote_users', 'wpaa_settings', array(__CLASS__,'settings_page'));
@@ -356,19 +355,22 @@ class WPAA_Settings {
 	}
 	static function select_post_status() {
 		$default_post_status = get_option('wpaa_default_post_status');
-		// stati: none, publish, private, pending, draft
+
 		?><select id="default-post-status-select" name="wpaa_default_post_status"><?php
-		foreach ( self::$post_stati as $post_status => $label ) {
-			?><option value="<?php echo $post_status; ?>" <?php selected($default_post_status,$post_status,true) ?>><?php echo $label ?></option><?php
+			?><option value="" <?php selected( $default_post_status, '', true ) ?>><?php _e('Don‘t change','wp-access-areas') ?></option><?php
+		foreach( self::get_post_stati() as $post_status => $status_obj ) {
+			?><option value="<?php echo $post_status; ?>" <?php selected( $default_post_status, $post_status, true ) ?>><?php echo $status_obj->label ?></option><?php
 		}
 		?></select><?php
+
 		?><p class="description"><?php
 			_e('Set post status of assigned posts after an Access Area has been deleted.','wp-access-areas');
 		?></p><?php
 	}
 	static function sanitize_poststatus( $post_status ) {
-		if ( array_key_exists( $post_status , self::$post_stati ) )
+		if ( array_key_exists( $post_status , self::get_post_stati() ) ) {
 			return $post_status;
+		}
 		return false;
 	}
 }
