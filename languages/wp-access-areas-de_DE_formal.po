@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: WordPress Access Areas v1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-04-30 11:51+0100\n"
-"PO-Revision-Date: 2016-04-30 16:50+0100\n"
+"PO-Revision-Date: 2016-04-30 16:49+0100\n"
 "Last-Translator: Jörn Lund <joern@podpirate.org>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -60,12 +60,12 @@ msgstr "Zugangsbereiche"
 # @ wp-access-areas
 #: inc/class-wpaa_caps.php:35 inc/class-wpaa_users.php:234
 msgid "You do not have permission to do this."
-msgstr "Du hast nicht die erforderlichen Rechte."
+msgstr "Sie haben nicht die erforderlichen Rechte."
 
 # @ wp-access-areas
 #: inc/class-wpaa_caps.php:48
 msgid "Please enter a Label."
-msgstr "Bitte gib einen Namen ein"
+msgstr "Bitte geben Sie ein Namen ein"
 
 # @ wp-access-areas
 #: inc/class-wpaa_caps.php:51
@@ -543,9 +543,9 @@ msgstr "Überall"
 #~ "Post types. Through Access Areas you can fine-tune who can view, edit or "
 #~ "comment on your posts."
 #~ msgstr ""
-#~ "Fine-Tuning für Ihre WordPress-Inhalte. Definiere Zugangsbereiche und "
-#~ "bestimmen für jeden Inhalt, wer ihn lesen, bearbeiten oder Kommentieren "
-#~ "darf."
+#~ "Fine-Tuning für Ihre WordPress-Inhalte. Definieren Sie Zugangsbereiche "
+#~ "und bestimmen Sie für jeden Inhalt, wer ihn lesen, bearbeiten oder "
+#~ "Kommentieren darf."
 
 # @ wp-access-areas
 #~ msgid "Commentable to"

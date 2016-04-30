@@ -26,9 +26,8 @@ class WPAA_Users {
 		}
 		add_action('add_user_to_blog',array(__CLASS__,'add_user_to_blog'),10,3);
 	}
-	
-	
-	
+
+
 	// --------------------------------------------------
 	// general actions
 	// --------------------------------------------------
