@@ -146,20 +146,25 @@ function wpaa_user_can_role( $role , $user_role_caps = null ) {
 /**
  * All capabilities contained in a role
  *
- * @param string $role A valid Wordpress rolename
- * @param string|array $user_roles One or more valid wordpress rolenames. If omitted the currant users roles will be used.
- * @return string
+ * @param string|array|null	$role	One or more valid wordpress rolenames. If omitted the currant users roles will be used.
+ * @return array	capabilities 
  */
 function wpaa_get_user_role_caps( $user_roles = null ) {
 	global $wp_roles;
-	if ( is_null($user_roles) )
+	if ( is_null($user_roles) ) {
 		$user_roles = wp_get_current_user()->roles;
+		if ( empty( $user_roles ) && is_super_admin() && $wp_roles->is_role( 'administrator' ) ) {
+			$user_roles = array( 'administrator' );
+		}
+	}
 	
 	$user_role_caps = array();
 	
-	foreach ( (array) $user_roles as $i=>$rolename )
-		if ( $wp_roles->is_role( $rolename ) )
+	foreach ( (array) $user_roles as $i=>$rolename ) {
+		if ( $wp_roles->is_role( $rolename ) ) {
 			$user_role_caps += array_filter( $wp_roles->get_role($rolename)->capabilities , 'intval' );
+		}
+	}
 	return $user_role_caps;
 }
 
