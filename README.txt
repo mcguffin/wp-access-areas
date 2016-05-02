@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: access, role, capability, user, security, editor
 Requires at least: 3.8
 Tested up to: 4.5
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,14 +102,15 @@ the official WP plugin repository first.
 
 Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if you are working on a cloned repository—send me a pull request.
 
-= Will you accept translations? =
+= How can I contribute a localization? =
 
-Yep sure! (And a warm thankyou in advance.) It might take some time until your localization 
-will appear in an official plugin release, and it is not unlikely that I will have added 
-or removed some strings in the meantime. 
+My goal is to host all translations on [translate.wordpress.org](https://translate.wordpress.org/). 
+For German this is already accomplished. For almost every other localization the project is still in 
+need of translation editors.
 
-As soon as there is a [public centralized repository for WordPress plugin translations](https://translate.wordpress.org/projects/wp-plugins) 
-I will migrate all the translation stuff there.
+If you want to contribute a translation please let me know by posting a comment to [this thread](https://make.wordpress.org/polyglots/2016/04/30/hi-polyglots-i-am-the-author-of-some/)
+stating the name of this plugin, the locale you would like to maintain and some brief information about you - e.g. if you are a native speaker. 
+I will back up your request with all the authority that a simple plugin developer can have.
 
 == Screenshots ==
 
@@ -119,6 +120,9 @@ I will migrate all the translation stuff there.
 4. Post Access Behaviour
 
 == Changelog ==
+
+= 1.5.1 =
+ - Localization: move de_DE and de_DE_formal to translate.wordpress.org
 
 = 1.5.0 =
  - Fix: A network admin without blog role could not edit post access by WP Roles
