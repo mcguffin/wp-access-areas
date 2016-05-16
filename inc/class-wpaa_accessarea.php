@@ -29,20 +29,30 @@ class WPAA_AccessArea {
 		global $wpdb;
 		$table_name = $wpdb->base_prefix . WPUND_USERLABEL_TABLE;
 		
-		$query = 'SELECT * FROM '.$table_name.' WHERE blog_id=0 ';
-		$query_param = array();
-		if ( ! is_network_admin() ) {
-			$query_param[] = get_current_blog_id();
-			$query .= 'OR blog_id=%d';
+		$blog_id_in = array();
+		if ( ! is_multisite() || is_accessareas_active_for_network() ) {
+			$blog_id_in[0] = '%d';
 		}
+		
+		$query = 'SELECT * FROM '.$table_name.' WHERE blog_id IN ';
+
+		if ( ! is_network_admin() ) {
+			$blog_id_in[ get_current_blog_id() ] = '%d';
+		}
+
+		$query .= '(' . implode( ',', array_values( $blog_id_in ) ) . ')';
+		
 		if ( $sql_orderby = sanitize_sql_orderby($order) ) {
 			$query .= " ORDER BY $sql_orderby";
 		}
-		if ( $limit )
+		if ( $limit ) {
 			$query .= " LIMIT $limit" ;
-		if ( count($query_param) ) {
-			array_unshift($query_param,$query);
-			$query = call_user_func_array( array($wpdb,'prepare') , $query_param);
+		}
+		if ( count($blog_id_in) ) {
+			$args = array_keys( $blog_id_in );
+			array_unshift( $args, $query );
+
+			$query = call_user_func_array( array($wpdb,'prepare') , $args );
 		}
 
 		return self::_get_cached_result( $query );
