@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: access, role, capability, user, security, editor
 Requires at least: 3.8
 Tested up to: 4.5
-Stable tag: 1.5.1
+Stable tag: 1.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -120,6 +120,10 @@ I will back up your request with all the authority that a simple plugin develope
 4. Post Access Behaviour
 
 == Changelog ==
+
+= 1.5.2 =
+ - Fix Multisite: Network Access Areas were visible when plugin was single activated
+ - Introduce filters: `wpaa_can_protect_{$post_type}`, `wpaa_can_edit_{$post_type}_view_cap`, `wpaa_can_edit_{$post_type}_edit_cap`, `wpaa_can_edit_{$post_type}_comment_cap`
 
 = 1.5.1 =
  - Localization: move de_DE and de_DE_formal to translate.wordpress.org

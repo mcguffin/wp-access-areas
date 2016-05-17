@@ -174,11 +174,14 @@ class WPAA_EditPost {
 	}
 	
 	static function edit_attachment( $attachment_ID ) {
-		$attachment			= get_post($attachment_ID);
-		$post_edit_cap 		= isset($_POST['post_edit_cap']) ? wpaa_sanitize_access_cap( $_POST['post_edit_cap'] ) : $attachment->post_edit_cap;
-		$post_comment_cap	= isset($_POST['post_comment_cap']) ? wpaa_sanitize_access_cap( $_POST['post_comment_cap'] ) : $attachment->post_comment_cap;
-	
-		if ( $attachment && $post_edit_cap != $attachment->post_edit_cap || $post_comment_cap != $attachment->post_comment_cap ) {
+		$attachment			= get_post( $attachment_ID );
+		$post_edit_cap 		= isset( $_POST['post_edit_cap'] ) ? wpaa_sanitize_access_cap( $_POST['post_edit_cap'] ) : $attachment->post_edit_cap;
+		$post_comment_cap	= isset( $_POST['post_comment_cap'] ) ? wpaa_sanitize_access_cap( $_POST['post_comment_cap'] ) : $attachment->post_comment_cap;
+		
+		$edit_cap_changed    = $post_edit_cap != $attachment->post_edit_cap;
+		$comment_cap_changed = $post_comment_cap != $attachment->post_comment_cap;
+		
+		if ( $attachment && ( $edit_cap_changed || $comment_cap_changed ) ) {
 			// use $wpdb instead of wp_update_post to avoid inifinite do_action
 			global $wpdb;
 			$data = array(
@@ -218,13 +221,13 @@ class WPAA_EditPost {
 			}
 		}
 		
-		if ( self::can_edit_view_cap( $post->post_type , $post_type_object ) ) { 
+		if ( self::can_edit_view_cap( $post->post_type, $post_type_object ) ) { 
 			?><div class="wpaa-view-select misc-pub-section dashicons-before dashicons-visibility"><?php
 				?><label for="post_view_cap-select"><strong><?php _e( 'Who can read:' , 'wp-access-areas') ?></strong></label><br /><?php
 				WPAA_Template::access_area_dropdown( $rolenames , $groups , $post->post_view_cap , 'post_view_cap' );
 			?></div><?php
 		}
-		if ( self::can_edit_edit_cap() ) {
+		if ( self::can_edit_edit_cap( $post->post_type ) ) {
 			?><div class="wpaa-edit-select misc-pub-section dashicons-before dashicons-edit"><?php
 				?><label for="post_edit_cap-select"><strong><?php _e( 'Who can edit:' , 'wp-access-areas') ?></strong></label><br /><?php 
 				WPAA_Template::access_area_dropdown( $edit_rolenames , $groups , $post->post_edit_cap , 'post_edit_cap' );
@@ -238,16 +241,24 @@ class WPAA_EditPost {
 		}
 	}
 	
-	private static function can_edit_view_cap( $post_type , $post_type_object = null ) {
-		if ( is_null( $post_type_object ) )
+	private static function can_edit_view_cap( $post_type, $post_type_object = null ) {
+		if ( is_null( $post_type_object ) ) {
 			$post_type_object = get_post_type_object( $post_type );
-		return ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_view_cap' ) ) && ( $post_type_object->public || $post_type_object->show_ui ) && $post_type != 'attachment';
+		}
+
+		$user_can_edit_cap       = ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_view_cap' ) );
+		$post_is_viewable        = ( $post_type_object->public || $post_type_object->show_ui );
+		$posttype_is_protectable = apply_filters( "wpaa_can_protect_{$post_type}", $post_type != 'attachment' );
+
+		return apply_filters( "wpaa_can_edit_{$post_type}_view_cap" , $user_can_edit_cap && $post_is_viewable && $posttype_is_protectable );
 	}
-	private static function can_edit_edit_cap() {
-		return ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_edit_cap' ) );
+	private static function can_edit_edit_cap( $post_type ) {
+		$can_edit = ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_edit_cap' ) );
+		return apply_filters( 'wpaa_can_edit_{$post_type}_edit_cap' , $can_edit );
 	}
 	private static function can_edit_comment_cap( $post_type ) {
-		 return ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_comment_cap' ) ) && post_type_supports( $post_type , 'comments' );
+		$can_edit = ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_comment_cap' ) ) && post_type_supports( $post_type , 'comments' );
+		return apply_filters( 'wpaa_can_edit_{$post_type}_comment_cap' , $can_edit );
 	}
 	
 	static function disclosure_box_behavior( ) {
@@ -330,8 +341,8 @@ class WPAA_EditPost {
 
 			$post_type_object	= get_post_type_object($post_type);
 
-			$can_edit_view = self::can_edit_view_cap( $post_type , $post_type_object );
-			$can_edit_edit = self::can_edit_edit_cap( );
+			$can_edit_view = self::can_edit_view_cap( $post_type, $post_type_object );
+			$can_edit_edit = self::can_edit_edit_cap( $post_type );
 			$can_edit_comment = self::can_edit_comment_cap( $post_type );
 			$can_edit = $can_edit_view || $can_edit_edit || $can_edit_comment;
 			
@@ -394,8 +405,8 @@ class WPAA_EditPost {
 			$_post_type = $post->post_type;
 		$post_type_object = get_post_type_object( $_post_type );
 		
-		$show_view = self::can_edit_view_cap( $_post_type , $post_type_object );
-		$show_edit =  self::can_edit_edit_cap();
+		$show_view = self::can_edit_view_cap( $_post_type, $post_type_object );
+		$show_edit =  self::can_edit_edit_cap( $post_type );
 		$show_comment = post_type_supports( $_post_type , 'comments' ) && self::can_edit_comment_cap( $_post_type );
 
 		// show only if needed
