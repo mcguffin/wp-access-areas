@@ -3,7 +3,7 @@ Contributors: podpirate
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WF4Z3HU93XYJA
 Tags: access, role, capability, user, security, editor
 Requires at least: 3.8
-Tested up to: 4.5
+Tested up to: 5.0-alpha-42142
 Stable tag: 1.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -13,7 +13,7 @@ Fine tuning access to your posts.
 == Description ==
 
 WP Access Areas lets you fine-tune who may read, edit or comment on your Blog posts.
-You can either restrict access to logged-in uses only, certain WordPress-Roles or 
+You can either restrict access to logged-in uses only, certain WordPress-Roles or
 even custom Access Areas.
 
 = Features =
@@ -28,16 +28,16 @@ Latest files on [GitHub](https://github.com/mcguffin/wp-access-areas).
 Developers might like to have a look at [the project wiki](https://github.com/mcguffin/wp-access-areas/wiki).
 
 = Known Issues =
-- WordPress calendar Widget still shows dates where restricted posts have been created. 
+- WordPress calendar Widget still shows dates where restricted posts have been created.
   When clicked on such a date a 404 will occur. There is an open
-  [WordPress Core ticket on that issue](https://core.trac.wordpress.org/ticket/29319). 
-- Taxonomy menus (e.g. Tags / Categories) also count restricted posts when the total number 
-  of posts in a taxonomy is ascertained. 
+  [WordPress Core ticket on that issue](https://core.trac.wordpress.org/ticket/29319).
+- Taxonomy menus (e.g. Tags / Categories) also count restricted posts when the total number
+  of posts in a taxonomy is ascertained.
   See [this post](http://wordpress.org/support/topic/archive-recents-posts-last-comments-show-restricted-content?replies=5#post-5929330) for details.
 
 == Installation ==
 
-1. Upload the 'wp-access-areas.zip' to the `/wp-content/plugins/` directory and unzip it. 
+1. Upload the 'wp-access-areas.zip' to the `/wp-content/plugins/` directory and unzip it.
 
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
@@ -45,33 +45,33 @@ Developers might like to have a look at [the project wiki](https://github.com/mc
 
 = Why can't I protect media? =
 
-Because the plugin can only protect posts, which are database entries. A media also contains a 
-file stored on your servers file system. A file is normally just returned by the server, the 
-WordPress core is not involved. In order to protect a file, let's say an image, the Image URL 
-would have to be point to a special Script, that decides whether the file is protected or not, 
+Because the plugin can only protect posts, which are database entries. A media also contains a
+file stored on your servers file system. A file is normally just returned by the server, the
+WordPress core is not involved. In order to protect a file, let's say an image, the Image URL
+would have to be point to a special Script, that decides whether the file is protected or not,
 and if so, which user or group of users would be granted access.
 
-A lot of processing would be going on, and each and every little thumbnail would add another 
+A lot of processing would be going on, and each and every little thumbnail would add another
 one or two seconds to your page load time. The result: Tears, rage and support requests.
 
 = What does it exactly do? =
 
-For each Post it stores a capabilty the user needs to have in order to view, edit or comment on a post. 
-By defining an Access Area you create nothing more than a custom capability. 
+For each Post it stores a capabilty the user needs to have in order to view, edit or comment on a post.
+By defining an Access Area you create nothing more than a custom capability.
 
 = Why didn't you use post_meta to store permissions? WordPress already provides an API for this! =
 
-I did this mainly for performance reason. For detecting the reading-permission on specific content, 
-the plugin mainly affects the WHERE clause used to retrieve posts. In most cases, using post_meta 
+I did this mainly for performance reason. For detecting the reading-permission on specific content,
+the plugin mainly affects the WHERE clause used to retrieve posts. In most cases, using post_meta
 would mean to add lots of JOIN clauses to the database query, slowing down your site's performance.
 
 = Does it mess up my database? =
 
 It makes changes to your database, but it won't make a mess out of it. Upon install it does two things:
 1. It creates a table named ´{$wp_prefix}_disclosure_userlabels´. The access areas you define are here.
-2. It adds three columns to Your Posts tables: post_view_cap and post_comment_cap. 
+2. It adds three columns to Your Posts tables: post_view_cap and post_comment_cap.
 
-Upon uninstall these changes will be removed completely, as well as it will remove any custom generated 
+Upon uninstall these changes will be removed completely, as well as it will remove any custom generated
 capability from your user's profiles.
 
 = I'd like to do some more magic / science with it. And yes: I can code! =
@@ -94,8 +94,8 @@ Use the GitHub Repo rather than the WordPress Plugin. Do as follows:
 
 4. If you want to update to the latest files (be careful, might be untested on Your WP-Version) type git pull´.
 
-Please note that the GitHub repository is more likely to contain unstable and untested code. Urgent fixes 
-concerning stability or security (like crashes, vulnerabilities and alike) are more likely to be fixed in 
+Please note that the GitHub repository is more likely to contain unstable and untested code. Urgent fixes
+concerning stability or security (like crashes, vulnerabilities and alike) are more likely to be fixed in
 the official WP plugin repository first.
 
 = I found a bug and fixed it. How can I contribute? =
@@ -104,12 +104,12 @@ Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if 
 
 = How can I contribute a localization? =
 
-My goal is to host all translations on [translate.wordpress.org](https://translate.wordpress.org/). 
-For German this is already accomplished. For almost every other localization the project is still in 
+My goal is to host all translations on [translate.wordpress.org](https://translate.wordpress.org/).
+For German this is already accomplished. For almost every other localization the project is still in
 need of translation editors.
 
 If you want to contribute a translation please let me know by posting a comment to [this thread](https://make.wordpress.org/polyglots/2016/04/30/hi-polyglots-i-am-the-author-of-some/)
-stating the name of this plugin, the locale you would like to maintain and some brief information about you - e.g. if you are a native speaker. 
+stating the name of this plugin, the locale you would like to maintain and some brief information about you - e.g. if you are a native speaker.
 I will back up your request with all the authority that a simple plugin developer can have.
 
 == Screenshots ==
@@ -138,7 +138,7 @@ I will back up your request with all the authority that a simple plugin develope
 
 = 1.4.7 =
  - Fix: PHP deprecated warning during install + network upgrade
- - Fix: Incorrect Post Classes 
+ - Fix: Incorrect Post Classes
 
 = 1.4.6 =
  - Fix: Crash during install
@@ -296,4 +296,3 @@ Fixing that one: http://wordpress.org/support/topic/plugin-causing-crash-post-wo
  - Initial Release
 
 == Upgrade notice ==
-
