@@ -79,7 +79,7 @@ class WPAA_Posts {
 					// get user to login and return him to the requested page.
 					$redirect = wp_login_url( get_permalink( $restricted_post->ID ) );
 				} else {
-					if ( $behavior == 'page' ) {
+					if ( $behavior == 'page' || ($behavior == 'login' && is_user_logged_in())) {
 					
 						// no fallback? take default value
 						if ( ! $fallback_page_id )
