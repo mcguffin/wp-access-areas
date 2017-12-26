@@ -121,6 +121,10 @@ I will back up your request with all the authority that a simple plugin develope
 
 == Changelog ==
 
+= 1.5.3 =
+ - Fix a Bug where a logged in user wasn't redirected to the fallback page. Thanks to [Andrey Shevtsov](https://github.com/freeworlder)
+ - Merry Christmas (Gregorian Calendar)
+
 = 1.5.2 =
  - Fix Multisite: Network Access Areas were visible when plugin was single activated
  - Introduce filters: `wpaa_can_protect_{$post_type}`, `wpaa_can_edit_{$post_type}_view_cap`, `wpaa_can_edit_{$post_type}_edit_cap`, `wpaa_can_edit_{$post_type}_comment_cap`
