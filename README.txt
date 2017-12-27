@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: access, role, capability, user, security, editor
 Requires at least: 3.8
 Tested up to: 5.0
-Stable tag: 1.5.3
+Stable tag: 1.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -120,6 +120,9 @@ I will back up your request with all the authority that a simple plugin develope
 4. Post Access Behaviour
 
 == Changelog ==
+
+= 1.5.4 =
+ - Fix WSOD when saving post
 
 = 1.5.3 =
  - Fix a Bug where a logged in user wasn't redirected to the fallback page. Thanks to [Andrey Shevtsov](https://github.com/freeworlder)
