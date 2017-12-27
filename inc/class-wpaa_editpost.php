@@ -2,10 +2,10 @@
 /**
 * @package WP_AccessAreas
 * @version 1.0.0
-*/ 
+*/
 
 // ----------------------------------------
-//	This class provides an UI for assining 
+//	This class provides an UI for assining
 //	WP-Roles and user-labels to posts.
 // ----------------------------------------
 
@@ -19,49 +19,49 @@ class WPAA_EditPost {
 			add_action('save_post', array(__CLASS__ , 'set_post_behavior') , 10 , 3 );
 			add_action('edit_attachment',array(__CLASS__ , 'edit_attachment') );
 			add_action('add_attachment',array(__CLASS__ , 'edit_attachment') );
-			
+
 			add_action('add_meta_boxes' , array( __CLASS__ , 'add_meta_boxes' ) );
 
 			add_action('bulk_edit_custom_box' , array(__CLASS__,'bulk_edit_fields') , 10 , 2 );
 			add_action('quick_edit_custom_box' , array(__CLASS__,'quick_edit_fields') , 10 , 2 );
 
 			add_action( 'wp_ajax_get_accessarea_values', array( __CLASS__ , 'ajax_get_accessarea_values' ) );
-			
+
 			add_action( 'admin_init' , array( __CLASS__ , 'add_post_type_columns' ) );
 		}
 		add_action( 'load-edit.php' , array( __CLASS__ , 'enqueue_script_style' ) );
 		add_action( 'load-edit.php' , array( __CLASS__ , 'enqueue_style' ) );
 		add_action( 'load-upload.php' , array( __CLASS__ , 'enqueue_style' ) );
-		
+
 		add_action( 'load-post.php' , array( __CLASS__ , 'enqueue_script_style' ) );
 		add_action( 'load-post-new.php' , array( __CLASS__ , 'enqueue_script_style' ) );
-		
+
 	}
 	static function add_post_type_columns() {
 		// posts
 		add_filter('manage_posts_columns' , array( __CLASS__ , 'add_disclosure_column') );
 		// posts and CPT
 		add_action('manage_posts_custom_column' , array( __CLASS__ , 'manage_disclosure_column') , 10 ,2 );
-		
+
 		// page
 		add_filter('manage_pages_columns' , array( __CLASS__ , 'add_disclosure_column') );
 		add_action('manage_pages_custom_column' , array( __CLASS__ , 'manage_disclosure_column') , 10 ,2 );
-		
+
 		// media
 		add_filter('manage_media_columns' , array( __CLASS__ , 'add_disclosure_column') );
 		add_action('manage_media_custom_column' , array( __CLASS__ , 'manage_disclosure_column') , 10 ,2 );
-		
+
 		// CPT
 		$post_types = get_post_types(array(
 			'show_ui' => true,
 			'_builtin' => false,
 		));
-		
+
 		foreach ( $post_types as $post_type ) {
 			add_filter( "manage_{$post_type}_posts_columns" , array( __CLASS__ , 'add_disclosure_column'));
 		}
 	}
-	
+
 	static function ajax_get_accessarea_values() {
 		$result = false;
 		if ( isset( $_POST['ajax_nonce'] ) && wp_verify_nonce( $_POST['ajax_nonce'], 'get_accessarea_values' ) ) {
@@ -77,7 +77,7 @@ class WPAA_EditPost {
 		echo json_encode( $result );
 		die;
 	}
-	
+
 	static function enqueue_script_style() {
 		self::enqueue_style();
 		self::enqueue_script();
@@ -92,11 +92,11 @@ class WPAA_EditPost {
 	static function load_edit_script() {
 		wp_enqueue_script( 'wpaa-edit' );
 		wp_enqueue_script( 'wpaa-quick-edit' );
-	} 
+	}
 	static function load_style() {
 		wp_enqueue_style( 'wpaa-admin' );
 	}
-	
+
 	// --------------------------------------------------
 	// add meta boxes to all post content
 	// --------------------------------------------------
@@ -114,18 +114,18 @@ class WPAA_EditPost {
 	// saving posts
 	// --------------------------------------------------
 	static function edit_post( $data, $postarr ) {
-	
+
 		$post_type = $data["post_type"];
 		$post_type_object 	= get_post_type_object( $post_type );
-		
+
 		// set default values
 		if ( ! $postarr['ID'] ) {
-			$caps = array( 
+			$caps = array(
 				'post_view_cap' => 'exist',
 				'post_edit_cap' => 'exist',
 				'post_comment_cap' => 'exist',
 			);
-			
+
 			if ( ( $default_caps = get_option( 'wpaa_default_caps' )) && isset( $default_caps[$data["post_type"]] ) )
 				$caps = wp_parse_args( $default_caps[$data["post_type"]] , $caps );
 			$data = wp_parse_args( $data , $caps );
@@ -133,22 +133,22 @@ class WPAA_EditPost {
 		if ( $data['post_status'] == 'auto-draft' )
 			return $data;
 
-		
-		// process user input. 
+
+		// process user input.
 		if ( self::can_edit_view_cap( $post_type , $post_type_object ) && isset($postarr['post_view_cap']) && $postarr['post_view_cap'] )
 			$data['post_view_cap']	= wpaa_sanitize_access_cap(  $postarr['post_view_cap'] );
-		
-		if ( self::can_edit_edit_cap() && isset($postarr['post_edit_cap']) && $postarr['post_edit_cap']) 
+
+		if ( self::can_edit_edit_cap( $post_type ) && isset($postarr['post_edit_cap']) && $postarr['post_edit_cap']) 
 			$data['post_edit_cap']	= wpaa_sanitize_access_cap( $postarr['post_edit_cap'] );
-	
+
 		if (  self::can_edit_comment_cap( $post_type ) && isset($postarr['post_comment_cap']) && $postarr['post_comment_cap'] )
 			$data['post_comment_cap']	= wpaa_sanitize_access_cap( $postarr['post_comment_cap'] );
-		
+
 		return $data;
 	}
-	
+
 	// --------------------------------------------------
-	// saving posts, 
+	// saving posts,
 	// --------------------------------------------------
 	static function set_post_behavior(  $post_ID , $post , $update ) {
 		// should only happen if edit_view_cap is true
@@ -156,10 +156,10 @@ class WPAA_EditPost {
 			if ( (bool) $_POST['_wpaa_enable_custom_behaviour'] ) {
 				if ( isset( $_POST['_wpaa_fallback_page'] ) )
 					update_post_meta( $post_ID , '_wpaa_fallback_page' , intval( $_POST['_wpaa_fallback_page'] ) );
-	
+
 				if ( isset( $_POST['_wpaa_post_behavior'] ) ) {
 					$meta = $_POST['_wpaa_post_behavior'];
-	
+
 					if ( $meta === '' ) {
 						delete_post_meta( $post_ID , '_wpaa_post_behavior' );
 					} else if ( in_array( $meta , array( '404' , 'page' , 'login' ) ) ) {
@@ -172,15 +172,15 @@ class WPAA_EditPost {
 			}
 		}
 	}
-	
+
 	static function edit_attachment( $attachment_ID ) {
 		$attachment			= get_post( $attachment_ID );
 		$post_edit_cap 		= isset( $_POST['post_edit_cap'] ) ? wpaa_sanitize_access_cap( $_POST['post_edit_cap'] ) : $attachment->post_edit_cap;
 		$post_comment_cap	= isset( $_POST['post_comment_cap'] ) ? wpaa_sanitize_access_cap( $_POST['post_comment_cap'] ) : $attachment->post_comment_cap;
-		
+
 		$edit_cap_changed    = $post_edit_cap != $attachment->post_edit_cap;
 		$comment_cap_changed = $post_comment_cap != $attachment->post_comment_cap;
-		
+
 		if ( $attachment && ( $edit_cap_changed || $comment_cap_changed ) ) {
 			// use $wpdb instead of wp_update_post to avoid inifinite do_action
 			global $wpdb;
@@ -191,7 +191,7 @@ class WPAA_EditPost {
 			$wpdb->update( $wpdb->posts , $data , array( 'ID' => $attachment_ID ) , array('%s','%s') , array( '%d' ) );
 		}
 	}
-	
+
 	// --------------------------------------------------
 	// edit post - the meta box
 	// --------------------------------------------------
@@ -201,7 +201,7 @@ class WPAA_EditPost {
 
 		$post_type_object 	= get_post_type_object($post->post_type);
 		$editing_cap 		= $post_type_object->cap->edit_posts;
-		
+
 		$post_behavior	 	= get_post_meta( $post->ID , '_wpaa_post_behavior' , true );
 		$post_fallback_page	= get_post_meta( $post->ID , '_wpaa_fallback_page' , true );
 
@@ -220,8 +220,8 @@ class WPAA_EditPost {
 				}
 			}
 		}
-		
-		if ( self::can_edit_view_cap( $post->post_type, $post_type_object ) ) { 
+
+		if ( self::can_edit_view_cap( $post->post_type, $post_type_object ) ) {
 			?><div class="wpaa-view-select misc-pub-section dashicons-before dashicons-visibility"><?php
 				?><label for="post_view_cap-select"><strong><?php _e( 'Who can read:' , 'wp-access-areas') ?></strong></label><br /><?php
 				WPAA_Template::access_area_dropdown( $rolenames , $groups , $post->post_view_cap , 'post_view_cap' );
@@ -229,7 +229,7 @@ class WPAA_EditPost {
 		}
 		if ( self::can_edit_edit_cap( $post->post_type ) ) {
 			?><div class="wpaa-edit-select misc-pub-section dashicons-before dashicons-edit"><?php
-				?><label for="post_edit_cap-select"><strong><?php _e( 'Who can edit:' , 'wp-access-areas') ?></strong></label><br /><?php 
+				?><label for="post_edit_cap-select"><strong><?php _e( 'Who can edit:' , 'wp-access-areas') ?></strong></label><br /><?php
 				WPAA_Template::access_area_dropdown( $edit_rolenames , $groups , $post->post_edit_cap , 'post_edit_cap' );
 			?></div><?php
 		}
@@ -240,7 +240,7 @@ class WPAA_EditPost {
 			?></div><?php
 		}
 	}
-	
+
 	private static function can_edit_view_cap( $post_type, $post_type_object = null ) {
 		if ( is_null( $post_type_object ) ) {
 			$post_type_object = get_post_type_object( $post_type );
@@ -260,7 +260,7 @@ class WPAA_EditPost {
 		$can_edit = ( ! get_option( 'wpaa_enable_assign_cap' ) || current_user_can( 'wpaa_set_comment_cap' ) ) && post_type_supports( $post_type , 'comments' );
 		return apply_filters( 'wpaa_can_edit_{$post_type}_comment_cap' , $can_edit );
 	}
-	
+
 	static function disclosure_box_behavior( ) {
 		$post 			= get_post(get_the_ID());
 		$is_custom_behaviour = true;
@@ -271,7 +271,7 @@ class WPAA_EditPost {
 			$post_behavior       = get_option('wpaa_default_behavior');
 			$is_custom_behaviour = false;
 		}
-		
+
 		$post_fallback_page	= get_post_meta( $post->ID , '_wpaa_fallback_page' , true );
 		if ( ! $post_fallback_page ) {
 			$post_fallback_page = get_option('wpaa_fallback_page');
@@ -291,27 +291,27 @@ class WPAA_EditPost {
 			?><div class="wpaa-behaviour-controls"><?php
 				?><div class="wpaa-view-select misc-pub-section"><?php
 					?><p class="description"><?php _e('If somebody tries to view a restricted post directly:' , 'wp-access-areas' ); ?></p><?php
-		
+
 					WPAA_Template::behavior_select( $post_behavior );
-		
+
 				?></div><?php
-	
+
 				?><div class="wpaa-view-select misc-pub-section"><?php
 					?><label for="_wpaa_fallback_page"><?php
 					_e('Fallback Page','wp-access-areas');
 					?></label><?php
 					// only offer non-restricted pages
-		
+
 					WPAA_Template::fallback_page_dropdown( $post_fallback_page );
 				?></div><?php
-			
+
 			?></div><?php
 		?></div><?php
 
 	}
-	
-	
-	
+
+
+
 	// --------------------------------------------------
 	// Quick Edit hook callback
 	// --------------------------------------------------
@@ -320,14 +320,14 @@ class WPAA_EditPost {
 		// enqueue
 		self::_edit_fields( $column_name, $post_type , $post , null );
 	}
-	
+
 	// --------------------------------------------------
 	// Bulk Edit hook callback
 	// --------------------------------------------------
 	static function bulk_edit_fields( $column_name, $post_type ) {
 		self::_edit_fields( $column_name, $post_type );
 	}
-	
+
 	// --------------------------------------------------
 	// Quick/Bulk Edit html
 	// --------------------------------------------------
@@ -345,18 +345,18 @@ class WPAA_EditPost {
 			$can_edit_edit = self::can_edit_edit_cap( $post_type );
 			$can_edit_comment = self::can_edit_comment_cap( $post_type );
 			$can_edit = $can_edit_view || $can_edit_edit || $can_edit_comment;
-			
+
 			if ( $can_edit ) {
 				$editing_cap 		= $post_type_object->cap->edit_posts;
 				$current_user 		= wp_get_current_user();
 				$roles	 			= $wp_roles->get_names();
 				$groups 			= WPAA_AccessArea::get_label_array( );
-		
+
 				$user_role_caps 	= wpaa_get_user_role_caps();
-			
+
 				$rolenames 			= array();
 				$edit_rolenames		= array();
-			
+
 				foreach ( $roles as $role => $rolename ) {
 					if ( wpaa_user_can_role( $role , $user_role_caps ) ) {
 						$rolenames[$role] = $rolename;
@@ -401,10 +401,10 @@ class WPAA_EditPost {
 	static function add_disclosure_column( $columns ) {
 		global $post,$post_type;
 		$_post_type = $post_type;
-		if ( is_null( $_post_type) && $post ) 
+		if ( is_null( $_post_type) && $post )
 			$_post_type = $post->post_type;
 		$post_type_object = get_post_type_object( $_post_type );
-		
+
 		$show_view = self::can_edit_view_cap( $_post_type, $post_type_object );
 		$show_edit =  self::can_edit_edit_cap( $post_type );
 		$show_comment = post_type_supports( $_post_type , 'comments' ) && self::can_edit_comment_cap( $_post_type );
@@ -419,16 +419,16 @@ class WPAA_EditPost {
 				$column_name .= '-edit';
 			if ( $show_comment )
 				$column_name .= '-comment';
-		
+
 			$cols = array();
 
 			// check after which column to insert access col
 			$afters = array('author','title','cb');
-		
+
 			foreach ( $afters as $after )
 				if ( isset($columns[$after] ) )
 					break;
-		
+
 			foreach ($columns as $k=>$v) {
 				$cols[$k] = $v;
 				if ($k == $after ) {
@@ -439,7 +439,7 @@ class WPAA_EditPost {
 		}
 		return $columns;
 	}
-	
+
 	static function manage_disclosure_column($column, $post_ID) {
 		global $wp_roles;
 		$column_segments = explode('-',$column);
@@ -455,20 +455,20 @@ class WPAA_EditPost {
 				switch ( $segment ) {
 					case 'view':
 						$val = get_post($post_ID)->post_view_cap;
-						?><div class="<?php echo $val=='exist'?'wpaa-default-permission ':'' ?> wpaa-permission dashicons-before dashicons-visibility" title="<?php _e( 'Who can read' , 'wp-access-areas' ) ?>"><?php 
-							_e($names[$val]); 
+						?><div class="<?php echo $val=='exist'?'wpaa-default-permission ':'' ?> wpaa-permission dashicons-before dashicons-visibility" title="<?php _e( 'Who can read' , 'wp-access-areas' ) ?>"><?php
+							_e($names[$val]);
 						?></div><?php
 						break;
 					case 'comment':
 						$val = get_post($post_ID)->post_comment_cap;
-						?><div class="<?php echo $val=='exist'?'wpaa-default-permission ':'' ?> wpaa-permission dashicons-before dashicons-admin-comments" title="<?php _e( 'Who can comment' , 'wp-access-areas' ) ?>"><?php 
+						?><div class="<?php echo $val=='exist'?'wpaa-default-permission ':'' ?> wpaa-permission dashicons-before dashicons-admin-comments" title="<?php _e( 'Who can comment' , 'wp-access-areas' ) ?>"><?php
 							_e($names[$val]);
 						?></div><?php
 						break;
 					case 'edit':
 						$val = get_post($post_ID)->post_edit_cap;
-						?><div class="<?php echo $val=='exist'?'wpaa-default-permission ':'' ?> wpaa-permission dashicons-before dashicons-edit" title="<?php _e( 'Who can read' , 'wp-access-areas' ) ?>"><?php 
-							_e($names[$val]); 
+						?><div class="<?php echo $val=='exist'?'wpaa-default-permission ':'' ?> wpaa-permission dashicons-before dashicons-edit" title="<?php _e( 'Who can read' , 'wp-access-areas' ) ?>"><?php
+							_e($names[$val]);
 						?></div><?php
 						break;
 				}
