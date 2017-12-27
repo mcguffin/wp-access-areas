@@ -1,0 +1,39 @@
+{
+  "modules": {
+    "admin": {
+      "css": true,
+      "js": true
+    },
+    "admin_page": {
+      "users": {
+        "css": true,
+        "js": true
+      }
+    },
+    "compat": {},
+    "core": {},
+    "force": {},
+    "git": {},
+    "gulp": {},
+    "model": {
+      "access_areas": {}
+    },
+    "settings": {
+      "access-areas": {},
+      "access_areas": {}
+    },
+    "wpcli": {
+      "access-areas": {}
+    },
+    "wprest": {
+      "access-areas": {}
+    }
+  },
+  "plugin_author": "J\u00f6rn Lund",
+  "plugin_author_uri": "",
+  "plugin_name": "WP Access Areas",
+  "plugin_namespace": "AccessAreas",
+  "plugin_slug": "access_areas",
+  "this_year": 2017,
+  "wp_plugin_slug": "wp-access-areas"
+}
