@@ -30,6 +30,8 @@ class Admin extends Core\Singleton {
 	 *	@action admin_init
 	 */
 	function admin_init() {
+		// check for upgradeability
+
 	}
 
 	/**
@@ -37,9 +39,9 @@ class Admin extends Core\Singleton {
 	 *	@action admin_print_scripts
 	 */
 	function enqueue_assets() {
-		wp_enqueue_style( 'access_areas-admin' , $this->core->get_asset_url( '/css/admin.css' ) );
+		wp_enqueue_style( 'access_areas-admin' , $this->core->get_asset_url( '/css/admin/admin.css' ) );
 
-		wp_enqueue_script( 'access_areas-admin' , $this->core->get_asset_url( 'js/admin.js' ) );
+		wp_enqueue_script( 'access_areas-admin' , $this->core->get_asset_url( 'js/admin/admin.js' ) );
 		wp_localize_script('access_areas-admin' , 'access_areas_admin' , array(
 		) );
 	}

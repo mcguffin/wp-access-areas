@@ -1,0 +1,62 @@
+/* Both Admin Menu and Post Formats */
+/* Post Format Icons */
+/* Welcome Screen Icons */
+/* Image Editing Icons */
+/* Both Image Editing and TinyMCE */
+/* TinyMCE Icons */
+/* Post Icons */
+/* Sorting */
+/* WPorg specific icons: Jobs, Profiles, WordCamps */
+/* Internal/Products */
+/* Taxonomies */
+/* Widget icons */
+/* Media icons */
+/* Alerts/Notifications/Flags */
+/* Social Icons */
+/* Misc/CPT */
+.media-modal.access-area-modal {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center; }
+  .media-modal.access-area-modal .media-modal-content {
+    min-width: 320px;
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+    bottom: auto;
+    position: relative; }
+  .media-modal.access-area-modal .media-modal-header {
+    height: 50px;
+    border-bottom: 1px solid #cccccc; }
+    .media-modal.access-area-modal .media-modal-header h1 {
+      padding: 16px;
+      margin: 0; }
+  .media-modal.access-area-modal .modal-content {
+    padding: 15px;
+    background: #f9f9f9;
+    position: absolute;
+    top: 51px;
+    bottom: 60px;
+    left: 0;
+    right: 0; }
+    .media-modal.access-area-modal .modal-content input {
+      font-size: 18px;
+      padding: 12px 14px;
+      width: 100%;
+      min-width: 200px;
+      -webkit-box-shadow: inset 2px 2px 4px -2px rgba(0, 0, 0, 0.1);
+              box-shadow: inset 2px 2px 4px -2px rgba(0, 0, 0, 0.1); }
+    .media-modal.access-area-modal .modal-content .notice {
+      margin-left: 0;
+      margin-right: 0; }
+  .media-modal.access-area-modal .modal-toolbar {
+    padding: 15px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: right;
+    border-top: 1px solid #cccccc; }

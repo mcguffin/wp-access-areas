@@ -15,7 +15,15 @@ class WPRest extends Core\Singleton {
 	 */
 	protected function __construct() {
 		parent::__construct();
+
 		add_action( 'rest_api_init', array( $this, 'rest_api_init' ) );
+	}
+
+	/**
+	 *	@return string
+	 */
+	public function get_namespace() {
+		return 'wp/v2';
 	}
 
 	/**
