@@ -61,7 +61,8 @@ if ( is_admin() || defined( 'DOING_AJAX' ) ) {
 
 	Admin\Admin::instance();
 
-	Admin\AdminPageUsers::instance();
+	Admin\AdminPageAccessAreas::instance();
+	Admin\AdminUsers::instance();
 
 	Settings\SettingsAccessAreas::instance();
 

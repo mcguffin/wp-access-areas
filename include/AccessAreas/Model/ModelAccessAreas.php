@@ -102,6 +102,37 @@ class ModelAccessAreas extends Model {
 	}
 
 	/**
+	 *	Fetch available access areas.
+	 *	@param string	$context	user|post
+	 *	@return array
+	 */
+	public function fetch_available( $context = 'post' ) {
+
+		$cache_key = "available_access_areas_{$context}";
+		$cache_group = 'wpaa';
+
+		if ( ! ( $access_areas = wp_cache_get($cache_key,$cache_group) ) ) {
+
+			$condition = array(
+				'blog_id'	=> get_current_blog_id(),
+			);
+			/**
+			 * Conditions to fetch avialable access areas
+			 *
+			 * @since 2.0.0
+			 *
+			 * @param array		$conditions	An array of the conditions. Naturally this is the blog id.
+			 * @param string	$context	user|post
+			 */
+			$condition = apply_filters( 'wpaa_fetch_available_condition', $condition, $context );
+			$access_areas = $this->fetch_by( $condition );
+
+			wp_cache_set( $cache_key, $access_areas, $cache_group );
+		}
+		return $access_areas;
+	}
+
+	/**
 	 *	@inheritdoc
 	 */
 	public function activate() {

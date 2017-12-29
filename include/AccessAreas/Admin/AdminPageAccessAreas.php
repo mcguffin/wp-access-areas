@@ -9,15 +9,13 @@ if ( ! defined('ABSPATH') ) {
 use AccessAreas\Core;
 
 
-class AdminPageUsers extends AdminPage {
+class AdminPageAccessAreas extends AdminPage {
 
 	/**
 	 *	@inheritdoc
 	 */
 	protected function __construct() {
 		parent::__construct();
-
-		$this->core = Core\Core::instance();
 
 		add_action( 'admin_init' , array( $this, 'admin_init' ) );
 //		add_action( "admin_print_scripts" , array( $this, 'enqueue_assets' ) );
@@ -46,17 +44,13 @@ class AdminPageUsers extends AdminPage {
 		</div><?php
 	}
 
-
+	/**
+	 *	@action load-{$page_hook}
+	 */
 	function enqueue_assets() {
-//		wp_enqueue_style( 'access_areas-admin-page-users' , $this->core->get_asset_url( '/css/admin/page/users.css' ) );
 		wp_enqueue_media();
-		wp_enqueue_script( 'access_areas-admin-page-users' , $this->core->get_asset_url( 'js/admin/page/users.js' ), array('wp-api'), null, true );
-		wp_localize_script('access_areas-admin-page-users' , 'access_areas_admin_page' , array(
-			'l10n'	=> array(
-				'createAccessArea'	=> __('Create Access Area','wp-access-areas'),
-				'editAccessArea'	=> __('Edit Access Area','wp-access-areas'),
-			)
-		) );
+		wp_enqueue_script( 'access-areas-admin');
+		wp_enqueue_style( 'access-areas-admin');
 	}
 
 	/**

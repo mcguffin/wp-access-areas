@@ -36,6 +36,18 @@ class WPRestAccessAreas extends Core\Singleton {
 		$item_schema_edit['blog_id']['readonly'] = false;
 		$item_schema_edit['title']['required'] = true;
 
+		$grant_schema = array(
+			'user_id'		=> array(
+				'type'			=> 'array',
+				'items'		=> array(
+					'type'		=> 'integer',
+				),
+				'required'			=> true,
+//				'sanitize_callback'	=> 'intval',
+				'description'		=> __( 'User-ID(s)', 'wp-access-areas' ),
+			),
+		);
+
 		register_rest_route( $namespace, '/access-area', array(
 			array(
 				'methods'				=> \WP_REST_Server::READABLE,
@@ -70,6 +82,24 @@ class WPRestAccessAreas extends Core\Singleton {
 				'callback'				=> array( $this, 'delete_item' ),
 			)
 		) );
+
+		register_rest_route( $namespace, '/access-area/(?P<id>[\d]+)/grant', array(
+			array(
+				'methods'				=> \WP_REST_Server::EDITABLE,
+				'permission_callback'	=> array( $this, 'get_permissions' ),
+				'callback'				=> array( $this, 'grant_access' ),
+				'args' 					=> $grant_schema,
+			)
+		) );
+		register_rest_route( $namespace, '/access-area/(?P<id>[\d]+)/revoke', array(
+			array(
+				'methods'				=> \WP_REST_Server::EDITABLE,
+				'permission_callback'	=> array( $this, 'get_permissions' ),
+				'callback'				=> array( $this, 'revoke_access' ),
+				'args' 					=> $grant_schema,
+			)
+		) );
+
 	}
 	/**
 	 *
@@ -95,8 +125,15 @@ class WPRestAccessAreas extends Core\Singleton {
 			case 'get_item':
 				$allowed = current_user_can( 'edit_posts' );
 				$allowed = apply_filters( 'wpaa_allow_read_accessarea', $allowed );
-				return true;
+				return $allowed;
+			case 'grant_access';
+			case 'revoke_access':
+				$model = Model\ModelAccessAreas::instance();
+				$access_area = $model->fetch_one_by( 'id', $request->get_param('id') );
 
+				$allowed = current_user_can( 'promote_users' );
+				$allowed = apply_filters( 'wpaa_allow_grant_access', $allowed, $access_area );
+				return true;
 		}
 		return current_user_can( 'manage_options' );
 	}
@@ -127,7 +164,8 @@ class WPRestAccessAreas extends Core\Singleton {
 			$blog_id = get_current_blog_id();
 		}
 
-		return $model->fetch_by('blog_id',$blog_id);
+		$response = rest_ensure_response( $model->fetch_by('blog_id',$blog_id) );
+		return $response;
 	}
 
 
@@ -202,5 +240,46 @@ class WPRestAccessAreas extends Core\Singleton {
 		return $response;
 	}
 
+
+
+	public function grant_access( $request ) {
+		$model = Model\ModelAccessAreas::instance();
+		$access_area = $model->fetch_one_by( 'id', $request->get_param('id') );
+		$user_ids = $request->get_param('user_id');
+		$edited_users = array();
+
+		foreach ( $user_ids as $user_id ) {
+			$user = new \WP_User( $user_id );
+			if ( ! $user->has_cap( $access_area->capability ) ) {
+				$user->add_cap( $access_area->capability , true );
+				do_action( 'wpaa_grant_access', $user, $access_area->capability );
+				do_action( "wpaa_grant_{$access_area->capability}", $user );
+				$edited_users[] = $user_id;
+			}
+		}
+		$response = new \WP_REST_Response();
+		$response->set_data( array( 'success' => true, 'access_area' => $access_area, 'user_id' => $edited_users ) );
+		return $response;
+	}
+
+	public function revoke_access( $request ) {
+		$model = Model\ModelAccessAreas::instance();
+		$access_area = $model->fetch_one_by( 'id', $request->get_param('id') );
+		$user_ids = $request->get_param('user_id');
+		$edited_users = array();
+
+		foreach ( $user_ids as $user_id ) {
+			$user = new \WP_User( $user_id );
+			if ( $user->has_cap( $access_area->capability ) ) {
+				$user->remove_cap( $access_area->capability, true );
+				do_action( 'wpaa_grant_access', $user, $access_area->capability );
+				do_action( "wpaa_grant_{$access_area->capability}", $user );
+				$edited_users[] = $user_id;
+			}
+		}
+		$response = new \WP_REST_Response();
+		$response->set_data( array( 'success' => true, 'access_area' => $access_area, 'user_id' => $edited_users ) );
+		return $response;
+	}
 
 }

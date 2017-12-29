@@ -105,7 +105,7 @@ abstract class Model extends Core\PluginComponent {
 	 *	@param	mixed			$value
 	 *	@return	null|object
 	 */
-	public function fetch_by( $fields, $value ) {
+	public function fetch_by( $fields, $value = null ) {
 		global $wpdb;
 		$table = $this->table;
 
@@ -135,8 +135,20 @@ abstract class Model extends Core\PluginComponent {
 			if ( ! isset( $this->fields[$col] ) ) {
 				continue;
 			}
+
 			$format = $this->fields[$col];
-			$where_sql[] = $wpdb->prepare("$col = $format", $val );
+
+			if ( is_array( $val ) && count( $val ) === 1 ) {
+				$val = array_pop( $val );
+			}
+
+			if ( is_scalar( $val ) ) {
+				$where_sql[] = $wpdb->prepare("$col = $format", $val );
+			} else if ( is_array( $val ) ) {
+				$formats = array_fill( 0, count($val), $format );
+				$formats = implode(',',$formats);
+				$where_sql[] = $wpdb->prepare("$col IN ($formats)", $val );
+			}
 		}
 
 		return count( $where_sql ) ? 'WHERE ' . implode(' AND ', $where_sql ) : '';

@@ -12,21 +12,24 @@ use AccessAreas\Core;
 
 class WPMU extends Core\PluginComponent {
 
+	/**
+	 *	@inheritdoc
+	 */
 	protected function __construct() {
-		var_dump($this);exit();
+
 	}
 
 	/**
 	 *	@inheritdoc
 	 */
-	 public function activate(){
+	 public function activate() {
 
 	 }
 
 	 /**
 	  *	@inheritdoc
 	  */
-	 public function deactivate(){
+	 public function deactivate() {
 
 	 }
 
@@ -34,7 +37,7 @@ class WPMU extends Core\PluginComponent {
 	  *	@inheritdoc
 	  */
 	 public function uninstall() {
-		 // remove content and settings
+		 // iterate blogs, alter posts table
 	 }
 
 	/**
