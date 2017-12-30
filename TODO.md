@@ -1,9 +1,10 @@
 WP Access Areas
 ===============
 
- - [ ] Posts editor
  - [ ] WPMU
+ - [ ] Posts editor
  - [ ] Posts frontend
+ - [ ] 1.x filters + actions
  - [ ] Shortcode with fallback
  - [ ] Settings
  - [ ] Installer / Uninstaller / WPMU uninstaller

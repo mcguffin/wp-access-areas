@@ -42,7 +42,7 @@ class Core extends Plugin {
 	 */
 	public function init_compat() {
 		if ( is_multisite() && is_plugin_active_for_network( ACCESS_AREAS_PLUGIN ) ) {
-			Compat\WPMU::instance();
+			Compat\WPMU\WPMU::instance();
 		}
 	}
 
