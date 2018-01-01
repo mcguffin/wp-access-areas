@@ -99,11 +99,11 @@ class ModelPost extends Core\PluginComponent {
 	 */
 	private function upgrade_1x() {
 		global $wpdb;
-		$posts = $wpdb->get_results($wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key=%s AND meta_value=%s" ), '_wpaa_post_behavior', 'login' );
-		// post behaviour
+		$posts = $wpdb->get_results($wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key=%s AND meta_value=%s" , '_wpaa_post_behavior', 'login' ));
+		// post behavior
 		foreach ( $posts as $p ) {
-			update_post_meta( $p->ID, '_wpaa_post_behavior', 'page' );
-			update_post_meta( $p->ID, '_wpaa_post_behavior_login_redirect', true );
+			update_post_meta( $p->post_id, '_wpaa_post_behavior', 'page' );
+			update_post_meta( $p->post_id, '_wpaa_post_behavior_login_redirect', true );
 		}
 
 	}
