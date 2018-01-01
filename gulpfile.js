@@ -1,5 +1,6 @@
 var autoprefixer = require('gulp-autoprefixer');
 var concat = require('gulp-concat');
+var fs = require('fs');
 var gulp = require('gulp');
 var gulputil = require('gulp-util');
 var rename = require('gulp-rename');
@@ -70,6 +71,17 @@ function concat_js( src, dest_name ) {
 		.pipe( gulp.dest( s.dest ) );
 
 }
+
+
+gulp.task('dashicons',function(){
+	var codepoints = require('./src/scss/variables/dashicons-codepoints.json'),
+		line, contents = '';
+	for (var c in codepoints ) {
+		line = '$dashicon-' + c + ': "\\' + codepoints[c].toString(16) + '";\n\n';
+		contents += line;
+	}
+	fs.writeFileSync( './src/scss/variables/_dashicons.scss', contents );
+});
 
 
 gulp.task('scss', function() {

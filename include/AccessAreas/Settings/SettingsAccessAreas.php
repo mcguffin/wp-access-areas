@@ -18,8 +18,25 @@ class SettingsAccessAreas extends Settings {
 	 */
 	protected function __construct() {
 
+		add_option( 'wpaa_default_behavior_login_redirect' , 0 );
+		add_option( 'wpaa_default_behavior' , '404' );
+		add_option( 'wpaa_default_behavior_status' , '404' );
+/*
+402 Payment Required
+403 Forbidden
+410 Gone
+418 I'm a teapot
+451 Unavailable For Legal Reasons
+*/
+		add_option( 'wpaa_fallback_page' , 0 );
 
-		add_option( 'access_areas_setting_1' , 'Default Value' , '' , False );
+		add_option( 'wpaa_default_caps' , array( ) );
+
+		add_option( 'wpaa_default_post_status' , 'publish' );
+
+		add_option( 'wpaa_enable_assign_cap' , 0 );
+
+//		add_option( 'access_areas_setting_1' , 'Default Value' , '' , False );
 
 		add_action( 'admin_menu', array( &$this, 'admin_menu' ) );
 
@@ -78,60 +95,129 @@ class SettingsAccessAreas extends Settings {
 
 		$settings_section	= 'access_areas_settings';
 
-		add_settings_section( $settings_section, __( 'Section #1',  'wp-access-areas' ), array( $this, 'section_1_description' ), $this->optionset );
+		add_settings_section( $settings_section, __( 'Restricted Access Behavior',  'wp-access-areas' ), array( $this, 'post_access_section_intro' ), $this->optionset );
 
 
-
-		// more settings go here ...
-		$option_name		= 'access_areas_setting_1';
-		register_setting( $this->optionset , $option_name, array( $this , 'sanitize_setting_1' ) );
+		$option_name		= 'wpaa_default_behaviour_login_redirect';
+		register_setting( $this->optionset , $option_name, array( $this , 'sanitize_http_status' ) );
 		add_settings_field(
 			$option_name,
-			__( 'Setting #1',  'wp-access-areas' ),
-			array( $this, 'setting_1_ui' ),
+			__( 'Redirect to Login',  'wp-access-areas' ),
+			array( $this, 'select_login_redirect' ),
 			$this->optionset,
 			$settings_section,
 			array(
 				'option_name'			=> $option_name,
-				'option_label'			=> __( 'Setting #1',  'wp-access-areas' ),
-				'option_description'	=> __( 'Setting #1 description',  'wp-access-areas' ),
+//				'label_for'		=> '',
+//				'class'			=> 'wpaa-http-status-select',
 			)
 		);
+
+		$option_name		= 'wpaa_default_behaviour';
+		register_setting( $this->optionset , $option_name, array( $this , 'sanitize_behaviour' ) );
+		add_settings_field(
+			$option_name,
+			__( 'Default Behaviour',  'wp-access-areas' ),
+			array( $this, 'select_behaviour' ),
+			$this->optionset,
+			$settings_section,
+			array(
+				'option_name'			=> $option_name,
+//				'label_for'		=> '',
+//				'class'			=> '',
+			)
+		);
+
+		$option_name		= 'wpaa_default_behaviour_status';
+		register_setting( $this->optionset , $option_name, array( $this , 'sanitize_http_status' ) );
+		add_settings_field(
+			$option_name,
+			__( 'HTTP Status',  'wp-access-areas' ),
+			array( $this, 'select_http_status' ),
+			$this->optionset,
+			$settings_section,
+			array(
+				'option_name'			=> $option_name,
+//				'label_for'		=> '',
+				'class'			=> 'wpaa-http-status-select',
+			)
+		);
+
+
+		$option_name		= 'wpaa_fallback_page';
+		register_setting( $this->optionset , $option_name, array( $this , 'sanitize_fallback_page' ) );
+		add_settings_field(
+			$option_name,
+			__( 'Fallback Page',  'wp-access-areas' ),
+			array( $this, 'select_fallback_page' ),
+			$this->optionset,
+			$settings_section,
+			array(
+				'option_name'			=> $option_name,
+//				'label_for'		=> '',
+//				'class'			=> '',
+			)
+		);
+
 	}
 
 	/**
-	 * Print some documentation for the optionset
+	 *	Print some documentation for the optionset
 	 */
-	public function section_1_description( $args ) {
-
+	public function post_access_section_intro( $args ) {
 		?>
 		<div class="inside">
-			<p><?php _e( 'Section 1 Description.' , 'wp-access-areas' ); ?></p>
+			<p class="description"><?php
+			_e('What will happen if somebody tries to view a restricted post directly.' , 'wp-access-areas' );
+			?><br /><?php
+			_e('You can also set these Options for each post individually.' , 'wp-access-areas' );
+
+			?></p>
 		</div>
 		<?php
 	}
 
 	/**
-	 * Output Theme selectbox
+	 *	...
 	 */
-	public function setting_1_ui( $args ) {
+	public function select_login_redirect( $args ) {
 
-		@list( $option_name, $label, $description ) = array_values( $args );
+		$template = Core\Template::instance();
+		echo $template->select_login_redirect( get_option( $args['option_name'] ), $args['option_name'] );
 
-		$option_value = get_option( $option_name );
-
-		?>
-			<label for="<?php echo $option_name ?>">
-				<input type="text" id="<?php echo $option_name ?>" name="<?php echo $option_name ?>" value="<?php esc_attr_e( $option_value ) ?>" />
-				<?php echo $label ?>
-			</label>
-			<?php
-			if ( ! empty( $description ) ) {
-				printf( '<p class="description">%s</p>', $description );
-			}
-			?>
-		<?php
 	}
+
+	/**
+	 *	...
+	 */
+	public function select_behaviour( $args ) {
+
+		$template = Core\Template::instance();
+		echo $template->select_behaviour( get_option( $args['option_name'] ), $args['option_name'] );
+
+	}
+
+	/**
+	 *	...
+	 */
+	public function select_http_status( $args ) {
+
+		$template = Core\Template::instance();
+		echo $template->select_http_status( get_option( $args['option_name'] ), $args['option_name'] );
+
+	}
+
+
+	/**
+	 *	...
+	 */
+	public function select_fallback_page( $args ) {
+		$template = Core\Template::instance();
+		echo $template->select_fallback_page( get_option( $args['option_name'] ), $args['option_name'] );
+
+
+	}
+
 
 	/**
 	 * Sanitize value of setting_1
@@ -142,5 +228,51 @@ class SettingsAccessAreas extends Settings {
 		// do sanitation here!
 		return $value;
 	}
+
+
+
+	/**
+	 *	@inheritdoc
+	 */
+	public function activate() {
+
+	}
+
+
+	/**
+	 *	@inheritdoc
+	 */
+	public function upgrade( $new_version, $old_version ) {
+		if ( version_compare( $old_version, '2.0.0', '<' ) ) {
+			$this->upgrade_1x();
+		}
+
+	}
+	/**
+	 *	Upgrade from version 1.x
+	 */
+	private function upgrade_1x() {
+
+		// post behaviour
+		if ( get_option( 'wpaa_default_behavior' === 'login' ) ) {
+			update_option( 'wpaa_default_behavior_login_redirect', true );
+			update_option( 'wpaa_default_behavior', 'page' );
+		}
+
+	}
+
+	/**
+	 *	@inheritdoc
+	 */
+	public function deactivate() {
+	}
+
+	/**
+	 *	@inheritdoc
+	 */
+	public function uninstall() {
+		// delete options!
+	}
+
 
 }

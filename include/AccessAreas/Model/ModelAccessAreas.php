@@ -7,6 +7,7 @@ if ( ! defined('ABSPATH') ) {
 	die('FU!');
 }
 
+use AccessAreas\Core;
 
 class ModelAccessAreas extends Model {
 
@@ -23,6 +24,10 @@ class ModelAccessAreas extends Model {
 	 */
 	protected $_table = 'access_areas';
 
+	/**
+	 *	@inheritdoc
+	 */
+	protected $_global_table = true;
 
 	/**
 	 *	Create an access area
@@ -81,12 +86,10 @@ class ModelAccessAreas extends Model {
 		if ( is_null( $blog_id ) ) {
 			$blog_id = get_current_blog_id();
 		}
+		$core = Core\Core::instance();
+		$prefix = sprintf( '%s%s_', $core->get_prefix(), $blog_id );
+		$prefix = apply_filters( 'wpaa_create_capability_prefix', $prefix, $blog_id );
 
-		$prefix = apply_filters( 'wpaa_capability_prefix', 'wpaa_', $blog_id );
-
-		if ( intval( $blog_id ) > 0 ) {
-			$prefix .= "{$blog_id}_";
-		}
 		return $prefix;
 	}
 
@@ -117,7 +120,7 @@ class ModelAccessAreas extends Model {
 				'blog_id'	=> get_current_blog_id(),
 			);
 			/**
-			 * Conditions to fetch avialable access areas
+			 * Conditions to fetch available access areas
 			 *
 			 * @since 2.0.0
 			 *
@@ -144,7 +147,23 @@ class ModelAccessAreas extends Model {
 	 *	@inheritdoc
 	 */
 	public function upgrade( $new_version, $old_version ) {
-		$this->update_db();
+		if ( version_compare( $old_version, '2.0.0', '<' ) ) {
+			$this->upgrade_1x();
+		}
+	}
+
+	private function upgrade_1x() {
+		global $wpdb;
+
+		$old_table = $wpdb->base_prefix . 'disclosure_userlabels';
+		$new_table = $wpdb->access_areas;
+
+		$sql = "ALTER TABLE $old_table RENAME TO $new_table";
+		$wpdb->query($sql);
+
+		$sql = "ALTER TABLE $new_table RENAME COLUMN `cap_title` TO `title`";
+		$wpdb->query($sql);
+
 	}
 
 	/**
@@ -165,7 +184,7 @@ class ModelAccessAreas extends Model {
 		$sql = "CREATE TABLE $wpdb->access_areas (
 			`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 			`title` varchar(255) NOT NULL,
-		    `capability` varchar(64) NOT NULL,
+		    `capability` varchar(128) NOT NULL,
 		    `blog_id` bigint(20) NOT NULL,
 			PRIMARY KEY (`id`),
 			UNIQUE KEY `capability` (`capability`),

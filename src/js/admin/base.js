@@ -190,6 +190,7 @@
 			wp.media.view.Modal.prototype.render.apply( this, arguments );
 			this.$okay = this.$('#btn-ok');
 			this.$title = this.$('#title-input');
+			this.$blog_id = this.$('[name="blog_id"]');
 			this.$title.val( this.model.get( 'title' ) );
 			this.setUIState();
 			return this;
@@ -208,6 +209,7 @@
 			var self = this;
 
 			this.model.set('title', this.$title.val() );
+			this.model.set('blog_id', this.$blog_id.val() );
 			this.model.save( null, {
 				success: function(e) {
 					self.close();

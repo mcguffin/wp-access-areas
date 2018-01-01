@@ -54,3 +54,80 @@
 		}
 	}
 }
+
+@keyframes spin {
+	from {
+		transform:rotate(0deg);
+	}
+	to {
+		transform:rotate(360deg);
+	}
+}
+
+
+
+.assign-access-areas {
+	[data-wpaa-action="grant"] {
+		width:auto;
+		margin:3px;
+		&:before {
+			font-size:20px;
+		}
+	}
+	[data-wpaa-action="revoke"] {
+		color:$wp-gray-darker;
+		&:hover,
+		&:focus {
+			color:$wp-red;
+		}
+	}
+	.wpaa-access-area {
+		display:block;
+		float:left;
+		clear:left;
+		border:1px solid $wp-gray-dark;
+		margin:3px;
+		position:relative;
+		border-radius:3px;
+		line-height:26px;
+//		height:28px;
+		box-sizing:border-box;
+		color: #555;
+//	    border-color: #ccc;
+	    background: #f7f7f7;
+//	    box-shadow: 0 1px 0 #ccc;
+	    vertical-align: top;
+		padding: 0 10px 1px 10px;
+		&.idle {
+			pointer-events:none;
+			//opacity:0.5;
+			.button-link {
+				&:before {
+					content:$dashicon-update;
+					transform-origin: center center;
+					animation-play-state: running;
+					color:$wp-gray-darker;
+				}
+			}
+		}
+		.button-link {
+			line-height:26px;
+			margin:0 -3px 0 6px;
+			&:before {
+				display:inline-block;
+				animation:spin 1.5s linear infinite paused;
+			}
+		}
+		&:before {
+			color:mix( $wp-gray-darker, $wp-gray-dark );
+			margin:3px 3px 3px 0;
+		}
+	}
+	[data-wpaa-scope] {
+		@include dashicon($dashicon-admin-home);
+	}
+	[data-wpaa-scope="0"] {
+		@include dashicon($dashicon-admin-site);
+	}
+
+}

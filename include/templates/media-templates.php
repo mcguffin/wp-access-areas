@@ -5,6 +5,7 @@ $template = AccessAreas\Core\Template::instance();
 $model = AccessAreas\Model\ModelAccessAreas::instance();
 
 ?>
+<!-- List Table Row -->
 <script type="text/html" id="tmpl-access-area-row">
 	<td class="access-areas-name">
 		<a href="#" class="edit"><strong>{{ data.model.get('title') }}</strong></a>
@@ -17,6 +18,7 @@ $model = AccessAreas\Model\ModelAccessAreas::instance();
 	<td class="access-areas-cap"><code>{{ data.model.get('capability') }}</code></td>
 </script>
 
+<!-- Create Acces Area Modal -->
 <script type="text/html" id="tmpl-access-area-modal">
 	<div class="media-modal access-area-modal">
 		<div class="media-modal-content">
@@ -32,6 +34,7 @@ $model = AccessAreas\Model\ModelAccessAreas::instance();
 						<label for="title-input"><?php _e( 'Title', 'wp-access-areas' ) ?></label>
 						<input class="widefat input-title" id="title-input" type="text" name="title" placeholder="<?php esc_attr_e( 'Title', 'wp-access-areas' ); ?>" />
 					</div>
+					<input type="hidden" name="blog_id" value="<?php echo apply_filters( 'access_areas_current_blog_id', get_current_blog_id() ); ?>" />
 				</article>
 				<footer class="modal-toolbar">
 					<div class="inner">
@@ -44,6 +47,7 @@ $model = AccessAreas\Model\ModelAccessAreas::instance();
 	<div class="media-modal-backdrop modal-close"></div>
 </script>
 
+<!-- Motice -->
 <script type="text/html" id="tmpl-access-area-notice">
 	<div id="message" class="notice notice-{{ data.model.get('type')}} {{ data.model.get('dismissible') ? 'is-dismissible' : '' }}">
 		<p>{{ data.model.get('message') }}</p>
@@ -51,6 +55,7 @@ $model = AccessAreas\Model\ModelAccessAreas::instance();
 	</div>
 </script>
 
+<!-- User Assigned Access Area -->
 <script type="text/html" id="tmpl-access-area-assigned-user">
 	<?php
 		echo $template->user_access_area( (object) array(
@@ -63,6 +68,7 @@ $model = AccessAreas\Model\ModelAccessAreas::instance();
 </script>
 
 
+<!-- Assign to User Dialog modal -->
 <script type="text/html" id="tmpl-access-area-assign-modal">
 	<div class="media-modal access-area-modal">
 		<div class="media-modal-content">
@@ -76,8 +82,13 @@ $model = AccessAreas\Model\ModelAccessAreas::instance();
 				<article class="modal-content">
 					<div class="form-control">
 						<?php
+
+							$access_areas = $model->fetch_available( 'user' );
+
+							$access_areas = apply_filters( "wpaa_access_areas_dropdown_user", $access_areas );
+
 							// select access area
-							echo $template->access_areas_dropdown('user');
+							echo $template->access_areas_dropdown( $access_areas, 'user' );
 						?>
 					</div>
 				</article>

@@ -32,6 +32,7 @@
 			model.set('user_id', $(this).attr('data-wpaa-user') );
 
 			if ( action === 'revoke' ) {
+				$(this).closest('.wpaa-access-area').addClass('idle');
 				model.set( 'id', $(this).attr('data-wpaa-access-area') );
 				model.save(null,{
 					success:function(){

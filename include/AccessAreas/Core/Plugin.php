@@ -14,6 +14,8 @@ class Plugin extends Singleton {
 
 	private static $components = array(
 		'AccessAreas\Model\ModelAccessAreas',
+		'AccessAreas\Model\ModelPost',
+		'AccessAreas\Settings\SettingsAccessAreas',
 	);
 
 	/**
@@ -40,7 +42,7 @@ class Plugin extends Singleton {
 		$old_version = get_option( 'access_areas_version' );
 
 		// call upgrade
-		if ( version_compare($new_version, $old_version, '>' ) ) {
+		if ( version_compare( $new_version, $old_version, '>' ) ) {
 
 			$this->upgrade( $new_version, $old_version );
 

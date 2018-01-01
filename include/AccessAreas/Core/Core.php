@@ -5,9 +5,11 @@ namespace AccessAreas\Core;
 if ( ! defined('ABSPATH') ) {
 	die('FU!');
 }
-
+use AccessAreas\Compat;
 
 class Core extends Plugin {
+
+	private $prefix = 'wpaa_';
 
 	/**
 	 *	@inheritdoc
@@ -18,6 +20,7 @@ class Core extends Plugin {
 		add_action( 'plugins_loaded' , array( $this , 'init_compat' ), 0 );
 		add_action( 'init' , array( $this , 'init' ) );
 		add_action( 'wp_enqueue_scripts' , array( $this , 'wp_enqueue_style' ) );
+
 		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
 		    require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
 		}
@@ -34,6 +37,12 @@ class Core extends Plugin {
 	public function wp_enqueue_style() {
 	}
 
+	/**
+	 *	@return string
+	 */
+	public function get_prefix() {
+		return $this->prefix;
+	}
 
 	/**
 	 *	Load Compatibility classes

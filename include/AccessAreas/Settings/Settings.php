@@ -8,7 +8,7 @@ if ( ! defined('ABSPATH') ) {
 
 use AccessAreas\Core;
 
-abstract class Settings extends Core\Singleton {
+abstract class Settings extends Core\PluginComponent {
 
 	/**
 	 *	@inheritdoc

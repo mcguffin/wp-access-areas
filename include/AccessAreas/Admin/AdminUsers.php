@@ -95,7 +95,7 @@ class AdminUsers extends Core\Singleton {
 	 */
 	public function add_column($columns) {
 
-		$columns['access'] = __( 'Access Areas', 'wp-access-areas' );
+		$columns['access'] = __( 'Access', 'wp-access-areas' );
 		return $columns;
 	}
 
@@ -106,23 +106,33 @@ class AdminUsers extends Core\Singleton {
 		if ( $column != 'access') {
 			return $column_content;
 		}
-		$granted	= array();
-		$output		= '';
-		$model		= Model\ModelAccessAreas::instance();
-		$template	= Core\Template::instance();
-		$available	= $model->fetch_available( 'user' );
 		$user		= new \WP_User( $user_id );
-
-		foreach ( $available as $aa ) {
-			if ( $user->has_cap( $aa->capability ) ) {
-				$granted[] = $aa;
-			}
-		}
+		$template	= Core\Template::instance();
+		$output		= '';
 		$output .= sprintf('<div class="assign-access-areas" data-wpaa-user="%d">', $user_id );
-		foreach ( $granted as $aa ) {
-			$output .= $template->user_access_area( $aa, $user_id );
+		if ( apply_filters('wpaa_user_is_admin', $user->has_cap('administrator') ) ) {
+			$output .= $template->user_access_area( (object) array(
+				'id'			=> 0,
+				'title' 		=> __( 'Everywhere', 'wp-access-area' ),
+				'capability'	=> 'global',
+				'blog_id'		=> '0',
+			), $user_id );
+		} else {
+			$granted	= array();
+			$model		= Model\ModelAccessAreas::instance();
+			$available	= apply_filters('wpaa_assignable_access_areas_user', $model->fetch_available( 'user' ), $user );
+
+			foreach ( $available as $aa ) {
+				if ( $user->has_cap( $aa->capability ) ) {
+					$granted[] = $aa;
+				}
+			}
+			foreach ( $granted as $aa ) {
+				$output .= $template->user_access_area( $aa, $user_id );
+			}
+			$output .= $template->user_add_access_area( $user_id );
+
 		}
-		$output .= $template->user_add_access_area( $user_id );
 		$output .= '</div>';
 		return $output;
 	}

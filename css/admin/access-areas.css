@@ -1,19 +1,4 @@
-/* Both Admin Menu and Post Formats */
-/* Post Format Icons */
-/* Welcome Screen Icons */
-/* Image Editing Icons */
-/* Both Image Editing and TinyMCE */
-/* TinyMCE Icons */
-/* Post Icons */
-/* Sorting */
-/* WPorg specific icons: Jobs, Profiles, WordCamps */
-/* Internal/Products */
-/* Taxonomies */
-/* Widget icons */
-/* Media icons */
-/* Alerts/Notifications/Flags */
-/* Social Icons */
-/* Misc/CPT */
+@charset "UTF-8";
 .media-modal.access-area-modal {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -60,3 +45,101 @@
     right: 0;
     text-align: right;
     border-top: 1px solid #cccccc; }
+
+@-webkit-keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg); }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg); } }
+
+@keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg); }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg); } }
+
+.assign-access-areas [data-wpaa-action="grant"] {
+  width: auto;
+  margin: 3px; }
+  .assign-access-areas [data-wpaa-action="grant"]:before {
+    font-size: 20px; }
+
+.assign-access-areas [data-wpaa-action="revoke"] {
+  color: #32373c; }
+  .assign-access-areas [data-wpaa-action="revoke"]:hover, .assign-access-areas [data-wpaa-action="revoke"]:focus {
+    color: #dc3232; }
+
+.assign-access-areas .wpaa-access-area {
+  display: block;
+  float: left;
+  clear: left;
+  border: 1px solid #cccccc;
+  margin: 3px;
+  position: relative;
+  border-radius: 3px;
+  line-height: 26px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  color: #555;
+  background: #f7f7f7;
+  vertical-align: top;
+  padding: 0 10px 1px 10px; }
+  .assign-access-areas .wpaa-access-area.idle {
+    pointer-events: none; }
+    .assign-access-areas .wpaa-access-area.idle .button-link:before {
+      content: "";
+      -webkit-transform-origin: center center;
+              transform-origin: center center;
+      -webkit-animation-play-state: running;
+              animation-play-state: running;
+      color: #32373c; }
+  .assign-access-areas .wpaa-access-area .button-link {
+    line-height: 26px;
+    margin: 0 -3px 0 6px; }
+    .assign-access-areas .wpaa-access-area .button-link:before {
+      display: inline-block;
+      -webkit-animation: spin 1.5s linear infinite paused;
+              animation: spin 1.5s linear infinite paused; }
+  .assign-access-areas .wpaa-access-area:before {
+    color: #7f8284;
+    margin: 3px 3px 3px 0; }
+
+.assign-access-areas [data-wpaa-scope]:before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  line-height: 1;
+  font-family: dashicons;
+  text-decoration: inherit;
+  font-weight: 400;
+  font-style: normal;
+  vertical-align: top;
+  text-align: center;
+  -webkit-transition: color .1s ease-in 0;
+  transition: color .1s ease-in 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+.assign-access-areas [data-wpaa-scope="0"]:before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  line-height: 1;
+  font-family: dashicons;
+  text-decoration: inherit;
+  font-weight: 400;
+  font-style: normal;
+  vertical-align: top;
+  text-align: center;
+  -webkit-transition: color .1s ease-in 0;
+  transition: color .1s ease-in 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }

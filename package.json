@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com//wp-access-areas#readme",
   "devDependencies": {
+    "fs": "0.0.1-security",
     "gulp": "*",
     "gulp-autoprefixer": "*",
     "gulp-concat": "*",
@@ -25,5 +26,6 @@
     "gulp-sourcemaps": "*",
     "gulp-uglify": "*",
     "gulp-util": "*"
-  }
+  },
+  "dependencies": {}
 }

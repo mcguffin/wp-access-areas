@@ -115,7 +115,7 @@ class WPRestAccessAreas extends Core\Singleton {
 				return $allowed;
 			case 'create_item':
 				$allowed = current_user_can( 'promote_users' );
-				$allowed = apply_filters( 'wpaa_allow_create_accessarea', $allowed );
+				$allowed = apply_filters( 'wpaa_allow_create_accessarea', $allowed, $request->get_params() );
 				return $allowed;
 			case 'delete_item':
 				$allowed = current_user_can( 'promote_users' );
@@ -169,25 +169,6 @@ class WPRestAccessAreas extends Core\Singleton {
 	}
 
 
-
-	/**
-	 *	Edit item
-	 *	@param $request
-	 */
-	public function edit_item( $request ) {
-		$model = Model\ModelAccessAreas::instance();
-		$id = $request->get_param('id');
-		$item = $model->fetch_one_by( 'id', $id );
-
-		if ( is_null( $item ) ) {
-			return new \WP_Error( 'wpaa-not-found', __( 'Invalid ID.' ), array( 'status' => 404 ) );
-		}
-		$result = $model->update(array( 'title' => $request->get_param('title') ), array( 'id' => $id ) );
-
-		$response = rest_ensure_response( $model->fetch_one_by( 'id', $id ) );
-		return $response;
-	}
-
 	/**
 	 *	Create an item
 	 *	@param $request
@@ -211,6 +192,25 @@ class WPRestAccessAreas extends Core\Singleton {
 			$response->header( 'Location', rest_url( sprintf( '%s/%s/%d', WPRest::instance()->get_namespace(), 'access-area', $result->id ) ) );
 		}
 
+		return $response;
+	}
+
+
+	/**
+	 *	Edit item
+	 *	@param $request
+	 */
+	public function edit_item( $request ) {
+		$model = Model\ModelAccessAreas::instance();
+		$id = $request->get_param('id');
+		$item = $model->fetch_one_by( 'id', $id );
+
+		if ( is_null( $item ) ) {
+			return new \WP_Error( 'wpaa-not-found', __( 'Invalid ID.' ), array( 'status' => 404 ) );
+		}
+		$result = $model->update(array( 'title' => $request->get_param('title') ), array( 'id' => $id ) );
+
+		$response = rest_ensure_response( $model->fetch_one_by( 'id', $id ) );
 		return $response;
 	}
 

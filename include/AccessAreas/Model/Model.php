@@ -18,14 +18,23 @@ abstract class Model extends Core\PluginComponent {
 	protected $_table = null;
 
 	/**
+	 *	@var bool is global table
+	 */
+	protected $_global_table = false;
+
+	/**
 	 *	@inheritdoc
 	 */
 	protected function __construct() {
 		// setup wpdb
 		global $wpdb;
-		$wpdb->tables[] = $this->table;
-		$wpdb->set_blog_id( get_current_blog_id() );
-
+		if ( $this->_global_table ) {
+			$wpdb->global_tables[] = $this->table;
+			$wpdb->set_prefix( $wpdb->base_prefix );
+		} else {
+			$wpdb->tables[] = $this->table;
+			$wpdb->set_blog_id( get_current_blog_id() );
+		}
 		parent::__construct();
 	}
 

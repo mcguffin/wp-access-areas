@@ -1,11 +1,11 @@
 WP Access Areas
 ===============
 
- - [ ] WPMU
+ - [x] WPMU
+ - [ ] Settings
+ - [ ] Installer / Uninstaller / WPMU uninstaller
  - [ ] Posts editor
  - [ ] Posts frontend
  - [ ] 1.x filters + actions
  - [ ] Shortcode with fallback
- - [ ] Settings
- - [ ] Installer / Uninstaller / WPMU uninstaller
  - [ ] 2.0 Upgrader (rename table & cols)
