@@ -81,7 +81,7 @@ class ModelPost extends Core\PluginComponent {
 		$this->uninstall_posts_table();
 
 		global $wpdb;
-		$wpdb->query($wpdb->prepare("DELETE FROM $wpdb->postmeta WHERE meta_key LIKE %s", $wpdb->esc_like('_wpaa_post_').'%') );
+		$wpdb->query($wpdb->prepare("DELETE FROM $wpdb->postmeta WHERE meta_key LIKE %s", $wpdb->esc_like('_wpaa_').'%') );
 	}
 
 	/**
