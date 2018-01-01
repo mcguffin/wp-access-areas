@@ -2,7 +2,7 @@
 /**
 * @package WP_AccessAreas
 * @version 1.0.0
-*/ 
+*/
 
 // ----------------------------------------
 //	Frontend Post Filters
@@ -10,7 +10,7 @@
 
 if ( ! class_exists('WPAA_Posts') ):
 class WPAA_Posts {
-	
+
 	static function init() {
 		add_action( 'pre_get_posts' , array( __CLASS__ , 'wp_query_allow_filters' ) );
 		// viewing restrictions on posts lists
@@ -29,15 +29,15 @@ class WPAA_Posts {
 		add_filter( 'get_previous_post_where' , array( __CLASS__ , 'get_adjacent_post_where' ) , 10 , 3 );
 		add_filter( 'get_next_post_join' , array( __CLASS__ , 'get_adjacent_post_join' ) , 10 , 3 );
 		add_filter( 'get_previous_post_join' , array( __CLASS__ , 'get_adjacent_post_join' ) , 10 , 3 );
-		
+
 		// behavior
 		add_action('template_redirect',array(__CLASS__,'template_redirect')); // or wp
-		
+
 		// comment restrictions
 		add_filter( 'comments_open', array(__CLASS__,'comments_open') , 10 , 2 );
 		add_filter( 'comments_clauses' , array( __CLASS__ , 'comments_query_clauses' ) , 10 , 2 );
 		add_filter( 'wp_count_comments' , array( __CLASS__ , 'count_comments' ) , 10 , 2 );
-		
+
 		add_filter( 'comment_feed_join' , array( __CLASS__ , 'get_comment_feed_join' ) );
 		add_filter( 'comment_feed_where' , array( __CLASS__ , 'get_archiveposts_where' ) , 10 , 2 );
 		//misc
@@ -55,11 +55,11 @@ class WPAA_Posts {
 			$allcaps += array_combine( $user_caps , array_fill(0,count($user_caps),true));
 		return $allcaps;
 	}
-	
-	static function wp_query_allow_filters( $wp_query ) {	
+
+	static function wp_query_allow_filters( $wp_query ) {
 		$wp_query->set('suppress_filters',false);
 	}
-	
+
 	// --------------------------------------------------
 	// template redirect
 	// --------------------------------------------------
@@ -74,17 +74,17 @@ class WPAA_Posts {
 				// no behavior? take default value
 				if ( ! $behavior )
 					$behavior = get_option( 'wpaa_default_behavior' );
-				
+
 				if ( $behavior == 'login' && ! is_user_logged_in() ) {
 					// get user to login and return him to the requested page.
 					$redirect = wp_login_url( get_permalink( $restricted_post->ID ) );
 				} else {
 					if ( $behavior == 'page' || ($behavior == 'login' && is_user_logged_in())) {
-					
+
 						// no fallback? take default value
 						if ( ! $fallback_page_id )
 							$fallback_page_id = get_option( 'wpaa_fallback_page' );
-										
+
 						if ( $fallback_page_id && wpaa_is_post_public( $fallback_page_id ) ) {
 							// if accessable take user to the fallback page
 							$redirect = get_permalink( $fallback_page_id );
@@ -106,7 +106,7 @@ class WPAA_Posts {
 			}
 		}
 	}
-	
+
 	// --------------------------------------------------
 	// comments query
 	// --------------------------------------------------
@@ -122,7 +122,7 @@ class WPAA_Posts {
 			$join .= " JOIN {$wpdb->posts} ON {$wpdb->posts}.ID = {$wpdb->comments}.comment_post_ID";
 		return $join;
 	}
-	
+
 	// --------------------------------------------------
 	// comment restrictions
 	// --------------------------------------------------
@@ -137,7 +137,7 @@ class WPAA_Posts {
 		global $wpdb;
 		if ( $post_id ) {
 			$post = get_post( $post_id );
-			
+
 			// user can read post. return empty stats to trigger WP stats count.
 			if ( $post && wpaa_user_can( $post->post_view_cap ) ) {
 				return $stats;
@@ -160,7 +160,7 @@ class WPAA_Posts {
 		),null);
 		$join	= $clauses['join'];
 		$where	= $clauses['where'];
-		
+
 		// taken from wp_count_comments
 		$count = $wpdb->get_results( "SELECT comment_approved, COUNT( * ) AS num_comments FROM {$wpdb->comments} {$join} {$where} GROUP BY comment_approved", ARRAY_A );
 
@@ -185,7 +185,7 @@ class WPAA_Posts {
 
 		return $stats;
 	}
-	
+
 	// --------------------------------------------------
 	// edit link
 	// --------------------------------------------------
@@ -195,7 +195,7 @@ class WPAA_Posts {
 			return $link;
 		return '';
 	}
-	
+
 	// --------------------------------------------------
 	// Post class
 	// --------------------------------------------------
@@ -217,7 +217,7 @@ class WPAA_Posts {
 		}
 		return array_unique($classes);
 	}
-	
+
 	// --------------------------------------------------
 	// editing caps
 	// --------------------------------------------------
@@ -248,14 +248,14 @@ class WPAA_Posts {
 						$view_cap = $post->post_view_cap;
 						if ( ! wpaa_user_can( $view_cap ) )
 							$caps[] = 'do_not_allow';
-						
+
 					}
 				}
 				break;
 		}
 		return $caps;
 	}
-	
+
 	// --------------------------------------------------
 	// viewing restrictions
 	// --------------------------------------------------
@@ -263,7 +263,7 @@ class WPAA_Posts {
 		// everything's fine - return.
 		if ( current_user_can( 'administrator' ) )
 			return $items;
-		
+
 		// remove undisclosed posts
 		$ret = array();
 		foreach ( $items as $i => $item ) {
@@ -272,21 +272,21 @@ class WPAA_Posts {
 		}
 		return $ret;
 	}
-	
+
 	static function get_archiveposts_where( $where , $args = null ) {
 		$where = self::_get_where( $where , '' );
 		return $where;
 	}
-	static function get_posts_where( $where , &$wp_query ) {
+	static function get_posts_where( $where , $wp_query ) {
 		global $wpdb;
 		$where = self::_get_where( $where , $wpdb->posts );
 		return $where;
 	}
-	static function get_posts_join( $join , &$wp_query ) {
+	static function get_posts_join( $join , $wp_query ) {
 // 		global $wpdb;
 		return $join;
 	}
-	
+
 	static function get_adjacent_post_where( $where , $in_same_cat, $excluded_categories ) {
 		return self::_get_where($where);
 	}
@@ -305,21 +305,21 @@ class WPAA_Posts {
 		}
 		if ( $table_name && substr($table_name,-1) !== '.' )
 			$table_name .= '.';
-		
+
 		$caps = array('exist');
 		if ( is_user_logged_in() ) {
 			// get current user's groups
 			$roles = new WP_Roles();
-			
+
 			// reading
 			if ( current_user_can( 'read' ) )
 				$caps[] = 'read';
-			
+
 			// user's roles
 			$user_roles = wpaa_user_contained_roles();
 			foreach ( $user_roles as $role )
 				$caps[] = $role;
-			
+
 			// user's custom caps
 			foreach( array_keys(WPAA_AccessArea::get_label_array( ) ) as $cap)
 				if ( wpaa_user_can_accessarea( $cap ) )
