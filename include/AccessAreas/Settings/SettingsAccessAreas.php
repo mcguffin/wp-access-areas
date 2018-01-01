@@ -98,7 +98,7 @@ class SettingsAccessAreas extends Settings {
 		add_settings_section( $settings_section, __( 'Restricted Access Behavior',  'wp-access-areas' ), array( $this, 'post_access_section_intro' ), $this->optionset );
 
 
-		$option_name		= 'wpaa_default_behaviour_login_redirect';
+		$option_name		= 'wpaa_default_behavior_login_redirect';
 		register_setting( $this->optionset , $option_name, array( $this , 'sanitize_http_status' ) );
 		add_settings_field(
 			$option_name,
@@ -113,12 +113,12 @@ class SettingsAccessAreas extends Settings {
 			)
 		);
 
-		$option_name		= 'wpaa_default_behaviour';
-		register_setting( $this->optionset , $option_name, array( $this , 'sanitize_behaviour' ) );
+		$option_name		= 'wpaa_default_behavior';
+		register_setting( $this->optionset , $option_name, array( $this , 'sanitize_behavior' ) );
 		add_settings_field(
 			$option_name,
 			__( 'Default Behaviour',  'wp-access-areas' ),
-			array( $this, 'select_behaviour' ),
+			array( $this, 'select_behavior' ),
 			$this->optionset,
 			$settings_section,
 			array(
@@ -128,7 +128,7 @@ class SettingsAccessAreas extends Settings {
 			)
 		);
 
-		$option_name		= 'wpaa_default_behaviour_status';
+		$option_name		= 'wpaa_default_behavior_status';
 		register_setting( $this->optionset , $option_name, array( $this , 'sanitize_http_status' ) );
 		add_settings_field(
 			$option_name,
@@ -190,10 +190,10 @@ class SettingsAccessAreas extends Settings {
 	/**
 	 *	...
 	 */
-	public function select_behaviour( $args ) {
+	public function select_behavior( $args ) {
 
 		$template = Core\Template::instance();
-		echo $template->select_behaviour( get_option( $args['option_name'] ), $args['option_name'] );
+		echo $template->select_behavior( get_option( $args['option_name'] ), $args['option_name'] );
 
 	}
 
@@ -253,7 +253,7 @@ class SettingsAccessAreas extends Settings {
 	 */
 	private function upgrade_1x() {
 
-		// post behaviour
+		// post behavior
 		if ( get_option( 'wpaa_default_behavior' === 'login' ) ) {
 			update_option( 'wpaa_default_behavior_login_redirect', true );
 			update_option( 'wpaa_default_behavior', 'page' );

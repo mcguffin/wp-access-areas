@@ -128,7 +128,7 @@ class Template extends Singleton {
 	 *	@param string $selected_behavior
 	 *	@param string $fieldname
 	 */
-	public function select_behaviour( $selected_behavior = '404', $fieldname = '_wpaa_post_behavior' ) {
+	public function select_behavior( $selected_behavior = '404', $fieldname = '_wpaa_post_behavior' ) {
 
 		$behaviors = array(
 			array(
@@ -206,7 +206,7 @@ EOT;
 	 */
 	public function select_login_redirect( $login_redirect = 0, $fieldname = '_wpaa_post_behavior_login_redirect' ) {
 		$output = '';
-		$id = 'wpaa-post-behaviour-login-redirect';
+		$id = 'wpaa-post-behavior-login-redirect';
 		$output .= sprintf('<input type="hidden" name="%s" value="0" />', $fieldname, $id );
 		$output .= sprintf('<input type="checkbox" name="%s" value="1" id="%s" %s />', $fieldname, $id, checked( $login_redirect, 1, false) );
 		$output .= sprintf('<label for="%s">%s</label>', $id, __('If not logged in, redirect to login.', 'wp-access-areas' ) );
