@@ -9,6 +9,7 @@ if ( ! defined('ABSPATH') ) {
 
 use AccessAreas\Core;
 use AccessAreas\Model;
+use AccessAreas\Settings;
 
 
 class WPMU extends Core\PluginComponent {
@@ -31,6 +32,8 @@ class WPMU extends Core\PluginComponent {
 		add_filter( 'wpaa_allow_grant_access', array( $this, 'allow_grant_access'), 10, 2 );
 
 		add_action( 'after_mu_upgrade', array( Core\Core::instance(), 'maybe_upgrade' ) );
+
+		add_action( 'after_mu_upgrade', array( $this, 'maybe_uninstall' ) );
 
 		if ( is_network_admin() ) {
 			NetworkAdmin::instance();
@@ -94,8 +97,8 @@ class WPMU extends Core\PluginComponent {
 	}
 
 	/**
-	*	@filter wpaa_allow_edit_accessarea
-	*	@filter wpaa_allow_delete_accessarea
+	 *	@filter wpaa_allow_edit_accessarea
+	 *	@filter wpaa_allow_delete_accessarea
 	 */
 	public function allow_edit_access_area( $allowed, $access_area_id ) {
 		if ( $allowed ) {
@@ -109,24 +112,35 @@ class WPMU extends Core\PluginComponent {
 	/**
 	 *	@inheritdoc
 	 */
-	 public function activate() {
-		 // iterate over the blog
-//		 Core\Plugin::activate();
-	 }
+	public function activate() {
+	 	// iterate over the blog
+//		Core\Plugin::activate();
+	}
 
-	 /**
-	  *	@inheritdoc
-	  */
-	 public function deactivate() {
+	/**
+	 *	@inheritdoc
+	 */
+	public function deactivate() {
 
-	 }
+	}
 
-	 /**
-	  *	@inheritdoc
-	  */
-	 public function uninstall() {
+	/**
+	 *	@inheritdoc
+	 */
+	public function uninstall() {
 		 // iterate blogs, alter posts table
-	 }
+	}
+
+	/**
+	 *	erase wpaa data on blog
+	 */
+	public function maybe_uninstall() {
+		if ( get_site_option( 'wpaa_uninstall_active' ) ) {
+			// uninstall posts, settings
+			Settings\SettingsAccessAreas::instance()->uninstall();
+			Model\ModelPost::instance()->uninstall();
+		}
+	}
 
 	/**
  	 *	@inheritdoc

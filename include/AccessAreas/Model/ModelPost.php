@@ -64,7 +64,6 @@ class ModelPost extends Core\PluginComponent {
 			if ( ! empty( $i ) ) {
 				$wpdb->query("ALTER TABLE $wpdb->posts DROP INDEX ('$idx');");
 			}
-
 		}
 	}
 
@@ -79,10 +78,10 @@ class ModelPost extends Core\PluginComponent {
 	 */
 	public function uninstall() {
 		// drop table
-		global $wpdb;
-		$tbl = $this->table;
-		$wpdb->query("DROP TABLE {$wpdb->$tbl}");
+		$this->uninstall_posts_table();
 
+		global $wpdb;
+		$wpdb->query($wpdb->prepare("DELETE FROM $wpdb->postmeta WHERE meta_key LIKE %s", $wpdb->esc_like('_wpaa_post_').'%') );
 	}
 
 	/**
