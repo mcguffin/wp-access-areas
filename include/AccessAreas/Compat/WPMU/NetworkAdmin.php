@@ -27,7 +27,7 @@ class NetworkAdmin extends Core\Singleton {
 		}
 	}
 	/**
-	 *	@filter access_areas_current_blog_id
+	 *	@filter access_areas_current_blog_id 
 	 */
 	public function return_zero_string() {
 		return '0';
