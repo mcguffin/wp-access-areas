@@ -9,7 +9,7 @@ if ( ! defined('ABSPATH') ) {
 use AccessAreas\Core;
 use AccessAreas\Model;
 
-class AdminUsers extends Core\Singleton {
+class AdminUsers extends Core\PluginComponent {
 
 	/**
 	 *	@inheritdoc
@@ -136,5 +136,47 @@ class AdminUsers extends Core\Singleton {
 		$output .= '</div>';
 		return $output;
 	}
+
+	/**
+	 *	@inheritdoc
+	 */
+	public function activate() {
+
+	}
+
+	/**
+	 *	@inheritdoc
+	 */
+	public function deactivate() {
+
+	}
+
+	/**
+	 *	@inheritdoc
+	 */
+	public function upgrade( $new_version, $old_version ) {
+
+	}
+
+	/**
+	 *	@inheritdoc
+	 */
+	public function uninstall() {
+		// revoke all access from all users
+		$model = Model\ModelAccessAreas::instance();
+		$access_areas = $model->fetch_available();
+		$users = get_users();
+		foreach ( $users as $user ) {
+			foreach ( $access_areas as $access_area ) {
+				// much faster than $user->remove_cap( $access_area->capability )
+				if ( isset( $user->caps[ $access_area->capability ] ) ) {
+					unset( $user->caps[ $access_area->capability ] );
+				}
+			}
+			update_user_meta( $user->ID, $user->cap_key, $user->caps );
+		}
+		
+	}
+
 
 }

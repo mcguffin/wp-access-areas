@@ -85,7 +85,7 @@ class ModelPost extends Core\PluginComponent {
 	}
 
 	/**
-	*	@inheritdoc
+	 *	@inheritdoc
 	 */
 	public function upgrade( $new_version, $old_version ) {
 		if ( version_compare( $old_version, '2.0.0', '<' ) ) {
@@ -93,6 +93,7 @@ class ModelPost extends Core\PluginComponent {
 		}
 
 	}
+
 	/**
 	 *	Upgrade from version 1.x
 	 */

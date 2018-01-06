@@ -51,8 +51,18 @@ class ModelAccessAreas extends Model {
 		if ( $result = $this->fetch_one_by( $data ) ) {
 			return new \WP_Error( 'wpaa-create-failed', __( 'Access Area exists', 'wp-access-areas') );
 		}
+		$cap = $this->get_capability_name( $title, $blog_id );
 
-		$data['capability'] = $this->get_capability_name( $title, $blog_id );
+		/**
+		 *	Prevent attacks like: 
+		 *		add_filter('wpaa_create_capability_prefix','__return_empty_string') + self::create('Manage Network')
+		 *		add_filter('wpaa_create_capability_prefix',function(){return 'manage'}) + self::create('Network')
+		 */
+		if ( false === $cap ) {
+			return new \WP_Error( 'wpaa-create-failed', __( 'Invalid capability name!', 'wp-access-areas') );
+		}
+
+		$data['capability'] = $cap;
 
 		$result = $this->insert( $data, array('%s','%d','%s'));
 
@@ -61,6 +71,13 @@ class ModelAccessAreas extends Model {
 		}
 
 		return $this->fetch_one_by( $data );
+	}
+	/**
+	 *	@param int $id
+	 */
+	public function delete_by_id( $id ) {
+		do_action( 'wpaa_before_delete', $id );
+		return parent::delete( array('id' => $id ) );
 	}
 
 	/**
@@ -71,17 +88,25 @@ class ModelAccessAreas extends Model {
 	 */
 	public function get_capability_name( $title, $blog_id = null ) {
 		$prefix = $this->get_capability_prefix( $blog_id );
+		// force plugin prefix!
+		if ( empty( $prefix ) || false === strpos( $prefix, $core->get_prefix() ) ) {
+			return false;
+		}
 		$basename = $prefix . $this->sanitize_capability_name( $title );
 		$basename = substr( $basename, 0, 60 );
 		$cap_name = $basename;
 		$counter = 1;
-		while ( ! is_null( $this->fetch_one_by('capability', $cap_name ) ) ) {
+		while ( ! is_null( $this->fetch_one_by( 'capability', $cap_name ) ) ) {
 			$cap_name = "{$basename}-{$counter}";
 			$counter++;
 		}
 		return $cap_name;
 	}
 
+	/**
+	 *	@param int $blog_id
+	 *	@return string
+	 */
 	public function get_capability_prefix( $blog_id = null ) {
 		if ( is_null( $blog_id ) ) {
 			$blog_id = get_current_blog_id();
@@ -93,6 +118,10 @@ class ModelAccessAreas extends Model {
 		return $prefix;
 	}
 
+	/**
+	 *	@param string $title
+	 *	@return string
+	 */
 	public function sanitize_capability_name( $title ) {
 
 		$slug = sanitize_title_with_dashes($title,'','save');

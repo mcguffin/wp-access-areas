@@ -31,9 +31,13 @@ class WPMU extends Core\PluginComponent {
 
 		add_filter( 'wpaa_allow_grant_access', array( $this, 'allow_grant_access'), 10, 2 );
 
-		add_action( 'after_mu_upgrade', array( Core\Core::instance(), 'maybe_upgrade' ) );
+		add_action( 'wpmu_upgrade_site', array( $this, 'maybe_upgrade' ) );
 
-		add_action( 'after_mu_upgrade', array( $this, 'maybe_uninstall' ) );
+		add_action( 'wpmu_upgrade_site', array( $this, 'maybe_uninstall' ) );
+
+		if ( is_admin() ) {
+			AdminUsers::instance();
+		}
 
 		if ( is_network_admin() ) {
 			NetworkAdmin::instance();
@@ -129,16 +133,31 @@ class WPMU extends Core\PluginComponent {
 	 */
 	public function uninstall() {
 		 // iterate blogs, alter posts table
+		 global $wpdb;
+		 $wpdb->query("DELETE FROM $wpdb->usermeta WHERE meta_key = 'wpaa_global_access_areas';");
+	}
+
+	public function maybe_upgrade( $site_id ) {
+		switch_to_blog( $blog_id );
+		Core\Core::instance()->maybe_upgrade();
+		restore_current_blog()
 	}
 
 	/**
 	 *	erase wpaa data on blog
+	 *	@action wpmu_upgrade_site
 	 */
-	public function maybe_uninstall() {
+	public function maybe_uninstall( $blog_id ) {
 		if ( get_site_option( 'wpaa_uninstall_active' ) ) {
 			// uninstall posts, settings
-			Settings\SettingsAccessAreas::instance()->uninstall();
-			Model\ModelPost::instance()->uninstall();
+			switch_to_blog( $blog_id );
+
+			//Settings\SettingsAccessAreas::instance()->uninstall();
+			Model\ModelUser::instance()->uninstall(); // remove all caps
+			Model\ModelPost::instance()->uninstall(); // remove post cols
+			Model\ModelAccessAreas::instance()->uninstall(); // remove main table
+			Settings\SettingsAccessAreas::instance()->uninstall(); // remove settings
+			restore_current_blog()
 		}
 	}
 
@@ -146,6 +165,8 @@ class WPMU extends Core\PluginComponent {
  	 *	@inheritdoc
 	 */
 	public function upgrade( $new_version, $old_version ) {
+		AdminUsers::instance()->upgrade( $new_version, $old_version );
+
 	}
 
 }

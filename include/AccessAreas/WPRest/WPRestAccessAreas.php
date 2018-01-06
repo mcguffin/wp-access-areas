@@ -242,26 +242,35 @@ class WPRestAccessAreas extends Core\Singleton {
 
 
 
+	/**
+	 *	Revoke Access
+	 *	@param $request
+	 */
 	public function grant_access( $request ) {
 		$model = Model\ModelAccessAreas::instance();
+		$user_model = Model\ModelUser::instance();
 		$access_area = $model->fetch_one_by( 'id', $request->get_param('id') );
+
+
 		$user_ids = $request->get_param('user_id');
 		$edited_users = array();
 
 		foreach ( $user_ids as $user_id ) {
 			$user = new \WP_User( $user_id );
-			if ( ! $user->has_cap( $access_area->capability ) ) {
-				$user->add_cap( $access_area->capability , true );
-				do_action( 'wpaa_grant_access', $user, $access_area->capability );
-				do_action( "wpaa_grant_{$access_area->capability}", $user );
+			if ( $user_model->grant_user_access( $user, $access_area ) ) {
 				$edited_users[] = $user_id;
 			}
+
 		}
 		$response = new \WP_REST_Response();
 		$response->set_data( array( 'success' => true, 'access_area' => $access_area, 'user_id' => $edited_users ) );
 		return $response;
 	}
 
+	/**
+	 *	Grant Access
+	 *	@param $request
+	 */
 	public function revoke_access( $request ) {
 		$model = Model\ModelAccessAreas::instance();
 		$access_area = $model->fetch_one_by( 'id', $request->get_param('id') );
@@ -272,8 +281,8 @@ class WPRestAccessAreas extends Core\Singleton {
 			$user = new \WP_User( $user_id );
 			if ( $user->has_cap( $access_area->capability ) ) {
 				$user->remove_cap( $access_area->capability, true );
-				do_action( 'wpaa_grant_access', $user, $access_area->capability );
-				do_action( "wpaa_grant_{$access_area->capability}", $user );
+				do_action( 'wpaa_revoke_access', $user, $access_area->capability );
+				do_action( "wpaa_revoke_{$access_area->capability}", $user );
 				$edited_users[] = $user_id;
 			}
 		}

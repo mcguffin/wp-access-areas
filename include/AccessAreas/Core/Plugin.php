@@ -13,6 +13,7 @@ use AccessAreas\Compat;
 class Plugin extends Singleton {
 
 	private static $components = array(
+		'AccessAreas\Admin\AdminUsers',
 		'AccessAreas\Model\ModelAccessAreas',
 		'AccessAreas\Model\ModelPost',
 		'AccessAreas\Settings\SettingsAccessAreas',
