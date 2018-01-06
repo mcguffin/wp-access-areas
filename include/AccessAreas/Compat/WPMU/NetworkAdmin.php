@@ -35,7 +35,7 @@ class NetworkAdmin extends Core\Singleton {
 
 	public function add_uninstaller() {
 		add_settings_page( __( 'Access Areas Uninstall' , 'wp-access-areas' ), __( 'Uninstall Access Areas' , 'wp-access-areas' ), 'manage_network', 'access_areas-uninstall', array( $this, 'render_uninstaller_page' ) );
-		
+
 	}
 
 	/**
@@ -55,5 +55,5 @@ class NetworkAdmin extends Core\Singleton {
 		</div><?php
 	}
 
-render_uninstaller_page
+
 }
