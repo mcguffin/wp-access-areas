@@ -34,8 +34,8 @@ class NetworkAdmin extends Core\Singleton {
 	}
 
 	public function add_uninstaller() {
-		add_settings_page( __( 'Access Areas Uninstall' , 'wp-access-areas' ), __( 'Uninstall Access Areas' , 'wp-access-areas' ), 'manage_network', 'access_areas-uninstall', array( $this, 'render_uninstaller_page' ) );
-		
+		add_options_page( __( 'Access Areas Uninstall' , 'wp-access-areas' ), __( 'Uninstall Access Areas' , 'wp-access-areas' ), 'manage_network', 'access_areas-uninstall', array( $this, 'render_uninstaller_page' ) );
+
 	}
 
 	/**
@@ -49,11 +49,16 @@ class NetworkAdmin extends Core\Singleton {
 				<?php if ( get_site_option( 'wpaa_uninstall_active' ) ) { ?>
 					<li><?php _e('Enable uninstall mode first', 'wp-access-areas' ); ?></li>
 				<?php } ?>
-				<li><?php printf( __('Visit the %s page', 'wp-access-areas' ), sprintf( '<a href="%s">%s</a>', network_admin_url('upgrade.php'), __('Upgrade Network','wp-access-areas') ); ?></li>
+				<li><?php printf(
+					__('Visit the %s page', 'wp-access-areas' ),
+					sprintf( '<a href="%s">%s</a>',
+						network_admin_url('upgrade.php'),
+						__('Upgrade Network','wp-access-areas') )
+				); ?></li>
 			</ol>
-			<button><
+			<button>
 		</div><?php
 	}
 
-render_uninstaller_page
+
 }
