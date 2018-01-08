@@ -53,6 +53,10 @@ Core\Core::instance();
 
 Model\ModelAccessAreas::instance();
 
+Model\ModelPost::instance();
+Model\ModelUser::instance();
+Model\ModelComment::instance();
+
 WPRest\WPRest::instance();
 
 

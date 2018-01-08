@@ -35,6 +35,8 @@ class WPMU extends Core\PluginComponent {
 
 		add_action( 'wpmu_upgrade_site', array( $this, 'maybe_uninstall' ) );
 
+		add_filter( 'user_has_cap', array( $this, 'user_has_cap' ) , 10 , 4  );
+
 		if ( is_admin() ) {
 			AdminUsers::instance();
 		}
@@ -43,6 +45,21 @@ class WPMU extends Core\PluginComponent {
 			NetworkAdmin::instance();
 		}
 	}
+
+	/**
+	 *	@filter user_has_cap;
+	 */
+	static function user_has_cap( $allcaps, $caps, $args, $user ) {
+
+		if ( $user_caps = User::instance()->get_global_caps( $user ) ) {
+
+			$allcaps += $user_caps; //array_combine(  , array_fill( 0, count( $user_caps ), true ) );
+
+		}
+
+		return $allcaps;
+	}
+
 
 	/**
 	 *	@filter wpaa_available_access_areas_post
@@ -140,7 +157,7 @@ class WPMU extends Core\PluginComponent {
 	public function maybe_upgrade( $site_id ) {
 		switch_to_blog( $blog_id );
 		Core\Core::instance()->maybe_upgrade();
-		restore_current_blog()
+		restore_current_blog();
 	}
 
 	/**
@@ -157,7 +174,7 @@ class WPMU extends Core\PluginComponent {
 			Model\ModelPost::instance()->uninstall(); // remove post cols
 			Model\ModelAccessAreas::instance()->uninstall(); // remove main table
 			Settings\SettingsAccessAreas::instance()->uninstall(); // remove settings
-			restore_current_blog()
+			restore_current_blog();
 		}
 	}
 

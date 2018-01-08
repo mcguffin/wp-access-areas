@@ -10,7 +10,7 @@ use AccessAreas\Core;
 
 class SettingsAccessAreas extends Settings {
 
-	private $optionset = '';
+	private $optionset = 'access-areas';
 
 
 	/**
@@ -18,23 +18,6 @@ class SettingsAccessAreas extends Settings {
 	 */
 	protected function __construct() {
 
-		add_option( 'wpaa_default_behavior_login_redirect' , 0 );
-		add_option( 'wpaa_default_behavior' , '404' );
-		add_option( 'wpaa_default_behavior_status' , '404' );
-/*
-402 Payment Required
-403 Forbidden
-410 Gone
-418 I'm a teapot
-451 Unavailable For Legal Reasons
-*/
-		add_option( 'wpaa_fallback_page' , 0 );
-
-		add_option( 'wpaa_default_caps' , array( ) );
-
-		add_option( 'wpaa_default_post_status' , 'publish' );
-
-		add_option( 'wpaa_enable_assign_cap' , 0 );
 
 //		add_option( 'access_areas_setting_1' , 'Default Value' , '' , False );
 
@@ -50,7 +33,7 @@ class SettingsAccessAreas extends Settings {
 	 *	@action admin_menu
 	 */
 	public function admin_menu() {
-		add_options_page( __('WP Access Areas Settings' , 'wp-access-areas' ),__('WP Access Areas' , 'wp-access-areas'),'manage_options',$this->optionset, array( $this, 'settings_page' ) );
+		add_options_page( __('WP Access Areas Settings' , 'wp-access-areas' ),__('WP Access Areas' , 'wp-access-areas'),'manage_options', $this->optionset, array( $this, 'settings_page' ) );
 	}
 
 	/**
@@ -98,6 +81,20 @@ class SettingsAccessAreas extends Settings {
 		add_settings_section( $settings_section, __( 'Restricted Access Behavior',  'wp-access-areas' ), array( $this, 'post_access_section_intro' ), $this->optionset );
 
 
+		$option_name		= 'wpaa_default_behavior';
+		register_setting( $this->optionset , $option_name, array( $this , 'sanitize_behavior' ) );
+		add_settings_field(
+			$option_name,
+			__( 'Default Behaviour',  'wp-access-areas' ),
+			array( $this, 'select_behavior' ),
+			$this->optionset,
+			$settings_section,
+			array(
+				'option_name'			=> $option_name,
+//				'label_for'		=> '',
+//				'class'			=> '',
+			)
+		);
 		$option_name		= 'wpaa_default_behavior_login_redirect';
 		register_setting( $this->optionset , $option_name, array( $this , 'sanitize_http_status' ) );
 		add_settings_field(
@@ -113,20 +110,6 @@ class SettingsAccessAreas extends Settings {
 			)
 		);
 
-		$option_name		= 'wpaa_default_behavior';
-		register_setting( $this->optionset , $option_name, array( $this , 'sanitize_behavior' ) );
-		add_settings_field(
-			$option_name,
-			__( 'Default Behaviour',  'wp-access-areas' ),
-			array( $this, 'select_behavior' ),
-			$this->optionset,
-			$settings_section,
-			array(
-				'option_name'			=> $option_name,
-//				'label_for'		=> '',
-//				'class'			=> '',
-			)
-		);
 
 		$option_name		= 'wpaa_default_behavior_status';
 		register_setting( $this->optionset , $option_name, array( $this , 'sanitize_http_status' ) );
@@ -158,8 +141,9 @@ class SettingsAccessAreas extends Settings {
 //				'class'			=> '',
 			)
 		);
-
 	}
+
+	
 
 	/**
 	 *	Print some documentation for the optionset
@@ -168,9 +152,12 @@ class SettingsAccessAreas extends Settings {
 		?>
 		<div class="inside">
 			<p class="description"><?php
-			_e('What will happen if somebody tries to view a restricted post directly.' , 'wp-access-areas' );
+
+				_e('What will happen if somebody tries to view a restricted post directly.' , 'wp-access-areas' );
+
 			?><br /><?php
-			_e('You can also set these Options for each post individually.' , 'wp-access-areas' );
+
+				_e('You can also set these Options for each post individually.' , 'wp-access-areas' );
 
 			?></p>
 		</div>
@@ -191,9 +178,11 @@ class SettingsAccessAreas extends Settings {
 	 *	...
 	 */
 	public function select_behavior( $args ) {
+		$option_name = 'wpaa_default_behavior';
+		$option_value = get_option( $option_name );
 
 		$template = Core\Template::instance();
-		echo $template->select_behavior( get_option( $args['option_name'] ), $args['option_name'] );
+		echo $template->select_behavior( $option_value, $option_name );
 
 	}
 
@@ -201,9 +190,19 @@ class SettingsAccessAreas extends Settings {
 	 *	...
 	 */
 	public function select_http_status( $args ) {
+		$option_name = 'wpaa_default_behavior_status';
+		$option_value = get_option( $option_name );
+
+		/*
+		402 Payment Required
+		403 Forbidden
+		410 Gone
+		418 I'm a teapot
+		451 Unavailable For Legal Reasons
+		*/
 
 		$template = Core\Template::instance();
-		echo $template->select_http_status( get_option( $args['option_name'] ), $args['option_name'] );
+		echo $template->select_http_status( $option_value, $option_name );
 
 	}
 
@@ -212,21 +211,10 @@ class SettingsAccessAreas extends Settings {
 	 *	...
 	 */
 	public function select_fallback_page( $args ) {
+		$option_name = 'wpaa_fallback_page';
+		$option_value = get_option( $option_name );
 		$template = Core\Template::instance();
-		echo $template->select_fallback_page( get_option( $args['option_name'] ), $args['option_name'] );
-
-
-	}
-
-
-	/**
-	 * Sanitize value of setting_1
-	 *
-	 * @return string sanitized value
-	 */
-	public function sanitize_setting_1( $value ) {
-		// do sanitation here!
-		return $value;
+		echo $template->select_fallback_page(  $option_value, $option_name );
 	}
 
 
@@ -235,6 +223,21 @@ class SettingsAccessAreas extends Settings {
 	 *	@inheritdoc
 	 */
 	public function activate() {
+
+		add_option( 'wpaa_default_behavior_login_redirect' , 0 );
+
+		add_option( 'wpaa_default_behavior' , '404' );
+
+		add_option( 'wpaa_default_behavior_status' , '404' );
+
+		add_option( 'wpaa_fallback_page' , 0 );
+
+
+		add_option( 'wpaa_default_caps' , array( ) );
+
+		add_option( 'wpaa_default_post_status' , 'publish' );
+
+		add_option( 'wpaa_enable_assign_cap' , 0 );
 
 	}
 
@@ -271,7 +274,9 @@ class SettingsAccessAreas extends Settings {
 	 *	@inheritdoc
 	 */
 	public function uninstall() {
-		// delete options!
+		// delete all options
+		global $wpdb;
+		$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name LIKE 'wpaa_%'" );
 	}
 
 

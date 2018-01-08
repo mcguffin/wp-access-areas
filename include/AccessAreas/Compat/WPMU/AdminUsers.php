@@ -11,9 +11,7 @@ use AccessAreas\Core;
 use AccessAreas\Admin;
 
 
-class AdminUsers extends Core\Singleton {
-
-	private $option_name = 'wpaa_gloabl_access_areas';
+class AdminUsers extends Users {
 
 	/**
 	 *	@inheritdoc
@@ -26,7 +24,7 @@ class AdminUsers extends Core\Singleton {
 	public function grant_access( $user, $capability, $access_area ) {
 		if ( intval( $access_area->blog_id ) === 0 ) {
 			//
-			$global_caps = get_user_option( $user->id, $this->option_name );
+			$global_caps = $this->get_global_caps($user);
 			$global_caps[ $access_area->capability ] = true;
 
 			update_user_option( $user->id, $this->option_name, $global_caps, true );
@@ -36,7 +34,7 @@ class AdminUsers extends Core\Singleton {
 	public function revoke_access( $user, $capability, $access_area ) {
 		if ( intval( $access_area->blog_id ) === 0 ) {
 
-			$global_caps = get_user_option( $user->id, $this->option_name );
+			$global_caps = $this->get_global_caps($user);
 
 			if ( isset( $global_caps[ $access_area->capability ] ) ) {
 				unset( $global_caps[ $access_area->capability ] );
