@@ -27,7 +27,7 @@ class AdminUsers extends Users {
 			$global_caps = $this->get_global_caps($user);
 			$global_caps[ $access_area->capability ] = true;
 
-			update_user_option( $user->id, $this->option_name, $global_caps, true );
+			update_user_option( $user->ID, $this->option_name, $global_caps, true );
 		}
 	}
 
@@ -40,7 +40,7 @@ class AdminUsers extends Users {
 				unset( $global_caps[ $access_area->capability ] );
 			}
 
-			update_user_option( $user->id, $this->option_name, $global_caps, true );
+			update_user_option( $user->ID, $this->option_name, $global_caps, true );
 		}
 	}
 
@@ -67,7 +67,7 @@ class AdminUsers extends Users {
 			foreach ( $caps as $cap ) {
 				$new_caps[$cap] = true;
 			}
-			update_user_option( $user->id, $this->option_name, $new_caps, true );
+			update_user_option( $user->ID, $this->option_name, $new_caps, true );
 			delete_user_meta( $usermeta->user_id, $usermeta->meta_key );
 		}
 	}

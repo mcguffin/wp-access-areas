@@ -20,7 +20,7 @@ class Users extends Core\Singleton {
 	 *	@return array
 	 */
 	public function get_global_caps($user) {
-		get_user_option( $user->id, $this->option_name );
+		get_user_option( $user->ID, $this->option_name );
 	}
 
 }

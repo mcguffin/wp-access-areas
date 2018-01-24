@@ -9,6 +9,7 @@ if ( ! defined('ABSPATH') ) {
 
 use AccessAreas\Core;
 
+
 class ModelAccessAreas extends Model {
 
 	protected $fields = array(
@@ -51,10 +52,10 @@ class ModelAccessAreas extends Model {
 		if ( $result = $this->fetch_one_by( $data ) ) {
 			return new \WP_Error( 'wpaa-create-failed', __( 'Access Area exists', 'wp-access-areas') );
 		}
-		$cap = $this->get_capability_name( $title, $blog_id );
+		$cap = $this->new_capability_name( $title, $blog_id );
 
 		/**
-		 *	Prevent attacks like: 
+		 *	Prevent attacks like:
 		 *		add_filter('wpaa_create_capability_prefix','__return_empty_string') + self::create('Manage Network')
 		 *		add_filter('wpaa_create_capability_prefix',function(){return 'manage'}) + self::create('Network')
 		 */
@@ -86,7 +87,7 @@ class ModelAccessAreas extends Model {
 	 *	@param	int		$blog_id
 	 *	@return string
 	 */
-	public function get_capability_name( $title, $blog_id = null ) {
+	public function new_capability_name( $title, $blog_id = null ) {
 		$prefix = $this->get_capability_prefix( $blog_id );
 		// force plugin prefix!
 		if ( empty( $prefix ) || false === strpos( $prefix, $core->get_prefix() ) ) {
@@ -176,6 +177,7 @@ class ModelAccessAreas extends Model {
 	 *	@inheritdoc
 	 */
 	public function upgrade( $new_version, $old_version ) {
+		var_dump('Upgrade!!!');
 		if ( version_compare( $old_version, '2.0.0', '<' ) ) {
 			$this->upgrade_1x();
 		}
@@ -187,11 +189,33 @@ class ModelAccessAreas extends Model {
 		$old_table = $wpdb->base_prefix . 'disclosure_userlabels';
 		$new_table = $wpdb->access_areas;
 
-		$sql = "ALTER TABLE $old_table RENAME TO $new_table";
-		$wpdb->query($sql);
+		$has_old = $wpdb->get_var("SHOW TABLES LIKE '{$old_table}'") === $old_table;
+		$has_new = $wpdb->get_var("SHOW TABLES LIKE '{$new_table}'") === $new_table;
+		$has_old_data = $has_old && $wpdb->get_var("SELECT COUNT(ID) FROM {$old_table}") > 0;
+		$has_new_data = $has_new && $wpdb->get_var("SELECT COUNT(ID) FROM {$new_table}") > 0;
 
-		$sql = "ALTER TABLE $new_table RENAME COLUMN `cap_title` TO `title`";
-		$wpdb->query($sql);
+		if ( $has_old && ! $has_new ) {
+			// rename
+			$sql = "ALTER TABLE {$old_table} RENAME TO {$new_table}";
+			$wpdb->query($sql);
+
+			$sql = "ALTER TABLE {$new_table} RENAME COLUMN `cap_title` TO `title`";
+			$wpdb->query($sql);
+		} else if ( $has_old && $has_new ) {
+			// move data, delete old
+			$all_wpaa = $wpdb->get_results( "SELECT * FROM {$old_table}" );
+			foreach ( $all_wpaa as $result ) {
+				if ( 0 === intval( $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM {$new_table} WHERE capability = %s", $result->capability ) ) ) ) {
+					$data = array(
+						'title'			=> $result->cap_title,
+						'capability'	=> $result->capability,
+						'blog_id'		=> $result->blog_id,
+					);
+					$this->insert( $data, array('%s','%s','%d') );
+				}
+			}
+
+		}
 
 	}
 
@@ -211,7 +235,8 @@ class ModelAccessAreas extends Model {
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
 		$sql = "CREATE TABLE $wpdb->access_areas (
-			`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			`ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			`created` DATETIME DEFAULT CURRENT_TIMESTAMP,
 			`title` varchar(255) NOT NULL,
 		    `capability` varchar(128) NOT NULL,
 		    `blog_id` bigint(20) NOT NULL,

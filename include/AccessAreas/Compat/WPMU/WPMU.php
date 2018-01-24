@@ -51,7 +51,7 @@ class WPMU extends Core\PluginComponent {
 	 */
 	static function user_has_cap( $allcaps, $caps, $args, $user ) {
 
-		if ( $user_caps = User::instance()->get_global_caps( $user ) ) {
+		if ( $user_caps = Users::instance()->get_global_caps( $user ) ) {
 
 			$allcaps += $user_caps; //array_combine(  , array_fill( 0, count( $user_caps ), true ) );
 
