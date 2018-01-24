@@ -131,27 +131,44 @@ class ModelPost extends Core\PluginComponent {
 
 
 
-
-	static function get_archiveposts_where( $where , $args = null ) {
+	/**
+	 *	@filter getarchives_where
+	 */
+	public function get_archiveposts_where( $where , $args = null ) {
 		$where = $this->build_where( $where , '' );
 		return $where;
 	}
-	static function get_posts_where( $where , &$wp_query ) {
+
+	/**
+	 *	@filter posts_where
+	 */
+	public function get_posts_where( $where , $wp_query ) {
 		global $wpdb;
 		$where = $this->build_where( $where , $wpdb->posts );
 		return $where;
 	}
 
-	static function get_posts_join( $join , &$wp_query ) {
+	/**
+	 *	@filter posts_join
+	 */
+	public function get_posts_join( $join , $wp_query ) {
 // 		global $wpdb;
 		return $join;
 	}
 
-	static function get_adjacent_post_where( $where , $in_same_cat, $excluded_categories ) {
+	/**
+	 *	@filter get_previous_post_where
+	 *	@filter get_mext_post_where
+	 */
+	public function get_adjacent_post_where( $where , $in_same_cat, $excluded_categories ) {
 		return $this->build_where($where);
 	}
 
-	static function get_adjacent_post_join( $join , $in_same_term, $excluded_terms ) {
+	/**
+	 *	@filter get_previous_post_join
+	 *	@filter get_mext_post_join
+	 */
+	public function get_adjacent_post_join( $join , $in_same_term, $excluded_terms ) {
 		global $wpdb;
 		$join .= " LEFT JOIN $wpdb->postmeta AS wpaa_postmeta ON wpaa_postmeta.meta_key = '_wpaa_post_behavior' AND wpaa_postmeta.meta_value IS NOT NULL";
 		return $join;
@@ -206,7 +223,7 @@ class ModelPost extends Core\PluginComponent {
 	}
 
 	/**
-	 *	...
+	 *	Add permission olumns to posts table
 	 */
 	private function install_posts_table( ) {
 
@@ -231,7 +248,7 @@ class ModelPost extends Core\PluginComponent {
 	}
 
 	/**
-	 *	...
+	 *	remove permission olumns from posts table
 	 */
 	private function uninstall_posts_table( ) {
 		global $wpdb;
