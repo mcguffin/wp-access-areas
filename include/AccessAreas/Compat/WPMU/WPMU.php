@@ -29,6 +29,9 @@ class WPMU extends Core\PluginComponent {
 		add_filter( 'wpaa_access_areas_dropdown_post', array( $this, 'add_global_access_areas' ) );
 		add_filter( 'wpaa_assignable_access_areas_user', array( $this, 'merge_global_access_areas' ), 10, 2 );
 
+		// override super user privileges
+		add_filter( 'wpaa_current_user_is_admin', 'is_super_admin', 10, 0 );
+
 		add_filter( 'wpaa_allow_grant_access', array( $this, 'allow_grant_access'), 10, 2 );
 
 		add_action( 'wpmu_upgrade_site', array( $this, 'maybe_upgrade' ) );
@@ -90,12 +93,16 @@ class WPMU extends Core\PluginComponent {
 		return array_merge( $access_areas, $model->fetch_by( 'blog_id', 0 ) );
 	}
 
+	/**
+	 *	@return string
+	 */
 	public function capability_prefix( $prefix, $blog_id ) {
 		if ( $blog_id === 0 ) {
 			return Core\Core::instance()->get_prefix();
 		}
 		return $prefix;
 	}
+
 
 	/**
 	 *	@filter wpaa_allow_grant_access
@@ -129,6 +136,8 @@ class WPMU extends Core\PluginComponent {
 		}
 		return $allowed;
 	}
+
+
 
 	/**
 	 *	@inheritdoc

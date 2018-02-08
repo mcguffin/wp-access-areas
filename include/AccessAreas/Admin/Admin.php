@@ -56,7 +56,10 @@ class Admin extends Core\Singleton {
 				'editAccessArea'	=> __('Edit Access Area','wp-access-areas'),
 				'grantAccess'		=> __('Grant Access','wp-access-areas'),
 				'revokeAccess'		=> __('Revoke Access','wp-access-areas'),
-			)
+			),
+			'options'	=> array(
+				'current_blog_id'	=> apply_filters( 'access_areas_current_blog_id', get_current_blog_id() ),
+			),
 		) );
 	}
 

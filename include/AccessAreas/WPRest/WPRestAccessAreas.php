@@ -158,13 +158,13 @@ class WPRestAccessAreas extends Core\Singleton {
 	public function get_items( $request ) {
 
 		$model = Model\ModelAccessAreas::instance();
-		$blog_id = $request->get_param('blog_id');
+		$blog_id = $request->get_param( 'blog_id' );
 
-		if ( is_null($blog_id) ) {
+		if ( is_null( $blog_id ) ) {
 			$blog_id = get_current_blog_id();
 		}
 
-		$response = rest_ensure_response( $model->fetch_by('blog_id',$blog_id) );
+		$response = rest_ensure_response( $model->fetch_by( 'blog_id', $blog_id ) );
 		return $response;
 	}
 

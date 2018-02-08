@@ -21,7 +21,7 @@ class Template extends Singleton {
 		$output = sprintf( '<span class="wpaa-access-area wpaa-%s" data-wpaa-scope="%s">', $access_area->capability, $access_area->blog_id );
 		$output .= $access_area->title;
 		if ( $access_area->id ) {
-			$output .= sprintf('<button %s><span class="screen-reader-text">%s</span></button>',
+			$output .= sprintf('<a %s><span class="screen-reader-text">%s</span></a>',
 				$this->mk_attr(array(
 					'class'					=> 'button-link dashicons dashicons-dismiss',
 					'data-wpaa-action'		=> 'revoke',
@@ -37,7 +37,7 @@ class Template extends Singleton {
 	 *	@param int $user_id
 	 */
 	public function user_add_access_area( $user_id ) {
-		$output = sprintf('<button %s><span class="screen-reader-text">%s</span></button>',
+		$output = sprintf('<a %s><span class="screen-reader-text">%s</span></a>',
 			$this->mk_attr(array(
 				'class'					=> 'button dashicons dashicons-plus-alt',
 				'data-wpaa-action'		=> 'grant',

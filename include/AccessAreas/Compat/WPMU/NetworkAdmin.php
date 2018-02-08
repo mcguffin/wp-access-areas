@@ -22,12 +22,9 @@ class NetworkAdmin extends Core\Singleton {
 			$admin = \AccessAreas\Admin\AdminPageAccessAreas::instance();
 			add_action( 'network_admin_menu', array( $admin, 'add_admin_page' ));
 			add_action( 'network_admin_menu', array( $this, 'add_uninstaller' ));
-			add_filter( 'access_areas_current_blog_id',array($this,'return_zero_string'));
-
+			add_filter( 'access_areas_current_blog_id', array( $this, 'return_zero_string' ) );
 		}
 	}
-
-
 
 
 	/**
@@ -72,7 +69,7 @@ class NetworkAdmin extends Core\Singleton {
 				?></p>
 				<ol>
 					<li><?php _e('Enable uninstall mode in the Box below', 'wp-access-areas' ); ?></li>
-					<li><?php 
+					<li><?php
 						printf( '<a href="%s">%s</a>',
 							add_query_arg( array(
 								'action' => 'upgrade',

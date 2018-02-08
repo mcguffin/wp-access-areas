@@ -15,6 +15,7 @@
 	// 	});
 
 	var l10n = access_areas_admin.l10n,
+		options = access_areas_admin.options,
 		wpaa = {
 			l10n: l10n,
 			view: {},
@@ -94,7 +95,7 @@
 			var self = this;
 			wp.media.View.prototype.initialize.apply(this,arguments);
 			this.collection = new wp.api.collections.AccessArea();
-			this.collection.fetch();
+			this.collection.fetch( { data: { blog_id: options.current_blog_id } } );
 			this.collection.once('sync',this.render,this);
 			this.listenTo(this.collection,'add',function(model){
 				self.addRow(model);

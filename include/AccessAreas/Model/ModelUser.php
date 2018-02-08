@@ -29,13 +29,44 @@ class ModelUser extends Core\PluginComponent {
 
 		$this->contained_roles = $this->get_role_hierarchy();
 	}
+	public function current_user_is_admin() {
+		$is_admin = current_user_can( 'administrator' );
+		return apply_filters( 'wpaa_current_user_is_admin', $is_admin );
+	}
+
+	public function get_current_user_access_caps() {
+		// anonymous users
+		$caps = array( 'exist' );
+
+		if ( ! is_user_logged_in() ) {
+			return $caps;
+		}
+
+		if ( current_user_can( 'read' ) ) {
+			$caps[] = 'read';
+		}
+		$user = wp_get_current_user();
+		$user_caps = $user->caps;
+		foreach ( $user->roles as $role_slug ) {
+			if ( isset( $user_caps[ $role_slug ] ) ) {
+				unset( $user_caps[ $role_slug ] );
+			}
+			if ( isset( $this->contained_roles[ $role_slug ] ) ) {
+				$caps = array_merge( $caps, $this->contained_roles[ $role_slug ] );
+			}
+		}
+		$caps = array_merge( $caps, array_keys( array_filter( $user_caps ) ) );
+		return array_unique($caps);
+	}
 
 	public function get_access_area_caps( $user = null ) {
+		//
 		return array();
 	}
 
 	public function get_contained_roles( $user = null ) {
-		// all user roles 
+		// all user roles
+		
 		return array();
 	}
 
@@ -99,10 +130,9 @@ class ModelUser extends Core\PluginComponent {
 	 */
 	private function get_role_hierarchy() {
 		$wp_roles = wp_roles();
-		$cache_key = 'role_hierarchy';
-		$cache_group = 'wpaa';
+		$transient_key = 'wpaa_role_hierarchy';
 
-		if ( $contained_roles = wp_cache_get( $cache_key, $cache_group ) ) {
+		if ( $contained_roles = get_transient( $transient_key ) ) {
 			return $contained_roles;
 		}
 		$contained_roles = array();
@@ -126,12 +156,16 @@ class ModelUser extends Core\PluginComponent {
 			}
 		}
 
-		wp_cache_set( $cache_key, $contained_roles, $cache_group );
+		set_transient( $transient_key, $contained_roles );
 
 		return $contained_roles;
 	}
-	public function purge_role_hierachy_cache() {
 
+	/**
+	 *
+	 */
+	public function purge_role_hierachy_cache() {
+		delete_transient( 'wpaa_role_hierarchy' );
 	}
 
 	/**
@@ -157,7 +191,7 @@ class ModelUser extends Core\PluginComponent {
 		$model = ModelAccessAreas::instance();
 
 		if ( $access_area = $model->fetch_one_by( 'capability', $capability ) ) {
-			return $this->can_accessarea( $capability, $args );
+			return $this->can_access_area( $capability, $args );
 		}
 
 		return current_user_can( $capability, $args );
@@ -173,12 +207,13 @@ class ModelUser extends Core\PluginComponent {
 	public function can_access_area( $capability, $args = array() ) {
 
 		// always true for administrators on local caps
-		if ( wpaa_is_local_cap( $capability ) && current_user_can( 'administrator' ) ) {
-			return true;
+		if ( $this->current_user_is_admin() ) {
+			$can = true;
+		} else {
+			$can = current_user_can( $capability, $args );
 		}
-		return apply_filters( 'wpaa_user_can_access_area', current_user_can( $capability, $args ), $capability, $args );
+		return apply_filters( 'wpaa_user_can_access_area', $can, $capability, $args );
 	}
-
 
 	/**
 	 * Check if a user is allowed in a specific Access Area.
@@ -192,15 +227,12 @@ class ModelUser extends Core\PluginComponent {
 			$user_role_caps = wpaa_get_user_role_caps();
 		}
 		if ( $wp_roles->is_role($role) ) {
-			return 0 == count(array_diff_assoc(  $wp_roles->get_role( $role )->capabilities , $user_role_caps ) );
+			$can = 0 == count(array_diff_assoc(  $wp_roles->get_role( $role )->capabilities , $user_role_caps ) );
 
 		}
-		return false;
+		$can ;
 
 		// always true for administrators on local caps
-		if ( wpaa_is_local_cap( $capability ) && current_user_can( 'administrator' ) ) {
-			return true;
-		}
 		return apply_filters( 'wpaa_user_can_access_area', current_user_can( $capability, $args ), $capability, $args );
 	}
 	/**

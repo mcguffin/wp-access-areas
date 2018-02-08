@@ -89,6 +89,7 @@ class ModelAccessAreas extends Model {
 	 */
 	public function new_capability_name( $title, $blog_id = null ) {
 		$prefix = $this->get_capability_prefix( $blog_id );
+		$core = Core\Core::instance();
 		// force plugin prefix!
 		if ( empty( $prefix ) || false === strpos( $prefix, $core->get_prefix() ) ) {
 			return false;
@@ -129,9 +130,6 @@ class ModelAccessAreas extends Model {
 		$slug = str_replace('%','',$slug);
 
 		return sanitize_html_class($slug);
-
-
-
 	}
 
 	/**
@@ -235,7 +233,7 @@ class ModelAccessAreas extends Model {
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
 		$sql = "CREATE TABLE $wpdb->access_areas (
-			`ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 			`created` DATETIME DEFAULT CURRENT_TIMESTAMP,
 			`title` varchar(255) NOT NULL,
 		    `capability` varchar(128) NOT NULL,

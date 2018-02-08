@@ -134,7 +134,7 @@ class ModelPost extends Core\PluginComponent {
 	/**
 	 *	@filter getarchives_where
 	 */
-	public function get_archiveposts_where( $where , $args = null ) {
+	public function get_archiveposts_where( $where, $args = null ) {
 		$where = $this->build_where( $where , '' );
 		return $where;
 	}
@@ -142,7 +142,7 @@ class ModelPost extends Core\PluginComponent {
 	/**
 	 *	@filter posts_where
 	 */
-	public function get_posts_where( $where , $wp_query ) {
+	public function get_posts_where( $where, $wp_query ) {
 		global $wpdb;
 		$where = $this->build_where( $where , $wpdb->posts );
 		return $where;
@@ -151,7 +151,7 @@ class ModelPost extends Core\PluginComponent {
 	/**
 	 *	@filter posts_join
 	 */
-	public function get_posts_join( $join , $wp_query ) {
+	public function get_posts_join( $join, $wp_query ) {
 // 		global $wpdb;
 		return $join;
 	}
@@ -160,15 +160,15 @@ class ModelPost extends Core\PluginComponent {
 	 *	@filter get_previous_post_where
 	 *	@filter get_mext_post_where
 	 */
-	public function get_adjacent_post_where( $where , $in_same_cat, $excluded_categories ) {
-		return $this->build_where($where);
+	public function get_adjacent_post_where( $where, $in_same_cat, $excluded_categories ) {
+		return $this->build_where( $where );
 	}
 
 	/**
 	 *	@filter get_previous_post_join
 	 *	@filter get_mext_post_join
 	 */
-	public function get_adjacent_post_join( $join , $in_same_term, $excluded_terms ) {
+	public function get_adjacent_post_join( $join, $in_same_term, $excluded_terms ) {
 		global $wpdb;
 		$join .= " LEFT JOIN $wpdb->postmeta AS wpaa_postmeta ON wpaa_postmeta.meta_key = '_wpaa_post_behavior' AND wpaa_postmeta.meta_value IS NOT NULL";
 		return $join;
@@ -183,31 +183,22 @@ class ModelPost extends Core\PluginComponent {
 	public function build_where( $where , $table_name = 'p' ) {
 		global $wpdb, $wp_query;
 
-		// disable filtering: on queries for single posts/pages and for single blog administrators
-		if ( ( isset( $wp_query ) && is_singular() && preg_match( "/{$wpdb->posts}.(post_name|ID)\s?=/" , $where ) ) || ( ! is_multisite() && current_user_can('administrator') ) ) {
+		$user = ModelUser::instance();
+
+		// single post/page views are handled bof @action template_redirect!
+		$is_single_post = isset( $wp_query ) && is_singular() && preg_match( "/{$wpdb->posts}.(post_name|ID)\s?=/" , $where );
+
+		if ( $user->current_user_is_admin() || $is_single_post ) {
 			return $where;
 		}
 
-		if ( $table_name && substr($table_name,-1) !== '.' )
+		if ( $table_name && substr($table_name,-1) !== '.' ) {
 			$table_name .= '.';
-
-		$caps = array('exist');
-
-		if ( is_user_logged_in() ) {
-
-			// reading
-			if ( current_user_can( 'read' ) ) {
-				$caps[] = 'read';
-			}
-
-			$caps = array_merge( $caps, $this->user->get_contained_roles() );
-
-			$caps = array_merge( $caps, $this->user->get_access_area_caps() );
-
 		}
+
+		$caps = $user->get_current_user_access_caps();
+
 		$add_where = " {$table_name}post_view_cap IN ('".implode( "','" , $caps ) . "')";
-//		if ( is_single() ) // why did I do this....?
-//			$add_where .= " OR (wpaa_postmeta.meta_value IS NOT NULL)";
 
 		$add_where = " AND ( $add_where ) ";
 		return $where . $add_where;
@@ -303,7 +294,7 @@ class ModelPost extends Core\PluginComponent {
 	private function upgrade_1x() {
 		global $wpdb;
 		$posts = $wpdb->get_results($wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key=%s AND meta_value=%s" , '_wpaa_post_behavior', 'login' ));
-		// post behavior
+		// update post behavior settings - login redirect is now a separate setting!
 		foreach ( $posts as $p ) {
 			update_post_meta( $p->post_id, '_wpaa_post_behavior', 'page' );
 			update_post_meta( $p->post_id, '_wpaa_post_behavior_login_redirect', true );
