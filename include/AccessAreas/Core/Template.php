@@ -82,27 +82,30 @@ class Template extends Singleton {
 		}
 		return $output;
 	}
+
 	/**
 	 *	Access Area select drowpdown
 	 */
 	public function access_areas_dropdown( $access_areas, $context = 'post', $dropdown_attr = array() ) {
 
-		if ( 'user' === $context ) {
-			$access_areas = $this->filter_grantable( $access_areas );
-		} else if ('post' === $context ) {
-
-		}
 
 
 		$dropdown_attr = wp_parse_args( $dropdown_attr, array(
 			'name'			=> 'access-area-'.$context,
 			'id'			=> 'access-area-'.$context,
-			'placeholder'	=> __('—Select—','wp-access-areas'),
 		));
 
+		$access_areas = apply_filters( "wpaa_access_areas_dropdown_{$context}", $access_areas );
+
+		$access_areas = $this->filter_grantable( $access_areas );
+
+		if ( 'user' === $context ) {
+			$dropdown_attr['placeholder'] = __( '—Select—', 'wp-access-areas' );
+		}
 
 		return $this->dropdown( $access_areas, null, $dropdown_attr );
 	}
+
 	/**
 	 *	Filter array with Access Areas the current may grant to other users
 	 */
@@ -214,29 +217,35 @@ EOT;
 
 	}
 	public function select_fallback_page( $post_fallback_page = 0, $fieldname = '_wpaa_fallback_page' ) {
-		$post_fallback_page = get_option('wpaa_fallback_page');
-		return;
 
 		global $wpdb;
-		if ( ! wpaa_is_post_public( $post_fallback_page ) )
+
+		$post_fallback_page = get_option('wpaa_fallback_page');
+		$postModel = Model\ModelPost::instance();
+
+		if ( ! $postModel->post_is_public( $post_fallback_page ) ) {
 			$post_fallback_page = 0;
+		}
 
 		//
-		$restricted_pages = $wpdb->get_col($wpdb->prepare("SELECT id
+		$sql = $wpdb->prepare("SELECT id
 			FROM $wpdb->posts
 			WHERE
 				post_type=%s AND
 				post_status=%s AND
-				post_view_cap=%s", 'page','publish','exist' ) );
+				post_view_cap!=%s", 'page','publish','exist' );
+		$restricted_pages = $wpdb->get_col( $sql );
 
-		wp_dropdown_pages(array(
-			'selected' 	=> $post_fallback_page,
-			'name'		=> $fieldname,
-			'exclude'	=> $restricted_pages,
-			'show_option_none' => __( 'Front page', 'wp-access-areas' ),
-			'option_none_value' => 0,
+		return wp_dropdown_pages(array(
+			'selected' 			=> $post_fallback_page,
+			'name'				=> $fieldname,
+			'exclude'			=> $restricted_pages,
+			'show_option_none'	=> false,//__( 'Home page', 'wp-access-areas' ),
+			'option_none_value'	=> 0,
+			'echo'				=> false,
 		));
 	}
+
 	/**
 	 *	Make HTML attributes
 	 *

@@ -1,0 +1,7 @@
+.wpaa-post-type-settings > th {
+  display: none; }
+  .wpaa-post-type-settings > th ~ td {
+    padding: 0; }
+
+.wpaa-post-type-settings .widefat td, .wpaa-post-type-settings .widefat th {
+  padding: 8px 10px; }

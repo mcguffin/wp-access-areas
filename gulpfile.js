@@ -87,6 +87,7 @@ gulp.task('dashicons',function(){
 gulp.task('scss', function() {
 	return [
 		do_scss('admin/access-areas'),
+		do_scss('admin/settings'),
 	];
 });
 

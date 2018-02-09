@@ -85,8 +85,6 @@ $model = AccessAreas\Model\ModelAccessAreas::instance();
 
 							$access_areas = $model->fetch_available( 'user' );
 
-							$access_areas = apply_filters( "wpaa_access_areas_dropdown_user", $access_areas );
-
 							// select access area
 							echo $template->access_areas_dropdown( $access_areas, 'user' );
 						?>

@@ -18,6 +18,15 @@ class AdminUsers extends Users {
 	 */
 	protected function __construct() {
 		add_action( 'wpaa_grant_access', array( $this, 'grant_access', 10, 3 ) );
+		add_filter( 'wpaa_user_is_admin', array( $this, 'user_is_admin' ), 10, 2 );
+	}
+
+
+	/**
+	 *	@filter wpaa_user_is_admin
+	 */
+	public function user_is_admin( $is_admin, $wp_user ) {
+		return is_super_admin( $wp_user->ID );
 	}
 
 

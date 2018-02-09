@@ -61,7 +61,18 @@ class ModelPost extends Core\PluginComponent {
 //		add_filter( 'user_has_cap', array( __CLASS__ , 'user_has_cap' ) , 10 , 3  );
 
 	}
-
+	/**
+	 *	@param $post int|WP_Post
+	 *	@return boolean
+	 */
+	public function post_is_public( $post ) {
+		if ( ! is_object( $post ) ) {
+			$post = get_post( $post );
+		}
+		if ( $post ) {
+			return $post->post_status === 'publish' && $post->post_view_cap === 'exist';
+		}
+	}
 	/**
 	 *	@filter post_class
 	 */

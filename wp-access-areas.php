@@ -37,6 +37,11 @@ Command line args were: ``
 
 
 namespace AccessAreas;
+// if ( ! function_exists( 'populate_roles' ) ) {
+// 	require_once( ABSPATH . 'wp-admin/includes/schema.php' );
+// }
+// update_option('wp_user_roles',array());
+// populate_roles();
 
 if ( ! defined('ABSPATH') ) {
 	die('FU!');

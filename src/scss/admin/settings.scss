@@ -1,0 +1,19 @@
+@import '../variables/variables';
+
+@import '../mixins/mixins';
+
+.wpaa-post-type-settings {
+	& > th {
+		display:none;
+		& ~ td {
+			padding:0;
+		}
+	}
+	.widefat {
+		td,th {
+			padding:8px 10px;
+		}
+
+	}
+
+}

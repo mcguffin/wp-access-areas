@@ -25,7 +25,13 @@ class WPMU extends Core\PluginComponent {
 		add_filter( 'wpaa_allow_edit_accessarea', array( $this, 'allow_edit_access_area'), 10, 2 );
 
 		add_filter( 'wpaa_create_capability_prefix', array( $this, 'capability_prefix' ), 10, 2 );
-		add_filter( 'wpaa_access_areas_dropdown_user', array( $this, 'add_global_access_areas' ) );
+
+		if ( is_network_admin() ) {
+			add_filter( 'wpaa_access_areas_dropdown_user', array( $this, 'get_global_access_areas' ) );
+		} else {
+			add_filter( 'wpaa_access_areas_dropdown_user', array( $this, 'add_global_access_areas' ) );
+		}
+
 		add_filter( 'wpaa_access_areas_dropdown_post', array( $this, 'add_global_access_areas' ) );
 		add_filter( 'wpaa_assignable_access_areas_user', array( $this, 'merge_global_access_areas' ), 10, 2 );
 
@@ -70,18 +76,26 @@ class WPMU extends Core\PluginComponent {
 	 */
 	public function add_global_access_areas( $access_areas ) {
 
-		$model = Model\ModelAccessAreas::instance();
-
 		$return = $access_areas;
-		$global = $model->fetch_by( 'blog_id', 0 );
+
+		$global = $this->get_global_access_areas();
+
 
 		if ( count( $global ) ) {
-			$return = array();
-			$return[ __( 'Local', 'wp_access_areas') ] = $access_areas;
+			if ( ! isset( $access_areas[ __( 'Local', 'wp_access_areas') ] ) ) {
+				$return = array();
+				$return[ __( 'Local', 'wp_access_areas') ] = $access_areas;
+			}
 			$return[ __( 'Network', 'wp_access_areas') ] = $global;
 		}
 
 		return $return;
+	}
+
+	public function get_global_access_areas() {
+		$model = Model\ModelAccessAreas::instance();
+
+		return $model->fetch_by( 'blog_id', 0 );
 	}
 
 	/**
@@ -108,7 +122,9 @@ class WPMU extends Core\PluginComponent {
 	 *	@filter wpaa_allow_grant_access
 	 */
 	public function allow_grant_access( $allowed, $access_area ) {
-		if ( $access_area->blog_id === 0 ) {
+
+		if ( is_object( $access_area ) && intval( $access_area->blog_id ) === 0 ) {
+
 			return $allowed && current_user_can( $access_area->capability );
 		}
 		return $allowed;

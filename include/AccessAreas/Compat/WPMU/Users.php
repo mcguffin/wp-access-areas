@@ -17,10 +17,14 @@ class Users extends Core\Singleton {
 	protected $option_name = 'wpaa_gloabl_access_areas';
 
 	protected function __construct() {
-		add_filter('wpaa_user_can_access_area', array( $this, 'can_access_area' ), 10, 3 );
-
+		add_filter( 'wpaa_user_can_access_area', array( $this, 'can_access_area' ), 10, 3 );
 	}
 
+
+	/**
+	 *	@filter wpaa_user_can_access_area
+	 *	@return boolean
+	 */
 	public function can_access_area( $can, $capability, $args ) {
 		$user = Model\ModelUser::instance();
 		$model = Model\ModelAccessAreas::instance();

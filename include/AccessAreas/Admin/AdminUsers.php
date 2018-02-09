@@ -110,7 +110,8 @@ class AdminUsers extends Core\PluginComponent {
 		$template	= Core\Template::instance();
 		$output		= '';
 		$output .= sprintf('<div class="assign-access-areas" data-wpaa-user="%d">', $user_id );
-		if ( apply_filters('wpaa_user_is_admin', $user->has_cap('administrator') ) ) {
+		if ( apply_filters('wpaa_user_is_admin', $user->has_cap('administrator'), $user ) ) {
+			//
 			$output .= $template->user_access_area( (object) array(
 				'id'			=> 0,
 				'title' 		=> __( 'Everywhere', 'wp-access-area' ),
@@ -175,7 +176,7 @@ class AdminUsers extends Core\PluginComponent {
 			}
 			update_user_meta( $user->ID, $user->cap_key, $user->caps );
 		}
-		
+
 	}
 
 
