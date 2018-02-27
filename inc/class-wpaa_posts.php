@@ -325,6 +325,9 @@ class WPAA_Posts {
 				if ( wpaa_user_can_accessarea( $cap ) )
 					$caps[] = $cap;
 		}
+		if ( empty( $caps ) ) {
+			return $where;
+		}
 		$add_where = " {$table_name}post_view_cap IN ('".implode( "','" , $caps ) . "')";
 //		if ( is_single() ) // why did I do this....?
 //			$add_where .= " OR (wpaa_postmeta.meta_value IS NOT NULL)";

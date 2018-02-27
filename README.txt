@@ -121,6 +121,9 @@ I will back up your request with all the authority that a simple plugin develope
 
 == Changelog ==
 
+= 1.5.6 =
+ - Fix Multisite Database Error when WPAA is not active for network.
+
 = 1.5.5 =
  - Fix PHP Warning
 
