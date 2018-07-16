@@ -1,13 +1,13 @@
 WordPress Access Areas
 ======================
 
-This is the official github repository of the [WordPress Access Areas](http://wordpress.org/plugins/wp-access-areas/) 
-plugin. This repo might contain untested and possibly unstable or insecure code. So use it on your own risk. 
+This is the official github repository of the [WordPress Access Areas](http://wordpress.org/plugins/wp-access-areas/)
+plugin. This repo might contain untested and possibly unstable or insecure code. So use it on your own risk.
 
 About
 -----
 WP Access Areas lets you fine-tune who may read, edit or comment on your Blog posts.
-You can either restrict access to logged-in uses only, certain WordPress-Roles or 
+You can either restrict access to logged-in uses only, certain WordPress-Roles or
 even custom Access Areas.
 
 Features
@@ -33,7 +33,7 @@ Finally activate it in the GUI.
 Compatibility
 -------------
 - WP 3.8 through 4.5
-- The plugin ist still functional in WP < 3.8, but some items may not be displayed correctly.
+- The plugin is still functional in WP < 3.8, but some items may not be displayed correctly.
 
 Plugin API
 ----------
