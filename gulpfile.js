@@ -84,41 +84,39 @@ gulp.task('dashicons',function(){
 });
 
 
-gulp.task('scss', function() {
-	return [
-		do_scss('admin/access-areas'),
-		do_scss('admin/settings'),
-	];
+gulp.task('scss:admin:aa',function(){
+	return do_scss('admin/access-areas');
 });
-
-
-gulp.task('js-admin', function() {
-    return [
-		concat_js( [
-			'admin/base',
-			'admin/manage',
-			'admin/users',
-		], 'access-areas.js'),
-		// do_js('admin/admin'),
-		// do_js('admin/users'),
-		// do_js('admin/access-areas'),
-    ];
-
+gulp.task('scss:admin:posts',function(){
+	return do_scss('admin/posts');
 });
+gulp.task('scss:admin:settings',function(){
+	return do_scss('admin/settings');
+});
+gulp.task('scss', gulp.parallel('scss:admin:aa','scss:admin:posts','scss:admin:settings'));
 
 
-gulp.task( 'js', function(){
-	// return concat_js( [
-	// ], 'access-areas.js');
-} );
+
+gulp.task('js:admin:aa',function(){
+	return concat_js( [
+		'admin/base',
+		'admin/manage',
+		'admin/users',
+	], 'access-areas.js');
+});
+gulp.task('js:admin:settings',function(){
+	return do_js('admin/settings');
+})
 
 
-gulp.task('build', ['scss','js','js-admin'] );
+gulp.task( 'js', gulp.parallel('js:admin:settings','js:admin:aa') );
 
+
+gulp.task('build', gulp.parallel('scss','js') );
 
 gulp.task('watch', function() {
 	// place code for your default task here
-	gulp.watch('./src/scss/**/*.scss',[ 'scss' ]);
-	gulp.watch('./src/js/**/*.js',[ 'js', 'js-admin' ]);
+	gulp.watch('./src/scss/**/*.scss',gulp.parallel( 'scss' ));
+	gulp.watch('./src/js/**/*.js',gulp.parallel( 'js' ) );
 });
-gulp.task('default', ['build','watch']);
+gulp.task('default', gulp.parallel('build','watch'));
