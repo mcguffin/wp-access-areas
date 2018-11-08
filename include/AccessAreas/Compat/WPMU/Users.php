@@ -14,9 +14,10 @@ use AccessAreas\Model;
 
 class Users extends Core\Singleton {
 
-	protected $option_name = 'wpaa_gloabl_access_areas';
+	protected $option_name = 'wpaa_global_access_areas';
 
 	protected function __construct() {
+			
 	//	add_filter( 'wpaa_user_can_access_area', array( $this, 'can_access_area' ), 10, 3 );
 	}
 

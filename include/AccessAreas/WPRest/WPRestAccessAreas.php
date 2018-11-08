@@ -116,19 +116,23 @@ class WPRestAccessAreas extends Core\Singleton {
 				$allowed = current_user_can( 'promote_users' );
 				$allowed = apply_filters( 'wpaa_allow_edit_accessarea', $allowed, $request->get_param('id') );
 				return $allowed;
+
 			case 'create_item':
 				$allowed = current_user_can( 'promote_users' );
 				$allowed = apply_filters( 'wpaa_allow_create_accessarea', $allowed, $request->get_params() );
 				return $allowed;
+
 			case 'delete_item':
 				$allowed = current_user_can( 'promote_users' );
 				$allowed = apply_filters( 'wpaa_allow_delete_accessarea', $allowed, $request->get_param('id') );
 				return $allowed;
+
 			case 'get_items';
 			case 'get_item':
 				$allowed = current_user_can( 'edit_posts' );
 				$allowed = apply_filters( 'wpaa_allow_read_accessarea', $allowed );
 				return $allowed;
+
 			case 'grant_access';
 			case 'revoke_access':
 				$model = Model\ModelAccessAreas::instance();
@@ -260,7 +264,7 @@ class WPRestAccessAreas extends Core\Singleton {
 
 		foreach ( $user_ids as $user_id ) {
 			$user = new \WP_User( $user_id );
-			if ( $user_model->grant_user_access( $user, $access_area ) ) {
+			if ( $user_model->grant_access( $user, $access_area ) ) {
 				$edited_users[] = $user_id;
 			}
 

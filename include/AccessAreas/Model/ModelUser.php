@@ -116,6 +116,12 @@ class ModelUser extends Core\PluginComponent {
 					}
 				}
 				break;
+			case 'grant_access':
+				$caps[] = 'promote_users';
+				break;
+			case 'revoke_access':
+				$caps[] = 'promote_users';
+				break;
 		}
 		return $caps;
 	}
@@ -254,7 +260,7 @@ class ModelUser extends Core\PluginComponent {
 		$access_area = $model->fetch_one_by( 'id', $access_area_id );
 		$users = get_users();
 		foreach ( $users as $user ) {
-			$this->revoke_user_access( $user, $access_area );
+			$this->revoke_access( $user, $access_area );
 		}
 	}
 
@@ -265,7 +271,7 @@ class ModelUser extends Core\PluginComponent {
 	 *	@param object $access_area
 	 *	@return bool
 	 */
-	public function grant_user_access( $user, $access_area ) {
+	public function grant_access( $user, $access_area ) {
 		if ( ! $user->has_cap( $access_area->capability ) ) {
 			$user->add_cap( $access_area->capability, true );
 			do_action( 'wpaa_grant_access', $user, $access_area->capability, $access_area );
@@ -282,7 +288,7 @@ class ModelUser extends Core\PluginComponent {
 	 *	@param object $access_area
 	 *	@return bool
 	 */
-	public function revoke_user_access( $user, $access_area ) {
+	public function revoke_access( $user, $access_area ) {
 		if ( $user->has_cap( $access_area->capability ) ) {
 			$user->remove_cap( $access_area->capability, true );
 			do_action( 'wpaa_grant_access', $user, $access_area->capability, $access_area );
