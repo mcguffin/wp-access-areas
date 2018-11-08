@@ -17,8 +17,6 @@ class ModelPost extends Core\PluginComponent {
 	 */
 	protected function __construct() {
 
-		$this->user = ModelUser::instance();
-
 		// make sure out filters are applied
 		add_action( 'pre_get_posts' , array( $this, 'wp_query_allow_filters' ) );
 
@@ -79,6 +77,7 @@ class ModelPost extends Core\PluginComponent {
 	 *	@filter post_class
 	 */
 	public function post_class( $classes, $class, $post_ID ) {
+		$user = ModelUser::instance();
 		if ( $post_ID ) {
 			$post = get_post( $post_ID );
 
@@ -86,11 +85,11 @@ class ModelPost extends Core\PluginComponent {
 				$classes[] = 'wpaa-view-restricted';
 				$classes[] = "wpaa-view-{$post->post_view_cap}";
 			}
-			if ( $post->post_edit_cap != 'exist' && $this->user->can( 'edit_post', $post_ID ) ) {
+			if ( $post->post_edit_cap != 'exist' && $user->can( 'edit_post', $post_ID ) ) {
 				$classes[] = 'wpaa-edit-restricted';
 				$classes[] = "wpaa-edit-{$post->post_edit_cap}";
 			}
-			if ( $post->post_comment_cap != 'exist' && $this->user->can( $post->post_comment_cap ) ) {
+			if ( $post->post_comment_cap != 'exist' && $user->can( $post->post_comment_cap ) ) {
 				$classes[] = 'wpaa-comment-restricted';
 				$classes[] = "wpaa-comment-{$post->post_comment_cap}";
 			}
@@ -105,6 +104,7 @@ class ModelPost extends Core\PluginComponent {
 	// 		return $link;
 	// 	return '';
 	// }
+
 	/**
 	 *	@action pre_get_posts
 	 */
@@ -127,7 +127,7 @@ class ModelPost extends Core\PluginComponent {
 	 *	@param string $action view|comment|edit
 	 */
 	protected function filter_posts( $posts, $action = 'view' ) {
-		$user = Model\ModelUser::instance();
+		$user = ModelUser::instance();
 		if ( $user->current_user_is_admin( 'administrator' ) ) {
 			return $posts;
 		}
