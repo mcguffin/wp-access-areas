@@ -1,0 +1,81 @@
+
+.wpaa-behavior-http-status,
+.wpaa-behavior-fallback-page,
+.wpaa-access-control {
+	.wpaa-post-type-settings & {
+
+	}
+	.postbox & {
+		padding:3px 0;
+		label {
+			width:40%;
+			display:block;
+			float:left;
+			clear:left;
+			vertical-align:middle;
+		}
+		select {
+			width:60%;
+			margin:0;
+		}
+	}
+}
+
+
+.wpaa-behavior-controls {
+	.wpaa-post-type-settings & {
+
+	}
+	.wpaa-behavior-control {
+		.postbox & {
+			padding:5px 0;
+			margin-top:5px;
+			border-top:1px solid $wp-gray;
+			&:first-of-type {
+				border-top-style:none;
+			}
+		}
+	}
+	label {
+//		font-weight:700;
+	}
+}
+
+.wpaa-behavior {
+	.description {
+		margin-bottom:0.5em;
+	}
+	& > label {
+		display:inline-block;
+		min-width:100%;
+		margin-bottom:0.5em;
+//			line-height:1em;
+//			font-weight:400;
+	}
+	&[data-value="404"] {
+		& ~ .wpaa-behavior-http-status,
+		& ~ .wpaa-behavior-fallback-page {
+			display:none;
+		}
+	}
+	&[data-value="page"] {
+		& ~ .wpaa-behavior-http-status {
+			display:none;
+		}
+	}
+	&[data-value="status"] {
+
+	}
+
+}
+.wpaa-behavior-login-redirect {
+
+}
+
+.wpaa-behavior-http-status {
+
+}
+.wpaa-behavior-http-status,
+.wpaa-behavior-fallback-page {
+
+}

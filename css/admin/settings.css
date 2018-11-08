@@ -1,3 +1,51 @@
+.tab-group {
+  background: #fff;
+  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+          box-shadow: 0 0 5px rgba(0, 0, 0, 0.05); }
+
+.tab-links {
+  float: left;
+  width: 150px; }
+  .tab-links ul {
+    margin-top: 0; }
+  .tab-links li {
+    margin-bottom: 0;
+    list-style-type: none;
+    border-style: none;
+    font-size: 1.2em;
+    padding: 0;
+    margin-bottom: -1px; }
+    .tab-links li.active {
+      background: #fff;
+      background: #f6fbfd;
+      font-weight: bold;
+      border-left: 4px solid #0085ba;
+      margin-right: -1px; }
+      .tab-links li.active a {
+        color: #23282d;
+        margin-left: -4px; }
+  .tab-links a {
+    display: block;
+    line-height: 18px;
+    border: 1px solid transparent;
+    border-right: none;
+    border-left: none;
+    text-decoration: none;
+    color: #0085ba;
+    padding: 0.5em 0.25em 0.5em 1em; }
+
+.tab-panels {
+  padding: 0 20px;
+  overflow: auto;
+  background: #f6fbfd;
+  background: #fff;
+  -webkit-box-shadow: 4px 0 5px rgba(0, 0, 0, 0.07) inset;
+          box-shadow: 4px 0 5px rgba(0, 0, 0, 0.07) inset; }
+  .tab-panels > * {
+    display: none; }
+  .tab-panels .active {
+    display: block; }
+
 .wpaa-post-type-settings > th {
   display: none; }
   .wpaa-post-type-settings > th ~ td {
@@ -5,3 +53,76 @@
 
 .wpaa-post-type-settings .widefat td, .wpaa-post-type-settings .widefat th {
   padding: 8px 10px; }
+
+.wpaa-post-type-settings label {
+  display: inline-block;
+  min-width: 200px; }
+
+.wpaa-settings-section {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  width: 50%;
+  float: left; }
+  .wpaa-settings-section h4:first-of-type {
+    margin-bottom: 0.5em; }
+  .wpaa-settings-section .wpaa-control {
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+    border-bottom: 1px solid #f1f1f1; }
+    .wpaa-settings-section .wpaa-control:last-of-type {
+      border-bottom-style: none; }
+  .wpaa-settings-section .description {
+    margin-bottom: 0.5em; }
+
+.wpaa-settings-access {
+  padding-right: 1em; }
+
+.wpaa-settings-behavior {
+  padding-left: 1em;
+  border-left: 1px solid #f1f1f1; }
+
+.wpaa-settings-advanced {
+  width: 100%;
+  float: none;
+  clear: left;
+  border-top: 1px solid #f1f1f1; }
+
+.postbox .wpaa-behavior-http-status, .postbox
+.wpaa-behavior-fallback-page, .postbox
+.wpaa-access-control {
+  padding: 3px 0; }
+  .postbox .wpaa-behavior-http-status label, .postbox
+  .wpaa-behavior-fallback-page label, .postbox
+  .wpaa-access-control label {
+    width: 40%;
+    display: block;
+    float: left;
+    clear: left;
+    vertical-align: middle; }
+  .postbox .wpaa-behavior-http-status select, .postbox
+  .wpaa-behavior-fallback-page select, .postbox
+  .wpaa-access-control select {
+    width: 60%;
+    margin: 0; }
+
+.postbox .wpaa-behavior-controls .wpaa-behavior-control {
+  padding: 5px 0;
+  margin-top: 5px;
+  border-top: 1px solid #f1f1f1; }
+  .postbox .wpaa-behavior-controls .wpaa-behavior-control:first-of-type {
+    border-top-style: none; }
+
+.wpaa-behavior .description {
+  margin-bottom: 0.5em; }
+
+.wpaa-behavior > label {
+  display: inline-block;
+  min-width: 100%;
+  margin-bottom: 0.5em; }
+
+.wpaa-behavior[data-value="404"] ~ .wpaa-behavior-http-status,
+.wpaa-behavior[data-value="404"] ~ .wpaa-behavior-fallback-page {
+  display: none; }
+
+.wpaa-behavior[data-value="page"] ~ .wpaa-behavior-http-status {
+  display: none; }

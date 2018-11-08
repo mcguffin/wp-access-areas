@@ -2,6 +2,8 @@
 
 @import '../mixins/mixins';
 
+@import '../modules/tabs';
+
 .wpaa-post-type-settings {
 	& > th {
 		display:none;
@@ -15,5 +17,48 @@
 		}
 
 	}
-
+	label {
+		display:inline-block;
+		min-width:200px;
+	}
 }
+
+
+.wpaa-settings-section {
+	box-sizing: border-box;
+	width:50%;
+	float:left;
+	h4 {
+		&:first-of-type {
+			margin-bottom:0.5em;
+		}
+	}
+	.wpaa-control {
+		padding-bottom:1em;
+		margin-bottom:1em;
+		border-bottom:1px solid $wp-gray;
+		&:last-of-type {
+			border-bottom-style:none;
+		}
+	}
+	.description {
+		margin-bottom:0.5em;
+	}
+}
+
+.wpaa-settings-access {
+	padding-right:1em;
+}
+.wpaa-settings-behavior {
+	padding-left:1em;
+	border-left:1px solid $wp-gray;
+}
+.wpaa-settings-advanced {
+	width:100%;
+	float:none;
+	clear:left;
+	border-top:1px solid $wp-gray;
+}
+
+
+@import '../modules/controls';

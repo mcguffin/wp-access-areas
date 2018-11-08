@@ -1,0 +1,64 @@
+.tab-group {
+	background:#fff;
+	box-shadow:0 0 5px rgba(0,0,0,0.05);
+}
+.tab-links {
+	float: left;
+    width: 150px;
+
+	ul {
+		margin-top:0;
+
+	}
+	li {
+		margin-bottom: 0;
+	    list-style-type: none;
+	    border-style: none;
+
+	    // border-color: transparent;
+		// border-width:0;
+		// border-top:1px solid $wp-gray-dark;
+		// border-left:1px solid $wp-gray-dark;
+		font-size:1.2em;
+		padding:0;
+		margin-bottom:-1px;
+		&:last-of-type {
+//			border-bottom:1px solid $wp-gray-dark;
+		}
+		&.active {
+			background:#fff;
+			background:$wp-blue-lightest;
+			font-weight:bold;
+			border-left:4px solid $wp-blue;
+			margin-right:-1px;
+			a {
+				color:$wp-black;
+				margin-left:-4px;
+			}
+		}
+	}
+	a {
+		display: block;
+	    line-height: 18px;
+	    border: 1px solid transparent;
+	    border-right: none;
+	    border-left: none;
+		text-decoration:none;
+		color:$wp-blue;
+		padding:0.5em 0.25em 0.5em 1em;
+	}
+}
+.tab-panels {
+	padding: 0 20px;
+    overflow: auto;
+//	border:1px solid $wp-gray-dark;
+	background:$wp-blue-lightest;
+	background:#fff;
+	box-shadow:4px 0 5px rgba(0,0,0,0.07) inset;
+	& > * {
+		display:none;
+	}
+	.active {
+		display:block;
+	}
+}
