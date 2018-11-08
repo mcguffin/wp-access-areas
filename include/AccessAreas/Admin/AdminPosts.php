@@ -16,30 +16,31 @@ class AdminPosts extends Core\Singleton {
 	 */
 	protected function __construct() {
 		// add meta boxes
-		$post_type_settings = get_option( 'wpaa_post_types' );
+		if ( $post_type_settings = get_option( 'wpaa_post_types' ) ) {
+			foreach ( $post_type_settings as $post_type => $settings ) {
+				if ( intval( $settings['access_override'] ) ) {
+					add_action( "add_meta_boxes_{$post_type}", array( $this, 'add_meta_boxes_access') );
 
-		foreach ( $post_type_settings as $post_type => $settings ) {
-			if ( intval( $settings['access_override'] ) ) {
-				add_action( "add_meta_boxes_{$post_type}", array( $this, 'add_meta_boxes_access') );
+					// add post type column
+					if ( $post_type === 'attachment' ) {
+						add_filter( "manage_media_columns", array( $this, 'post_columns') );
+						add_filter( "manage_media_custom_column", array( $this, 'post_column'), 10, 2 );
+					} else {
+						add_filter( "manage_{$post_type}_posts_columns", array( $this, 'post_columns') );
+						add_filter( "manage_{$post_type}_posts_custom_column", array( $this, 'post_column'), 10, 2 );
+					}
 
-				// add post type column
-				if ( $post_type === 'attachment' ) {
-					add_filter( "manage_media_columns", array( $this, 'post_columns') );
-					add_filter( "manage_media_custom_column", array( $this, 'post_column'), 10, 2 );
 				} else {
-					add_filter( "manage_{$post_type}_posts_columns", array( $this, 'post_columns') );
-					add_filter( "manage_{$post_type}_posts_custom_column", array( $this, 'post_column'), 10, 2 );
+					// add action @ save post...
 				}
-
-			} else {
-				// add action @ save post...
-			}
-			if ( intval( $settings['behavior_override'] ) ) {
-				add_action( "add_meta_boxes_{$post_type}", array( $this, 'add_meta_boxes_behavior') );
-			} else {
-				// add action @ save post...
-			}
+				if ( intval( $settings['behavior_override'] ) ) {
+					add_action( "add_meta_boxes_{$post_type}", array( $this, 'add_meta_boxes_behavior') );
+				} else {
+					// add action @ save post...
+				}
+			}			
 		}
+
 		add_filter( 'wp_insert_attachment_data', array( $this, 'insert_post_data') , 10 , 2 );
 		add_filter( 'wp_insert_post_data', array( $this, 'insert_post_data') , 10 , 2 );
 		add_action( 'save_post', array( $this, 'save_post') , 10 , 3 );
@@ -62,7 +63,7 @@ class AdminPosts extends Core\Singleton {
 	}
 	public function post_column( $column, $post_id ) {
 		if ('wpaa' === $column ) {
-			$names = 
+			$names =
 			printf();
 			vaR_dump(get_post($post_id));
 
