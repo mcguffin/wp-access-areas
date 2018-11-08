@@ -73,6 +73,7 @@ class ModelAccessAreas extends Model {
 
 		return $this->fetch_one_by( $data );
 	}
+
 	/**
 	 *	@param int $id
 	 */
@@ -126,10 +127,10 @@ class ModelAccessAreas extends Model {
 	 */
 	public function sanitize_capability_name( $title ) {
 
-		$slug = sanitize_title_with_dashes($title,'','save');
-		$slug = str_replace('%','',$slug);
+		$slug = sanitize_title_with_dashes( $title, '', 'save' );
+		$slug = str_replace( '%', '', $slug );
 
-		return sanitize_html_class($slug);
+		return sanitize_html_class( $slug );
 	}
 
 	/**
@@ -137,31 +138,63 @@ class ModelAccessAreas extends Model {
 	 *	@param string	$context	user|post
 	 *	@return array
 	 */
-	public function fetch_available( $context = 'post' ) {
+	public function fetch_list( $key = false, $field = false ) {
 
-		$cache_key = "available_access_areas_{$context}";
+		$cache_key = "available_access_areas_{$key}_{$field}";
 		$cache_group = 'wpaa';
 
-		if ( ! ( $access_areas = wp_cache_get($cache_key,$cache_group) ) ) {
+		if ( ! ( $access_areas = wp_cache_get( $cache_key, $cache_group ) ) ) {
 
 			$condition = array(
 				'blog_id'	=> get_current_blog_id(),
 			);
-			/**
-			 * Conditions to fetch available access areas
-			 *
-			 * @since 2.0.0
-			 *
-			 * @param array		$conditions	An array of the conditions. Naturally this is the blog id.
-			 * @param string	$context	user|post
-			 */
-			$condition = apply_filters( 'wpaa_fetch_available_condition', $condition, $context );
+
 			$access_areas = $this->fetch_by( $condition );
+			$access_areas = $this->setup_list( $access_areas, $key, $field );
+
 
 			wp_cache_set( $cache_key, $access_areas, $cache_group );
 		}
 		return $access_areas;
 	}
+
+	/**
+	 *	@return assoc
+	 */
+	public function get_access_options() {
+
+		$roles_key =__( 'WordPress Roles', 'wp_access_areas');
+
+		$wpaa_key = __( 'Local Access Areas', 'wp_access_areas');
+
+		// gather intel
+		$access = array();
+		$access[ 'exist' ] = __( 'WordPress default', 'wp-access-areas' );
+		$access[ 'read' ] = __( 'Logged in Users', 'wp-access-areas' );
+		$access[ $roles_key ] = wp_roles()->get_names();
+		$access[ $wpaa_key ] = $this->fetch_list( 'capability', 'title' );
+
+		$access = apply_filters( 'wpaa_access_options', $access );
+
+		return $access;
+	}
+
+
+	/**
+	 *	@return assoc
+	 */
+	public function get_grant_options() {
+
+		// gather intel
+		$access = $this->fetch_list( 'id' );
+
+		$access = apply_filters( 'wpaa_grant_options', $access );
+
+		return $access;
+	}
+
+
+
 
 	/**
 	 *	@inheritdoc

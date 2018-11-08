@@ -3,6 +3,7 @@
 
 namespace AccessAreas\WPRest;
 
+use AccessAreas\Admin;
 use AccessAreas\Core;
 use AccessAreas\Model;
 
@@ -13,6 +14,8 @@ class WPRestAccessAreas extends Core\Singleton {
 	 *	@inheritdoc
 	 */
 	protected function __construct() {
+
+		$admin = Admin\AdminPosts::instance();
 
 		$namespace = WPRest::instance()->get_namespace();
 		$item_schema = array(
@@ -228,7 +231,7 @@ class WPRestAccessAreas extends Core\Singleton {
 			return new \WP_Error( 'wpaa-not-found', __( 'Invalid ID.' ), array( 'status' => 404 ) );
 		}
 
-		$result = $model->delete( array('id' => $request->get_param('id') ));
+		$result = $model->delete_by_id( $request->get_param('id') );
 
 		if ( $result === false ) {
 			return new \WP_Error( 'wpaa-delete-failed', __( 'Error deleting Access Area', 'wp-access-areas') );

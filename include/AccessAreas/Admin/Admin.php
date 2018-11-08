@@ -37,16 +37,28 @@ class Admin extends Core\Singleton {
 	 *	@action admin_init
 	 */
 	function admin_init() {
-		// check for upgradeability
-
+		// check for upgradeability ...
 	}
 
+
+
 	/**
-	 *	Enqueue options Assets
-	 *	@action admin_print_scripts
+	 *	Register admin Assets
+	 *
+	 *	@action admin_init
 	 */
 	function register_assets() {
 
+		// post editor and settings page
+		wp_register_style( 'access-areas-settings', $this->core->get_asset_url( '/css/admin/settings.css' ) );
+
+		wp_register_script( 'access-areas-settings', $this->core->get_asset_url( '/js/admin/settings.js' ) );
+
+
+		// post editor and settings page
+		wp_register_style( 'access-areas-posts', $this->core->get_asset_url( '/css/admin/posts.css' ) );
+
+		// admin access areas
 		wp_register_style( 'access-areas-admin' , $this->core->get_asset_url( '/css/admin/access-areas.css' ) );
 
 		wp_register_script( 'access-areas-admin' , $this->core->get_asset_url( 'js/admin/access-areas.js' ), array( 'jquery', 'wp-api' ), null, true );

@@ -8,6 +8,7 @@ if ( ! defined('ABSPATH') ) {
 }
 
 use AccessAreas\Core;
+use AccessAreas\Model;
 
 class ModelPost extends Core\PluginComponent {
 
@@ -61,6 +62,7 @@ class ModelPost extends Core\PluginComponent {
 //		add_filter( 'user_has_cap', array( __CLASS__ , 'user_has_cap' ) , 10 , 3  );
 
 	}
+
 	/**
 	 *	@param $post int|WP_Post
 	 *	@return boolean
@@ -125,7 +127,8 @@ class ModelPost extends Core\PluginComponent {
 	 *	@param string $action view|comment|edit
 	 */
 	protected function filter_posts( $posts, $action = 'view' ) {
-		if ( current_user_can( 'administrator' ) ) {
+		$user = Model\ModelUser::instance();
+		if ( $user->current_user_is_admin( 'administrator' ) ) {
 			return $posts;
 		}
 		$prop = "post_{$action}_cap";
@@ -133,7 +136,7 @@ class ModelPost extends Core\PluginComponent {
 		// remove undisclosed posts
 		$filtered_posts = array();
 		foreach ( $posts as $post ) {
-			if ( wpaa_user_can( $post->$prop ) ) {
+			if ( current_user_can( $post->$prop ) ) {
 				$filtered_posts[] = $post;
 			}
 		}

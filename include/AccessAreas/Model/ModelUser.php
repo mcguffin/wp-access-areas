@@ -29,12 +29,28 @@ class ModelUser extends Core\PluginComponent {
 
 		$this->contained_roles = $this->get_role_hierarchy();
 	}
+
+	/**
+	 *	Return whether the the current user has admin privileges in this WP installtion.
+	 *	(True for Admins on single site installs)
+	 *
+	 *	@return boolean
+	 */
 	public function current_user_is_admin() {
-		$is_admin = current_user_can( 'administrator' );
-		return apply_filters( 'wpaa_current_user_is_admin', $is_admin );
+
+		return apply_filters( 'wpaa_current_user_is_admin', current_user_can( 'administrator' ) );
+
 	}
 
+
+	/**
+	 *	Return Current Users Access Capabilities.
+	 *	Returns an array including primitive capabilies, rolenames and Access Area capabilities.
+	 *
+	 *	@return array Current users access capabilities
+	 */
 	public function get_current_user_access_caps() {
+
 		// anonymous users
 		$caps = array( 'exist' );
 
@@ -59,17 +75,6 @@ class ModelUser extends Core\PluginComponent {
 		return array_unique($caps);
 	}
 
-	public function get_access_area_caps( $user = null ) {
-		//
-		return array();
-	}
-
-	public function get_contained_roles( $user = null ) {
-		// all user roles
-		
-		return array();
-	}
-
 
 	/**
 	 *	@filter map_meta_cap
@@ -88,8 +93,8 @@ class ModelUser extends Core\PluginComponent {
 					if ( ! $post->post_edit_cap ) {
 						break;
 					}
-
-					if ( ! $this->can( $post->post_edit_cap ) || ! $this->can( $post->post_view_cap ) ) {
+//var_dump( current_user_can('edit_post') );
+					if ( ! ( $this->can( $post->post_edit_cap ) && $this->can( $post->post_view_cap ) ) ) {
 						$caps[] = 'do_not_allow';
 					}
 				}
@@ -105,7 +110,7 @@ class ModelUser extends Core\PluginComponent {
 
 						$post = get_post( $comment->comment_post_ID );
 
-						if ( ! $this->can( $post->post_view_cap ) ) {
+						if ( ! $this->can( $post->post_comment_cap ) ) {
 							$caps[] = 'do_not_allow';
 						}
 					}
@@ -117,12 +122,13 @@ class ModelUser extends Core\PluginComponent {
 
 
 	/**
+	 *	Iintialize
+	 *
 	 *	@action init
 	 */
 	public function init() {
 		$wp_roles = wp_roles();
 		add_action( "update_option_{$wp_roles->role_key}", array( $this, 'purge_role_hierachy_cache' ) );
-
 	}
 
 	/**
@@ -162,7 +168,7 @@ class ModelUser extends Core\PluginComponent {
 	}
 
 	/**
-	 *
+	 *	Purge Role hierarchy cache
 	 */
 	public function purge_role_hierachy_cache() {
 		delete_transient( 'wpaa_role_hierarchy' );
@@ -183,6 +189,7 @@ class ModelUser extends Core\PluginComponent {
 			return true;
 		}
 
+
 		// true for role
 		if ( $wp_roles->is_role( $capability ) ) {
 			return $this->can_role( $capability );
@@ -191,6 +198,7 @@ class ModelUser extends Core\PluginComponent {
 		$model = ModelAccessAreas::instance();
 
 		if ( $access_area = $model->fetch_one_by( 'capability', $capability ) ) {
+
 			return $this->can_access_area( $capability, $args );
 		}
 
@@ -212,6 +220,7 @@ class ModelUser extends Core\PluginComponent {
 		} else {
 			$can = current_user_can( $capability, $args );
 		}
+
 		return apply_filters( 'wpaa_user_can_access_area', $can, $capability, $args );
 	}
 
@@ -223,17 +232,19 @@ class ModelUser extends Core\PluginComponent {
 	 * @return boolean
 	 */
 	public function can_role( $rolename, $args = array() ) {
-		if ( is_null( $user_role_caps ) ) {
-			$user_role_caps = wpaa_get_user_role_caps();
-		}
-		if ( $wp_roles->is_role($role) ) {
-			$can = 0 == count(array_diff_assoc(  $wp_roles->get_role( $role )->capabilities , $user_role_caps ) );
 
-		}
-		$can ;
+		$user_roles = wp_get_current_user()->roles;
 
+		$can = false;
+
+		foreach ( $user_roles as $role ) {
+			if ( isset( $this->contained_roles[ $role ] ) && in_array( $rolename, $this->contained_roles[ $role ] ) ) {
+				$can = true;
+				break;
+			}
+		}
 		// always true for administrators on local caps
-		return apply_filters( 'wpaa_user_can_access_area', current_user_can( $capability, $args ), $capability, $args );
+		return apply_filters( 'wpaa_user_can_access_area', $can, $rolename, $args );
 	}
 	/**
 	 *	Revoke Access area from all users
@@ -249,13 +260,14 @@ class ModelUser extends Core\PluginComponent {
 
 	/**
 	 *	Grant Access
+	 *
 	 *	@param WP_User $user
 	 *	@param object $access_area
 	 *	@return bool
 	 */
 	public function grant_user_access( $user, $access_area ) {
 		if ( ! $user->has_cap( $access_area->capability ) ) {
-			$user->add_cap( $access_area->capability , true );
+			$user->add_cap( $access_area->capability, true );
 			do_action( 'wpaa_grant_access', $user, $access_area->capability, $access_area );
 			do_action( "wpaa_grant_{$access_area->capability}", $user );
 			return true;
@@ -265,6 +277,7 @@ class ModelUser extends Core\PluginComponent {
 
 	/**
 	 *	Revoke Access
+	 *
 	 *	@param WP_User $user
 	 *	@param object $access_area
 	 *	@return bool
@@ -298,7 +311,7 @@ class ModelUser extends Core\PluginComponent {
 	 */
 	public function uninstall() {
 		$model = Model\ModelAccessAreas::instance();
-		$access_areas = $model->fetch_available();
+		$access_areas = $model->fetch_list();
 		$users = get_users();
 		foreach ( $users as $user ) {
 			foreach ( $access_areas as $access_area ) {

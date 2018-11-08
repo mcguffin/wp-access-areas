@@ -10,6 +10,11 @@ use AccessAreas\Model;
 
 class Template extends Singleton {
 
+
+	public function grant_access_controls( $user_id ) {
+		
+	}
+
 	/**
 	 *	Access Area
 	 *	@param object	$access_area
@@ -18,7 +23,7 @@ class Template extends Singleton {
 		if ( $user_id instanceOf \WP_User ) {
 			$user_id = $user_id->ID;
 		}
-		$output = sprintf( '<span class="wpaa-access-area wpaa-%s" data-wpaa-scope="%s">', $access_area->capability, $access_area->blog_id );
+		$output = sprintf( '<label class="wpaa-access-area wpaa-%s" data-wpaa-scope="%s">', $access_area->capability, $access_area->blog_id );
 		$output .= $access_area->title;
 		if ( $access_area->id ) {
 			$output .= sprintf('<a %s><span class="screen-reader-text">%s</span></a>',
@@ -29,9 +34,11 @@ class Template extends Singleton {
 					'data-wpaa-user'		=> $user_id,
 				)), __('Revoke Access','wp-access-areas') );
 		}
-		$output .= '</span>';
+		$output .= '</label>';
 		return $output;
 	}
+
+
 	/**
 	 *	Add access area button in users admin.
 	 *	@param int $user_id
@@ -45,42 +52,218 @@ class Template extends Singleton {
 			)), __('Grant Access','wp-access-areas') );
 		return $output;
 	}
+
+
+
+
+
+
+
+
+
+
 	/**
-	 *	Generic dropdown.
+	 *	Access controls html
+	 *
+	 *	@param object $post_type_object
+	 *	@param array $values array( 'post_view_cap' => 'exists', 'post_edit_cap' => 'exists', 'post_comment_cap' => 'exist' )
+	 *	@param array $options array( 'name_template' => '%s', 'id_template' => '%s',  )
+	 *	@return string access control html
 	 */
-	public function dropdown( $choices, $selected, $attr = array() ) {
-		if ( isset($attr['placeholder']) && $attr['placeholder'] ) {
-			$choices = array( '' => $attr['placeholder'] ) + $choices;
-			unset($attr['placeholder']);
+	public function access_controls( $post_type_object, $values = array(), $options = array() ) {
+		// parse input
+		$values = wp_parse_args( $values, array(
+			'post_view_cap'		=> 'exist',
+			'post_edit_cap'		=> 'exist',
+			'post_comment_cap'	=> 'exist',
+		));
+
+		$options = wp_parse_args( $options, array(
+			'name_template'	=> '%s',
+			'id_template'	=> '%s',
+		));
+
+		$model = Model\ModelAccessAreas::instance();
+
+		$roles = wp_roles()->get_names();
+
+		$roles_key =__( 'WordPress Roles', 'wp_access_areas');
+
+		$access_options = $access_options_edit = $model->get_access_options();
+
+		unset( $access_options_edit['read'] );
+
+		// generate output
+		$output = '';
+
+		$output .= '<div class="wpaa-access-controls">';
+
+		// View cap
+		if ( $post_type_object->public || $post_type_object->show_ui ) {
+			$output .=	'<div class="wpaa-control wpaa-access-control wpaa-access-view">';
+
+			$name	= sprintf( $options['name_template'], 'post_view_cap' );
+			$id		= sprintf( $options['id_template'], 'view' );
+
+
+			if ( 'attachment' === $post_type_object->name ) {
+
+				$output .=	'<div class="inline notice notice-warning">';
+				$output .=		'<p>';
+				$output .=			'<strong>' . __( 'Security Notice', 'wp-access-areas' ) . ': </strong>';
+				$output .=			__( 'Only the attachment page will be protected. The media file can still be downloaded.', 'wp-access-areas' );
+				$output .=		'</p>';
+				$output .=	'</div>';
+
+			}
+			$output .=		sprintf( '<label for="%s">%s</label>', $id, __( 'Who can read', 'wp-access-areas' ) );
+
+			$output .=		$this->assign_access_select( $access_options, array(
+				'name'		=> $name,
+				'id'		=> $id,
+				'selected'	=> $values['post_view_cap'],
+			));
+
+			$output	.=	'</div>';
+		} else {
+			$output .=	sprintf( '<input type="hidden" name="%s" value="exist" />', $name );
 		}
-		$output = sprintf('<select %s>', $this->mk_attr( $attr ));
-		$output .= $this->optgroup( $choices, $selected );
-		$output .= '</select>';
+
+
+		// Edit cap
+		$output .= 		'<div class="wpaa-control wpaa-access-control wpaa-access-edit">';
+
+		$name	= sprintf( $options['name_template'], 'post_edit_cap' );
+		$id		= sprintf( $options['id_template'], 'edit' );
+
+		$output .=			sprintf( '<label for="%s">%s</label>', $id, __( 'Who can edit', 'wp-access-areas' ) );
+
+		$access_options_edit[ $roles_key ] = array();
+		$edit_roles = array();
+		foreach ( $roles as $role_slug => $role_name ) {
+			if ( get_role( $role_slug )->has_cap( $post_type_object->cap->edit_posts ) ) {
+				$access_options_edit[ $roles_key ][ $role_slug ] = $role_name;
+			}
+		}
+
+		$output .=			$this->assign_access_select( $access_options_edit, array(
+			'name'		=> $name,
+			'id'		=> $id,
+			'selected'	=> $values['post_edit_cap'],
+		));
+		$output	.=		'</div>';
+
+		// Comment cap
+		if ( post_type_supports( $post_type_object->name, 'comments' ) ) {
+			// comment access
+			$output .= 	'<div class="wpaa-control wpaa-access-control wpaa-access-edit">';
+
+			$name	= sprintf( $options['name_template'], 'post_comment_cap' );
+			$id		= sprintf( $options['id_template'], 'comment' );
+
+			$output .=			sprintf( '<label for="%s">%s</label>', $id, __( 'Who can comment', 'wp-access-areas' ) );
+
+			$output .=		$this->assign_access_select( $access_options, array(
+				'name'		=> $name,
+				'id'		=> $id,
+				'selected'	=> $values['post_comment_cap'],
+			));
+			$output	.=	'</div>';
+		} else {
+			printf( '<input type="hidden" name="%s" value="exist" />', $name );
+		}
+
+		$output	.=	'</div>';
+
 		return $output;
+
 	}
 
 	/**
-	 *	Generic optigroup. Used by dropdown()
+	 *	Access controls html
+	 *
+	 *	@param object $post_type_object
+	 *	@param array $values array( 'post_view_cap' => 'exists', 'post_edit_cap' => 'exists', 'post_comment_cap' => 'exist' )
+	 *	@param array $options array( 'name_template' => '%s', 'id_template' => '%s',  )
+	 *	@return string access control html
 	 */
-	protected function optgroup( $choices, $selected ) {
+	public function behavior_controls( $post_type_object, $values = array(), $options = array() ) {
+		// parse input
+		$values = wp_parse_args( $values, array(
+			'behavior'			=> '404',
+			'login_redirect'	=> 0,
+			'http_status'		=> '404',
+			'fallback_page'		=> 0,
+		));
+
+		$options = wp_parse_args( $options, array(
+			'name_template'	=> '_wpaa_%s',
+			'id_template'	=> 'wpaa-behavior-%s',
+		));
 		$output = '';
-		foreach ( $choices as $i => $choice ) {
-//vaR_dump(is_object($choice),is_array( $choice ),is_null($choice ));continue;
-			if ( is_object($choice) ) {
-				if ( isset( $choice->title, $choice->id ) ) {
-					$output .= sprintf('<option value="%s" %s>%s</option>', $choice->id, selected( $selected, $choice->id, false ), $choice->title );
-				}
-			} else if ( is_array( $choice ) ) {
-				$output .= sprintf( '<optgroup label="%s">', $i );
-				$output .= $this->optgroup( $choice, $selected );
-				$output .= '</optgroup>';
-			} else if ( is_null($choice ) ) {
-				continue;
-			} else {
-				$output .= sprintf('<option value="%s" %s>%s</option>', $i, selected( $selected, $i, false ), $choice );
-			}
-		}
+
+		$output .= 	'<div class="wpaa-behavior-controls">';
+
+		// behavior
+		$name = sprintf($options['name_template'],'behavior');
+		$id = sprintf( $options['id_template'], 'behavior' );
+
+		$output .=		sprintf('<div class="wpaa-control wpaa-behavior-control wpaa-behavior" id="%1$s" data-value="%1$s">', $id );
+
+		$output .= $this->select_behavior(
+			$values['behavior'], $name, $id
+		);
+		$output	.=		'</div>';
+
+
+		// login redirect
+		$output .=		'<div class="wpaa-control wpaa-behavior-control wpaa-behavior-login-redirect">';
+
+		$name = sprintf($options['name_template'],'login_redirect');
+		$id = sprintf( $options['id_template'], 'login-redirect' );
+
+		$output .= $this->select_login_redirect(
+			$values['login_redirect'], $name, $id
+		);
+		$output	.=		'</div>';
+
+
+		$output .=		'<div class="wpaa-control wpaa-behavior-control wpaa-behavior-http-status">';
+
+		$name = sprintf($options['name_template'],'http_status');
+		$id = sprintf( $options['id_template'], 'http-status' );
+
+		$output .=			sprintf( '<label for="%s">%s</label>', $id, __( 'HTTP Status', 'wp-access-areas' ) );
+
+		$output .= $this->select_http_status(
+			$values['http_status'], $name, $id
+		);
+		$output	.=		'</div>';
+
+
+		$output .=		'<div class="wpaa-control wpaa-behavior-control wpaa-behavior-fallback-page">';
+
+		$name = sprintf( $options['name_template'], 'fallback_page' );
+		$id = sprintf( $options['id_template'], 'fallback-page' );
+
+		$output .=			sprintf( '<label for="%s">%s</label>', $id, __( 'Fallback Page', 'wp-access-areas' ) );
+
+		$output .= $this->select_fallback_page(
+			$values['fallback_page'], $name, $id
+		);
+
+		$output	.=		'</div>';
+
+		$output	.=	'</div>';
+
 		return $output;
+
+	}
+
+	/**
+	 *	Access Area select drowpdown
+	 */
+	public function capablities_dropdown( $access_areas, $context = 'post', $dropdown_attr = array() ) {
 	}
 
 	/**
@@ -88,22 +271,81 @@ class Template extends Singleton {
 	 */
 	public function access_areas_dropdown( $access_areas, $context = 'post', $dropdown_attr = array() ) {
 
-
-
 		$dropdown_attr = wp_parse_args( $dropdown_attr, array(
 			'name'			=> 'access-area-'.$context,
 			'id'			=> 'access-area-'.$context,
+			'selected'		=> null,
 		));
-
+		$selected = null;
+		if ( isset( $dropdown_attr['selected'] ) ) {
+			$selected = $dropdown_attr['selected'];
+			unset($dropdown_attr['selected']);
+		}
 		$access_areas = apply_filters( "wpaa_access_areas_dropdown_{$context}", $access_areas );
 
-		$access_areas = $this->filter_grantable( $access_areas );
 
 		if ( 'user' === $context ) {
 			$dropdown_attr['placeholder'] = __( '—Select—', 'wp-access-areas' );
+			$access_areas = $this->filter_grantable( $access_areas );
+		} else if ( 'post' === $context ) {
+			$access_areas = $this->filter_assignable( $access_areas );
 		}
 
-		return $this->dropdown( $access_areas, null, $dropdown_attr );
+		return $this->dropdown( $access_areas, $selected, $dropdown_attr );
+	}
+
+	/**
+	 *	Assign Access Dropdown
+	 *
+	 *	@param assoc $access_areas
+	 *	@param assoc $dropdown_attr
+	 *	@return string
+	 */
+	public function assign_access_select( $access_areas, $dropdown_attr = array() ) {
+
+		$dropdown_attr = wp_parse_args( $dropdown_attr, array(
+			'name'			=> 'wpaa-assign-access',
+			'id'			=> 'wpaa-assign-access',
+			'selected'		=> null,
+		));
+
+		$selected = null;
+
+		if ( isset( $dropdown_attr['selected'] ) ) {
+			$selected = $dropdown_attr['selected'];
+			unset( $dropdown_attr['selected'] );
+		}
+
+		$access_areas = $this->filter_assignable( $access_areas );
+
+		return $this->dropdown( $access_areas, $selected, $dropdown_attr );
+	}
+
+	/**
+	 *	Grant Access Dropdown
+	 *
+	 *	@param assoc $access_areas
+	 *	@param assoc $dropdown_attr
+	 *	@return string
+	 */
+	public function grant_access_select( $access_areas, $dropdown_attr = array() ) {
+
+		$dropdown_attr = wp_parse_args( $dropdown_attr, array(
+			'name'			=> 'wpaa-grant-access',
+			'id'			=> 'wpaa-grant-access',
+			'selected'		=> null,
+		));
+		$selected = null;
+		if ( isset( $dropdown_attr['selected'] ) ) {
+			$selected = $dropdown_attr['selected'];
+			unset($dropdown_attr['selected']);
+		}
+
+		$dropdown_attr['placeholder'] = __( '—Select—', 'wp-access-areas' );
+
+		$access_areas = $this->filter_grantable( $access_areas );
+
+		return $this->dropdown( $access_areas, $selected, $dropdown_attr );
 	}
 
 	/**
@@ -111,13 +353,16 @@ class Template extends Singleton {
 	 */
 	public function filter_grantable( $access_areas ) {
 
+		$sanitize = Sanitize::instance();
+
 		$user_can = current_user_can( 'promote_users' );
 		$grantable = array();
 		foreach ( $access_areas as $i => $access_area ) {
 			if ( is_array( $access_area ) ) {
 				$grantable[$i] = $this->filter_grantable( $access_area );
-			} else {
-				if ( apply_filters( 'wpaa_allow_grant_access', $user_can, $access_area ) ) {
+			} else if ( is_object( $access_area ) ) {
+				$capability = $access_area->capability;
+				if ( $sanitize->post_cap_grantable( $capability ) ) {
 					$grantable[$i] = $access_area;
 				}
 			}
@@ -127,44 +372,63 @@ class Template extends Singleton {
 	}
 
 	/**
-	 *	Select Behaviour for restricted posts.
+	 *	Filter array with Access Areas the current may grant to other users
+	 */
+	public function filter_assignable( $access_areas ) {
+		$sanitize = Sanitize::instance();
+
+		$assignable = array();
+		foreach ( $access_areas as $i => $access_area ) {
+			if ( is_array( $access_area ) ) {
+				$assignable[$i] = $this->filter_assignable( $access_area );
+			} else {
+				if ( is_object( $access_area ) ) {
+					$capability = $access_area->capability;
+				} else {
+					$capability = $access_area;
+				}
+
+				if ( $sanitize->post_cap_assignable( $capability ) ) {
+					$assignable[$i] = $access_area;
+				}
+			}
+
+		}
+		return $assignable;
+	}
+
+
+	/**
+	 *	Select behavior for restricted posts.
 	 *	@param string $selected_behavior
 	 *	@param string $fieldname
 	 */
-	public function select_behavior( $selected_behavior = '404', $fieldname = '_wpaa_post_behavior' ) {
+	public function select_behavior( $selected_behavior = '404', $fieldname = '_wpaa_behavior', $id_prefix = 'wpaa-behavior' ) {
 
-		$behaviors = array(
-			array(
-				'value'	=> '404',
-				'label' => __( 'Show WordPress 404' , 'wp-access-areas'),
-			),
-			array(
-				'value'	=> 'page',
-				'label' => __( 'Redirect to the fallback page.' , 'wp-access-areas'),
-			),
-			array(
-				'value'	=> 'status',
-				'label' => __( 'Show fallback page contents with HTTP-Status.' , 'wp-access-areas'),
-			),
-		);
+		$sanitize = Sanitize::instance();
+
+		$behaviors = $sanitize->get_behaviors();
 
 		$output = '';
+		$output .= 		'<p class="description">';
+		$output .=			__('What will happen if somebody tries to view a restricted post directly.' , 'wp-access-areas' );
+		$output .=		'</p>';
 
 		foreach ( $behaviors as $item ) {
 			extract( $item );
-			$id = 'wpaa-view-post-behavior-' . $value;
+			$id = $id_prefix . '-' . $value;
 			$output .= sprintf( '<label for="%s">', $id );
 			$output .= sprintf( '<input type="radio" name="%s" id="%s" value="%s" %s />', $fieldname, $id, $value, checked( $value , $selected_behavior, false ) );
 			$output .= $label;
-			$output .= '</label><br />';
+			$output .= '</label>';
 		}
 		$output .= <<<EOT
 		<script type="text/javascript">
 		(function($){
-			$('[name="{$fieldname}"]').on('change',function(){
-				var val = $('[name="{$fieldname}"]:checked').val();
-
-				$('#wpaa-http-status-select').prop('disabled', val.indexOf('status') === -1);
+			$('#{$id_prefix} [type="radio"]').on('change',function(){
+				console.log(this,$('#{$id_prefix} [type="radio"]:checked'));
+				var val = $('#{$id_prefix} [type="radio"]:checked').val();
+				$(this).closest('[data-value]').attr( 'data-value', val );
 			})
 		})(jQuery);
 		</script>
@@ -178,45 +442,51 @@ EOT;
 	 *	@param string $selected_behavior
 	 *	@param string $fieldname
 	 */
-	public function select_http_status( $selected_status = '', $fieldname = '_wpaa_post_behavior_status' ) {
+	public function select_login_redirect( $login_redirect = 0, $fieldname = '_wpaa_login_redirect', $id = 'wpaa-post-behavior-login-redirect' ) {
+		$output = '';
 
-		$http_stati = array(
-			__('2xx – Success','wp-access-areas') => array(
-				'200' => __('200 - OK', 'wp-access-areas' ),
-				'204' => __('204 – No Content', 'wp-access-areas' ),
-			),
-			__('4xx – Client Errors') => array(
-				'402' => __('402 - Payment Required', 'wp-access-areas' ),
-				'403' => __('403 - Forbidden', 'wp-access-areas' ),
-				'404' => __('404 - Not Found', 'wp-access-areas' ),
-				'410' => __('410 - Gone', 'wp-access-areas' ),
-				'418' => __('418 - I\'m a teapot', 'wp-access-areas' ),
-				'451' => __('451 - Unavailable For Legal Reasons', 'wp-access-areas' ),
-			),
+		$output .= sprintf(
+			'<input type="hidden" name="%s" value="0" />',
+			$fieldname
 		);
-		return $this->dropdown( $http_stati, $selected_status, array(
-			'name'			=> $fieldname,
-			'id'			=> 'wpaa-http-status-select',
-			'placeholder'	=> __( '—Select—', 'wp-access-areas' ),
-		) );
-	}
+		$output .= sprintf(
+			'<input type="checkbox" name="%s" value="1" id="%s" %s />',
+			$fieldname,
+			$id,
+			checked( $login_redirect, 1, false )
+		);
+		$output .= sprintf(
+			'<label for="%s">%s</label>',
+			$id,
+			__('Redirect to login first if not logged in.', 'wp-access-areas' )
+		);
 
+		return $output;
+
+	}
 
 	/**
 	 *	Select HTTP-Status for restricted posts.
 	 *	@param string $selected_behavior
 	 *	@param string $fieldname
 	 */
-	public function select_login_redirect( $login_redirect = 0, $fieldname = '_wpaa_post_behavior_login_redirect' ) {
-		$output = '';
-		$id = 'wpaa-post-behavior-login-redirect';
-		$output .= sprintf('<input type="hidden" name="%s" value="0" />', $fieldname, $id );
-		$output .= sprintf('<input type="checkbox" name="%s" value="1" id="%s" %s />', $fieldname, $id, checked( $login_redirect, 1, false) );
-		$output .= sprintf('<label for="%s">%s</label>', $id, __('If not logged in, redirect to login.', 'wp-access-areas' ) );
-		return $output;
+	public function select_http_status( $selected_status = '', $fieldname = '_wpaa_http_status', $id = 'wpaa-http-status-select' ) {
 
+		$sanitize = Sanitize::instance();
+
+		$http_stati = $sanitize->get_http_stati();
+
+		return $this->dropdown( $http_stati, $selected_status, array(
+			'name'			=> $fieldname,
+			'id'			=> $id,
+			'placeholder'	=> __( '—Select—', 'wp-access-areas' ),
+		) );
 	}
-	public function select_fallback_page( $post_fallback_page = 0, $fieldname = '_wpaa_fallback_page' ) {
+
+	/**
+	 *
+	 */
+	public function select_fallback_page( $post_fallback_page = 0, $fieldname = '_wpaa_fallback_page', $id = 'wpaa-fallback-page' ) {
 
 		global $wpdb;
 
@@ -243,7 +513,46 @@ EOT;
 			'show_option_none'	=> false,//__( 'Home page', 'wp-access-areas' ),
 			'option_none_value'	=> 0,
 			'echo'				=> false,
+			'id'				=> $id,
 		));
+	}
+
+	/**
+	 *	Generic dropdown.
+	 */
+	public function dropdown( $choices, $selected, $attr = array() ) {
+		if ( isset($attr['placeholder']) && $attr['placeholder'] ) {
+			$choices = array( '' => $attr['placeholder'] ) + $choices;
+			unset($attr['placeholder']);
+		}
+		$output = sprintf('<select %s>', $this->mk_attr( $attr ));
+		$output .= $this->optgroup( $choices, $selected );
+		$output .= '</select>';
+		return $output;
+	}
+
+	/**
+	 *	Generic optigroup. Used by dropdown()
+	 */
+	protected function optgroup( $choices, $selected, $identifier = 'id' ) {
+		$output = '';
+		foreach ( $choices as $i => $choice ) {
+
+			if ( is_object($choice) ) {
+				if ( isset( $choice->title, $choice->id ) ) {
+					$output .= sprintf('<option value="%s" %s>%s</option>', $choice->id, selected( $selected, $choice->id, false ), $choice->title );
+				}
+			} else if ( is_array( $choice ) ) {
+				$output .= sprintf( '<optgroup label="%s">', $i );
+				$output .= $this->optgroup( $choice, $selected );
+				$output .= '</optgroup>';
+			} else if ( is_null( $choice ) ) {
+				continue;
+			} else {
+				$output .= sprintf('<option value="%s" %s>%s</option>', $i, selected( $selected, $i, false ), $choice );
+			}
+		}
+		return $output;
 	}
 
 	/**

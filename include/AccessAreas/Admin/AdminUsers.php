@@ -121,7 +121,8 @@ class AdminUsers extends Core\PluginComponent {
 		} else {
 			$granted	= array();
 			$model		= Model\ModelAccessAreas::instance();
-			$available	= apply_filters('wpaa_assignable_access_areas_user', $model->fetch_available( 'user' ), $user );
+			// !!!
+			$available	= apply_filters('wpaa_assignable_access_areas_user', $model->fetch_list( ), $user );
 
 			foreach ( $available as $aa ) {
 				if ( $user->has_cap( $aa->capability ) ) {
@@ -165,7 +166,7 @@ class AdminUsers extends Core\PluginComponent {
 	public function uninstall() {
 		// revoke all access from all users
 		$model = Model\ModelAccessAreas::instance();
-		$access_areas = $model->fetch_available();
+		$access_areas = $model->fetch_list();
 		$users = get_users();
 		foreach ( $users as $user ) {
 			foreach ( $access_areas as $access_area ) {

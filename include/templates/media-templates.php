@@ -83,10 +83,10 @@ $model = AccessAreas\Model\ModelAccessAreas::instance();
 					<div class="form-control">
 						<?php
 
-							$access_areas = $model->fetch_available( 'user' );
+							$access_areas = $model->get_grant_options( );
 
 							// select access area
-							echo $template->access_areas_dropdown( $access_areas, 'user' );
+							echo $template->grant_access_select( $access_areas );
 						?>
 					</div>
 				</article>

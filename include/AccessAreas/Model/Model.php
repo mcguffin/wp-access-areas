@@ -48,20 +48,23 @@ abstract class Model extends Core\PluginComponent {
 	}
 
 	/**
-	 *	@inheritdoc
+	 *	Setup a list
+	 *
+	 *	@param $list array
+	 *	@param $key 	bool|string	item property to use as key. use false for numeric
+	 *	@param $field	bool|string	item property to use as value. use false to fetch objects
+	 *	@return array
 	 */
-	public function deactivate() {
-	}
-
-	/**
-	 *	@inheritdoc
-	 */
-	public function uninstall() {
-		// drop table
-		global $wpdb;
-		$tbl = $this->table;
-		$wpdb->query("DROP TABLE {$wpdb->$tbl}");
-
+	public function setup_list( $list, $key = false, $field = false ) {
+		$out = array();
+		foreach ( array_values($list) as $i => $item ) {
+			if ( is_object( $item ) ) {
+				$out[ $key ? $item->$key : $i ] = $field ? $item->$field : $item;
+			} else if ( is_array( $item ) ) {
+				$out[ $key ? $item[$key] : $i ] = $field ? $item[ $field ] : $item;
+			}
+		}
+		return $out;
 	}
 
 	/**
@@ -219,5 +222,22 @@ abstract class Model extends Core\PluginComponent {
 		return $wpdb->delete( $wpdb->$table, $where, $where_format );
 	}
 
+
+	/**
+	 *	@inheritdoc
+	 */
+	public function deactivate() {
+	}
+
+	/**
+	 *	@inheritdoc
+	 */
+	public function uninstall() {
+		// drop table
+		global $wpdb;
+		$tbl = $this->table;
+		$wpdb->query("DROP TABLE {$wpdb->$tbl}");
+
+	}
 
 }
