@@ -13,7 +13,7 @@
 	// 	.done( function() {
 	// 		console.log(this, wp.api.endpoints.find({versionString:'wpaa/v1/'}) );
 	// 	});
-
+console.log("base!")
 	var l10n = access_areas_admin.l10n,
 		options = access_areas_admin.options,
 		wpaa = {
