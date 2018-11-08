@@ -12,12 +12,20 @@ use AccessAreas\Compat;
 
 class Plugin extends Singleton {
 
+	/**
+	 *	@var array plugin component classes
+	 */
 	private static $components = array(
 		'AccessAreas\Admin\AdminUsers',
 		'AccessAreas\Model\ModelAccessAreas',
 		'AccessAreas\Model\ModelPost',
 		'AccessAreas\Settings\SettingsAccessAreas',
 	);
+
+	/**
+	 *	@var array plugin metadata
+	 */
+	private $meta = null;
 
 	/**
 	 *	@inheritdoc
@@ -38,8 +46,8 @@ class Plugin extends Singleton {
 	 */
 	public function maybe_upgrade() {
 		// trigger upgrade
-		$meta = get_plugin_data( ACCESS_AREAS_FILE );
-		$new_version = $meta['Version'];
+
+		$new_version = $this->get_version();
 		$old_version = get_option( 'access_areas_version' );
 
 		// call upgrade
@@ -53,11 +61,19 @@ class Plugin extends Singleton {
 
 	}
 
+	private function get_version() {
+		if ( is_null( $this->meta ) ) {
+			$this->meta = get_plugin_data( ACCESS_AREAS_FILE );
+		}
+		return $this->meta['Version'];
+	}
+
 	/**
 	 *	Fired on plugin activation
 	 */
 	public static function activate() {
 
+		$new_version = self::instance()->get_version();
 
 		update_site_option( '_version', $new_version );
 
@@ -113,7 +129,7 @@ class Plugin extends Singleton {
 	public static function uninstall() {
 		foreach ( self::$components as $component ) {
 			$comp = $component::instance();
-			$comp->unistall();
+			$comp->uninstall();
 		}
 	}
 
