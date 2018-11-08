@@ -227,7 +227,8 @@ class WPAA_Posts {
 			case 'delete_post':
 			case 'edit_page':
 			case 'delete_page':
-				if ( count($args[0]) ) {
+
+				if ( count($args) ) {
 					$post_ID = $args[0];
 					// if he not can like specfied, ;
 					$post = get_post( $post_ID );
@@ -240,7 +241,7 @@ class WPAA_Posts {
 				}
 				break;
 			case 'edit_comment':
-				if ( count($args[0]) ) {
+				if ( count($args) ) {
 					$comment_ID = $args[0];
 					$comment = get_comment( $comment_ID );
 					if ( $comment && $comment->comment_post_ID  ) {
@@ -324,6 +325,9 @@ class WPAA_Posts {
 			foreach( array_keys(WPAA_AccessArea::get_label_array( ) ) as $cap)
 				if ( wpaa_user_can_accessarea( $cap ) )
 					$caps[] = $cap;
+		}
+		if ( empty( $caps ) ) {
+			return $where;
 		}
 		$add_where = " {$table_name}post_view_cap IN ('".implode( "','" , $caps ) . "')";
 //		if ( is_single() ) // why did I do this....?
