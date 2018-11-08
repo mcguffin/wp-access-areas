@@ -310,7 +310,7 @@ class ModelUser extends Core\PluginComponent {
 	 *	@inheritdoc
 	 */
 	public function uninstall() {
-		$model = Model\ModelAccessAreas::instance();
+		$model = ModelAccessAreas::instance();
 		$access_areas = $model->fetch_list();
 		$users = get_users();
 		foreach ( $users as $user ) {

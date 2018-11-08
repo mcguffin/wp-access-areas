@@ -182,7 +182,7 @@ class WPMU extends Core\PluginComponent {
 	}
 
 	public function maybe_upgrade( $site_id ) {
-		switch_to_blog( $blog_id );
+		switch_to_blog( $site_id );
 		Core\Core::instance()->maybe_upgrade();
 		restore_current_blog();
 	}
