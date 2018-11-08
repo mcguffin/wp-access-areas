@@ -208,10 +208,11 @@ class ModelAccessAreas extends Model {
 	 *	@inheritdoc
 	 */
 	public function upgrade( $new_version, $old_version ) {
-		var_dump('Upgrade!!!');
+
 		if ( version_compare( $old_version, '2.0.0', '<' ) ) {
 			$this->upgrade_1x();
 		}
+
 	}
 
 	private function upgrade_1x() {

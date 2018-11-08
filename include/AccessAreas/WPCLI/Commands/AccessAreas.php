@@ -61,7 +61,7 @@ class AccessAreas extends \WP_CLI_Command {
 	 *     wp access-areas remove wpaa_1_premium_content
 	 */
 	public function remove( $args, $assoc_args ) {
-
+		
 	}
 
 

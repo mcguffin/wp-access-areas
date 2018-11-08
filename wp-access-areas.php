@@ -59,7 +59,7 @@ Core\Core::instance();
 Model\ModelAccessAreas::instance();
 
 Model\ModelPost::instance();
-Model\ModelUser::instance();
+Model\ModelUser::instance(); // load only if logged in!
 Model\ModelComment::instance();
 
 WPRest\WPRest::instance();
