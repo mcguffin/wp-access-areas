@@ -38,7 +38,7 @@ class AdminPosts extends Core\Singleton {
 				} else {
 					// add action @ save post...
 				}
-			}			
+			}
 		}
 
 		add_filter( 'wp_insert_attachment_data', array( $this, 'insert_post_data') , 10 , 2 );
@@ -52,7 +52,26 @@ class AdminPosts extends Core\Singleton {
 			error_log($a);
 			return $a;
 		});
+
+		add_filter( 'map_meta_cap' , array( $this, 'map_meta_cap' ) , 10 , 4 );
+
+
 	}
+	public function map_meta_cap( $caps, $cap, $user_id, $args ) {
+		return $caps;
+		switch ( $cap ) {
+			case 'wpaa_set_view_cap': // belongs to post!
+			case 'wpaa_set_edit_cap':
+				$caps[] = 'edit_post';
+				//vaR_dump($caps);exit();
+				break;
+			case 'wpaa_set_comment_cap':
+				break;
+
+		}
+		return $caps;
+	}
+
 	/**
 	 *	@param $columns
 	 *	@filter manage_{$post_type}_posts_columns
@@ -61,17 +80,18 @@ class AdminPosts extends Core\Singleton {
 		$columns['wpaa'] = __( 'Access', 'wp-access-areas' );
 		return $columns;
 	}
+
 	public function post_column( $column, $post_id ) {
 		if ('wpaa' === $column ) {
-			$names =
-			printf();
-			vaR_dump(get_post($post_id));
-
+			$post = get_post($post_id);
+			var_dump($post->post_view_cap); //
+			var_dump($post->post_edit_cap);
+			var_dump($post->post_comment_cap);
 		}
 	}
 	/**
-	*	@action load-post.php
-	*	@action load-post-new.php
+	 *	@action load-post.php
+	 *	@action load-post-new.php
 	 */
 	public function enqueue_assets() {
 		wp_enqueue_style('access-areas-posts');
@@ -138,13 +158,20 @@ class AdminPosts extends Core\Singleton {
 	 *	@action "add_meta_boxes_{$post_type}"
 	 */
 	public function add_meta_boxes_access( $post ) {
-		add_meta_box('wpaa-access',
-			'<span class="dashicons dashicons-lock"></span>' . __('Access Control','wp-access-areas'),
-			array( $this, 'meta_box_access' ),
-			null,
-			'side',
-			'high'
-		);
+		if (
+			current_user_can( 'wpaa_set_edit_cap', $post->ID ) ||
+			current_user_can( 'wpaa_set_view_cap', $post->ID ) ||
+			current_user_can( 'wpaa_set_comment_cap', $post->ID )
+		) {
+			add_meta_box('wpaa-access',
+				'<span class="dashicons dashicons-lock"></span>' . __('Access Control','wp-access-areas'),
+				array( $this, 'meta_box_access' ),
+				null,
+				'side',
+				'high'
+			);
+		}
+
 	}
 	/**
 	 *	@action "add_meta_boxes_{$post_type}"
@@ -155,7 +182,7 @@ class AdminPosts extends Core\Singleton {
 			array( $this, 'meta_box_behavior' ),
 			null,
 			'side',
-			'high'
+			'default'
 		);
 	}
 
@@ -172,7 +199,7 @@ class AdminPosts extends Core\Singleton {
 			'post_comment_cap'	=> $post->post_comment_cap,
 		);
 
-		echo $template->access_controls( $post_type_object, $values );
+		echo $template->access_controls( $post_type_object, $post, $values );
 
 	}
 
@@ -181,7 +208,6 @@ class AdminPosts extends Core\Singleton {
 	 */
 	public function meta_box_behavior( $post, $metabox ) {
 		$template = Core\Template::instance();
-		$post_type_object = get_post_type_object( $post->post_type );
 		$values = array(
 			'post_behavior'		=> get_post_meta( $post->ID, '_wpaa_post_behavior', true ),
 			'login_redirect'	=> get_post_meta( $post->ID, '_wpaa_login_redirect', true ),
@@ -189,7 +215,7 @@ class AdminPosts extends Core\Singleton {
 			'fallback_page'		=> get_post_meta( $post->ID, '_wpaa_fallback_page', true ),
 		);
 
-		echo $template->behavior_controls( $post_type_object, $values );
+		echo $template->behavior_controls( $values );
 
 	}
 

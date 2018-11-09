@@ -25,8 +25,48 @@ class SettingsAccessAreas extends Settings {
 
 		add_action( "load-settings_page_{$this->optionset}", array( $this, 'add_help_tabs' ) );
 
+		add_filter( 'pre_update_option_wpaa_enable_assign_cap', array( $this, 'process_role_cap' ), 10, 2 );
+//		add_action( 'update_option_wpaa_enable_assign_cap', array( $this, 'role_caps_changed' ), 10, 2 );
+
 		parent::__construct();
 
+	}
+
+	public function process_role_cap( $value ) {
+
+		if ( is_array( $_POST['grant_cap'] ) ) {
+			foreach ( $_POST['grant_cap'] as $role_slug => $cap ) {
+
+				if ( current_user_can( 'edit_wpaa_role_caps', $role_slug ) && ( $role = get_role( $role_slug ) ) ) {
+					$role->add_cap( $cap, true );
+				}
+			}
+		}
+		if ( is_array( $_POST['revoke_cap'] ) ) {
+			foreach ( $_POST['revoke_cap'] as $role_slug => $cap ) {
+				if ( current_user_can( 'edit_wpaa_role_caps', $role_slug ) && ( $role = get_role( $role_slug ) ) ) {
+					$role->remove_cap( $cap, true );
+				}
+			}
+		}
+		return $value;
+	}
+
+	public function role_caps_changed( $old_value, $value ) {
+
+		if ( $value && ! $old_value ) { // was enabled
+			$admin_role = get_role( 'administrator' );
+			if ( ! $admin_role->has_cap('edit_wpaa_role_caps') ) {
+
+				// add default role caps
+				$admin_role->add_cap('wpaa_set_view_cap');
+				$admin_role->add_cap('wpaa_set_edit_cap');
+				$admin_role->add_cap('wpaa_set_comment_cap');
+				$admin_role->add_cap('edit_wpaa_role_caps');
+
+			}
+
+		}
 	}
 
 	/**
@@ -128,76 +168,10 @@ class SettingsAccessAreas extends Settings {
 
 		$this->register_post_type_settings();
 
-	//	$this->register_behavior_settings();
-
 		$this->register_role_settings();
 
 	}
 
-	/**
-	 *	@access private
-	 */
-	private function register_behavior_settings() {
-		$settings_section	= 'access_areas_settings';
-
-		add_settings_section( $settings_section, __( 'Behavior',  'wp-access-areas' ), array( $this, 'behavior_section_intro' ), $this->optionset );
-
-
-		$option_name		= 'wpaa_default_behavior';
-		register_setting( $this->optionset , $option_name, array( $this , 'sanitize_behavior' ) );
-		add_settings_field(
-			$option_name,
-			__( 'Default behavior',  'wp-access-areas' ),
-			array( $this, 'select_behavior' ),
-			$this->optionset,
-			$settings_section,
-			array(
-				'option_name'			=> $option_name,
-			)
-		);
-		$option_name		= 'wpaa_default_behavior_login_redirect';
-		register_setting( $this->optionset , $option_name, array( $this , 'sanitize_http_status' ) );
-		add_settings_field(
-			$option_name,
-			__( 'Redirect to Login',  'wp-access-areas' ),
-			array( $this, 'select_login_redirect' ),
-			$this->optionset,
-			$settings_section,
-			array(
-				'option_name'			=> $option_name,
-			)
-		);
-
-
-		$option_name		= 'wpaa_default_behavior_status';
-		register_setting( $this->optionset , $option_name, array( $this , 'sanitize_http_status' ) );
-		add_settings_field(
-			$option_name,
-			__( 'HTTP Status',  'wp-access-areas' ),
-			array( $this, 'select_http_status' ),
-			$this->optionset,
-			$settings_section,
-			array(
-				'option_name'			=> $option_name,
-				'class'			=> 'wpaa-http-status-select',
-			)
-		);
-
-
-		$option_name		= 'wpaa_fallback_page';
-		register_setting( $this->optionset , $option_name, array( $this , 'sanitize_fallback_page' ) );
-		add_settings_field(
-			$option_name,
-			__( 'Fallback Page',  'wp-access-areas' ),
-			array( $this, 'select_fallback_page' ),
-			$this->optionset,
-			$settings_section,
-			array(
-				'option_name'			=> $option_name,
-			)
-		);
-
-	}
 	/**
 	 *	@access private
 	 */
@@ -206,21 +180,22 @@ class SettingsAccessAreas extends Settings {
 		$settings_section	= 'wpaa_post_access_section';
 		add_settings_section( $settings_section, __( 'Post Types', 'wp-access-areas' ), array( $this, 'post_type_section_intro' ), $this->optionset );
 
-		$option_name		= 'wpaa_post_types'; //
-		register_setting( $this->optionset, $option_name, array( $this , 'sanitize_post_type_settings' ) );
 
-		add_settings_field(
-			$option_name,
-			__( 'Post Type Settings',  'wp-access-areas' ),
-			array( $this, 'post_type_settings' ),
-			$this->optionset,
-			$settings_section,
-			array(
-				'option_name'			=> $option_name,
-//				'label_for'		=> '',
-				'class'			=> 'wpaa-post-type-settings',
-			)
-		);
+		register_setting( $this->optionset, 'wpaa_default_access_override', 'absint' ); //*
+
+		register_setting( $this->optionset, 'wpaa_default_post_view_cap', array( $this, 'sanitize_cap' ) );
+		register_setting( $this->optionset, 'wpaa_default_post_edit_cap', array( $this, 'sanitize_cap' ) );
+		register_setting( $this->optionset, 'wpaa_default_post_comment_cap', array( $this, 'sanitize_cap' ) );
+
+		register_setting( $this->optionset, 'wpaa_default_behavior_override', 'absint'); //*
+		register_setting( $this->optionset, 'wpaa_default_behavior', array( $this, 'sanitize_behavior' )); //*
+		register_setting( $this->optionset, 'wpaa_default_login_redirect', 'absint');
+		register_setting( $this->optionset, 'wpaa_default_http_status', array( $this, 'sanitize_http_status' ));
+		register_setting( $this->optionset, 'wpaa_default_fallback_page', 'absint');
+		register_setting( $this->optionset, 'wpaa_default_default_post_status', array( $this, 'sanitize_post_status' ) );
+
+
+		register_setting( $this->optionset, 'wpaa_post_types', array( $this , 'sanitize_post_type_settings' ) );
 
 	}
 
@@ -228,6 +203,12 @@ class SettingsAccessAreas extends Settings {
 	 *	@access private
 	 */
 	private function register_role_settings() {
+		$settings_section	= 'wpaa_roles_section';
+		add_settings_section( $settings_section, __( 'Role Capabilities', 'wp-access-areas' ), array( $this, 'role_section_intro' ), $this->optionset );
+
+		$option_name = 'wpaa_enable_assign_cap';
+		register_setting( $this->optionset, 'wpaa_enable_assign_cap', 'absint' );
+
 	}
 
 
@@ -244,32 +225,63 @@ class SettingsAccessAreas extends Settings {
 			?></p>
 		</div>
 		<?php
+
+		$this->post_type_settings();
+	}
+
+
+	/**
+	 *	Print some documentation for the optionset
+	 */
+	public function role_section_intro( $args ) {
+		?>
+		<div class="inside">
+			<p class="description"><?php
+				if ( absint( get_option('wpaa_enable_assign_cap') ) ) {
+					_e('If you are running a role editor plugin such as <a href="https://wordpress.org/plugins/user-role-editor/">User Role editor by Vladimir Garagulya</a> or <a href="https://wordpress.org/plugins/wpfront-user-role-editor/">WPFront User Role Editor by Syam Mohan</a> you can do the same as here by assigning the custom capabilites <code>wpaa_set_view_cap</code>, <code>wpaa_set_edit_cap</code> and <code>wpaa_set_comment_cap</code>.','wp-access-areas');
+					?>
+					</p>
+					<p class="description"><?php
+
+					_e('By disabling the role capabilities feature you will allow everybody who can at least publish a post to edit the access properties as well.','wp-access-areas');
+
+				} else {
+					_e('By default everybody who can publish an entry can also edit the access properties such as ‘Who can view’ or ‘Who can edit’.<br /> If this is too generous for you then click on the button below.','wp-access-areas');
+				}
+
+			?></p>
+		</div>
+		<?php
+
+		$this->role_settings();
 	}
 
 
 	/**
 	 *	settings field callback
 	 */
-	public function post_type_settings( $args ) {
+	public function post_type_settings(  ) {
 		global $wp_roles;
 
 		$template = Core\Template::instance();
 
-		$option_value = get_option( $args['option_name'] );
+		$option_name = 'wpaa_post_types';
+		$option_value = get_option( $option_name );
 
 		$post_types = get_post_types(array(
 			'show_ui' => true,
 		),'objects');
 
-		$pt_keys = array_keys( $post_types );
-		$first_pt = array_shift( $pt_keys );
+		$post_types = array( 0 => get_post_type_object('post') ) + $post_types;
 
 
 		//
 		$post_status_labels = array();
-		$post_stati = get_post_stati(array(
+
+		$post_stati = get_post_stati( array(
 			'internal'	=> false,
 		), false );
+
 		foreach ( $post_stati as $status => $post_status ) {
 			$post_status_labels[ $status ] = $post_status->label;
 		}
@@ -282,12 +294,17 @@ class SettingsAccessAreas extends Settings {
 				<ul>
 					<?php foreach ( $post_types as $post_type => $post_type_object ) { ?>
 						<?php
-							$id = sprintf( 'tab-panel-%s', $post_type );
-							printf( '<li id="tab-link-wpaa-%s" class="%s">%s</li>',
-								$post_type,
-								( $first_pt == $post_type ) ? 'active' : '',
-								sprintf( '<a href="#%1$s" aria-controls="%1$s">%2$s</a>', $id, $post_type_object->labels->name )
-							);
+							if ( $post_type !== 0) {
+								$id = sprintf( 'tab-panel-%s', $post_type );
+								printf( '<li id="tab-link-wpaa-%s">%s</li>',
+									$post_type,
+									sprintf( '<a href="#%1$s" aria-controls="%1$s">%2$s</a>', $id, $post_type_object->labels->name )
+								);
+							} else {
+								printf( '<li id="tab-link-wpaa-general" class="active">%s</li>',
+									sprintf( '<a href="#tab-panel-general" aria-controls="tab-panel-general">%1$s</a>', __('General','wp-access-areas') )
+								);
+							}
 						?>
 					<?php } ?>
 				</ul>
@@ -297,16 +314,36 @@ class SettingsAccessAreas extends Settings {
 				<?php foreach ( $post_types as $post_type => $post_type_object ) { ?>
 					<?php
 
+						if ( $post_type !== 0 ) {
+							$name_template = sprintf('%s[%s][%%s]', $option_name, $post_type );
+							$id_template = sprintf('%s-%s-%%s', $option_name, $post_type );
 
-						$name_prefix = sprintf('%s[%s]', $args['option_name'], $post_type );
-						$id_prefix = sprintf('%s-%s', $args['option_name'], $post_type );
+							$tab_name = $post_type_object->labels->name;
+							$tab_singular_name = $post_type_object->labels->singular_name;
 
-						// sanitize pt settings
-						$pt_settings = wp_parse_args( $option_value[ $post_type ], $pt_options[$post_type] );
+							// sanitize pt settings
+							$pt_settings = wp_parse_args( $option_value[ $post_type ], $pt_options[ $post_type ] );
+						} else {
+							$name_template = 'wpaa_default_%s';
+							$id_template = 'wpaa-default-%s';
+							$tab_name = __( 'General','wp-access-areas' );
+							$tab_singular_name = __( 'General', 'wp-access-areas' );
+							$tab_singular_name = $post_type_object->labels->singular_name;
+
+							$pt_settings = array();
+							foreach ( $this->get_default_pt_option() as $key => $default ) {
+								$val = get_option( 'wpaa_default_' . $key );
+								if ( $val !== false ) {
+									$pt_settings[$key] = $val;
+								} else {
+									$pt_settings[$key] = $default;
+								}
+							}
+						}
 
 					?>
-					<div id="<?php printf( 'tab-panel-%s', $post_type ); ?>" class="tab-panel-content <?php echo ( $first_pt == $post_type ) ? 'active' : ''; ?>">
-						<h3><?php echo $post_type_object->labels->name; ?></h3>
+					<div id="<?php printf( 'tab-panel-%s', $post_type === 0 ? 'general' : $post_type ); ?>" class="tab-panel-content <?php echo ( $post_type === 0 ) ? 'active' : ''; ?>">
+						<h3><?php echo $tab_name; ?></h3>
 						<?php /* Access Settings */ ?>
 						<div class="wpaa-settings-section wpaa-settings-access">
 
@@ -315,8 +352,9 @@ class SettingsAccessAreas extends Settings {
 								<?php
 
 									// add enable access control for post type
-									$name = sprintf('%s[access_override]', $name_prefix );
-									$id = sprintf('%s-%s-access-override', $args['option_name'], $post_type );
+									$name = sprintf( $name_template, 'access_override' );
+									$id = sprintf( $id_template, 'access-override' );
+
 									printf( '<input type="hidden" name="%s" value="0" />', $name );
 									printf(
 										'<input type="checkbox" name="%s" id="%s" value="1" %s />',
@@ -330,7 +368,7 @@ class SettingsAccessAreas extends Settings {
 								<p class="description">
 									<?php printf(
 											_x('If checked you will be able to edit these settings for each %s individually.', 'post-type', 'wp-access-areas'),
-											$post_type_object->labels->singular_name
+											$tab_singular_name
 									); ?>
 								</p>
 
@@ -338,9 +376,9 @@ class SettingsAccessAreas extends Settings {
 
 							<?php
 
-								echo $template->access_controls( $post_type_object, $pt_settings, array(
-									'name_template'	=> $name_prefix . '[%s]',
-									'id_template'	=> $id_prefix . '-%s',
+								echo $template->access_controls( $post_type_object, null, $pt_settings, array(
+									'name_template'	=> $name_template,
+									'id_template'	=> $id_template,
 								) );
 
 							?>
@@ -355,8 +393,9 @@ class SettingsAccessAreas extends Settings {
 								<?php
 
 									// add enable access control for post type
-									$name = sprintf('%s[behavior_override]', $name_prefix );
-									$id = sprintf('%s-%s-behavior-override', $args['option_name'], $post_type );
+									$name = sprintf( $name_template, 'behavior_override' );
+									$id = sprintf( $id_template, 'behavior-override' );
+
 									printf( '<input type="hidden" name="%s" value="0" />', $name );
 									printf(
 										'<input type="checkbox" name="%s" id="%s" value="1" %s />',
@@ -370,7 +409,7 @@ class SettingsAccessAreas extends Settings {
 								<p class="description">
 									<?php printf(
 											_x('If checked you will be able to edit these settings for each %s individually.', 'post-type', 'wp-access-areas'),
-											$post_type_object->labels->singular_name
+											$tab_singular_name
 									); ?>
 								</p>
 
@@ -378,9 +417,9 @@ class SettingsAccessAreas extends Settings {
 
 							<?php
 
-								echo $template->behavior_controls( $post_type_object, $pt_settings, array(
-									'name_template'	=> $name_prefix . '[%s]',
-									'id_template'	=> $id_prefix . '-%s',
+								echo $template->behavior_controls( $pt_settings, array(
+									'name_template'	=> $name_template,
+									'id_template'	=> $id_template,
 								) );
 
 							?>
@@ -389,18 +428,21 @@ class SettingsAccessAreas extends Settings {
 
 						<div class="wpaa-settings-section wpaa-settings-advanced">
 							<?php
-							$id = $id_prefix . '-default-post-status';
+							$name = sprintf( $name_template, 'default_post_status' );
+							$id = sprintf( $id_template, 'default-post-status' );
 
 							?>
 							<h4><?php _e('Advanced','wp-access-areas') ?></h4>
 							<div class="wpaa-control">
 								<?php
+
 									printf( '<label for="%s">%s</label>', $id, __( 'Fallback Post status', 'wp-access-areas' ) );
 
 									echo $template->dropdown( $post_status_labels, $pt_settings['default_post_status'], array(
-										'name'	=> sprintf('%s[default_post_status]',$name_prefix ),
+										'name'	=> $name,
 										'id'	=> $id,
 									));
+
 								?>
 								<p class="description">
 									<?php _e('Assign this post status when the reading access area or role is deleted.', 'wp-access-areas' ); ?>
@@ -413,13 +455,155 @@ class SettingsAccessAreas extends Settings {
 			</div>
 		</div>
 		<?php
+	}
+
+	/**
+	 *	@param array $args
+	 */
+	public function role_settings( ) {
+
+		$option_name = 'wpaa_enable_assign_cap';
+		$option_value = absint( get_option( $option_name ) );
+
+		printf( '<input type="hidden" name="%s" value="%s" />', $option_name, $option_value );
+
+		if ( ! $option_value ) {
+			// print convert button, return
+			?>
+			<button name="wpaa_enable_assign_cap" value="1" type="submit" class="button-secondary">
+				<?php _e('Enable Role Capabilities' , 'wp-access-areas'); ?>
+			</button>
+			<?php
+			return;
+		}
+		?>
+		<button name="wpaa_enable_assign_cap" value="0" type="submit" class="button-secondary">
+			<?php _e('Disable Role Capabilities' , 'wp-access-areas'); ?>
+		</button>
+		<?php
+
+		$roles = get_editable_roles();
+		$caps = array(
+			'wpaa_set_view_cap'		=> __( 'Change View Access' , 'wp-access-areas'),
+			'wpaa_set_edit_cap'		=> __( 'Change Edit Access' , 'wp-access-areas'),
+			'wpaa_set_comment_cap'	=> __( 'Change Comment Access' , 'wp-access-areas'),
+		);
+
+		$ad = get_role('administrator');
+
+		foreach ( array_keys($caps) as $cap ) {
+			if ( ! current_user_can( $cap ) ) {
+				unset($caps[$cap]);
+			}
+		}
+
+		?>
+		<table class="widefat striped">
+			<thead>
+				<th><?php _e('Role','wp-access-areas'); ?></th>
+				<?php
+					foreach ( $caps as $cap => $label ) {
+						printf('<th>%s<br /><code>%s</code></th>', $label, $cap );
+					}
+				?>
+			</thead>
+			<tbody>
+				<?php
+				foreach ( $roles as $role_slug => $role_details ) {
+					$role = get_role( $role_slug );
+
+					if ( ! current_user_can( 'edit_wpaa_role_caps', $role_slug ) || ! $role->has_cap( 'edit_posts' ) && ! $role->has_cap( 'edit_pages' ) ) {
+						continue;
+					}
+
+					?>
+					<tr>
+						<th scope="row">
+							<?php echo translate_user_role( $role_details['name'] ) ?>
+						</th>
+						<?php
+						foreach ( array_keys( $caps ) as $cap ) {
+
+							?>
+							<td>
+								<?php
+								$attr = '';
+								if ( $role->has_cap( $cap ) ) {
+									printf('<button type="submit" name="revoke_cap[%s]" value="%s" class="button-secondary">%s</button', $role_slug, $cap, __('Forbid','wp-access-areas' ) );
+								} else {
+									printf('<button type="submit" name="grant_cap[%s]" value="%s" class="button-primary">%s</button', $role_slug, $cap, __('Allow','wp-access-areas' ) );
+								}
+								?>
+							</td>
+							<?php
+						}
+						?>
+					</tr>
+					<?php
+				}
+				?>
+			</tbody>
+		</table>
+		<?php
 
 	}
 
 
+	/**
+	 *	@param string $value
+	 *	@return string
+	 */
+	public function sanitize_http_status( $value ) {
+		// sanitize http status - regex('[\d]{3}');
+		if ( ! preg_match( '/^[\d]{3}$/', $value ) ) {
+			return '404';
+		}
+		return $value;
+	}
 
 	/**
-	 *
+	 *	@param string $value
+	 *	@return string
+	 */
+	public function sanitize_behavior( $value ) {
+		if ( ! in_array( $value, array('404','page','status') ) ) {
+			return '404';
+		}
+		return $value;
+	}
+
+	/**
+	 *	@param string $value
+	 *	@return string
+	 */
+	public function sanitize_post_status( $value ) {
+		if ( is_null( get_post_status_object($value) ) ) {
+			return 'private';
+		}
+		return $value;
+	}
+
+	/**
+	 *	@param string $value
+	 *	@return string
+	 */
+	public function sanitize_cap( $value ) {
+		// chack if exist,read,rolename exists or wpaa exists!
+		if ( in_array( $value, array('exist','read') ) ) {
+			return $value;
+		}
+		if ( $GLOBALS['wp_roles']->is_role( $value ) ) {
+			return $value;
+		}
+		if ( wpaa_access_area_exists( $value ) ) {
+			return $value;
+		}
+		return 'exist';
+	}
+
+	/**
+	 *	@param array $settings
+	 *	@return array
 	 */
 	public function sanitize_post_type_settings( $settings ) {
 
@@ -436,52 +620,31 @@ class SettingsAccessAreas extends Settings {
 				unset( $settings[ $post_type ] );
 				continue;
 			}
+
+			// fill up with default values
 			$settings[ $post_type ] = wp_parse_args( $settings[ $post_type ], $this->get_default_pt_option() );
+
+			$settings[ $post_type ][ 'http_status' ] = $this->sanitize_http_status( $settings[ $post_type ][ 'http_status' ] );
+			$settings[ $post_type ][ 'behavior' ] = $this->sanitize_behavior( $settings[ $post_type ][ 'behavior' ] );
+			$settings[ $post_type ][ 'default_post_status' ] = $this->sanitize_post_status( $settings[ $post_type ][ 'default_post_status' ] );
+
+			$settings[ $post_type ][ 'post_view_cap' ] = $this->sanitize_cap( $settings[ $post_type ][ 'post_view_cap' ] );
+			$settings[ $post_type ][ 'post_edit_cap' ] = $this->sanitize_cap( $settings[ $post_type ][ 'post_edit_cap' ] );
+			$settings[ $post_type ][ 'post_comment_cap' ] = $this->sanitize_cap( $settings[ $post_type ][ 'post_comment_cap' ] );
 
 			// sanitize boolean
 			foreach ( array( 'access_override', 'behavior_override', 'login_redirect' ) as $prop ) {
-				$settings[ $post_type ][ $prop ] = intval( $settings[ $post_type ] );
+				$settings[ $post_type ][ $prop ] = absint( $settings[ $post_type ][ $prop ] );
 			}
 
-			// sanitize http status
-
-			// sanitize post default_status
-
-			// sanitize assignable capability
-
-			// post_behavior
-
-
-
-			// check the rest
-			/*
-			√access_override	intval
-			post_view_cap	is capability && current_user_can( capability ) ... is_grantable
-			post_edit_cap	(same)
-			post_comment_cap (same)
-			default_status	valid post status
-
-			√behavior_override	intval
-			post_behavior		string 404|page|status
-			√login_redirect		intval
-			http_status			string http status
-			fallback_page		unprotected page id
-			*/
 		}
+
 		return $settings;
 	}
 
 	/**
-	 *	@inheritdoc
-	 */
-	public function activate() {
-
-		add_option( 'wpaa_post_types', $this->get_default_pt_options() );
-
-	}
-
-	/**
 	 *	Settings default values
+	 *	@return array
 	 */
 	private function get_default_pt_options() {
 		$default_pt_option = array();
@@ -497,19 +660,43 @@ class SettingsAccessAreas extends Settings {
 		return $default_pt_option;
 	}
 
+	/**
+	 *	Post type Settings default values
+	 *	@return array
+	 */
 	private function get_default_pt_option() {
 		return array(
-			'access_override'	=>  1,
-			'post_view_cap'		=>  'exist',
-			'post_edit_cap'		=>  'exist',
-			'post_comment_cap'	=>  'exist',
-			'default_status'	=>  'publish',
-			'behavior_override'	=>  1,
-			'post_behavior'		=>  '404',
-			'login_redirect'	=>  0,
-			'http_status'		=>  '404',
-			'fallback_page'		=>  0,
+			'access_override'		=>  1,
+			'post_view_cap'			=>  'exist',
+			'post_edit_cap'			=>  'exist',
+			'post_comment_cap'		=>  'exist',
+			'default_status'		=>  'publish',
+
+			'behavior_override'		=>  1,
+			'behavior'			=>  '404',
+			'login_redirect'		=>  0,
+			'http_status'			=>  '404',
+			'fallback_page'			=>  0,
+
+			'default_post_status'	=> 'private',
 		);
+	}
+
+	/**
+	 *	@inheritdoc
+	 */
+	public function activate() {
+
+		$defaults = $this->get_default_pt_option();
+
+		add_option( 'wpaa_enable_assign_cap', 0, null, true );
+
+		foreach ( $defaults as $key => $default) {
+			add_option( 'wpaa_default_' . $key, $default, null, true );
+		}
+
+		add_option( 'wpaa_post_types', $this->get_default_pt_options(), null, false );
+
 	}
 
 	/**
@@ -548,7 +735,7 @@ class SettingsAccessAreas extends Settings {
 				$post_type_settings[$post_type]['default_status'] 	= $default_post_status;
 
 				$post_type_settings[$post_type]['behavior_override']	= 1;
-				$post_type_settings[$post_type]['post_behavior']		= $behavior;
+				$post_type_settings[$post_type]['behavior']				= $behavior;
 				$post_type_settings[$post_type]['login_redirect']		= $login_redirect;
 				$post_type_settings[$post_type]['http_status']			= '404';
 				$post_type_settings[$post_type]['fallback_page']		= $fallback_page;

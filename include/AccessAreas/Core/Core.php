@@ -10,7 +10,7 @@ use AccessAreas\Compat;
 class Core extends Plugin {
 
 	private $prefix = 'wpaa_';
-
+	public const PREFIX = 'wpaa_';
 	/**
 	 *	@inheritdoc
 	 */
@@ -24,6 +24,7 @@ class Core extends Plugin {
 		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
 		    require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
 		}
+
 
 
 		parent::__construct();
@@ -41,7 +42,7 @@ class Core extends Plugin {
 	 *	@return string
 	 */
 	public function get_prefix() {
-		return $this->prefix;
+		return self::PREFIX;
 	}
 
 	/**
@@ -50,7 +51,8 @@ class Core extends Plugin {
 	 *  @action plugins_loaded
 	 */
 	public function init_compat() {
-		if ( is_multisite() && is_plugin_active_for_network( ACCESS_AREAS_PLUGIN ) ) {
+
+		if ( is_multisite() && function_exists('is_plugin_active_for_network') && is_plugin_active_for_network( ACCESS_AREAS_PLUGIN ) ) {
 			Compat\WPMU\WPMU::instance();
 		}
 	}

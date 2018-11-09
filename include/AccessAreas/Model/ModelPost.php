@@ -45,7 +45,7 @@ class ModelPost extends Core\PluginComponent {
 
 
 		// behavior
-//		add_action('template_redirect',array(__CLASS__,'template_redirect')); // or wp
+		add_action( 'template_redirect', array( $this, 'template_redirect' ) ); // or wp
 
 
 		//	misc
@@ -56,9 +56,166 @@ class ModelPost extends Core\PluginComponent {
 
 
 		// caps
-//		add_filter( 'map_meta_cap' , array( __CLASS__ , 'map_meta_cap' ) , 10 , 4 );
+		add_filter( 'map_meta_cap' , array( $this, 'map_meta_cap' ) , 10 , 4 );
 //		add_filter( 'user_has_cap', array( __CLASS__ , 'user_has_cap' ) , 10 , 3  );
 
+	}
+
+	/**
+	 *	@action template_redirect
+	 */
+	static function template_redirect() {
+		global $wp_query;
+
+		if ( isset( $wp_query ) && is_singular() && $restricted_post = get_post() ) {
+			if ( $restricted_post->ID !== 0 && ! wpaa_user_can( $restricted_post->post_view_cap ) ) {
+				do_action( 'wpaa_view_restricted_post' , $restricted_post->ID , $restricted_post );
+
+
+				if ( $this->get_post_type_setting( 'behavior_override', $restricted_post->post_type ) ) {
+					$behavior 			= $this->get_post_setting( 'behavior', $restricted_post );
+					$fallback_page_id	= $this->get_post_setting( 'fallback_page', $restricted_post );
+					$login_redirect		= $this->get_post_setting( 'login_redirect', $restricted_post );
+					$http_status		= $this->get_post_setting( 'http_status', $restricted_post );
+
+				} else {
+					$behavior 			= $this->get_post_type_setting( 'behavior', $restricted_post->post_type );
+					$fallback_page_id	= $this->get_post_type_setting( 'fallback_page', $restricted_post->post_type );
+					$login_redirect		= $this->get_post_type_setting( 'login_redirect', $restricted_post->post_type );
+					$http_status		= $this->get_post_type_setting( 'http_status', $restricted_post->post_type );
+				}
+
+				$do_redirect = false;
+
+				if ( $behavior === '404' ) {
+					$redirect = get_permalink( $post->ID );
+					$wp_query->set_404();
+
+				} else if ( $behavior === 'page' ) {
+					$redirect = get_permalink( $fallback_page_id );
+					$do_redirect = true;
+
+				} else if ( $behavior === 'status' ) {
+					$redirect = get_permalink( $restricted_post->ID );
+					$wp_query->query( array(
+						'post__in'		=> array($fallback_page_id),
+						'post_status'	=> 'publish',
+						'post_type'		=> 'any',
+					) );
+					status_header( $http_status );
+				}
+
+				if ( $login_redirect && ! is_user_logged_in() ) {
+					$redirect = wp_login_url( $redirect );
+					$do_redirect = true;
+				}
+
+				$redirect = apply_filters( 'wpaa_restricted_post_redirect', $redirect, $restricted_post->ID, $restricted_post );
+
+				if ( $do_redirect ) {
+					wp_redirect( $redirect );
+					exit();
+				}
+				return;
+
+				if ( $behavior == 'login' && ! is_user_logged_in() ) {
+					// get user to login and return him to the requested page.
+					$redirect = wp_login_url( get_permalink( $restricted_post->ID ) );
+				} else {
+					if ( $behavior == 'page' || ( $behavior == 'login' && is_user_logged_in())) {
+
+						if ( $fallback_page_id && wpaa_is_post_public( $fallback_page_id ) ) {
+							// if accessable take user to the fallback page
+							$redirect = get_permalink( $fallback_page_id );
+						} else {
+							// last resort: send him home
+							$redirect = home_url();
+						}
+					} else { // assume 404
+						$wp_query->set_404();
+						status_header(404);
+						return;
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 *	@param string $key The setting to get. Keys: behaviour | fallback_page | login_redirect | http_status
+	 *	@param WP_Post $post The post
+	 */
+	private function get_post_setting( $key, $post ) {
+		if ( $value = get_post_meta( $post->ID, '_wpaa_' . $key, true ) ) {
+			return $value;
+		}
+		return $this->get_post_type_setting( $key, $post->post_type );
+
+	}
+
+	/**
+	 *	@param string $key The setting to get. Keys: behaviour | fallback_page | login_redirect | http_status
+	 *	@param string $post_type The post type
+	 */
+	private function get_post_type_setting( $key, $post_type ) {
+		$pt_options = get_option('wpaa_post_types');
+		if ( isset( $pt_options[ $post_type ], $pt_options[ $post_type ][ $key ] ) ) {
+			return $pt_options[ $post_type ][ $key ];
+		}
+		//
+		return get_option( 'wpaa_default_' . $key );
+	}
+
+
+	/**
+	 *	@filter map_meta_cap
+	 */
+	public function map_meta_cap( $caps, $cap, $user_id, $args ) {
+		switch ( $cap ) {
+			case 'edit_post': // belongs to post!
+			case 'delete_post':
+			case 'edit_page':
+			case 'delete_page':
+				if ( count( $args ) ) {
+					$post_ID = $args[0];
+					// if he not can like specfied, ;
+					$post = get_post( $post_ID );
+
+					if ( ! $post->post_edit_cap ) {
+						break;
+					}
+					//*
+					$caps[] = $post->post_edit_cap;
+					$caps[] = $post->post_view_cap;
+					/*/
+					if ( ! ( $this->can( $post->post_edit_cap ) && $this->can( $post->post_view_cap ) ) ) {
+						$caps[] = 'do_not_allow';
+					}
+					//*/
+				}
+				break;
+
+			case 'edit_comment':
+				if ( count( $args ) ) {
+
+					$comment_ID = $args[0];
+					$comment = get_comment( $comment_ID );
+
+					if ( $comment && $comment->comment_post_ID  ) {
+
+						$post = get_post( $comment->comment_post_ID );
+						//*
+						$caps[] = $post->post_comment_cap;
+						/*/
+						if ( ! $this->can( $post->post_comment_cap ) ) {
+							$caps[] = 'do_not_allow';
+						}
+						//*/
+					}
+				}
+				break;
+		}
+		return $caps;
 	}
 
 	/**

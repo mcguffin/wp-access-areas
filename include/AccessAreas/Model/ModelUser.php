@@ -81,41 +81,6 @@ class ModelUser extends Core\PluginComponent {
 	 */
 	public function map_meta_cap( $caps, $cap, $user_id, $args ) {
 		switch ( $cap ) {
-			case 'edit_post':
-			case 'delete_post':
-			case 'edit_page':
-			case 'delete_page':
-				if ( count($args[0]) ) {
-					$post_ID = $args[0];
-					// if he not can like specfied, ;
-					$post = get_post( $post_ID );
-
-					if ( ! $post->post_edit_cap ) {
-						break;
-					}
-//var_dump( current_user_can('edit_post') );
-					if ( ! ( $this->can( $post->post_edit_cap ) && $this->can( $post->post_view_cap ) ) ) {
-						$caps[] = 'do_not_allow';
-					}
-				}
-				break;
-
-			case 'edit_comment':
-				if ( count($args[0]) ) {
-
-					$comment_ID = $args[0];
-					$comment = get_comment( $comment_ID );
-
-					if ( $comment && $comment->comment_post_ID  ) {
-
-						$post = get_post( $comment->comment_post_ID );
-
-						if ( ! $this->can( $post->post_comment_cap ) ) {
-							$caps[] = 'do_not_allow';
-						}
-					}
-				}
-				break;
 			case 'grant_access':
 				$caps[] = 'promote_users';
 				break;

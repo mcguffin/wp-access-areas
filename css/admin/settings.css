@@ -46,17 +46,24 @@
   .tab-panels .active {
     display: block; }
 
+table.widefat tr > :first-child {
+  padding-left: 10px; }
+
+.wpaa-role-settings > th,
 .wpaa-post-type-settings > th {
   display: none; }
+  .wpaa-role-settings > th ~ td,
   .wpaa-post-type-settings > th ~ td {
     padding: 0; }
 
-.wpaa-post-type-settings .widefat td, .wpaa-post-type-settings .widefat th {
+.wpaa-role-settings .widefat td, .wpaa-role-settings .widefat th,
+.wpaa-post-type-settings .widefat td,
+.wpaa-post-type-settings .widefat th {
   padding: 8px 10px; }
 
+.wpaa-role-settings label,
 .wpaa-post-type-settings label {
-  display: inline-block;
-  min-width: 200px; }
+  display: inline-block; }
 
 .wpaa-settings-section {
   -webkit-box-sizing: border-box;
@@ -87,23 +94,25 @@
   clear: left;
   border-top: 1px solid #f1f1f1; }
 
-.postbox .wpaa-behavior-http-status, .postbox
-.wpaa-behavior-fallback-page, .postbox
+.wpaa-behavior-http-status,
+.wpaa-behavior-fallback-page,
 .wpaa-access-control {
   padding: 3px 0; }
-  .postbox .wpaa-behavior-http-status label, .postbox
-  .wpaa-behavior-fallback-page label, .postbox
+  .wpaa-behavior-http-status label,
+  .wpaa-behavior-fallback-page label,
   .wpaa-access-control label {
     width: 40%;
     display: block;
     float: left;
     clear: left;
     vertical-align: middle; }
-  .postbox .wpaa-behavior-http-status select, .postbox
-  .wpaa-behavior-fallback-page select, .postbox
+  .wpaa-behavior-http-status select,
+  .wpaa-behavior-fallback-page select,
   .wpaa-access-control select {
     width: 60%;
-    margin: 0; }
+    margin: 0;
+    float: left;
+    vertical-align: middle; }
 
 .postbox .wpaa-behavior-controls .wpaa-behavior-control {
   padding: 5px 0;
@@ -120,7 +129,6 @@
   min-width: 100%;
   margin-bottom: 0.5em; }
 
-.wpaa-behavior[data-value="404"] ~ .wpaa-behavior-http-status,
 .wpaa-behavior[data-value="404"] ~ .wpaa-behavior-fallback-page {
   display: none; }
 

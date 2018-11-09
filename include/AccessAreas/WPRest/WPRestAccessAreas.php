@@ -267,7 +267,6 @@ class WPRestAccessAreas extends Core\Singleton {
 			if ( $user_model->grant_access( $user, $access_area ) ) {
 				$edited_users[] = $user_id;
 			}
-
 		}
 		$response = new \WP_REST_Response();
 		$response->set_data( array( 'success' => true, 'access_area' => $access_area, 'user_id' => $edited_users ) );

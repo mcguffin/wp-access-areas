@@ -20,8 +20,24 @@ class AdminUsers extends Users {
 		add_action( 'wpaa_grant_access', array( $this, 'grant_access', 10, 3 ) );
 		add_action( 'wpaa_revoke_access', array( $this, 'revoke_access', 10, 3 ) );
 		add_filter( 'wpaa_user_is_admin', array( $this, 'user_is_admin' ), 10, 2 );
+
+		add_filter('map_meta_cap',array( $this, 'map_meta_cap'), 20, 4 );
 	}
 
+	/**
+	 *	@filter map_meta_cap
+	 */
+	public function map_meta_cap( $caps, $cap, $user_id, $args ) {
+		if ( $cap === 'edit_wpaa_role_caps' ) {
+			if ( is_super_admin() ) { // super admins can edit 
+				$idx = array_search( 'do_not_allow', $caps );
+				if ( false !== $idx ) {
+					unset( $caps[$idx] );
+				}
+			}
+		}
+		return $caps;
+	}
 
 	/**
 	 *	@filter wpaa_user_is_admin

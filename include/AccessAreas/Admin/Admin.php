@@ -23,6 +23,17 @@ class Admin extends Core\Singleton {
 		add_action( 'admin_init', array( $this , 'register_assets' ) );
 
 		add_action( 'print_media_templates', array( $this, 'print_media_templates' ) );
+
+		add_filter('map_meta_cap',array( $this, 'map_meta_cap'),10,4);
+	}
+
+	public function map_meta_cap( $caps, $cap, $user_id, $args ) {
+		if ( $cap === 'edit_wpaa_role_caps' ) {
+			if ( count( $args ) && in_array( $args[0], get_userdata( $user_id )->roles ) ) { // don't change own role!
+				$caps[] = 'do_not_allow';
+			}
+		}
+		return $caps;
 	}
 
 	/**

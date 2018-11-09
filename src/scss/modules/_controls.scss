@@ -5,7 +5,7 @@
 	.wpaa-post-type-settings & {
 
 	}
-	.postbox & {
+//	.postbox & {
 		padding:3px 0;
 		label {
 			width:40%;
@@ -17,8 +17,10 @@
 		select {
 			width:60%;
 			margin:0;
+			float:left;
+			vertical-align:middle;
 		}
-	}
+//	}
 }
 
 
@@ -49,11 +51,8 @@
 		display:inline-block;
 		min-width:100%;
 		margin-bottom:0.5em;
-//			line-height:1em;
-//			font-weight:400;
 	}
 	&[data-value="404"] {
-		& ~ .wpaa-behavior-http-status,
 		& ~ .wpaa-behavior-fallback-page {
 			display:none;
 		}

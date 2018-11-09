@@ -93,7 +93,7 @@ gulp.task('scss:admin:posts',function(){
 gulp.task('scss:admin:settings',function(){
 	return do_scss('admin/settings');
 });
-gulp.task('scss', gulp.parallel('scss:admin:aa','scss:admin:posts','scss:admin:settings'));
+gulp.task('scss', gulp.parallel( 'scss:admin:aa','scss:admin:posts','scss:admin:settings' ,));
 
 
 
@@ -109,7 +109,7 @@ gulp.task('js:admin:settings',function(){
 })
 
 
-gulp.task( 'js', gulp.parallel('js:admin:settings','js:admin:aa') );
+gulp.task( 'js', gulp.parallel('js:admin:settings','js:admin:aa',) );
 
 
 gulp.task('build', gulp.parallel('scss','js') );

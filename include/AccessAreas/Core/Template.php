@@ -12,7 +12,7 @@ class Template extends Singleton {
 
 
 	public function grant_access_controls( $user_id ) {
-		
+
 	}
 
 	/**
@@ -65,12 +65,27 @@ class Template extends Singleton {
 	/**
 	 *	Access controls html
 	 *
+	 *	@param WP_Post $post
 	 *	@param object $post_type_object
 	 *	@param array $values array( 'post_view_cap' => 'exists', 'post_edit_cap' => 'exists', 'post_comment_cap' => 'exist' )
 	 *	@param array $options array( 'name_template' => '%s', 'id_template' => '%s',  )
 	 *	@return string access control html
 	 */
-	public function access_controls( $post_type_object, $values = array(), $options = array() ) {
+	public function access_controls( $post_type_object, $post = null, $values = array(), $options = array() ) {
+
+		$output = '';
+
+		if ( is_null( $post ) ) {
+			$can_assign_view = $can_assign_edit = $can_assign_comment = current_user_can( 'manage_options' );
+		} else {
+			$can_assign_view = current_user_can( 'wpaa_assign_view_cap', $post->ID );
+			$can_assign_edit = current_user_can( 'wpaa_assign_edit_cap', $post->ID );
+			$can_assign_comment = current_user_can( 'wpaa_assign_comment_cap', $post->ID );
+		}
+		if ( ! $can_assign_view && ! $can_assign_view && ! $can_assign_comment ) {
+			return $output;
+		}
+
 		// parse input
 		$values = wp_parse_args( $values, array(
 			'post_view_cap'		=> 'exist',
@@ -83,24 +98,24 @@ class Template extends Singleton {
 			'id_template'	=> '%s',
 		));
 
-		$model = Model\ModelAccessAreas::instance();
+		$model_wpaa = Model\ModelAccessAreas::instance();
 
 		$roles = wp_roles()->get_names();
 
 		$roles_key =__( 'WordPress Roles', 'wp_access_areas');
 
-		$access_options = $access_options_edit = $model->get_access_options();
+		$access_options = $access_options_edit = $model_wpaa->get_access_options();
 
 		unset( $access_options_edit['read'] );
 
 		// generate output
-		$output = '';
 
 		$output .= '<div class="wpaa-access-controls">';
 
+
 		// View cap
-		if ( $post_type_object->public || $post_type_object->show_ui ) {
-			$output .=	'<div class="wpaa-control wpaa-access-control wpaa-access-view">';
+		if ( $can_assign_view && ( $post_type_object->public || $post_type_object->show_ui ) ) {
+			$output .=	'<div class="wpaa-control wpaa-access-control wpaa-access-view wp-clearfix">';
 
 			$name	= sprintf( $options['name_template'], 'post_view_cap' );
 			$id		= sprintf( $options['id_template'], 'view' );
@@ -131,32 +146,35 @@ class Template extends Singleton {
 
 
 		// Edit cap
-		$output .= 		'<div class="wpaa-control wpaa-access-control wpaa-access-edit">';
+		if ( $can_assign_edit ) {
+			$output .= 		'<div class="wpaa-control wpaa-access-control wpaa-access-edit wp-clearfix">';
 
-		$name	= sprintf( $options['name_template'], 'post_edit_cap' );
-		$id		= sprintf( $options['id_template'], 'edit' );
+			$name	= sprintf( $options['name_template'], 'post_edit_cap' );
+			$id		= sprintf( $options['id_template'], 'edit' );
 
-		$output .=			sprintf( '<label for="%s">%s</label>', $id, __( 'Who can edit', 'wp-access-areas' ) );
+			$output .=			sprintf( '<label for="%s">%s</label>', $id, __( 'Who can edit:', 'wp-access-areas' ) );
 
-		$access_options_edit[ $roles_key ] = array();
-		$edit_roles = array();
-		foreach ( $roles as $role_slug => $role_name ) {
-			if ( get_role( $role_slug )->has_cap( $post_type_object->cap->edit_posts ) ) {
-				$access_options_edit[ $roles_key ][ $role_slug ] = $role_name;
+			$access_options_edit[ $roles_key ] = array();
+			$edit_roles = array();
+			foreach ( $roles as $role_slug => $role_name ) {
+				if ( get_role( $role_slug )->has_cap( $post_type_object->cap->edit_posts ) ) {
+					$access_options_edit[ $roles_key ][ $role_slug ] = $role_name;
+				}
 			}
+
+			$output .=			$this->assign_access_select( $access_options_edit, array(
+				'name'		=> $name,
+				'id'		=> $id,
+				'selected'	=> $values['post_edit_cap'],
+			));
+			$output	.=		'</div>';
 		}
 
-		$output .=			$this->assign_access_select( $access_options_edit, array(
-			'name'		=> $name,
-			'id'		=> $id,
-			'selected'	=> $values['post_edit_cap'],
-		));
-		$output	.=		'</div>';
 
 		// Comment cap
-		if ( post_type_supports( $post_type_object->name, 'comments' ) ) {
+		if ( $can_assign_comment && post_type_supports( $post_type_object->name, 'comments' ) ) {
 			// comment access
-			$output .= 	'<div class="wpaa-control wpaa-access-control wpaa-access-edit">';
+			$output .= 	'<div class="wpaa-control wpaa-access-control wpaa-access-edit wp-clearfix">';
 
 			$name	= sprintf( $options['name_template'], 'post_comment_cap' );
 			$id		= sprintf( $options['id_template'], 'comment' );
@@ -183,12 +201,13 @@ class Template extends Singleton {
 	 *	Access controls html
 	 *
 	 *	@param object $post_type_object
-	 *	@param array $values array( 'post_view_cap' => 'exists', 'post_edit_cap' => 'exists', 'post_comment_cap' => 'exist' )
+	 *	@param array $values array( 'behavior' => '404', 'login_redirect' => 0, 'http_status' => '404', 'fallback_page' => 0 )
 	 *	@param array $options array( 'name_template' => '%s', 'id_template' => '%s',  )
 	 *	@return string access control html
 	 */
-	public function behavior_controls( $post_type_object, $values = array(), $options = array() ) {
+	public function behavior_controls( $values = array(), $options = array() ) {
 		// parse input
+
 		$values = wp_parse_args( $values, array(
 			'behavior'			=> '404',
 			'login_redirect'	=> 0,
@@ -208,7 +227,7 @@ class Template extends Singleton {
 		$name = sprintf($options['name_template'],'behavior');
 		$id = sprintf( $options['id_template'], 'behavior' );
 
-		$output .=		sprintf('<div class="wpaa-control wpaa-behavior-control wpaa-behavior" id="%1$s" data-value="%1$s">', $id );
+		$output .=		sprintf('<div class="wpaa-control wpaa-behavior-control wpaa-behavior" data-value="%2$s">', $id, $values['behavior'] );
 
 		$output .= $this->select_behavior(
 			$values['behavior'], $name, $id
@@ -228,7 +247,7 @@ class Template extends Singleton {
 		$output	.=		'</div>';
 
 
-		$output .=		'<div class="wpaa-control wpaa-behavior-control wpaa-behavior-http-status">';
+		$output .=		'<div class="wpaa-control wpaa-behavior-control wpaa-behavior-http-status wp-clearfix">';
 
 		$name = sprintf($options['name_template'],'http_status');
 		$id = sprintf( $options['id_template'], 'http-status' );
@@ -241,7 +260,7 @@ class Template extends Singleton {
 		$output	.=		'</div>';
 
 
-		$output .=		'<div class="wpaa-control wpaa-behavior-control wpaa-behavior-fallback-page">';
+		$output .=		'<div class="wpaa-control wpaa-behavior-control wpaa-behavior-fallback-page wp-clearfix">';
 
 		$name = sprintf( $options['name_template'], 'fallback_page' );
 		$id = sprintf( $options['id_template'], 'fallback-page' );
@@ -422,17 +441,7 @@ class Template extends Singleton {
 			$output .= $label;
 			$output .= '</label>';
 		}
-		$output .= <<<EOT
-		<script type="text/javascript">
-		(function($){
-			$('#{$id_prefix} [type="radio"]').on('change',function(){
-				console.log(this,$('#{$id_prefix} [type="radio"]:checked'));
-				var val = $('#{$id_prefix} [type="radio"]:checked').val();
-				$(this).closest('[data-value]').attr( 'data-value', val );
-			})
-		})(jQuery);
-		</script>
-EOT;
+
 
 		return $output;
 	}
@@ -490,7 +499,6 @@ EOT;
 
 		global $wpdb;
 
-		$post_fallback_page = get_option('wpaa_fallback_page');
 		$postModel = Model\ModelPost::instance();
 
 		if ( ! $postModel->post_is_public( $post_fallback_page ) ) {
@@ -525,8 +533,9 @@ EOT;
 			$choices = array( '' => $attr['placeholder'] ) + $choices;
 			unset($attr['placeholder']);
 		}
+
 		$output = sprintf('<select %s>', $this->mk_attr( $attr ));
-		$output .= $this->optgroup( $choices, $selected );
+		$output .= $this->select_options( $choices, $selected );
 		$output .= '</select>';
 		return $output;
 	}
@@ -534,7 +543,7 @@ EOT;
 	/**
 	 *	Generic optigroup. Used by dropdown()
 	 */
-	protected function optgroup( $choices, $selected, $identifier = 'id' ) {
+	protected function select_options( $choices, $selected, $identifier = 'id' ) {
 		$output = '';
 		foreach ( $choices as $i => $choice ) {
 
@@ -543,8 +552,11 @@ EOT;
 					$output .= sprintf('<option value="%s" %s>%s</option>', $choice->id, selected( $selected, $choice->id, false ), $choice->title );
 				}
 			} else if ( is_array( $choice ) ) {
+				if ( ! count( $choice ) ) {
+					continue;
+				}
 				$output .= sprintf( '<optgroup label="%s">', $i );
-				$output .= $this->optgroup( $choice, $selected );
+				$output .= $this->select_options( $choice, $selected );
 				$output .= '</optgroup>';
 			} else if ( is_null( $choice ) ) {
 				continue;

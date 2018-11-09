@@ -1,4 +1,7 @@
 @charset "UTF-8";
+table.widefat tr > :first-child {
+  padding-left: 10px; }
+
 .media-modal.access-area-modal {
   display: -webkit-box;
   display: -ms-flexbox;

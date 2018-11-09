@@ -1,20 +1,22 @@
-.postbox .wpaa-behavior-http-status, .postbox
-.wpaa-behavior-fallback-page, .postbox
+.wpaa-behavior-http-status,
+.wpaa-behavior-fallback-page,
 .wpaa-access-control {
   padding: 3px 0; }
-  .postbox .wpaa-behavior-http-status label, .postbox
-  .wpaa-behavior-fallback-page label, .postbox
+  .wpaa-behavior-http-status label,
+  .wpaa-behavior-fallback-page label,
   .wpaa-access-control label {
     width: 40%;
     display: block;
     float: left;
     clear: left;
     vertical-align: middle; }
-  .postbox .wpaa-behavior-http-status select, .postbox
-  .wpaa-behavior-fallback-page select, .postbox
+  .wpaa-behavior-http-status select,
+  .wpaa-behavior-fallback-page select,
   .wpaa-access-control select {
     width: 60%;
-    margin: 0; }
+    margin: 0;
+    float: left;
+    vertical-align: middle; }
 
 .postbox .wpaa-behavior-controls .wpaa-behavior-control {
   padding: 5px 0;
@@ -31,7 +33,6 @@
   min-width: 100%;
   margin-bottom: 0.5em; }
 
-.wpaa-behavior[data-value="404"] ~ .wpaa-behavior-http-status,
 .wpaa-behavior[data-value="404"] ~ .wpaa-behavior-fallback-page {
   display: none; }
 

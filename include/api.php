@@ -61,7 +61,7 @@ function wpaa_sanitize_access_cap( $cap ) {
  * @return boolean
  */
 function wpaa_is_access_area( $cap ) {
-	return strpos( $cap , WPUND_USERLABEL_PREFIX ) === 0;
+	return strpos( $cap , \AccessAreas\Core\Core::instance()->get_prefix() ) === 0;
 }
 
 /**
@@ -71,9 +71,11 @@ function wpaa_is_access_area( $cap ) {
  * @return boolean
  */
 function wpaa_access_area_exists( $cap ) {
-	if ( ! wpaa_is_access_area( $cap ) )
+	if ( ! wpaa_is_access_area( $cap ) ) {
 		return false;
-	return WPAA_AccessArea::capability_exists( $cap );
+	}
+	$wpaa = \AccessAreas\Model\ModelAccessAreas::instance()->fetch_one_by( 'capability', $cap );
+	return ! is_null( $wpaa );
 }
 
 /**
@@ -113,7 +115,7 @@ function wpaa_is_local_cap( $cap ) {
  * @return string
  */
 function wpaa_get_local_prefix( $blog_id = null ){
-	$prefix = WPUND_USERLABEL_PREFIX;
+	$prefix = \AccessAreas\Core\Core::instance()->get_prefix();
 	if ( ! $blog_id )
 		$blog_id = get_current_blog_id();
 
@@ -136,7 +138,7 @@ function wpaa_user_can_role( $role , $user_role_caps = null ) {
 		$user_role_caps = wpaa_get_user_role_caps();
 	}
 	if ( $wp_roles->is_role( $role ) ) {
-		return 0 == count( array_diff_assoc( $wp_roles->get_role( $role )->capabilities , $user_role_caps ) );		
+		return 0 == count( array_diff_assoc( $wp_roles->get_role( $role )->capabilities , $user_role_caps ) );
 	}
 	return false;
 }

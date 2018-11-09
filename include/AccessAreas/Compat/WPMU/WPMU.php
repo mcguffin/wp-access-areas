@@ -18,6 +18,7 @@ class WPMU extends Core\PluginComponent {
 	 *	@inheritdoc
 	 */
 	protected function __construct() {
+
 		// add_action('wpmu_new_blog' , array( $this, 'set_network_roles_for_blog' ) , 10 , 1 );
 		// add_action('wpmu_upgrade_site' , array( $this, 'set_network_roles_for_blog' ) , 10 ,1 );
 		add_filter( 'wpaa_allow_create_accessarea', array( $this, 'allow_create_access_area'), 10, 2 );
@@ -57,6 +58,8 @@ class WPMU extends Core\PluginComponent {
 		}
 	}
 
+
+
 	/**
 	 *	@filter user_has_cap;
 	 */
@@ -79,8 +82,11 @@ class WPMU extends Core\PluginComponent {
 	public function add_global_access( $access_areas ) {
 
 		$return = $access_areas;
-
-		$global = $this->get_global_access_areas();
+		$model = Model\ModelAccessAreas::instance();
+		$global = $model->fetch_by('blog_id','0');
+		foreach ( array_keys($global) as $idx ) {
+			$global[$idx]->id = $global[$idx]->capability;
+		}
 		$local_key = __( 'Local Access Areas', 'wp_access_areas');
 
 		if ( count( $global ) ) {
@@ -98,6 +104,10 @@ class WPMU extends Core\PluginComponent {
 		$model = Model\ModelAccessAreas::instance();
 
 		return $model->fetch_by( 'blog_id', 0 );
+	}
+	public function add_global_grant( $a ) {
+		vaR_dump($a);
+		return $a + $this->get_global_grant();
 	}
 
 	/**
@@ -182,7 +192,9 @@ class WPMU extends Core\PluginComponent {
 	}
 
 	public function maybe_upgrade( $site_id ) {
+		error_log("maybe upgrade $site_id");
 		switch_to_blog( $site_id );
+		Core\Core::instance()->activate();
 		Core\Core::instance()->maybe_upgrade();
 		restore_current_blog();
 	}

@@ -53,6 +53,7 @@ define( 'ACCESS_AREAS_DIRECTORY', plugin_dir_path(__FILE__) );
 define( 'ACCESS_AREAS_PLUGIN', pathinfo( ACCESS_AREAS_DIRECTORY, PATHINFO_FILENAME ) . '/' . pathinfo( __FILE__, PATHINFO_BASENAME ) );
 
 require_once ACCESS_AREAS_DIRECTORY . 'include/autoload.php';
+require_once ACCESS_AREAS_DIRECTORY . 'include/api.php';
 
 Core\Core::instance();
 
