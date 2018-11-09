@@ -79,7 +79,3 @@ if ( is_admin() || defined( 'DOING_AJAX' ) ) {
 	Settings\SettingsAccessAreas::instance();
 
 }
-
-if ( defined( 'WP_CLI' ) && WP_CLI ) {
-	WPCLI\WPCLIAccessAreas::instance();
-}

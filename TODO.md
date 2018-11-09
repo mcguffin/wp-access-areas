@@ -13,6 +13,8 @@ Release
 		 - [x] post Status
 	 - [x] Setup Role-Caps
  - [?] Installer / Uninstaller / WPMU uninstaller
+ - [ ] Edit User
+	 - [ ] Deny to edit own access areas
  - [ ] Posts editor
 	 - [x] Post Metabox
 	 - [ ] Posts Column
@@ -30,3 +32,4 @@ Future
  - [ ] Gutenberg Block access settings
  - [ ] Term edit access
  - [ ] Admin menu item access
+ - [ ] WPCLI: create, list, delete, update AA
