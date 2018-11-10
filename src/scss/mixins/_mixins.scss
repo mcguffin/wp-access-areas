@@ -1,5 +1,5 @@
-@mixin dashicon( $dashicon ) {
-	&:before {
+@mixin dashicon( $dashicon, $where: 'before' ) {
+	&:#{$where} {
 		content:$dashicon;
 		display: inline-block;
 		width: 20px;

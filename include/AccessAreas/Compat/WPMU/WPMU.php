@@ -43,6 +43,7 @@ class WPMU extends Core\PluginComponent {
 
 		add_filter( 'wpaa_allow_grant_access', array( $this, 'allow_grant_access'), 10, 2 );
 
+		add_filter('pre_wpaa_posts_where', array( $this, 'pre_posts_where'), 10, 3 );
 
 		if ( get_site_option( 'wpaa_uninstall_active' ) ) {
 			add_action( 'wpmu_upgrade_site', array( $this, 'maybe_uninstall' ) );
@@ -62,6 +63,18 @@ class WPMU extends Core\PluginComponent {
 			NetworkAdmin::instance();
 		}
 		add_filter( 'wpaa_default_admin_caps', array( $this, 'default_admin_role_caps') );
+	}
+
+	/**
+	 *	Allow super admins to see all posts.
+	 *
+	 *	@filter pre_wpaa_posts_where
+	 */
+	public function pre_posts_where( $result, $where, $table_name ) {
+		if ( is_super_admin() ) {
+			return $where;
+		}
+		return $result;
 	}
 
 	/**
@@ -88,40 +101,65 @@ class WPMU extends Core\PluginComponent {
 		return $allcaps;
 	}
 
+	public function get_global_access() {
+		$model = Model\ModelAccessAreas::instance();
+		$global = $model->fetch_by( 'blog_id', 0 );
+		$return = array();
+		foreach ( $global as $access_area ) {
+			$return[ $access_area->capability ] = $access_area->title;
+		}
+		return $return;
+	}
 
 	/**
 	 *	@filter wpaa_available_access_areas_post
 	 *	@filter wpaa_available_access_areas_user
 	 */
 	public function add_global_access( $access_areas ) {
-
-		$return = $access_areas;
-		$model = Model\ModelAccessAreas::instance();
-		$global = $model->fetch_by('blog_id','0');
-		foreach ( array_keys($global) as $idx ) {
-			$global[$idx]->id = $global[$idx]->capability;
+		$global = $this->get_global_access();
+		if ( ! empty( $global ) ) {
+			$access_areas[ __( 'Network Access Areas', 'wp_access_areas') ] = $global;
 		}
-		$local_key = __( 'Local Access Areas', 'wp_access_areas');
+		return $access_areas;
 
-		if ( count( $global ) ) {
-			if ( ! isset( $access_areas[ $local_key ] ) ) {
-				$return = array();
-				$return[ $local_key ] = $access_areas;
-			}
-			$return[ __( 'Network Access Areas', 'wp_access_areas') ] = $global;
-		}
-
-		return $return;
+		// $return = $access_areas;
+		// $model = Model\ModelAccessAreas::instance();
+		// $model->fetch_list( 'capability', 'title' );
+		// $global = $model->fetch_by( 'blog_id', 0 );
+		//
+		// foreach ( array_keys( $global ) as $idx ) {
+		// 	$global[$idx]->id = $global[$idx]->capability;
+		// }
+		// $local_key = __( 'Local Access Areas', 'wp_access_areas');
+		//
+		// if ( count( $global ) ) {
+		// 	if ( ! isset( $access_areas[ $local_key ] ) ) {
+		// 		$return = array();
+		// 		$return[ $local_key ] = $access_areas;
+		// 	}
+		// 	$return[ __( 'Network Access Areas', 'wp_access_areas') ] = $global;
+		// }
+		//
+		// return $return;
 	}
 
+	/**
+	 *
+	 */
 	public function get_global_grant() {
 		$model = Model\ModelAccessAreas::instance();
 
 		return $model->fetch_by( 'blog_id', 0 );
 	}
+
+	/**
+	 *
+	 */
 	public function add_global_grant( $a ) {
-		vaR_dump($a);
-		return $a + $this->get_global_grant();
+		return array(
+			__('Local','wp-access-areas') => $a,
+			__('Global','wp-access-areas') => $this->get_global_grant(),
+		);
 	}
 
 	/**

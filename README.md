@@ -8,6 +8,9 @@ WP Access Areas
 Additional WP-Capabilities
 --------------------------
 
+`wpaa_manage_access_areas`  
+...
+
 `wpaa_grant_access`  
 Ability to assign Access Areas to users.
 **Usage:**  
@@ -27,6 +30,7 @@ current_user_can( 'wpaa_grant_access', 'wpaa_1_some-access-area' );
 
 `wpaa_revoke_access`  
 Ability to revoke Access Areas from users.
+
 
 `wpaa_edit_role_caps`  
 The Ability to assign `wpaa_set_*_cap` capabilities to User roles.

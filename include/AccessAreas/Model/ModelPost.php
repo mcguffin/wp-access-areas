@@ -88,7 +88,7 @@ class ModelPost extends Core\PluginComponent {
 				$do_redirect = false;
 
 				if ( $behavior === '404' ) {
-					$redirect = get_permalink( $post->ID );
+					$redirect = get_permalink( $restricted_post->ID );
 					$wp_query->set_404();
 
 				} else if ( $behavior === 'page' ) {
@@ -184,9 +184,21 @@ class ModelPost extends Core\PluginComponent {
 					if ( ! $post->post_edit_cap ) {
 						break;
 					}
+					if ( ! current_user_can('wpaa_manage_access_areas') ) {
+						$caps[] = $post->post_edit_cap;
+						$caps[] = $post->post_view_cap;
+					} else {
+						$view_aa = wpaa_get_access_area( $post->post_view_cap );
+						if ( $view_aa && ( intval($view_aa->blog_id) !== get_current_blog_id() ) ) {
+							$caps[] = $post->post_view_cap;
+						}
+						$edit_aa = wpaa_get_access_area( $post->post_edit_cap );
+						if ( $edit_aa && ( intval($edit_aa->blog_id) !== get_current_blog_id() ) ) {
+							$caps[] = $post->post_edit_cap;
+						}
+
+					}
 					//*
-					$caps[] = $post->post_edit_cap;
-					$caps[] = $post->post_view_cap;
 					/*/
 					if ( ! ( $this->can( $post->post_edit_cap ) && $this->can( $post->post_view_cap ) ) ) {
 						$caps[] = 'do_not_allow';
@@ -196,6 +208,11 @@ class ModelPost extends Core\PluginComponent {
 				break;
 
 			case 'edit_comment':
+
+				if ( current_user_can('wpaa_manage_access_areas') ) {
+					return $caps;
+				}
+
 				if ( count( $args ) ) {
 
 					$comment_ID = $args[0];
@@ -204,13 +221,8 @@ class ModelPost extends Core\PluginComponent {
 					if ( $comment && $comment->comment_post_ID  ) {
 
 						$post = get_post( $comment->comment_post_ID );
-						//*
+
 						$caps[] = $post->post_comment_cap;
-						/*/
-						if ( ! $this->can( $post->post_comment_cap ) ) {
-							$caps[] = 'do_not_allow';
-						}
-						//*/
 					}
 				}
 				break;
@@ -354,19 +366,23 @@ class ModelPost extends Core\PluginComponent {
 	public function build_where( $where , $table_name = 'p' ) {
 		global $wpdb, $wp_query;
 
+		if ( $result = apply_filters( 'pre_wpaa_posts_where', null, $where, $table_name ) ) {
+			return $result;
+		}
+
 		$user = ModelUser::instance();
 
 		// single post/page views are handled bof @action template_redirect!
 		$is_single_post = isset( $wp_query ) && is_singular() && preg_match( "/{$wpdb->posts}.(post_name|ID)\s?=/" , $where );
 
-		if ( $user->current_user_is_admin() || $is_single_post ) {
+		if ( $is_single_post ) {
 			return $where;
 		}
 
 		if ( $table_name && substr($table_name,-1) !== '.' ) {
 			$table_name .= '.';
 		}
-
+//var_dump($caps);exit();
 		$caps = $user->get_current_user_access_caps();
 
 		$add_where = " {$table_name}post_view_cap IN ('".implode( "','" , $caps ) . "')";

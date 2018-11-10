@@ -46,25 +46,6 @@
   .tab-panels .active {
     display: block; }
 
-table.widefat tr > :first-child {
-  padding-left: 10px; }
-
-.wpaa-role-settings > th,
-.wpaa-post-type-settings > th {
-  display: none; }
-  .wpaa-role-settings > th ~ td,
-  .wpaa-post-type-settings > th ~ td {
-    padding: 0; }
-
-.wpaa-role-settings .widefat td, .wpaa-role-settings .widefat th,
-.wpaa-post-type-settings .widefat td,
-.wpaa-post-type-settings .widefat th {
-  padding: 8px 10px; }
-
-.wpaa-role-settings label,
-.wpaa-post-type-settings label {
-  display: inline-block; }
-
 .wpaa-settings-section {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;

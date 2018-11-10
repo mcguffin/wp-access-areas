@@ -4,35 +4,6 @@
 
 @import '../modules/tabs';
 
-table.widefat {
-	tr {
-		& > :first-child {
-			padding-left:10px;
-		}
-	}
-}
-
-.wpaa-role-settings,
-.wpaa-post-type-settings {
-	& > th {
-		display:none;
-		& ~ td {
-			padding:0;
-		}
-	}
-	.widefat {
-		td,th {
-			padding:8px 10px;
-		}
-
-	}
-	label {
-		display:inline-block;
-//		min-width:200px;
-	}
-}
-
-
 .wpaa-settings-section {
 	box-sizing: border-box;
 	width:50%;

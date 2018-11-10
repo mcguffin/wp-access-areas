@@ -140,13 +140,14 @@ class ModelAccessAreas extends Model {
 	 */
 	public function fetch_list( $key = false, $field = false ) {
 
-		$cache_key = "available_access_areas_{$key}_{$field}";
+		$blog_id = get_current_blog_id();
+		$cache_key = "available_access_areas_{$key}_{$field}_{$blog_id}";
 		$cache_group = 'wpaa';
 
 		if ( ! ( $access_areas = wp_cache_get( $cache_key, $cache_group ) ) ) {
 
 			$condition = array(
-				'blog_id'	=> get_current_blog_id(),
+				'blog_id'	=> $blog_id,
 			);
 
 			$access_areas = $this->fetch_by( $condition );

@@ -114,7 +114,6 @@ class WPRestAccessAreas extends Core\Singleton {
 			case 'create_item':
 			case 'get_items':
 			case 'get_item':
-//var_dump(wp_get_current_user(),current_user_can( 'wpaa_manage_access_areas' ));exit();
 				$allowed = current_user_can( 'wpaa_manage_access_areas' );
 				return $allowed;
 

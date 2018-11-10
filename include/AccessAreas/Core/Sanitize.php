@@ -20,7 +20,7 @@ class Sanitize extends Singleton {
 	 */
 	public function post_cap_assignable( $capability, $assign_type = 'view' ) {
 
-		return current_user_can( $capability ) && current_user_can( sprintf( 'wpaa_set_%s_cap', $assign_type ) );
+		return current_user_can( sprintf( 'wpaa_set_%s_cap', $assign_type ), $capability );
 
 	}
 
@@ -68,7 +68,7 @@ class Sanitize extends Singleton {
 	 *	@param string $value
 	 *	@return string
 	 */
-	public function capability( $value ) {
+	public function capability( $value, $default = 'exists' ) {
 		// chack if exist,read,rolename exists or wpaa exists!
 		if ( in_array( $value, array('exist','read') ) ) {
 			return $value;

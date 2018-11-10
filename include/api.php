@@ -27,21 +27,6 @@ function wpaa_user_can( $cap , $args = array() ) {
 }
 
 /**
- * Get Access Area object.
- *
- * @param string|int $identifier Capability name or numeric ID.
- * @return object
- */
-function wpaa_get_access_area( $identifier ) {
-	if ( is_numeric( $identifier ) ) {
-		return WPAA_AccessArea::get_userlabel( $identifier );
-	} else if ( wpaa_is_access_area( $identifier ) ) {
-		return WPAA_AccessArea::get_userlabel_by_cap( $identifier );
-	}
-
-}
-
-/**
  * Safely return access capability for use in posts table.
  *
  * @param string $cap Access Area Capability name, valid role name, 'read' or 'exist'
@@ -64,6 +49,24 @@ function wpaa_is_access_area( $cap ) {
 	return strpos( $cap , \AccessAreas\Core\Core::instance()->get_prefix() ) === 0;
 }
 
+
+/**
+ * Check if an Access Area exists.
+ *
+ * @param string $cap Access Area Capability name
+ * @return boolean
+ */
+function wpaa_get_access_area( $cap ) {
+	$key = 'id';
+	if ( ! is_numeric( $cap ) ) {
+		if ( ! wpaa_is_access_area( $cap ) ) {
+			return null;
+		}
+		$key = 'capability';
+	}
+	return \AccessAreas\Model\ModelAccessAreas::instance()->fetch_one_by( $key, $cap );
+}
+
 /**
  * Check if an Access Area exists.
  *
@@ -74,7 +77,7 @@ function wpaa_access_area_exists( $cap ) {
 	if ( ! wpaa_is_access_area( $cap ) ) {
 		return false;
 	}
-	$wpaa = \AccessAreas\Model\ModelAccessAreas::instance()->fetch_one_by( 'capability', $cap );
+	$wpaa = wpaa_get_access_area( $cap );
 	return ! is_null( $wpaa );
 }
 

@@ -47,6 +47,7 @@ class AdminUsers extends Core\PluginComponent {
 //			add_filter( 'user_row_actions', array( $this, 'user_row_actions' ), 10, 2 );
 		}
 	}
+
 	/**
 	 *	Filter users by granted Access Areas
 	 *
@@ -173,13 +174,13 @@ class AdminUsers extends Core\PluginComponent {
 				}
 			}
 			foreach ( $granted as $aa ) {
-				if ( $is_self ) {
+				if ( $is_self || ! current_user_can( 'wpaa_revoke_access', $aa ) ) {
 					$output .= $template->post_access_area( $aa );
 				} else {
 					$output .= $template->user_access_area( $aa, $user_id );
 				}
 			}
-			if ( ! $is_self ) {
+			if ( ! $is_self && current_user_can('wpaa_grant_access') ) {
 				$output .= $template->user_add_access_area( $user_id );
 			}
 

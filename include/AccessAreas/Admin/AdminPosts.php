@@ -7,6 +7,7 @@ if ( ! defined('ABSPATH') ) {
 }
 
 use AccessAreas\Core;
+use AccessAreas\Model;
 
 
 class AdminPosts extends Core\Singleton {
@@ -45,13 +46,9 @@ class AdminPosts extends Core\Singleton {
 		add_filter( 'wp_insert_post_data', array( $this, 'insert_post_data') , 10 , 2 );
 		add_action( 'save_post', array( $this, 'save_post') , 10 , 3 );
 
+		add_action('load-edit.php', array( $this, 'enqueue_assets' ));
 		add_action('load-post.php', array( $this, 'enqueue_assets' ));
 		add_action('load-post-new.php', array( $this, 'enqueue_assets' ));
-
-		add_filter('pre_post_view_cap',function($a){
-			error_log($a);
-			return $a;
-		});
 
 		add_filter( 'map_meta_cap' , array( $this, 'map_meta_cap' ) , 10 , 4 );
 
@@ -60,14 +57,27 @@ class AdminPosts extends Core\Singleton {
 
 
 	public function map_meta_cap( $caps, $cap, $user_id, $args ) {
-		return $caps;
+
 		switch ( $cap ) {
 			case 'wpaa_set_view_cap': // belongs to post!
 			case 'wpaa_set_edit_cap':
-				// + edit *this* post!
-				$caps[] = 'edit_post';
-				break;
 			case 'wpaa_set_comment_cap':
+				// + edit *this* post!
+				$access_area = false;
+				foreach ( $args as $arg ) {
+					if ( is_string( $arg ) ) {
+						$access_area = Model\ModelAccessAreas::instance()->fetch_one_by( 'capability', $arg );
+					} else if ( is_object( $arg ) && isset( $access_area->capability ) ) {
+						$access_area = $arg;
+					}
+				}
+
+				// must have global cap to allow assign.
+				if ( is_object( $access_area ) ) {
+					if ( ! current_user_can('wpaa_manage_access_areas') || intval( $access_area->blog_id ) !== get_current_blog_id() ) {
+						$caps[] = $access_area->capability;
+					}
+				}
 				break;
 
 		}
@@ -85,10 +95,18 @@ class AdminPosts extends Core\Singleton {
 
 	public function post_column( $column, $post_id ) {
 		if ('wpaa' === $column ) {
+			$model = Model\ModelAccessAreas::instance();
+			$template = Core\Template::instance();
 			$post = get_post($post_id);
-			var_dump($post->post_view_cap); //
-			var_dump($post->post_edit_cap);
-			var_dump($post->post_comment_cap);
+			if ( current_user_can( 'wpaa_set_view_cap', $post_id ) ) {
+				echo $template->post_access( $post->post_view_cap, 'view' );
+			}
+			if ( current_user_can( 'wpaa_set_edit_cap', $post_id ) ) {
+				echo $template->post_access( $post->post_edit_cap, 'edit' );
+			}
+			if ( current_user_can( 'wpaa_set_comment_cap', $post_id ) ) {
+				echo $template->post_access( $post->post_comment_cap, 'comment' );
+			}
 		}
 	}
 	/**
@@ -103,10 +121,12 @@ class AdminPosts extends Core\Singleton {
 	 *	@filter wp_insert_post_data
 	 */
 	public function insert_post_data( $data, $postarr ) {
-
+		$sanitize = Core\Sanitize::instance();
 		$post_type = $data["post_type"];
 		$post_type_object 	= get_post_type_object( $post_type );
 		$post_type_settings = get_option( 'wpaa_post_types' );
+
+
 		if ( isset( $post_type_settings[ $post_type ] ) ) {
 			$post_type_setting = $post_type_settings[ $post_type ];
 		} else {
@@ -118,32 +138,33 @@ class AdminPosts extends Core\Singleton {
 			'post_edit_cap' => 'exist',
 			'post_comment_cap' => 'exist',
 		) );
-		$data = wp_parse_args( $data, $default_caps );
 
+		// post is created.
 		if ( $data['post_status'] == 'auto-draft' ) {
+			$data = wp_parse_args( $data, $default_caps );
 			return $data;
 		}
 
 		// process user input
-		if ( isset($postarr['post_view_cap'])
-			&& $postarr['post_view_cap']
+		if ( isset( $postarr['post_view_cap'] )
+			&& ( $cap = $sanitize->capability( $postarr['post_view_cap'], $default_caps['post_view_cap'] ) )
 			&& current_user_can( 'wpaa_set_view_cap', $postarr['ID'] ) ) {
 
-			$data['post_view_cap'] = $postarr['post_view_cap'];
+			$data['post_view_cap'] = $cap;
 		}
 
 		if ( isset($postarr['post_edit_cap'])
-			&& $postarr['post_edit_cap']
+			&& ( $cap = $sanitize->capability( $postarr['post_edit_cap'], $default_caps['post_edit_cap'] ) )
 			&& current_user_can( 'wpaa_set_edit_cap', $postarr['ID'] ) ) {
 
-			$data['post_edit_cap'] = $postarr['post_edit_cap'];
+			$data['post_edit_cap'] = $cap;
 		}
 
-		if ( isset($postarr['post_comment_cap'])
-			&& $postarr['post_comment_cap']
+		if ( isset( $postarr['post_comment_cap'] )
+			&& ( $cap = $sanitize->capability( $postarr['post_comment_cap'], $default_caps['post_comment_cap'] ) )
 			&& current_user_can( 'wpaa_set_comment_cap', $postarr['ID'] ) ) {
 
-			$data['post_comment_cap'] = $postarr['post_comment_cap'];
+			$data['post_comment_cap'] = $cap;
 		}
 
 		return $data;

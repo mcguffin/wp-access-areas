@@ -63,6 +63,11 @@ class ModelUser extends Core\PluginComponent {
 		}
 		$user = wp_get_current_user();
 		$user_caps = $user->caps;
+
+		if ( current_user_can('wpaa_manage_access_areas') ) {
+			// add all access areas to caps
+			$user_caps += ModelAccessAreas::instance()->fetch_list( 'capability', 'id' );
+		}
 		foreach ( $user->roles as $role_slug ) {
 			if ( isset( $user_caps[ $role_slug ] ) ) {
 				unset( $user_caps[ $role_slug ] );
@@ -93,13 +98,14 @@ class ModelUser extends Core\PluginComponent {
 							return $caps;
 						}
 					} else if ( is_string( $arg ) ) {
-						$access_area = ModelAccessAreas::instance()->fetch_by( 'capability', $arg );
+						$access_area = ModelAccessAreas::instance()->fetch_one_by( 'capability', $arg );
 					} else if ( is_object( $arg ) && isset( $access_area->capability ) ) {
 						$access_area = $arg;
 					}
 				}
-				// must have cap to grant/revoke
-				if ( $access_area ) {
+
+				// must have cap to grant/revoke global caps.
+				if ( $access_area && ( intval( $access_area->blog_id ) !== get_current_blog_id() ) ) {
 					$caps[] = $access_area->capability;
 				}
 				break;

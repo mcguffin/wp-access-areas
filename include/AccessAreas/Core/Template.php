@@ -11,10 +11,6 @@ use AccessAreas\Model;
 class Template extends Singleton {
 
 
-	public function grant_access_controls( $user_id ) {
-
-	}
-
 	/**
 	 *	Access Area
 	 *	@param object	$access_area
@@ -40,20 +36,61 @@ class Template extends Singleton {
 	}
 
 	/**
-	 *	Access Area
+	 *	Access Area Badge
 	 *	@param object	$access_area
 	 *	@param int $user_id
 	 *	@return string
 	 */
-	public function post_access_area( $access_area, $after = '' ) {
+	public function post_access_area( $access_area, $after = '', $type = 'none' ) {
 
-		$output = sprintf( '<label class="wpaa-access-area wpaa-%s" data-wpaa-scope="%s">', $access_area->capability, $access_area->blog_id );
-		$output .= $access_area->title;
+		$output = sprintf( '<label class="wpaa-access-type-%s wpaa-access-area wpaa-%s" data-wpaa-scope="%s" title="%s">', $type, $access_area->capability, $access_area->blog_id, esc_attr($access_area->title) );
+		$output .= '<span>' . $access_area->title . '</span>';
 		$output .= $after;
 		$output .= '</label>';
 		return $output;
 	}
 
+	/**
+	 *	Access Area Badge
+	 *	@param object	$access_area
+	 *	@param int $user_id
+	 *	@return string
+	 */
+	public function post_access_role( $rolename, $type = 'none' ) {
+
+		if ( ! isset( wp_roles()->roles[ $rolename ] )) {
+			return '';
+		}
+		$rile_title = wp_roles()->roles[ $rolename ]['name'];
+		$output = sprintf( '<label class="wpaa-access-type-%s wpaa-access-area wpaa-role-access wpaa-%s" title="%s">', $type, $rolename, esc_attr( $rile_title ) );
+		$output .= '<span>' . $rile_title . '</span>';
+		$output .= '</label>';
+		return $output;
+	}
+
+	/**
+	 *	Access Badge
+	 *	@param object	$access_area
+	 *	@param int $user_id
+	 *	@return string
+	 */
+	public function post_access( $capability, $type = 'view' ) {
+		if ( wp_roles()->is_role( $capability ) ) {
+			return $this->post_access_role( $capability, $type );
+		}
+		if ( $wpaa = wpaa_get_access_area( $capability ) ) {
+			return $this->post_access_area( $wpaa, '', $type );
+		}
+		if ( $capability === 'read' ) {
+			$label = __( 'Logged in Users', 'wp-access-areas' );
+			$output = sprintf( '<label class="wpaa-access-type-%s wpaa-access-area wpaa-base-access wpaa-%s" title="%s">', $type, $capability, esc_attr( $label ) );
+			$output .= '<span>' . $label . '</span>';
+			$output .= '</label>';
+			return $output;
+		}
+		return '';
+
+	}
 
 	/**
 	 *	Add access area button in users admin.
@@ -162,7 +199,7 @@ class Template extends Singleton {
 
 			$output	.=	'</div>';
 		} else {
-			$output .=	sprintf( '<input type="hidden" name="%s" value="exist" />', $name );
+//			$output .=	sprintf( '<input type="hidden" name="%s" value="exist" />', $name );
 		}
 
 
@@ -209,7 +246,7 @@ class Template extends Singleton {
 			), 'comment' );
 			$output	.=	'</div>';
 		} else {
-			printf( '<input type="hidden" name="%s" value="exist" />', $name );
+//			printf( '<input type="hidden" name="%s" value="exist" />', $name );
 		}
 
 		$output	.=	'</div>';
@@ -414,18 +451,14 @@ class Template extends Singleton {
 		}
 
 
-		foreach ( $access_areas as $i => $access_area ) {
+		foreach ( $access_areas as $capability => $access_area ) {
+
 			if ( is_array( $access_area ) ) {
-				$assignable[$i] = $this->filter_assignable( $access_area, $assign_type );
+				$assignable[ $capability ] = $this->filter_assignable( $access_area, $assign_type );
 			} else {
-				if ( is_object( $access_area ) ) {
-					$capability = $access_area->capability;
-				} else {
-					$capability = $access_area;
-				}
 
 				if ( $sanitize->post_cap_assignable( $capability, $assign_type ) ) {
-					$assignable[$i] = $access_area;
+					$assignable[$capability] = $access_area;
 				}
 			}
 

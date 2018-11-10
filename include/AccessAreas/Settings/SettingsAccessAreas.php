@@ -186,7 +186,9 @@ What do we want?
 
 		$this->register_post_type_settings();
 
-		$this->register_role_settings();
+		if ( current_user_can('wpaa_edit_role_caps') ) {
+			$this->register_role_settings();			
+		}
 
 	}
 
@@ -278,7 +280,7 @@ What do we want?
 	/**
 	 *	settings field callback
 	 */
-	public function post_type_settings(  ) {
+	public function post_type_settings() {
 		global $wp_roles;
 
 		$template = Core\Template::instance();
