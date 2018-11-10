@@ -24,6 +24,9 @@ class NetworkAdmin extends Core\Singleton {
 			add_action( 'network_admin_menu', array( $this, 'add_uninstaller' ));
 			add_filter( 'access_areas_current_blog_id', array( $this, 'return_zero_string' ) );
 		}
+		if ( current_user_can('manage_network_options') ) {
+			// add network option for default admin role caps
+		}
 	}
 
 

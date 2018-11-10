@@ -57,13 +57,15 @@ class AdminPosts extends Core\Singleton {
 
 
 	}
+
+
 	public function map_meta_cap( $caps, $cap, $user_id, $args ) {
 		return $caps;
 		switch ( $cap ) {
 			case 'wpaa_set_view_cap': // belongs to post!
 			case 'wpaa_set_edit_cap':
+				// + edit *this* post!
 				$caps[] = 'edit_post';
-				//vaR_dump($caps);exit();
 				break;
 			case 'wpaa_set_comment_cap':
 				break;
@@ -105,9 +107,13 @@ class AdminPosts extends Core\Singleton {
 		$post_type = $data["post_type"];
 		$post_type_object 	= get_post_type_object( $post_type );
 		$post_type_settings = get_option( 'wpaa_post_types' );
-
+		if ( isset( $post_type_settings[ $post_type ] ) ) {
+			$post_type_setting = $post_type_settings[ $post_type ];
+		} else {
+			$post_type_setting = array();
+		}
 		// set default caps for post type
-		$default_caps = array_intersect_key( $post_type_settings[ $post_type ], array(
+		$default_caps = array_intersect_key( $post_type_setting, array(
 			'post_view_cap' => 'exist',
 			'post_edit_cap' => 'exist',
 			'post_comment_cap' => 'exist',

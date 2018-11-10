@@ -43,11 +43,16 @@ class WPMU extends Core\PluginComponent {
 
 		add_filter( 'wpaa_allow_grant_access', array( $this, 'allow_grant_access'), 10, 2 );
 
-		add_action( 'wpmu_upgrade_site', array( $this, 'maybe_upgrade' ) );
 
-		add_action( 'wpmu_upgrade_site', array( $this, 'maybe_uninstall' ) );
+		if ( get_site_option( 'wpaa_uninstall_active' ) ) {
+			add_action( 'wpmu_upgrade_site', array( $this, 'maybe_uninstall' ) );
+		} else {
+			add_action( 'wpmu_upgrade_site', array( $this, 'maybe_upgrade' ) );
+		}
 
 		add_filter( 'user_has_cap', array( $this, 'user_has_cap' ) , 10 , 4  );
+
+	//	add_action( 'wpmu_new_blog', $blog_id, $user_id, $domain, $path, $network_id, $meta );
 
 		if ( is_admin() ) {
 			AdminUsers::instance();
@@ -56,9 +61,18 @@ class WPMU extends Core\PluginComponent {
 		if ( is_network_admin() ) {
 			NetworkAdmin::instance();
 		}
+		add_filter( 'wpaa_default_admin_caps', array( $this, 'default_admin_role_caps') );
 	}
 
-
+	/**
+	 *	@filter wpaa_default_admin_caps
+	 */
+	public function default_admin_role_caps( $caps ) {
+		if ( $network_caps = get_site_option('wpaa_default_admin_caps') ) {
+			return $network_caps;
+		}
+		return $caps;
+	}
 
 	/**
 	 *	@filter user_has_cap;

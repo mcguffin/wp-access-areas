@@ -31,20 +31,53 @@ class AdminUsers extends Core\PluginComponent {
 
 			add_filter( 'manage_users_columns' , array( $this, 'add_column') );
 			add_filter( 'manage_users_custom_column' , array( $this, 'manage_column'), 10, 3 );
+
 			add_action( 'load-users.php', array( $this, 'enqueue_assets' ) );
 			add_action( 'load-user-edit.php', array( $this, 'enqueue_assets' ) );
 			add_action( 'load-profile.php', array( $this, 'enqueue_assets' ) );
+
 			add_filter( 'additional_capabilities_display' , '__return_false' );
+
 
 			add_action( 'edit_user_profile' , array( $this, 'personal_options' ) );
 			add_action( 'show_user_profile' , array( $this, 'personal_options' ) );
+
+			add_filter( 'views_users', array( $this, 'list_table_views' ) );
 
 //			add_filter( 'user_row_actions', array( $this, 'user_row_actions' ), 10, 2 );
 		}
 	}
 	/**
-	*	@action edit_user_profile
-	*	@action show_user_profile
+	 *	Filter users by granted Access Areas
+	 *
+	 *	@filter views_users
+	 */
+	public function list_table_views( $views ) {
+		$model = Model\ModelAccessAreas::instance();
+		$access_areas = $model->fetch_by( 'blog_id', get_current_blog_id() );
+
+		if ( ! $access_areas ) {
+			return $views;
+		}
+
+		foreach ( array_values( $access_areas ) as $i => $access_area ) {
+			$before = '';
+			if ( $i === 0 ) {
+				$before = sprintf('<span class="wpaa-label">%s</span>',__('Access Areas:','wp-access-areas'));
+			}
+
+			$views[ $access_area->capability ] = sprintf('%s <a href="%s">%s</a>',
+					$before,
+					add_query_arg( 'role', $access_area->capability, admin_url( 'users.php' ) ),
+					$access_area->title
+				);
+		}
+		return $views;
+	}
+
+	/**
+	 *	@action edit_user_profile
+	 *	@action show_user_profile
 	 */
 	public function personal_options( $profileuser ) {
 		?>
@@ -52,7 +85,7 @@ class AdminUsers extends Core\PluginComponent {
 			<table class="form-table">
 				<tbody>
 					<th><?php _e('Granted Access', 'wp-access-areas'); ?></th>
-					<td><?php echo $this->manage_column( '', 'access', $profileuser->ID ) ?></td>
+					<td><?php echo $this->get_access_areas_ui( $profileuser->ID ) ?></td>
 				</tbody>
 			</table>
 		<?php
@@ -106,6 +139,15 @@ class AdminUsers extends Core\PluginComponent {
 		if ( $column != 'access') {
 			return $column_content;
 		}
+		return $this->get_access_areas_ui( $user_id );
+	}
+
+	/**
+	 *	@param int|WP_User
+	 *	@return string
+	 */
+	public function get_access_areas_ui( $user_id ) {
+
 		$user		= new \WP_User( $user_id );
 		$template	= Core\Template::instance();
 		$output		= '';
@@ -119,6 +161,7 @@ class AdminUsers extends Core\PluginComponent {
 				'blog_id'		=> '0',
 			), $user_id );
 		} else {
+			$is_self = $user_id === get_current_user_id();
 			$granted	= array();
 			$model		= Model\ModelAccessAreas::instance();
 			// !!!
@@ -130,9 +173,15 @@ class AdminUsers extends Core\PluginComponent {
 				}
 			}
 			foreach ( $granted as $aa ) {
-				$output .= $template->user_access_area( $aa, $user_id );
+				if ( $is_self ) {
+					$output .= $template->post_access_area( $aa );
+				} else {
+					$output .= $template->user_access_area( $aa, $user_id );
+				}
 			}
-			$output .= $template->user_add_access_area( $user_id );
+			if ( ! $is_self ) {
+				$output .= $template->user_add_access_area( $user_id );
+			}
 
 		}
 		$output .= '</div>';
@@ -143,6 +192,29 @@ class AdminUsers extends Core\PluginComponent {
 	 *	@inheritdoc
 	 */
 	public function activate() {
+		// single blog activation: add all caps to administrator
+		$admin_role = get_role( 'administrator' );
+
+		if ( $admin_role ) {
+			// add default role caps
+			$admin_caps = array(
+				// modify roles
+				'wpaa_edit_role_caps',
+
+				// modify users
+				'wpaa_set_view_cap', 'wpaa_set_edit_cap','wpaa_set_comment_cap',
+
+				// modify posts
+				'wpaa_grant_access', 'wpaa_revoke_access',
+
+				// manage aa
+				'wpaa_manage_access_areas',
+			);
+			$admin_caps = apply_filters( 'wpaa_default_admin_caps', $admin_caps );
+			foreach ( $admin_caps as $cap ) {
+				$admin_role->add_cap( $cap );
+			}
+		}
 
 	}
 

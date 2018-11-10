@@ -7,6 +7,7 @@ if ( ! defined('ABSPATH') ) {
 }
 
 use AccessAreas\Core;
+use AccessAreas\Model;
 
 
 class Admin extends Core\Singleton {
@@ -28,9 +29,18 @@ class Admin extends Core\Singleton {
 	}
 
 	public function map_meta_cap( $caps, $cap, $user_id, $args ) {
-		if ( $cap === 'edit_wpaa_role_caps' ) {
+		if ( $cap === 'wpaa_edit_role_caps' ) {
 			if ( count( $args ) && in_array( $args[0], get_userdata( $user_id )->roles ) ) { // don't change own role!
 				$caps[] = 'do_not_allow';
+			}
+		} else if ( $cap === 'wpaa_manage_access_area' ) {
+			$caps = array( 'wpaa_manage_access_areas' );
+			if ( count( $args ) ) {
+				if ( $aa = Model\ModelAccessAreas::instance()->fetch_one_by( 'id', $args[0] ) ) {
+					if ( intval( $aa->blog_id ) !== get_current_blog_id() ) {
+						$caps[] = 'do_not_allow';
+					}
+				}
 			}
 		}
 		return $caps;
@@ -79,6 +89,8 @@ class Admin extends Core\Singleton {
 				'editAccessArea'	=> __('Edit Access Area','wp-access-areas'),
 				'grantAccess'		=> __('Grant Access','wp-access-areas'),
 				'revokeAccess'		=> __('Revoke Access','wp-access-areas'),
+				'thisBlogOnly'		=> __('This Blog only','wp-access-areas'),
+				'entireNetwork'		=> __('Entire Network','wp-access-areas'),
 			),
 			'options'	=> array(
 				'current_blog_id'	=> apply_filters( 'access_areas_current_blog_id', get_current_blog_id() ),

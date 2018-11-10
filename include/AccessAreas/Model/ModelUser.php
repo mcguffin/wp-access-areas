@@ -81,11 +81,27 @@ class ModelUser extends Core\PluginComponent {
 	 */
 	public function map_meta_cap( $caps, $cap, $user_id, $args ) {
 		switch ( $cap ) {
-			case 'grant_access':
-				$caps[] = 'promote_users';
-				break;
-			case 'revoke_access':
-				$caps[] = 'promote_users';
+			case 'wpaa_grant_access':
+			case 'wpaa_revoke_access':
+				$access_area = $edit_user_id = false;
+				foreach ( $args as $arg ) {
+					if ( is_numeric( $arg ) ) {
+						$edit_user_id = intval( $arg );
+						// can't edit oneself
+						if ( $edit_user_id === $user_id ) {
+							$caps[] = 'do_not_allow';
+							return $caps;
+						}
+					} else if ( is_string( $arg ) ) {
+						$access_area = ModelAccessAreas::instance()->fetch_by( 'capability', $arg );
+					} else if ( is_object( $arg ) && isset( $access_area->capability ) ) {
+						$access_area = $arg;
+					}
+				}
+				// must have cap to grant/revoke
+				if ( $access_area ) {
+					$caps[] = $access_area->capability;
+				}
 				break;
 		}
 		return $caps;

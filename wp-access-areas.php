@@ -68,7 +68,6 @@ WPRest\WPRest::instance();
 
 if ( is_admin() || defined( 'DOING_AJAX' ) ) {
 
-
 	Admin\Admin::instance();
 
 	Admin\AdminPosts::instance();

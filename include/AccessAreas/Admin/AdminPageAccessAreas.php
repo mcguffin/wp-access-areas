@@ -28,7 +28,7 @@ class AdminPageAccessAreas extends AdminPage {
 	 *	@action	admin_menu
 	 */
 	function add_admin_page() {
-		$page_hook = add_users_page( __( 'Access Areas' , 'wp-access-areas' ), __( 'Access Areas' , 'wp-access-areas' ), 'manage_options', 'access_areas-users', array( $this, 'render_page' ) );
+		$page_hook = add_users_page( __( 'Access Areas' , 'wp-access-areas' ), __( 'Access Areas' , 'wp-access-areas' ), 'wpaa_manage_access_areas', 'access_areas-users', array( $this, 'render_page' ) );
 		add_action( "load-{$page_hook}" , array( $this, 'enqueue_assets' ) );
 	}
 

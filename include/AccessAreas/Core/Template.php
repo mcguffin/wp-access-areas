@@ -18,15 +18,17 @@ class Template extends Singleton {
 	/**
 	 *	Access Area
 	 *	@param object	$access_area
+	 *	@param int $user_id
+	 *	@return string
 	 */
 	public function user_access_area( $access_area, $user_id ) {
 		if ( $user_id instanceOf \WP_User ) {
 			$user_id = $user_id->ID;
 		}
-		$output = sprintf( '<label class="wpaa-access-area wpaa-%s" data-wpaa-scope="%s">', $access_area->capability, $access_area->blog_id );
-		$output .= $access_area->title;
-		if ( $access_area->id ) {
-			$output .= sprintf('<a %s><span class="screen-reader-text">%s</span></a>',
+
+		$after = '';
+		if ( current_user_can( 'wpaa_revoke_access', $user_id, $access_area ) ) {
+			$after = sprintf('<a %s><span class="screen-reader-text">%s</span></a>',
 				$this->mk_attr(array(
 					'class'					=> 'button-link dashicons dashicons-dismiss',
 					'data-wpaa-action'		=> 'revoke',
@@ -34,6 +36,20 @@ class Template extends Singleton {
 					'data-wpaa-user'		=> $user_id,
 				)), __('Revoke Access','wp-access-areas') );
 		}
+		return $this->post_access_area( $access_area, $after );
+	}
+
+	/**
+	 *	Access Area
+	 *	@param object	$access_area
+	 *	@param int $user_id
+	 *	@return string
+	 */
+	public function post_access_area( $access_area, $after = '' ) {
+
+		$output = sprintf( '<label class="wpaa-access-area wpaa-%s" data-wpaa-scope="%s">', $access_area->capability, $access_area->blog_id );
+		$output .= $access_area->title;
+		$output .= $after;
 		$output .= '</label>';
 		return $output;
 	}
@@ -44,6 +60,8 @@ class Template extends Singleton {
 	 *	@param int $user_id
 	 */
 	public function user_add_access_area( $user_id ) {
+		if ( ! current_user_can( 'wpaa_grant_access', $user_id ) ) {
+		}
 		$output = sprintf('<a %s><span class="screen-reader-text">%s</span></a>',
 			$this->mk_attr(array(
 				'class'					=> 'button dashicons dashicons-plus-alt',
@@ -76,11 +94,13 @@ class Template extends Singleton {
 		$output = '';
 
 		if ( is_null( $post ) ) {
-			$can_assign_view = $can_assign_edit = $can_assign_comment = current_user_can( 'manage_options' );
+			$can_assign_view = current_user_can( 'wpaa_set_view_cap' );
+			$can_assign_edit = current_user_can( 'wpaa_set_edit_cap' );
+			$can_assign_comment = current_user_can( 'wpaa_set_comment_cap' );
 		} else {
-			$can_assign_view = current_user_can( 'wpaa_assign_view_cap', $post->ID );
-			$can_assign_edit = current_user_can( 'wpaa_assign_edit_cap', $post->ID );
-			$can_assign_comment = current_user_can( 'wpaa_assign_comment_cap', $post->ID );
+			$can_assign_view = current_user_can( 'wpaa_set_view_cap', $post->ID );
+			$can_assign_edit = current_user_can( 'wpaa_set_edit_cap', $post->ID );
+			$can_assign_comment = current_user_can( 'wpaa_set_comment_cap', $post->ID );
 		}
 		if ( ! $can_assign_view && ! $can_assign_view && ! $can_assign_comment ) {
 			return $output;
@@ -113,6 +133,7 @@ class Template extends Singleton {
 		$output .= '<div class="wpaa-access-controls">';
 
 
+
 		// View cap
 		if ( $can_assign_view && ( $post_type_object->public || $post_type_object->show_ui ) ) {
 			$output .=	'<div class="wpaa-control wpaa-access-control wpaa-access-view wp-clearfix">';
@@ -137,7 +158,7 @@ class Template extends Singleton {
 				'name'		=> $name,
 				'id'		=> $id,
 				'selected'	=> $values['post_view_cap'],
-			));
+			), 'view' );
 
 			$output	.=	'</div>';
 		} else {
@@ -166,7 +187,7 @@ class Template extends Singleton {
 				'name'		=> $name,
 				'id'		=> $id,
 				'selected'	=> $values['post_edit_cap'],
-			));
+			), 'edit' );
 			$output	.=		'</div>';
 		}
 
@@ -185,7 +206,7 @@ class Template extends Singleton {
 				'name'		=> $name,
 				'id'		=> $id,
 				'selected'	=> $values['post_comment_cap'],
-			));
+			), 'comment' );
 			$output	.=	'</div>';
 		} else {
 			printf( '<input type="hidden" name="%s" value="exist" />', $name );
@@ -279,39 +300,6 @@ class Template extends Singleton {
 
 	}
 
-	/**
-	 *	Access Area select drowpdown
-	 */
-	public function capablities_dropdown( $access_areas, $context = 'post', $dropdown_attr = array() ) {
-	}
-
-	/**
-	 *	Access Area select drowpdown
-	 */
-	public function access_areas_dropdown( $access_areas, $context = 'post', $dropdown_attr = array() ) {
-
-		$dropdown_attr = wp_parse_args( $dropdown_attr, array(
-			'name'			=> 'access-area-'.$context,
-			'id'			=> 'access-area-'.$context,
-			'selected'		=> null,
-		));
-		$selected = null;
-		if ( isset( $dropdown_attr['selected'] ) ) {
-			$selected = $dropdown_attr['selected'];
-			unset($dropdown_attr['selected']);
-		}
-		$access_areas = apply_filters( "wpaa_access_areas_dropdown_{$context}", $access_areas );
-
-
-		if ( 'user' === $context ) {
-			$dropdown_attr['placeholder'] = __( '—Select—', 'wp-access-areas' );
-			$access_areas = $this->filter_grantable( $access_areas );
-		} else if ( 'post' === $context ) {
-			$access_areas = $this->filter_assignable( $access_areas );
-		}
-
-		return $this->dropdown( $access_areas, $selected, $dropdown_attr );
-	}
 
 	/**
 	 *	Assign Access Dropdown
@@ -320,7 +308,13 @@ class Template extends Singleton {
 	 *	@param assoc $dropdown_attr
 	 *	@return string
 	 */
-	public function assign_access_select( $access_areas, $dropdown_attr = array() ) {
+	public function assign_access_select( $access_areas, $dropdown_attr = array(), $assign_type = 'view' ) {
+
+		$access_areas = $this->filter_assignable( $access_areas, $assign_type );
+
+		if ( empty( $access_areas ) ) {
+			return '';
+		}
 
 		$dropdown_attr = wp_parse_args( $dropdown_attr, array(
 			'name'			=> 'wpaa-assign-access',
@@ -335,8 +329,6 @@ class Template extends Singleton {
 			unset( $dropdown_attr['selected'] );
 		}
 
-		$access_areas = $this->filter_assignable( $access_areas );
-
 		return $this->dropdown( $access_areas, $selected, $dropdown_attr );
 	}
 
@@ -348,6 +340,12 @@ class Template extends Singleton {
 	 *	@return string
 	 */
 	public function grant_access_select( $access_areas, $dropdown_attr = array() ) {
+
+		$access_areas = $this->filter_grantable( $access_areas );
+
+		if ( empty( $access_areas ) ) {
+			return '';
+		}
 
 		$dropdown_attr = wp_parse_args( $dropdown_attr, array(
 			'name'			=> 'wpaa-grant-access',
@@ -362,20 +360,29 @@ class Template extends Singleton {
 
 		$dropdown_attr['placeholder'] = __( '—Select—', 'wp-access-areas' );
 
-		$access_areas = $this->filter_grantable( $access_areas );
 
 		return $this->dropdown( $access_areas, $selected, $dropdown_attr );
 	}
 
 	/**
-	 *	Filter array with Access Areas the current may grant to other users
+	 *	Recursively Filter array with Access Areas the current user may grant
+	 *	to other users.
+	 *
+	 *	@param array $access_areas
+	 *	@return array Grantable Access Areas
 	 */
 	public function filter_grantable( $access_areas ) {
 
 		$sanitize = Sanitize::instance();
 
-		$user_can = current_user_can( 'promote_users' );
+
 		$grantable = array();
+
+		// shortcut
+		if ( ! current_user_can( 'wpaa_grant_access' ) ) {
+			return $grantable;
+		}
+
 		foreach ( $access_areas as $i => $access_area ) {
 			if ( is_array( $access_area ) ) {
 				$grantable[$i] = $this->filter_grantable( $access_area );
@@ -391,15 +398,25 @@ class Template extends Singleton {
 	}
 
 	/**
-	 *	Filter array with Access Areas the current may grant to other users
+	 *	Recursively Filter array with Access Areas the current may assign to posts
+	 *
+	 *	@param array $access_areas
+	 *	@return array
 	 */
-	public function filter_assignable( $access_areas ) {
+	public function filter_assignable( $access_areas, $assign_type = 'view' ) {
 		$sanitize = Sanitize::instance();
 
 		$assignable = array();
+
+		// shortcut
+		if ( ! current_user_can( sprintf( 'wpaa_set_%s_cap', $assign_type ) ) ) {
+			return $assignable;
+		}
+
+
 		foreach ( $access_areas as $i => $access_area ) {
 			if ( is_array( $access_area ) ) {
-				$assignable[$i] = $this->filter_assignable( $access_area );
+				$assignable[$i] = $this->filter_assignable( $access_area, $assign_type );
 			} else {
 				if ( is_object( $access_area ) ) {
 					$capability = $access_area->capability;
@@ -407,7 +424,7 @@ class Template extends Singleton {
 					$capability = $access_area;
 				}
 
-				if ( $sanitize->post_cap_assignable( $capability ) ) {
+				if ( $sanitize->post_cap_assignable( $capability, $assign_type ) ) {
 					$assignable[$i] = $access_area;
 				}
 			}

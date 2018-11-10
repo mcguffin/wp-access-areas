@@ -13,7 +13,7 @@
 	// 	.done( function() {
 	// 		console.log(this, wp.api.endpoints.find({versionString:'wpaa/v1/'}) );
 	// 	});
-console.log("base!")
+
 	var l10n = access_areas_admin.l10n,
 		options = access_areas_admin.options,
 		wpaa = {
@@ -63,6 +63,7 @@ console.log("base!")
 			var self = this;
 			wp.media.View.prototype.render.apply(this,arguments);
 			this.$el.attr('data-id',this.model.get('id'));
+			this.$el.find('.access-areas-scope').text( parseInt( this.model.get('blog_id') ) ? l10n.thisBlogOnly : l10n.entireNetwork )
 			return this;
 		},
 		disable:function(e){
@@ -252,9 +253,18 @@ console.log("base!")
 			return this;
 		},
 		open:function(){
+			var self = this,
+				$select = this.$('select');
 			wp.media.view.Modal.prototype.open.apply( this, arguments );
 			this.$('.title').text( this.model.get('action') === 'grant' ? l10n.grantAccess : l10n.revokeAccess );
-			this.$('select').val('')
+			$select.val('');
+
+			$('[data-wpaa-access-area][data-wpaa-user="'+this.model.get('user_id')+'"]').each(function(){
+				$select.find('option').removeAttr('style');
+				$select.find('[value="'+$(this).attr('data-wpaa-access-area')+'"]').css('display','none');
+
+			});
+
 			this.setUIState();
 			return this;
 		},

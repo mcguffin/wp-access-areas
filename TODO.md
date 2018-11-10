@@ -12,8 +12,13 @@ Release
 		 - [x] default access
 		 - [x] post Status
 	 - [x] Setup Role-Caps
+ - [ ] Network Settings
+	 - [ ] Grant / Revoke WPAA Caps for Default Admin Role
  - [?] Installer / Uninstaller / WPMU uninstaller
  - [ ] Edit User
+	 - [x] Bulk edit users.
+	 - [x] Filter by Assigned AA
+	 - [ ] Network-Users: Global Access UI in User list table
 	 - [ ] Deny to edit own access areas
  - [ ] Posts editor
 	 - [x] Post Metabox
@@ -33,3 +38,4 @@ Future
  - [ ] Term edit access
  - [ ] Admin menu item access
  - [ ] WPCLI: create, list, delete, update AA
+ - [ ] WPMU: access restrict entire blogs

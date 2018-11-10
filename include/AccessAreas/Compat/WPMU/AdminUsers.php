@@ -9,7 +9,7 @@ if ( ! defined('ABSPATH') ) {
 
 use AccessAreas\Core;
 use AccessAreas\Admin;
-
+use AccessAreas\Settings;
 
 class AdminUsers extends Users {
 
@@ -22,14 +22,42 @@ class AdminUsers extends Users {
 		add_filter( 'wpaa_user_is_admin', array( $this, 'user_is_admin' ), 10, 2 );
 
 		add_filter('map_meta_cap',array( $this, 'map_meta_cap'), 20, 4 );
+
+		//add_filter( 'pre_update_option_wpaa_enable_assign_cap', array( $this, 'process_admin_role_cap' ), 9, 2 );
+		add_action( 'wpaa_settings_editable_role_caps', array( $this, 'editable_role_caps' ) );
+	}
+
+	/**
+	 *	@filter wpaa_settings_editable_role_caps
+	 */
+	public function editable_role_caps( $caps ) {
+		$add_caps = array();
+		if ( current_user_can('manage_network_users' ) ) {
+			$add_caps = array(
+				'wpaa_manage_access_areas'	=> __( 'Manage Access Areas', 'wp-access-areas' ),
+				'wpaa_grant_access'			=> __( 'Grant Access', 'wp-access-areas' ),
+				'wpaa_revoke_access'		=> __( 'Revoke Access', 'wp-access-areas' ),
+				'wpaa_edit_role_caps'		=> __( 'Edit Role Capabilities', 'wp-access-areas' ),
+			);
+		}
+		return $add_caps + $caps;
+	}
+
+	/**
+	 *	@filter pre_update_option_wpaa_enable_assign_cap
+	 */
+	public function process_admin_role_cap( $value ) {
+		if ( current_user_can('manage_network_users') ) {
+			// grant or revoke wpaa_edit_role_caps to administrator role
+		}
 	}
 
 	/**
 	 *	@filter map_meta_cap
 	 */
 	public function map_meta_cap( $caps, $cap, $user_id, $args ) {
-		if ( $cap === 'edit_wpaa_role_caps' ) {
-			if ( is_super_admin() ) { // super admins can edit 
+		if ( $cap === 'wpaa_edit_role_caps' ) {
+			if ( is_super_admin() ) { // super admins can edit
 				$idx = array_search( 'do_not_allow', $caps );
 				if ( false !== $idx ) {
 					unset( $caps[$idx] );
