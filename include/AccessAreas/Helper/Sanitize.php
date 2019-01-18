@@ -1,6 +1,6 @@
 <?php
 
-namespace AccessAreas\Core;
+namespace AccessAreas\Helper;
 
 class Sanitize extends Singleton {
 

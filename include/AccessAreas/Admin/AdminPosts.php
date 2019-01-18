@@ -121,7 +121,7 @@ class AdminPosts extends Core\Singleton {
 	 *	@filter wp_insert_post_data
 	 */
 	public function insert_post_data( $data, $postarr ) {
-		$sanitize = Core\Sanitize::instance();
+		$sanitize = Helper\Sanitize::instance();
 		$post_type = $data["post_type"];
 		$post_type_object 	= get_post_type_object( $post_type );
 		$post_type_settings = get_option( 'wpaa_post_types' );

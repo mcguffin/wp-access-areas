@@ -196,7 +196,7 @@ What do we want?
 	 *	@access private
 	 */
 	private function register_post_type_settings() {
-		$sanitize = Core\Sanitize::instance();
+		$sanitize = Helper\Sanitize::instance();
 		$settings_section	= 'wpaa_post_access_section';
 		add_settings_section( $settings_section, __( 'Post Types', 'wp-access-areas' ), array( $this, 'post_type_section_intro' ), $this->optionset );
 
@@ -582,7 +582,7 @@ What do we want?
 	 *	@return array
 	 */
 	public function sanitize_post_type_settings( $settings ) {
-		$sanitize = Core\Sanitize::instance();
+		$sanitize = Helper\Sanitize::instance();
 		// validate var var type
 		if ( ! is_array( $settings ) ) {
 			$settings = array();
