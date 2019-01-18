@@ -13,19 +13,20 @@ Release
 		 - [x] post Status
 	 - [x] Setup Role-Caps
  - [ ] Network Settings
-	 - [ ] Grant / Revoke WPAA Caps for Default Admin Role
+	 - [ ] Default Admin Role Caps
  - [?] Installer / Uninstaller / WPMU uninstaller
  - [ ] Edit User
 	 - [x] Bulk edit users.
 	 - [x] Filter by Assigned AA
 	 - [ ] Network-Users: Global Access UI in User list table
-	 - [ ] Deny to edit own access areas
+	 - [ ] Deny to edit own access areas (unless admin or super admin)
  - [ ] Posts editor
 	 - [x] Post Metabox
-	 - [ ] Posts Column
+	 - [x] Posts Column
+	 - [ ] Post QuickEdit
  - [x] Posts frontend
  - [ ] Legacy
-	 - [ ] Miration from 1.5.x
+	 - [ ] Migration from 1.5.x
  - [ ] Compat
 	 - [ ] Disable Comments (if comments globally off)
 	 - [ ] PLL (sync access settings between languages)
@@ -35,6 +36,7 @@ Release
 Future
 -------
  - [ ] Gutenberg Block access settings
+ - [ ] Gutenberg Block: Access-Wall
  - [ ] Term edit access
  - [ ] Admin menu item access
  - [ ] WPCLI: create, list, delete, update AA
