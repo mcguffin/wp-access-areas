@@ -187,7 +187,7 @@ What do we want?
 		$this->register_post_type_settings();
 
 		if ( current_user_can('wpaa_edit_role_caps') ) {
-			$this->register_role_settings();			
+			$this->register_role_settings();
 		}
 
 	}
@@ -314,15 +314,15 @@ What do we want?
 				<ul>
 					<?php foreach ( $post_types as $post_type => $post_type_object ) { ?>
 						<?php
-							if ( $post_type !== 0) {
+							if ( $post_type === 0) {
+								printf( '<li id="tab-link-wpaa-general" class="active">%s</li>',
+									sprintf( '<a href="#tab-panel-general" aria-controls="tab-panel-general">%1$s</a>', __('General','wp-access-areas') )
+								);
+							} else {
 								$id = sprintf( 'tab-panel-%s', $post_type );
 								printf( '<li id="tab-link-wpaa-%s">%s</li>',
 									$post_type,
 									sprintf( '<a href="#%1$s" aria-controls="%1$s">%2$s</a>', $id, $post_type_object->labels->name )
-								);
-							} else {
-								printf( '<li id="tab-link-wpaa-general" class="active">%s</li>',
-									sprintf( '<a href="#tab-panel-general" aria-controls="tab-panel-general">%1$s</a>', __('General','wp-access-areas') )
 								);
 							}
 						?>
@@ -334,25 +334,11 @@ What do we want?
 				<?php foreach ( $post_types as $post_type => $post_type_object ) { ?>
 					<?php
 
-						if ( $post_type !== 0 ) {
-							$name_template = sprintf('%s[%s][%%s]', $option_name, $post_type );
-							$id_template = sprintf('%s-%s-%%s', $option_name, $post_type );
-
-							$tab_name = $post_type_object->labels->name;
-							$tab_singular_name = $post_type_object->labels->singular_name;
-							if ( isset( $option_value[ $post_type ] ) ) {
-								$option_val = $option_value[ $post_type ];
-							} else {
-								$option_val = array();
-							}
-							// sanitize pt settings
-							$pt_settings = wp_parse_args( $option_val, $pt_options[ $post_type ] );
-						} else {
+						if ( $post_type === 0 ) { // general settings
 							$name_template = 'wpaa_default_%s';
 							$id_template = 'wpaa-default-%s';
 							$tab_name = __( 'General','wp-access-areas' );
-							$tab_singular_name = __( 'General', 'wp-access-areas' );
-							$tab_singular_name = $post_type_object->labels->singular_name;
+							$tab_singular_name = __( 'Post', 'wp-access-areas' );
 
 							$pt_settings = array();
 							foreach ( $this->get_default_pt_option() as $key => $default ) {
@@ -363,6 +349,20 @@ What do we want?
 									$pt_settings[$key] = $default;
 								}
 							}
+						} else {  // specific post type settings
+							$name_template = sprintf('%s[%s][%%s]', $option_name, $post_type );
+							$id_template = sprintf('%s-%s-%%s', $option_name, $post_type );
+
+							$tab_name = $post_type_object->labels->name;
+							$tab_singular_name = $post_type_object->labels->singular_name;
+
+							if ( isset( $option_value[ $post_type ] ) ) {
+								$option_val = $option_value[ $post_type ];
+							} else {
+								$option_val = array();
+							}
+							// sanitize pt settings
+							$pt_settings = wp_parse_args( $option_val, $pt_options[ $post_type ] );
 						}
 
 					?>
@@ -525,12 +525,14 @@ What do we want?
 		}
 		$caps = apply_filters( 'wpaa_settings_editable_role_caps', $caps );
 		?>
-		<table class="widefat striped">
+		<table class="widefat striped wpaa-role-caps">
 			<thead>
 				<th><?php _e('Role','wp-access-areas'); ?></th>
 				<?php
 					foreach ( $caps as $cap => $label ) {
-						printf('<th>%s<br /><code>%s</code></th>', $label, $cap );
+
+						printf('<th data-cap="%s">%s<br /><code>%s</code></th>', esc_attr($cap), $label, $cap );
+
 					}
 				?>
 			</thead>
@@ -552,7 +554,7 @@ What do we want?
 						foreach ( array_keys( $caps ) as $cap ) {
 
 							?>
-							<td>
+							<td data-cap="<?php echo esc_attr($cap); ?>">
 								<?php
 								$attr = '';
 								if ( $role->has_cap( $cap ) ) {

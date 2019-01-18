@@ -24,7 +24,7 @@ class AdminUsers extends Users {
 		add_filter('map_meta_cap',array( $this, 'map_meta_cap'), 20, 4 );
 
 		//add_filter( 'pre_update_option_wpaa_enable_assign_cap', array( $this, 'process_admin_role_cap' ), 9, 2 );
-		add_action( 'wpaa_settings_editable_role_caps', array( $this, 'editable_role_caps' ) );
+		add_filter( 'wpaa_settings_editable_role_caps', array( $this, 'editable_role_caps' ) );
 	}
 
 	/**
@@ -35,9 +35,9 @@ class AdminUsers extends Users {
 		if ( current_user_can('manage_network_users' ) ) {
 			$add_caps = array(
 				'wpaa_manage_access_areas'	=> __( 'Manage Access Areas', 'wp-access-areas' ),
+				'wpaa_edit_role_caps'		=> __( 'Edit Role Capabilities', 'wp-access-areas' ),
 				'wpaa_grant_access'			=> __( 'Grant Access', 'wp-access-areas' ),
 				'wpaa_revoke_access'		=> __( 'Revoke Access', 'wp-access-areas' ),
-				'wpaa_edit_role_caps'		=> __( 'Edit Role Capabilities', 'wp-access-areas' ),
 			);
 		}
 		return $add_caps + $caps;

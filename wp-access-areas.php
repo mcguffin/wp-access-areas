@@ -2,13 +2,13 @@
 
 /*
 Plugin Name: WP Access Areas
-Plugin URI: http://wordpress.org/
-Description: Enter description here.
+Plugin URI: https://wordpress.org/plugins/wp-access-areas
+GitHub Plugin URI: mcguffin/wp-access-areas
+Description: Fine tuning WordPress Content Access
 Author: Jörn Lund
 Version: 2.0.0-a1
 Author URI: https://github.com/mcguffin
 License: GPL3
-Github Repository: mcguffin/wp-access-areas
 Text Domain: wp-access-areas
 Domain Path: /languages/
 */

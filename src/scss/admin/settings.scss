@@ -39,6 +39,13 @@
 	clear:left;
 	border-top:1px solid $wp-gray;
 }
-
+.wpaa-role-caps {
+	thead th:first-of-type,
+	tbody th,
+	[data-cap="wpaa_revoke_access"],
+	[data-cap="wpaa_manage_access_areas"] {
+		border-right:1px solid $wp-gray-dark;
+	}
+}
 
 @import '../modules/controls';

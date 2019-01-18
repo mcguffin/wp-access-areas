@@ -75,6 +75,12 @@
   clear: left;
   border-top: 1px solid #f1f1f1; }
 
+.wpaa-role-caps thead th:first-of-type,
+.wpaa-role-caps tbody th,
+.wpaa-role-caps [data-cap="wpaa_revoke_access"],
+.wpaa-role-caps [data-cap="wpaa_manage_access_areas"] {
+  border-right: 1px solid #cccccc; }
+
 .wpaa-behavior-http-status,
 .wpaa-behavior-fallback-page,
 .wpaa-access-control {
