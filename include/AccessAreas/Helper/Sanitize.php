@@ -2,7 +2,9 @@
 
 namespace AccessAreas\Helper;
 
-class Sanitize extends Singleton {
+use AccessAreas\Core;
+
+class Sanitize extends Core\Singleton {
 
 	/**
 	 *	@param string $capability

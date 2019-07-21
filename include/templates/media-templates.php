@@ -1,7 +1,7 @@
 <?php
 
 $core = AccessAreas\Core\Core::instance();
-$template = AccessAreas\Core\Template::instance();
+$template = AccessAreas\Helper\Template::instance();
 $model = AccessAreas\Model\ModelAccessAreas::instance();
 
 ?>

@@ -7,10 +7,11 @@ Release
  - [x] WPMU
  - [x] Settings
 	 - [x] Fallback
-	 - [x] Post type
+	 - [ ] Post type
 		 - [x] Enabled
 		 - [x] default access
 		 - [x] post Status
+		 - [ ] Remove wp_block from list
 	 - [x] Setup Role-Caps
  - [ ] Network Settings
 	 - [ ] Default Admin Role Caps
@@ -37,7 +38,9 @@ Future
 -------
  - [ ] Gutenberg Block access settings
  - [ ] Gutenberg Block: Access-Wall
+ - [ ] Gutenberg Reusable Block: Editable Access Settings
  - [ ] Term edit access
  - [ ] Admin menu item access
+ - [ ] Widgets View Access
  - [ ] WPCLI: create, list, delete, update AA
  - [ ] WPMU: access restrict entire blogs

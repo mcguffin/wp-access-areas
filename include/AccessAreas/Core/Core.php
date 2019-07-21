@@ -6,6 +6,7 @@ if ( ! defined('ABSPATH') ) {
 	die('FU!');
 }
 use AccessAreas\Compat;
+use AccessAreas\Helper;
 
 class Core extends Plugin {
 

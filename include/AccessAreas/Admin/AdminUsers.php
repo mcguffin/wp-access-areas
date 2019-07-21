@@ -7,6 +7,7 @@ if ( ! defined('ABSPATH') ) {
 }
 
 use AccessAreas\Core;
+use AccessAreas\Helper;
 use AccessAreas\Model;
 
 class AdminUsers extends Core\PluginComponent {
@@ -150,7 +151,7 @@ class AdminUsers extends Core\PluginComponent {
 	public function get_access_areas_ui( $user_id ) {
 
 		$user		= new \WP_User( $user_id );
-		$template	= Core\Template::instance();
+		$template	= Helper\Template::instance();
 		$output		= '';
 		$output .= sprintf('<div class="assign-access-areas" data-wpaa-user="%d">', $user_id );
 		if ( apply_filters('wpaa_user_is_admin', $user->has_cap('administrator'), $user ) ) {

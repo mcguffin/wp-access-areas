@@ -1,7 +1,11 @@
 WP Access Areas
 ===============
 
-#### Developer info here. ####
+Installation
+------------
+ - Either via the WordPress.org plugin repository ...
+ - Or through [Andy Fragens GitHUb Updater](https://github.com/afragen/github-updater) ... (enter `mcguffin/wp-access-areas`) as a plugin URI ...
+
 
 
 

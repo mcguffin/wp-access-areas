@@ -1,14 +1,15 @@
 <?php
 
-namespace AccessAreas\Core;
+namespace AccessAreas\Helper;
 
 if ( ! defined('ABSPATH') ) {
 	die('FU!');
 }
 
+use AccessAreas\Core;
 use AccessAreas\Model;
 
-class Template extends Singleton {
+class Template extends Core\Singleton {
 
 
 	/**

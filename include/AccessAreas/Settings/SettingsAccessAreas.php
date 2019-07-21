@@ -7,6 +7,7 @@ if ( ! defined('ABSPATH') ) {
 }
 
 use AccessAreas\Core;
+use AccessAreas\Helper;
 use AccessAreas\Model;
 
 class SettingsAccessAreas extends Settings {
@@ -283,7 +284,7 @@ What do we want?
 	public function post_type_settings() {
 		global $wp_roles;
 
-		$template = Core\Template::instance();
+		$template = Helper\Template::instance();
 
 		$option_name = 'wpaa_post_types';
 		$option_value = get_option( $option_name );

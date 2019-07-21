@@ -7,6 +7,7 @@ if ( ! defined('ABSPATH') ) {
 }
 
 use AccessAreas\Core;
+use AccessAreas\Helper;
 use AccessAreas\Model;
 
 
@@ -96,7 +97,7 @@ class AdminPosts extends Core\Singleton {
 	public function post_column( $column, $post_id ) {
 		if ('wpaa' === $column ) {
 			$model = Model\ModelAccessAreas::instance();
-			$template = Core\Template::instance();
+			$template = Helper\Template::instance();
 			$post = get_post($post_id);
 			if ( current_user_can( 'wpaa_set_view_cap', $post_id ) ) {
 				echo $template->post_access( $post->post_view_cap, 'view' );
@@ -218,7 +219,7 @@ class AdminPosts extends Core\Singleton {
 	 */
 	public function meta_box_access( $post, $metabox ) {
 
-		$template = Core\Template::instance();
+		$template = Helper\Template::instance();
 		$post_type_object = get_post_type_object( $post->post_type );
 		$values = array(
 			'post_view_cap'		=> $post->post_view_cap,
@@ -234,7 +235,7 @@ class AdminPosts extends Core\Singleton {
 	 *	Meta Box callback
 	 */
 	public function meta_box_behavior( $post, $metabox ) {
-		$template = Core\Template::instance();
+		$template = Helper\Template::instance();
 		$values = array(
 			'post_behavior'		=> get_post_meta( $post->ID, '_wpaa_post_behavior', true ),
 			'login_redirect'	=> get_post_meta( $post->ID, '_wpaa_login_redirect', true ),
