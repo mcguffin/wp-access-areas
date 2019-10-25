@@ -121,8 +121,8 @@ class AdminPosts extends Core\Singleton {
 	 *	@filter wp_insert_post_data
 	 */
 	public function insert_post_data( $data, $postarr ) {
-		$sanitize = Core\Sanitize::instance();
-		$post_type = $data["post_type"];
+		$sanitize			= Core\Sanitize::instance();
+		$post_type			= $data["post_type"];
 		$post_type_object 	= get_post_type_object( $post_type );
 		$post_type_settings = get_option( 'wpaa_post_types' );
 
@@ -133,35 +133,37 @@ class AdminPosts extends Core\Singleton {
 			$post_type_setting = array();
 		}
 		// set default caps for post type
-		$default_caps = array_intersect_key( $post_type_setting, array(
+		$global_default_caps = array(
 			'post_view_cap' => 'exist',
 			'post_edit_cap' => 'exist',
 			'post_comment_cap' => 'exist',
-		) );
+		);
+		$post_type_setting = wp_parse_args( $post_type_setting, $global_default_caps );
+		$pt_default_caps = array_intersect_key( $post_type_setting, $global_default_caps );
 
 		// post is created.
 		if ( $data['post_status'] == 'auto-draft' ) {
-			$data = wp_parse_args( $data, $default_caps );
+			$data = wp_parse_args( $data, $pt_default_caps );
 			return $data;
 		}
 
 		// process user input
 		if ( isset( $postarr['post_view_cap'] )
-			&& ( $cap = $sanitize->capability( $postarr['post_view_cap'], $default_caps['post_view_cap'] ) )
+			&& ( $cap = $sanitize->capability( $postarr['post_view_cap'], $pt_default_caps['post_view_cap'] ) )
 			&& current_user_can( 'wpaa_set_view_cap', $postarr['ID'] ) ) {
 
 			$data['post_view_cap'] = $cap;
 		}
 
-		if ( isset($postarr['post_edit_cap'])
-			&& ( $cap = $sanitize->capability( $postarr['post_edit_cap'], $default_caps['post_edit_cap'] ) )
+		if ( isset( $postarr['post_edit_cap'] )
+			&& ( $cap = $sanitize->capability( $postarr['post_edit_cap'], $pt_default_caps['post_edit_cap'] ) )
 			&& current_user_can( 'wpaa_set_edit_cap', $postarr['ID'] ) ) {
 
 			$data['post_edit_cap'] = $cap;
 		}
 
 		if ( isset( $postarr['post_comment_cap'] )
-			&& ( $cap = $sanitize->capability( $postarr['post_comment_cap'], $default_caps['post_comment_cap'] ) )
+			&& ( $cap = $sanitize->capability( $postarr['post_comment_cap'], $pt_default_caps['post_comment_cap'] ) )
 			&& current_user_can( 'wpaa_set_comment_cap', $postarr['ID'] ) ) {
 
 			$data['post_comment_cap'] = $cap;
