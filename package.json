@@ -30,6 +30,7 @@
     ],
     "type": "plugin",
     "build": {
+      "versionedFiles": null,
       "prebuild": [
         "wp i18n make-pot . languages/wp-access-areas.pot --domain=wp-access-areas --exclude=tmp"
       ],
