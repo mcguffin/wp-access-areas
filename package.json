@@ -1,0 +1,48 @@
+{
+  "name": "wp-access-areas",
+  "version": "1.5.3",
+  "description": "",
+  "private": true,
+  "author": "Fine-tune access to WordPress posts and pages.",
+  "license": "GPL-2.0-or-later",
+  "engines": {
+    "node": "12.4.0",
+    "npm": "^6.9.0"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "rollback": "git reset --hard HEAD~ && git push origin +master"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://bitbucket.org/polyplanet/generic-child.git"
+  },
+  "bugs": {
+    "url": "https://bitbucket.org/polyplanet/generic-child/issues"
+  },
+  "wporg": {
+    "steps": [
+      "build",
+      "git",
+      "github",
+      "wporg"
+    ],
+    "type": "plugin",
+    "build": {
+      "prebuild": [
+        "wp i18n make-pot . languages/wp-access-areas.pot --domain=wp-access-areas --exclude=tmp"
+      ],
+      "build": []
+    },
+    "git": {
+      "host": "github.com",
+      "user": "mcguffin"
+    },
+    "wporg": {
+      "assets": ".wporg",
+      "svn_user": "podpirate",
+      "svn": "https://plugins.svn.wordpress.org/wp-access-areas/"
+    }
+  }
+}
