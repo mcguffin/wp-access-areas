@@ -7,3 +7,4 @@
 .svn/
 .svnignore
 node_modules/
+tmp/
