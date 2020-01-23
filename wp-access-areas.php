@@ -1,8 +1,8 @@
 <?php
 /**
-* @package WP_AccessAreas
-* @version 1.1.0
-*/
+ * @package WP_AccessAreas
+ * @version 1.1.0
+ */
 
 /*
 Plugin Name: WordPress Access Areas
@@ -26,21 +26,20 @@ FEATURE:
 */
 
 // table name for userlabels
-define( 'WPUND_VERSION' , "1.5.6"); // edit-col came with 1.1.0
-define( 'WPUND_USERLABEL_TABLE' , "disclosure_userlabels");
-define( 'WPUND_USERLABEL_PREFIX' , "userlabel_");
-define( 'WPUND_GLOBAL_USERMETA_KEY' , "undisclosed_global_capabilities");
+define( 'WPUND_VERSION', "1.5.7" ); // edit-col came with 1.1.0
+define( 'WPUND_USERLABEL_PREFIX', "userlabel_" );
+define( 'WPUND_GLOBAL_USERMETA_KEY', "undisclosed_global_capabilities" );
 
-function is_accessareas_active_for_network( ) {
+function is_accessareas_active_for_network() {
 	if ( ! is_multisite() ) {
 		return false;
 	}
 
 	if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
-		require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+		require_once ABSPATH . '/wp-admin/includes/plugin.php';
 	}
 
-	return is_plugin_active_for_network( basename(dirname(__FILE__)).'/'.basename(__FILE__) );
+	return is_plugin_active_for_network( basename( dirname( __FILE__ ) ) . '/' . basename( __FILE__ ) );
 }
 
 /**
@@ -49,15 +48,15 @@ function is_accessareas_active_for_network( ) {
  * @param string $classname
  */
 function wpaa_autoload( $classname ) {
-	$class_path = dirname(__FILE__). sprintf('/inc/class-%s.php' , strtolower( $classname ) ) ;
-	if ( file_exists($class_path) ) {
+	$class_path = dirname( __FILE__ ) . sprintf( '/inc/class-%s.php', strtolower( $classname ) );
+	if ( file_exists( $class_path ) ) {
 		require_once $class_path;
 	}
 }
 spl_autoload_register( 'wpaa_autoload' );
 
 // function library
-require_once( dirname(__FILE__). '/inc/wpaa_roles.php' );
+require_once dirname( __FILE__ ) . '/inc/wpaa_roles.php';
 
 // common plugin functions
 WPAA_Core::init();
@@ -95,6 +94,6 @@ if ( is_admin() ) {
 	// access options
 	WPAA_Settings::init();
 }
-register_activation_hook( __FILE__ , 'accessareas_activate' );
-register_deactivation_hook( __FILE__ , 'accessareas_deactivate' );
-register_uninstall_hook( __FILE__ , 'accessareas_uninstall' );
+register_activation_hook( __FILE__, 'accessareas_activate' );
+register_deactivation_hook( __FILE__, 'accessareas_deactivate' );
+register_uninstall_hook( __FILE__, 'accessareas_uninstall' );

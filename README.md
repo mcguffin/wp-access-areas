@@ -30,9 +30,15 @@ $ git clone git@github.com:mcguffin/wp-access-areas.git
 
 Finally activate it in the GUI.
 
+Development
+-----------
+Run code Audit
+```
+```
+
 Compatibility
 -------------
-- WP 3.8 through 4.5
+- Up to WP 5.3
 - The plugin is still functional in WP < 3.8, but some items may not be displayed correctly.
 
 Plugin API

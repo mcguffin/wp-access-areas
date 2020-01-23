@@ -10,30 +10,14 @@
 	<exclude-pattern>node_modules/*</exclude-pattern>
 	<exclude-pattern>vendor/*</exclude-pattern>
 
+
 	<config name="ParanoiaMode" value="1"/>
 
 	<!-- BadFunctions -->
 	<!-- PHP functions that can lead to security issues -->
-	<rule ref="Security.BadFunctions.Asserts"/>
-	<rule ref="Security.BadFunctions.Backticks"/>
-	<rule ref="Security.BadFunctions.CallbackFunctions"/>
-	<rule ref="Security.BadFunctions.CryptoFunctions"/>
-	<rule ref="Security.BadFunctions.EasyRFI"/>
-	<rule ref="Security.BadFunctions.EasyXSS">
-		<properties>
-			<!-- Comment out to follow global ParanoiaMode -->
-			<property name="forceParanoia" value="1"/>
-		</properties>
-	</rule>
-	<rule ref="Security.BadFunctions.ErrorHandling"/>
-	<rule ref="Security.BadFunctions.FilesystemFunctions"/>
-	<rule ref="Security.BadFunctions.FringeFunctions"/>
-	<rule ref="Security.BadFunctions.FunctionHandlingFunctions"/>
-	<rule ref="Security.BadFunctions.Mysqli"/>
+	<rule ref="Security.BadFunctions.SQLFunctions"/>
 	<rule ref="Security.BadFunctions.NoEvals"/>
 	<rule ref="Security.BadFunctions.Phpinfos"/>
-	<rule ref="Security.BadFunctions.PregReplace"/>
-	<rule ref="Security.BadFunctions.SQLFunctions"/>
 	<rule ref="Security.BadFunctions.SystemExecFunctions"/>
 
 	<!-- CVE -->
@@ -230,6 +214,22 @@
 		<exclude name="WordPress.XSS.EscapeOutput.UnsafePrintingFunction" />
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
 
+
+		<exclude name="Squiz.Commenting.BlockComment.CloserSameLine" />
+		<exclude name="Squiz.PHP.DisallowMultipleAssignments.FoundInControlStructure" />
+		<exclude name="PHPCS_SecurityAudit.BadFunctions.EasyRFI.WarnEasyRFI" />
+		<exclude name="PHPCS_SecurityAudit.BadFunctions.CryptoFunctions.WarnCryptoFunc" />
+		<exclude name="PSR2.Classes.PropertyDeclaration.Underscore" />
+		<exclude name="Generic.Formatting.MultipleStatementAlignment.IncorrectWarning" />
+		<exclude name="PSR2.Methods.MethodDeclaration.Underscore" />
+		<exclude name="WordPress.PHP.YodaConditions.NotYoda" />
+		<exclude name="PEAR.Functions.FunctionCallSignature.CloseBracketLine" />
+		<exclude name="PEAR.Functions.FunctionCallSignature.ContentAfterOpenBracket" />
+		<exclude name="PEAR.Functions.FunctionCallSignature.MultipleArguments" />
+		<exclude name="Generic.Arrays.DisallowShortArraySyntax.Found" />
+		<exclude name="Generic.Formatting.MultipleStatementAlignment.NotSameWarning" />
+		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
+		<exclude name="WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned" />
 		<exclude name="PEAR.Functions.FunctionDeclaration.BraceOnSameLine" />
 		<exclude name="PEAR.NamingConventions.ValidFunctionName.FunctionNoCapital" />
 		<exclude name="Generic.Files.LineLength.TooLong" />
