@@ -14,8 +14,7 @@ Fine tuning access to your posts.
 == Description ==
 
 [](http://coderisk.com/wp/plugin/wp-access-areas/RIPS-mxV5mA312W)WP Access Areas lets you fine-tune who may read, edit or comment on your Blog posts.
-You can either restrict access to logged-in uses only, certain WordPress-Roles or
-even custom Access Areas.
+You can either restrict access to logged-in uses only, certain WordPress-Roles or even custom Access Areas.
 
 = Features =
 - Define custom Access Areas and assign them to your blog-users
@@ -30,10 +29,8 @@ Developers might like to have a look at [the project wiki](https://github.com/mc
 
 = Known Issues =
 - WordPress calendar Widget still shows dates where restricted posts have been created.
-  When clicked on such a date a 404 will occur. There is an open
-  [WordPress Core ticket on that issue](https://core.trac.wordpress.org/ticket/29319).
-- Taxonomy menus (e.g. Tags / Categories) also count restricted posts when the total number
-  of posts in a taxonomy is ascertained.
+  When clicked on such a date a 404 will occur. There is an open [WordPress Core ticket on that issue](https://core.trac.wordpress.org/ticket/29319).
+- Taxonomy menus (e.g. Tags / Categories) also count restricted posts when the total number of posts in a taxonomy is ascertained.
   See [this post](http://wordpress.org/support/topic/archive-recents-posts-last-comments-show-restricted-content?replies=5#post-5929330) for details.
 
 == Installation ==

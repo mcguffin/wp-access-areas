@@ -16,3 +16,6 @@ wp-plugin-boilerplate.json export-ignore
 .es* export-ignore
 .editorconfig export-ignore
 .sassrc export-ignore
+composer.* export-ignore
+phpcs.ruleset.xml export-ignore
+phpunit.* export-ignore
