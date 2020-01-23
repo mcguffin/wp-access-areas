@@ -6,6 +6,45 @@
 	<!-- Set a description for this ruleset. -->
 	<description>A custom set of code standard rules to check for WordPress themes and plugins.</description>
 
+	<exclude-pattern>assets/*</exclude-pattern>
+	<exclude-pattern>node_modules/*</exclude-pattern>
+	<exclude-pattern>vendor/*</exclude-pattern>
+
+	<config name="ParanoiaMode" value="1"/>
+
+	<!-- BadFunctions -->
+	<!-- PHP functions that can lead to security issues -->
+	<rule ref="Security.BadFunctions.Asserts"/>
+	<rule ref="Security.BadFunctions.Backticks"/>
+	<rule ref="Security.BadFunctions.CallbackFunctions"/>
+	<rule ref="Security.BadFunctions.CryptoFunctions"/>
+	<rule ref="Security.BadFunctions.EasyRFI"/>
+	<rule ref="Security.BadFunctions.EasyXSS">
+		<properties>
+			<!-- Comment out to follow global ParanoiaMode -->
+			<property name="forceParanoia" value="1"/>
+		</properties>
+	</rule>
+	<rule ref="Security.BadFunctions.ErrorHandling"/>
+	<rule ref="Security.BadFunctions.FilesystemFunctions"/>
+	<rule ref="Security.BadFunctions.FringeFunctions"/>
+	<rule ref="Security.BadFunctions.FunctionHandlingFunctions"/>
+	<rule ref="Security.BadFunctions.Mysqli"/>
+	<rule ref="Security.BadFunctions.NoEvals"/>
+	<rule ref="Security.BadFunctions.Phpinfos"/>
+	<rule ref="Security.BadFunctions.PregReplace"/>
+	<rule ref="Security.BadFunctions.SQLFunctions"/>
+	<rule ref="Security.BadFunctions.SystemExecFunctions"/>
+
+	<!-- CVE -->
+	<!-- Entries from CVE database from vendor PHP and bugs.php.net -->
+	<rule ref="Security.CVE.20132110"/>
+	<rule ref="Security.CVE.20134113"/>
+
+	<!-- Misc -->
+	<rule ref="Security.Misc.BadCorsHeader"/>
+	<rule ref="Security.Misc.IncludeMismatch"/>
+
 	<!-- Include the WordPress ruleset, with exclusions. -->
 	<rule ref="WordPress">
 		<exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedCATCH" />
@@ -190,5 +229,10 @@
 		<exclude name="WordPress.XSS.EscapeOutput.OutputNotEscaped" />
 		<exclude name="WordPress.XSS.EscapeOutput.UnsafePrintingFunction" />
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
+
+		<exclude name="PEAR.Functions.FunctionDeclaration.BraceOnSameLine" />
+		<exclude name="PEAR.NamingConventions.ValidFunctionName.FunctionNoCapital" />
+		<exclude name="Generic.Files.LineLength.TooLong" />
+		<exclude name="Generic.WhiteSpace.DisallowTabIndent.TabsUsed" />
 	</rule>
 </ruleset>

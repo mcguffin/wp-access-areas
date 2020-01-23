@@ -50,3 +50,6 @@ node_modules
 
 # Composer
 vendor
+
+# phpcs
+phpcs-report.txt
