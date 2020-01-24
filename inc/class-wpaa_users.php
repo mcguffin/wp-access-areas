@@ -46,7 +46,6 @@ if ( ! class_exists( 'WPAA_Users' ) ) :
 
                 // js
                 add_action( 'load-profile.php', array( __CLASS__, 'load_edit_script' ) );
-                add_action( 'load-user-edit.php', array( __CLASS__, 'load_edit_script' ) );
 
                 // ajax
                 add_action( 'wp_ajax_add_accessarea', array( __CLASS__, 'ajax_add_access_area' ) );
@@ -148,9 +147,10 @@ if ( ! class_exists( 'WPAA_Users' ) ) :
                 submit_button( __( 'Revoke', 'wp-access-areas' ), 'button', 'revokeit', false );
             }
         }
+
         public static function bulk_edit_access() {
 
-            if ( ! check_ajax_referer( 'bulk-access-areas', '_wpaa_nonce', false )) {
+            if ( ! check_ajax_referer( 'bulk-access-areas', '_wpaa_nonce', false ) ) {
                 return;
             }
 
@@ -430,7 +430,9 @@ if ( ! class_exists( 'WPAA_Users' ) ) :
         // --------------------------------------------------
 
         public static function table_views( $views ) {
-            $current_label = isset( $_GET['role'] ) ? sanitize_key( $_GET['role'] ) : '';
+            global $role;
+
+            $current_label = $role;
             $ret  = '';
             $ret .= self::_listtable_label_select( WPAA_AccessArea::get_blog_userlabels(), $current_label );
             if ( is_accessareas_active_for_network() ) {

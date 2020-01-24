@@ -120,19 +120,25 @@ if ( ! class_exists( 'AccessAreas_List_Table' ) ) :
 
             $this->_column_headers = array( $columns, $hidden, $sortable );
 
-            $this->process_bulk_action();
+            // $this->process_bulk_action();
 
-            $orderby = isset( $_GET['orderby'] ) ? wp_unslash( $_GET['orderby'] ) : null;
-            if ( ! is_null( $order ) ) {
-                if ( isset( $_GET['order'] ) ) {
-                    $order .= ' ' . wp_unslash( $_GET['order'] );
-                } else {
-                    $order .= ' ASC';
-                }
-            }
+            $order = 'ASC';
+            $orderby = 'cap_title';
+            $order_sql = 'blog_id DESC,cap_title ASC';
+
+            if ( isset( $_REQUEST['orderby'] ) ) {
+    			$orderby = wp_unslash( $_REQUEST['orderby'] );
+    		}
+
+    		if ( isset( $_REQUEST['order'] ) ) {
+    			$order = wp_unslash( $_REQUEST['order'] );
+    		}
+
+            $order_sql = sanitize_sql_orderby( "{$orderby} {$order}" );
+
             // use wpdb here!
-            $data = WPAA_AccessArea::get_available_userlabels( $limit, $order );
-
+            $data = WPAA_AccessArea::get_available_userlabels( $limit, $order_sql );
+            
             $this->items = $data;
             /**
              * REQUIRED. We also have to register our pagination options & calculations.
@@ -149,42 +155,12 @@ if ( ! class_exists( 'AccessAreas_List_Table' ) ) :
         public function get_bulk_actions_shortname( $action ) {
             return ucwords( $this->get_bulk_actions_statusname( $action ) );
         }
+
         public function get_bulk_actions() {
             $actions = array(
-				'delete' => __( 'Delete', 'wp-access-areas' ),
+				'bulk-delete' => __( 'Delete', 'wp-access-areas' ),
             );
             return $actions;
-        }
-        public function process_bulk_action() {
-            // Detect when a bulk action is being triggered...
-            if ( ! check_ajax_referer( 'bulk-' . $this->_args['plural'], '_wpnonce', false ) ) {
-                return;
-            }
-            $action = $this->current_action();
-
-            $ul_ids = array_map( 'intval', $_REQUEST[ $this->_args['plural'] ] );
-            $ul_ids = array_filter( $ul_ids );
-            if ( -1 !== $action ) {
-                switch ( $action ) {
-                    case 'delete':
-    					foreach ( $ul_ids as $ul_id ) {
-                            $ul = WPAA_AccessArea::get_userlabel( intval( $ul_id ) );
-    						if ( $ul ) {
-    							WPAA_AccessArea::delete_userlabel( intval( $ul_id ) );
-    						}
-    					}
-                        return wp_safe_redirect(
-                            add_query_arg(
-                                array(
-    								'page'    => 'user_labels',
-    								'message' => 3,
-    								'deleted' => count( $ul_ids ),
-    							),
-                                $_SERVER['SCRIPT_NAME']
-                            )
-                        );
-                }
-            }
         }
     }
 endif;

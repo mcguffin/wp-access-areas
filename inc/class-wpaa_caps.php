@@ -33,11 +33,61 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
             add_action( 'load-users_page_user_labels', array( __CLASS__, 'do_userlabel_actions' ) );
         }
 
+        public static function bulk_edit_access_areas() {
+            // Detect when a bulk action is being triggered...
+            if ( ! check_ajax_referer( 'bulk-userlabels', '_wpnonce', false ) ) {
+                return;
+            }
+            $action = $this->current_action();
+
+            $ul_ids = array_map( 'intval', $_REQUEST[ 'userlabels' ] );
+            $ul_ids = array_filter( $ul_ids );
+            if ( -1 !== $action ) {
+                switch ( $action ) {
+                    case 'delete':
+    					foreach ( $ul_ids as $ul_id ) {
+                            $ul = WPAA_AccessArea::get_userlabel( intval( $ul_id ) );
+    						if ( $ul ) {
+    							WPAA_AccessArea::delete_userlabel( intval( $ul_id ) );
+    						}
+    					}
+                        return wp_safe_redirect(
+                            add_query_arg(
+                                array(
+    								'page'    => 'user_labels',
+    								'message' => 3,
+    								'deleted' => count( $ul_ids ),
+    							),
+                                admin_url( 'users.php' )
+                            )
+                        );
+                }
+            }
+        }
+
+        private static function get_action() {
+            $action = -1;
+            if ( isset( $_REQUEST['action'] ) && intval( $_REQUEST['action'] ) !== -1 ) {
+                $action = wp_unslash( $_REQUEST['action'] );
+            }
+            if ( isset( $_REQUEST['action2'] ) && intval( $_REQUEST['action2'] ) !== -1 ) {
+                $action = wp_unslash( $_REQUEST['action2'] );
+            }
+            return $action;
+        }
+
         public static function do_userlabel_actions() {
 
-            $nonce_action = ! empty( $_REQUEST['action'] )
-                ? 'userlabel-' . sanitize_key( $_REQUEST['action'] )
-                : 'NOPE';
+            $action = self::get_action();
+            if ( $action === -1 ) {
+                return;
+            }
+
+            $nonce_action = 'userlabel-' . $action;
+
+            if ( $action === 'bulk-delete' ) {
+                $nonce_action = 'bulk-userlabels';
+            }
 
             if ( ! check_ajax_referer( $nonce_action, '_wpnonce', false ) ) {
                 return;
@@ -49,103 +99,119 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
 
             wp_enqueue_style( 'wpaa-admin' );
 
-            $table = new AccessAreas_List_Table();
-            $table->process_bulk_action();
             $redirect_url = false;
-            if ( isset( $_REQUEST['action'] ) ) {
-                // do actions
-                $data = self::_sanitize_userlabel_data( $_POST );
-                
-                // integrity check.
-                if ( ! $data['cap_title'] ) {
-                    wp_die( esc_html__( 'Please enter a Label.', 'wp-access-areas' ) );
-                }
-                
-                if ( is_multisite() && ! $data['blog_id'] && ! current_user_can( 'manage_network_users' ) ) {
-                    wp_die( esc_html__( 'You do not have permission to edit network wide user labels.', 'wp-access-areas' ) );
-                }
 
-                switch ( $_REQUEST['action'] ) {
-                    case 'new':
-						// do create action
-                        $edit_id = WPAA_AccessArea::create_userlabel( $data );
-                        if ( $edit_id ) {
+            // do actions
+            $data = self::_sanitize_action_input( $_POST );
+
+            if ( is_multisite() && ! $data['blog_id'] && ! current_user_can( 'manage_network_users' ) ) {
+                wp_die( esc_html__( 'You do not have permission to edit network wide user labels.', 'wp-access-areas' ) );
+            }
+
+            switch ( $action ) {
+                case 'new':
+					// do create action
+                    
+                    // integrity check.
+                    if ( ! $data['cap_title'] ) {
+                        wp_die( esc_html__( 'Please enter a Label.', 'wp-access-areas' ) );
+                    }
+
+                    $edit_id = WPAA_AccessArea::create_userlabel( $data );
+                    if ( $edit_id ) {
+                        $redirect_url = add_query_arg(
+                            array(
+                                'page'    => 'user_labels',
+                                'action'  => 'new',
+                                'message' => 1,
+                            ),
+                            admin_url( 'users.php' )
+                        );
+                    } else {
+                        $redirect_url = add_query_arg(
+                            array(
+                                'page'      => 'user_labels',
+                                'action'    => 'new',
+                                'message'   => WPAA_AccessArea::what_went_wrong(),
+                                'cap_title' => sanitize_text_field( $data['cap_title'] ),
+                            ),
+                            admin_url( 'users.php' )
+                        );
+                    }
+                    break;
+                case 'edit':
+					// update and redirect
+					if ( ! empty( $_POST ) ) {
+                        $edit_id = WPAA_AccessArea::update_userlabel( $data );
+						if ( $edit_id ) {
+							$redirect_url = add_query_arg(
+                                array(
+									'id'      => $edit_id,
+									'message' => 2,
+								)
+                            );
+						} else {
+							$redirect_url = add_query_arg(
+                                array(
+									'id'        => $edit_id,
+									'message'   => WPAA_AccessArea::what_went_wrong(),
+									'cap_title' => sanitize_text_field( $data['cap_title'] ),
+								)
+                            );
+						}
+					}
+
+					if ( ! isset( $_GET['id'] ) ) {
+						$redirect_url = add_query_arg( array( 'page' => 'user_labels' ), $_SERVER['SCRIPT_NAME'] );
+					}
+
+                    break;
+                case 'delete':
+					// delete and redirect
+                    
+					if ( isset( $_REQUEST['id'] ) ) {
+                        $deleted = WPAA_AccessArea::delete_userlabel( intval( $_REQUEST['id'] ) );
+						if ( $deleted ) {
                             $redirect_url = add_query_arg(
                                 array(
-                                    'page'    => 'user_labels',
-                                    'action'  => 'new',
-                                    'message' => 1,
-                                ),
-                                wp_unslash( $_SERVER['SCRIPT_NAME'] )
+									'page'    => 'user_labels',
+									'message' => 3,
+									'deleted' => $deleted,
+								),
+                                admin_url( 'users.php' )
                             );
-                        } else {
+						} else {
                             $redirect_url = add_query_arg(
                                 array(
-                                    'page'      => 'user_labels',
-                                    'action'    => 'new',
-                                    'message'   => WPAA_AccessArea::what_went_wrong(),
-                                    'cap_title' => sanitize_text_field( $data['cap_title'] ),
-                                ),
-                                wp_unslash( $_SERVER['SCRIPT_NAME'] )
+									'page'    => 'user_labels',
+									'message' => WPAA_AccessArea::what_went_wrong(),
+								),
+                                admin_url( 'users.php' )
                             );
+						}
+					}
+
+                    break;
+                case 'bulk-delete':
+                    $ul_ids = array_map( 'intval', $_REQUEST[ 'userlabels' ] );
+                    $ul_ids = array_filter( $ul_ids );
+                    foreach ( $ul_ids as $ul_id ) {
+                        $ul = WPAA_AccessArea::get_userlabel( intval( $ul_id ) );
+                        if ( $ul ) {
+                            WPAA_AccessArea::delete_userlabel( intval( $ul_id ) );
                         }
-                        break;
-                    case 'edit':
-						// update and redirect
-						if ( ! empty( $_POST ) ) {
-                            $edit_id = WPAA_AccessArea::update_userlabel( $data );
-							if ( $edit_id ) {
-								$redirect_url = add_query_arg(
-                                    array(
-										'id'      => $edit_id,
-										'message' => 2,
-									)
-                                );
-							} else {
-								$redirect_url = add_query_arg(
-                                    array(
-										'id'        => $edit_id,
-										'message'   => WPAA_AccessArea::what_went_wrong(),
-										'cap_title' => sanitize_text_field( $data['cap_title'] ),
-									)
-                                );
-							}
-						}
-
-						if ( ! isset( $_GET['id'] ) ) {
-							$redirect_url = add_query_arg( array( 'page' => 'user_labels' ), $_SERVER['SCRIPT_NAME'] );
-						}
-
-                        break;
-                    case 'delete':
-						// delete and redirect
-						if ( isset( $_REQUEST['id'] ) ) {
-                            $deleted = WPAA_AccessArea::delete_userlabel( intval( $_REQUEST['id'] ) );
-							if ( $deleted ) {
-                                $redirect_url = add_query_arg(
-                                    array(
-										'page'    => 'user_labels',
-										'message' => 3,
-										'deleted' => $deleted,
-									),
-                                    wp_unslash( $_SERVER['SCRIPT_NAME'] )
-                                );
-							} else {
-                                $redirect_url = add_query_arg(
-                                    array(
-										'page'    => 'user_labels',
-										'message' => WPAA_AccessArea::what_went_wrong(),
-									),
-                                    wp_unslash( $_SERVER['SCRIPT_NAME'] )
-                                );
-							}
-						}
-
-                        break;
-                    default:
-						wp_safe_redirect( remove_query_arg( 'action' ) );
-                        exit();
-                }
+                    }
+                    $redirect_url = add_query_arg(
+                        array(
+                            'page'    => 'user_labels',
+                            'message' => 3,
+                            'deleted' => count( $ul_ids ),
+                        ),
+                        admin_url( 'users.php' )
+                    );
+                    break;
+                default:
+                    $redirect_url = remove_query_arg( [ 'action', 'action2' ] );
             }
             if ( $redirect_url ) {
                 wp_safe_redirect( $redirect_url );
@@ -153,6 +219,7 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
             }
 
         }
+
         public static function manage_userlabels_page() {
             
             if ( isset( $_REQUEST['action'] ) ) {
@@ -290,17 +357,19 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
 
         }
 
-        public static function _sanitize_userlabel_data( $data ) {
+        public static function _sanitize_action_input( $data ) {
 
             $data = wp_parse_args(
                 $data,
                 array(
 					'cap_title' => '',
 					'blog_id'   => 0,
+                    'userlabels' => [],
                 )
             );
             $data['cap_title'] = trim( strip_tags( $data['cap_title'] ) );
             $data['blog_id']   = is_network_admin() ? 0 : get_current_blog_id();
+            $data['userlabels']   = is_network_admin() ? 0 : get_current_blog_id();
             return $data;
         }
 

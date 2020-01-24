@@ -135,16 +135,7 @@ if ( ! class_exists( 'WPAA_AccessArea' ) ) :
                 foreach ( $usermeta as $meta ) {
                     $caps = maybe_unserialize( $meta->meta_value );
                     $caps = array_filter( $caps, array( __CLASS__, 'is_not_custom_cap' ) );
-                    
-                    /*
-                    $wpdb->query(
-                        $wpdb->prepare(
-                            "UPDATE $wpdb->usermeta SET meta_value=%s WHERE umeta_id=%d",
-                            maybe_serialize( $caps ),
-                            $meta->umeta_id
-                        )
-                    );
-                    /*/
+
                     $wpdb->update(
                         $wpdb->prefix . 'usermeta',
                         [ 'meta_value' => $caps ],
@@ -152,22 +143,17 @@ if ( ! class_exists( 'WPAA_AccessArea' ) ) :
                         '%s',
                         '%d'
                     );
-                    //*/
                 }
             } else {
                 self::_delete_userlabel_from_blog( $userlabel );
             }
             self::_clear_cache();
-            
-            /*
-            return $wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->disclosure_userlabels WHERE ID=%d", $id ) );
-            /*/
+
             return $wpdb->delete(
                 $wpdb->prefix . 'disclosure_userlabels',
                 [ 'ID' => $id ],
                 '%d'
             );
-            //*/
         }
 
         private static function _delete_userlabel_from_blog( &$userlabel ) {
@@ -179,11 +165,6 @@ if ( ! class_exists( 'WPAA_AccessArea' ) ) :
             }
 
             // delete everything from posts and restore usefull default values
-            /*
-            $query = $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET post_view_cap='exist' $post_status_sql WHERE post_view_cap=%s", $userlabel->capability ) );
-            $query = $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET post_edit_cap='exist' WHERE post_edit_cap=%s", $userlabel->capability ) ); // back to default
-            $query = $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET post_comment_cap='exist',comment_status='closed' WHERE post_comment_cap=%s", $userlabel->capability ) ); // back to default
-            /*/
             // reset post_*_caps to default
             $wpdb->update(
                 $wpdb->prefix . 'posts',
@@ -203,8 +184,7 @@ if ( ! class_exists( 'WPAA_AccessArea' ) ) :
                 [ 'post_comment_cap' => $userlabel->capability ],
                 '%s', '%s'
             );
-            
-            //*/
+
             // set back options
             if ( get_option( 'wpaa_default_view_cap' ) == $userlabel->capability ) {
                 update_option( 'wpaa_default_view_cap', 'exist' );
@@ -263,16 +243,8 @@ if ( ! class_exists( 'WPAA_AccessArea' ) ) :
 
             $capability  = $blog_id ? wpaa_get_local_prefix( $blog_id ) : WPUND_USERLABEL_PREFIX;
             $capability .= sanitize_title( $cap_title );
-            /*
-            $query = $wpdb->prepare(
-                "INSERT INTO $wpdb->disclosure_userlabels (`cap_title`,`capability`,`blog_id`) VALUES (%s,%s,%d)",
-                $cap_title,
-                $capability,
-                $blog_id
-            );
-            $wpdb->query( $query );
-            /*/
-            $wpdb->insert( 
+
+            $wpdb->insert(
                 $wpdb->prefix . 'disclosure_userlabels',
                 [
                     'cap_title' => $cap_title,
@@ -281,7 +253,7 @@ if ( ! class_exists( 'WPAA_AccessArea' ) ) :
                 ],
                 [ '%s', '%s', '%d' ]
             );
-            //*/
+
             self::_clear_cache();
             $insert_id = $wpdb->insert_id;
             do_action( 'wpaa_create_access_area', $capability, $cap_title, $blog_id, $insert_id );
@@ -302,23 +274,15 @@ if ( ! class_exists( 'WPAA_AccessArea' ) ) :
                 self::$_what_went_wrong = 4;
                 return false;
             }
-            /*
-            $query = $wpdb->prepare(
-                "UPDATE $wpdb->disclosure_userlabels SET cap_title=%s,blog_id=%d WHERE ID=%d",
-                $cap_title,
-                $blog_id,
-                $id
-            );
-            $wpdb->query( $query );
-            /*/
+
             $wpdb->update(
-                $wpdb->prefix . 'disclosure_userlabels', 
+                $wpdb->prefix . 'disclosure_userlabels',
                 [ 'cap_title' => $cap_title ],
                 [ 'ID' => $id ],
                 '%s',
                 '%d'
             );
-            //*/
+
             self::_clear_cache();
             do_action( 'wpaa_update_access_area', $id, $update_data );
             return $id;
