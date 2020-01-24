@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the WordPress Access Areas plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WordPress Access Areas 1.5.7\n"
+"Project-Id-Version: WordPress Access Areas 1.5.8\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-access-areas\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-01-22T18:31:10+00:00\n"
+"POT-Creation-Date: 2020-01-24T09:31:43+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: wp-access-areas\n"
@@ -42,385 +42,400 @@ msgstr ""
 msgid "Scope"
 msgstr ""
 
-#: inc/class-accessareas_list_table.php:47
+#: inc/class-accessareas_list_table.php:48
 msgid "WP Capability"
 msgstr ""
 
-#: inc/class-accessareas_list_table.php:71
-#: inc/class-accessareas_list_table.php:85
-#: inc/class-accessareas_list_table.php:139
+#: inc/class-accessareas_list_table.php:83
+#: inc/class-accessareas_list_table.php:103
+#: inc/class-accessareas_list_table.php:161
 msgid "Delete"
 msgstr ""
 
-#: inc/class-accessareas_list_table.php:77
-#: inc/class-wpaa_users.php:367
+#: inc/class-accessareas_list_table.php:89
+#: inc/class-wpaa_users.php:502
 msgid "Network"
 msgstr ""
 
-#: inc/class-wpaa_caps.php:28
-#: inc/class-wpaa_caps.php:198
+#: inc/class-wpaa_caps.php:32
+#: inc/class-wpaa_caps.php:331
 msgid "Manage Access Areas"
 msgstr ""
 
-#: inc/class-wpaa_caps.php:28
-#: inc/class-wpaa_users.php:251
-#: inc/class-wpaa_users.php:389
+#: inc/class-wpaa_caps.php:32
+#: inc/class-wpaa_users.php:334
+#: inc/class-wpaa_users.php:537
 msgid "Access Areas"
 msgstr ""
 
-#: inc/class-wpaa_caps.php:35
-#: inc/class-wpaa_users.php:233
+#: inc/class-wpaa_caps.php:66
+#: inc/class-wpaa_editpost.php:71
+#: inc/class-wpaa_users.php:225
+#: inc/class-wpaa_users.php:312
 msgid "You do not have permission to do this."
 msgstr ""
 
-#: inc/class-wpaa_caps.php:48
-msgid "Please enter a Label."
-msgstr ""
-
-#: inc/class-wpaa_caps.php:51
+#: inc/class-wpaa_caps.php:77
 msgid "You do not have permission to edit network wide user labels."
 msgstr ""
 
-#: inc/class-wpaa_caps.php:126
+#: inc/class-wpaa_caps.php:85
+#: inc/class-wpaa_caps.php:114
+msgid "Please enter a Label."
+msgstr ""
+
+#: inc/class-wpaa_caps.php:227
 msgid "Edit Access Area"
 msgstr ""
 
-#: inc/class-wpaa_caps.php:128
-#: inc/class-wpaa_caps.php:153
+#: inc/class-wpaa_caps.php:229
+#: inc/class-wpaa_caps.php:261
 msgid "Create Access Area"
 msgstr ""
 
-#: inc/class-wpaa_caps.php:143
+#: inc/class-wpaa_caps.php:246
 msgid "Access Area"
 msgstr ""
 
-#: inc/class-wpaa_caps.php:144
+#: inc/class-wpaa_caps.php:250
 msgid "New Access Area"
 msgstr ""
 
-#: inc/class-wpaa_caps.php:151
+#: inc/class-wpaa_caps.php:259
 msgid "Save changes"
 msgstr ""
 
-#: inc/class-wpaa_caps.php:169
+#: inc/class-wpaa_caps.php:279
 msgid "Access Area created."
 msgstr ""
 
-#: inc/class-wpaa_caps.php:172
+#: inc/class-wpaa_caps.php:282
 msgid "Access Area updated."
 msgstr ""
 
-#: inc/class-wpaa_caps.php:175
+#. translators: %d number of deleted items
+#: inc/class-wpaa_caps.php:290
 msgid "Access Area deleted."
 msgid_plural "%d Access Areas deleted."
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/class-wpaa_caps.php:178
+#: inc/class-wpaa_caps.php:293
 msgid "An Access Area with that Name already exists."
 msgstr ""
 
-#: inc/class-wpaa_caps.php:181
+#: inc/class-wpaa_caps.php:296
 msgid "Could not find the specified Access Area."
 msgstr ""
 
-#: inc/class-wpaa_caps.php:199
-#: inc/class-wpaa_users.php:314
-#: inc/class-wpaa_users.php:316
-msgctxt "access area"
+#: inc/class-wpaa_caps.php:334
+#: inc/class-wpaa_users.php:436
+#: inc/class-wpaa_users.php:440
 msgid "Add New"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:107
-#: inc/class-wpaa_editpost.php:369
-#: inc/class-wpaa_editpost.php:435
+#: inc/class-wpaa_editpost.php:113
+#: inc/class-wpaa_editpost.php:437
+#: inc/class-wpaa_editpost.php:534
 msgid "Access"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:109
+#: inc/class-wpaa_editpost.php:115
 msgid "Behaviour"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:226
+#: inc/class-wpaa_editpost.php:264
 msgid "Who can read:"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:232
+#: inc/class-wpaa_editpost.php:279
 msgid "Who can edit:"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:238
+#: inc/class-wpaa_editpost.php:294
 msgid "Who can comment:"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:288
+#: inc/class-wpaa_editpost.php:353
 msgid "Custom Behaviour"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:293
-#: inc/class-wpaa_settings.php:325
+#: inc/class-wpaa_editpost.php:359
+#: inc/class-wpaa_settings.php:434
 msgid "If somebody tries to view a restricted post directly:"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:301
+#: inc/class-wpaa_editpost.php:367
 msgid "Fallback Page"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:374
+#: inc/class-wpaa_editpost.php:446
 msgid "Read:"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:375
+#: inc/class-wpaa_editpost.php:450
 msgid "&mdash; No Change &mdash;"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:382
+#: inc/class-wpaa_editpost.php:461
 msgid "Edit:"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:390
+#: inc/class-wpaa_editpost.php:476
 msgid "Comment:"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:450
-#: inc/class-wpaa_template.php:37
+#: inc/class-wpaa_editpost.php:549
+#: inc/class-wpaa_template.php:71
 msgid "(Network)"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:451
+#: inc/class-wpaa_editpost.php:552
 msgid "WP Default"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:451
+#: inc/class-wpaa_editpost.php:553
 msgid "Blog users"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:458
-#: inc/class-wpaa_editpost.php:470
+#: inc/class-wpaa_editpost.php:563
+#: inc/class-wpaa_editpost.php:581
 msgid "Who can read"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:464
+#: inc/class-wpaa_editpost.php:572
 msgid "Who can comment"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:19
+#: inc/class-wpaa_settings.php:20
 msgid "Change View Access"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:20
+#: inc/class-wpaa_settings.php:21
 msgid "Change Edit Access"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:21
+#: inc/class-wpaa_settings.php:22
 msgid "Change Comment Access"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:59
-msgid "<strong>WP Access Areas:</strong> Something looks wrong with your Posts table."
+#: inc/class-wpaa_settings.php:66
+msgid "WP Access Areas:"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:71
+#: inc/class-wpaa_settings.php:70
+msgid "Something looks wrong with your Posts table."
+msgstr ""
+
+#: inc/class-wpaa_settings.php:82
 msgid "Please fix it for me"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:125
+#: inc/class-wpaa_settings.php:158
 msgid "Access Settings"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:135
+#: inc/class-wpaa_settings.php:169
 msgid "Restricted Access Behavior"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:137
+#: inc/class-wpaa_settings.php:171
 msgid "Default Behaviour"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:138
+#: inc/class-wpaa_settings.php:172
 msgid "Default Fallback Page"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:140
+#: inc/class-wpaa_settings.php:174
 msgid "Access Defaults for new Posts"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:141
+#: inc/class-wpaa_settings.php:175
 msgid "Default Access:"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:143
+#: inc/class-wpaa_settings.php:177
 msgid "Posts defaults"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:144
+#: inc/class-wpaa_settings.php:178
 msgid "Default Post Status"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:145
+#: inc/class-wpaa_settings.php:179
 msgid "Role Capabilities"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:148
+#: inc/class-wpaa_settings.php:183
 msgid "You can also set these Options for each post individually."
 msgstr ""
 
-#: inc/class-wpaa_settings.php:151
+#: inc/class-wpaa_settings.php:188
 msgid "Default settings for newly created posts."
 msgstr ""
 
-#: inc/class-wpaa_settings.php:162
+#: inc/class-wpaa_settings.php:195
 msgid "Access Areas Settings"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:169
+#: inc/class-wpaa_settings.php:202
 msgid "Save Changes"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:197
+#: inc/class-wpaa_settings.php:233
 msgid "Post Type"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:200
+#: inc/class-wpaa_settings.php:237
 msgid "Reading"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:203
+#: inc/class-wpaa_settings.php:241
 msgid "Edit"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:206
+#: inc/class-wpaa_settings.php:245
 msgid "Post Comment"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:265
+#: inc/class-wpaa_settings.php:331
 msgid "This table shows which Roles are allowed to set the ‘Who can view’, ‘Who can edit’ and ‘Who can comment’ properties."
 msgstr ""
 
-#: inc/class-wpaa_settings.php:272
+#: inc/class-wpaa_settings.php:337
 msgid "Role"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:297
+#: inc/class-wpaa_settings.php:380
 msgid "Forbid"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:299
+#: inc/class-wpaa_settings.php:386
 msgid "Allow"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:310
+#: inc/class-wpaa_settings.php:405
 msgid "If you are running a role editor plugin such as <a href=\"https://wordpress.org/plugins/user-role-editor/\">User Role editor by Vladimir Garagulya</a> or <a href=\"https://wordpress.org/plugins/wpfront-user-role-editor/\">WPFront User Role Editor by Syam Mohan</a> you can do the same as here by assigning the custom capabilites <code>wpaa_set_view_cap</code>, <code>wpaa_set_edit_cap</code> and <code>wpaa_set_comment_cap</code>."
 msgstr ""
 
-#: inc/class-wpaa_settings.php:313
+#: inc/class-wpaa_settings.php:410
 msgid "By disabling the role capabilities feature you will allow everybody who can at least publish a post to edit the access properties as well."
 msgstr ""
 
-#: inc/class-wpaa_settings.php:315
+#: inc/class-wpaa_settings.php:414
 msgid "Disable Role Capabilities"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:318
+#: inc/class-wpaa_settings.php:421
 msgid "By default everybody who can publish an entry can also edit the access properties such as ‘Who can view’ or ‘Who can edit’.<br /> If this is too generous for you then click on the button below."
 msgstr ""
 
-#: inc/class-wpaa_settings.php:320
+#: inc/class-wpaa_settings.php:425
 msgid "Enable Role Capabilities"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:360
+#: inc/class-wpaa_settings.php:477
 msgid "Don‘t change"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:367
+#: inc/class-wpaa_settings.php:491
 msgid "Set post status of assigned posts after an Access Area has been deleted."
 msgstr ""
 
-#: inc/class-wpaa_template.php:20
+#: inc/class-wpaa_template.php:32
 msgid "WordPress default"
 msgstr ""
 
-#: inc/class-wpaa_template.php:22
+#: inc/class-wpaa_template.php:38
 msgid "Logged in Users"
 msgstr ""
 
-#: inc/class-wpaa_template.php:25
+#: inc/class-wpaa_template.php:44
 msgid "WordPress roles"
 msgstr ""
 
-#: inc/class-wpaa_template.php:33
+#: inc/class-wpaa_template.php:61
 msgid "Users with Access to"
 msgstr ""
 
-#: inc/class-wpaa_template.php:63
+#: inc/class-wpaa_template.php:113
 msgid "Front page"
 msgstr ""
 
-#: inc/class-wpaa_template.php:71
+#: inc/class-wpaa_template.php:122
 msgid "Show 404"
 msgstr ""
 
-#: inc/class-wpaa_template.php:75
+#: inc/class-wpaa_template.php:126
 msgid "Redirect to the fallback page."
 msgstr ""
 
-#: inc/class-wpaa_template.php:79
+#: inc/class-wpaa_template.php:130
 msgid "If not logged in, redirect to login. Otherwise redirect to the fallback page."
 msgstr ""
 
-#: inc/class-wpaa_users.php:79
-#: inc/class-wpaa_users.php:98
+#: inc/class-wpaa_users.php:71
+msgid "CSRF-Token did not verify."
+msgstr ""
+
+#: inc/class-wpaa_users.php:85
+#: inc/class-wpaa_users.php:109
 msgid "Insufficient privileges."
 msgstr ""
 
-#: inc/class-wpaa_users.php:81
+#: inc/class-wpaa_users.php:87
 msgid "Empty name."
 msgstr ""
 
-#: inc/class-wpaa_users.php:92
+#: inc/class-wpaa_users.php:103
 msgid "Access Area exists."
 msgstr ""
 
-#: inc/class-wpaa_users.php:116
+#: inc/class-wpaa_users.php:143
 msgid "Grant Access … "
 msgstr ""
 
-#: inc/class-wpaa_users.php:117
+#: inc/class-wpaa_users.php:144
 msgid "Grant"
 msgstr ""
 
-#: inc/class-wpaa_users.php:124
+#: inc/class-wpaa_users.php:159
 msgid "Revoke Access … "
 msgstr ""
 
-#: inc/class-wpaa_users.php:125
+#: inc/class-wpaa_users.php:160
 msgid "Revoke"
 msgstr ""
 
-#: inc/class-wpaa_users.php:135
+#: inc/class-wpaa_users.php:171
 msgid "You can&#8217;t edit that user."
 msgstr ""
 
-#: inc/class-wpaa_users.php:257
+#: inc/class-wpaa_users.php:200
+msgid "Access Area does not exist."
+msgstr ""
+
+#: inc/class-wpaa_users.php:342
 msgid "Grant Access"
 msgstr ""
 
-#: inc/class-wpaa_users.php:264
+#: inc/class-wpaa_users.php:349
 msgid "Grant Network-Wide Access"
 msgstr ""
 
-#: inc/class-wpaa_users.php:333
+#: inc/class-wpaa_users.php:464
 msgid "Access Areas:"
 msgstr ""
 
-#: inc/class-wpaa_users.php:345
+#: inc/class-wpaa_users.php:478
 msgid "&mdash; Select &mdash;"
 msgstr ""
 
-#: inc/class-wpaa_users.php:362
+#: inc/class-wpaa_users.php:496
 msgid "Local"
 msgstr ""
 
-#: inc/class-wpaa_users.php:401
+#: inc/class-wpaa_users.php:550
 msgid "Everywhere"
 msgstr ""
