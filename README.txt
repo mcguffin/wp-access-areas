@@ -13,7 +13,7 @@ Fine tuning access to your posts.
 
 == Description ==
 
-[](http://coderisk.com/wp/plugin/wp-access-areas/RIPS-mxV5mA312W)WP Access Areas lets you fine-tune who may read, edit or comment on your Blog posts.
+WP Access Areas lets you fine-tune who may read, edit or comment on your Blog posts.
 You can either restrict access to logged-in uses only, certain WordPress-Roles or even custom Access Areas.
 
 = Features =
