@@ -6,7 +6,7 @@ WP Access Areas ToDo
 ./vendor/squizlabs/php_codesniffer/bin/phpcs . --report=code --standard=./phpcs.ruleset.xml -n -s
 ```
 
-**Known false positives in the results:**
+**Known false positives in CS results:**
 
  - inc/class-wpaa_accessarea.php
    - False Positives: 

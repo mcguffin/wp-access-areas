@@ -122,35 +122,48 @@ if ( ! class_exists( 'WPAA_Users' ) ) :
         // --------------------------------------------------
         // bulk editing
         // --------------------------------------------------
-        public static function bulk_grant_access_dropdown() {
+        public static function bulk_grant_access_dropdown( $position ) {
+
             if ( current_user_can( 'promote_users' ) ) {
                 ?></div>
                 <?php
 
-                wp_nonce_field( 'bulk-access-areas', '_wpaanonce', true );
+                $field_name = 'grant_access_area';
+
+                if ( $position === 'top' ) {
+                    wp_nonce_field( 'bulk-assign-access-areas', '_wpaa_nonce', true );
+                } else {
+                    $field_name .= '-bottom';
+                }
 
                 ?>
                 <div class="alignleft actions">
                 <?php
 
-                self::_label_select_all( 'grant_access_area', __( 'Grant Access … ', 'wp-access-areas' ), true );
+                self::_label_select_all( $field_name, __( 'Grant Access … ', 'wp-access-areas' ), true );
                 submit_button( __( 'Grant', 'wp-access-areas' ), 'button', 'grantit', false );
             }
         }
-        public static function bulk_revoke_access_dropdown() {
+        public static function bulk_revoke_access_dropdown( $position ) {
             if ( current_user_can( 'promote_users' ) ) {
                 ?>
                 </div><div class="alignleft actions">
                 <?php
 
-                self::_label_select_all( 'revoke_access_area', __( 'Revoke Access … ', 'wp-access-areas' ), true );
+                $field_name = 'revoke_access_area';
+
+                if ( $position === 'bottom' ) {
+                    $field_name .= '-bottom';
+                }
+
+                self::_label_select_all( $field_name, __( 'Revoke Access … ', 'wp-access-areas' ), true );
                 submit_button( __( 'Revoke', 'wp-access-areas' ), 'button', 'revokeit', false );
             }
         }
 
         public static function bulk_edit_access() {
 
-            if ( ! check_ajax_referer( 'bulk-access-areas', '_wpaa_nonce', false ) ) {
+            if ( ! check_ajax_referer( 'bulk-assign-access-areas', '_wpaa_nonce', false ) ) {
                 return;
             }
 
@@ -159,12 +172,21 @@ if ( ! class_exists( 'WPAA_Users' ) ) :
             }
 
             $params = wp_parse_args( $_REQUEST, [
-                'grant_access_area'     => '',
-                'revoke_access_area'    => '',
+                'grant_access_area' => '',
+                'revoke_access_area' => '',
+                'grant_access_area-bottom' => '',
+                'revoke_access_area-bottom' => '',
                 'grantit'  => false,
                 'revokeit'  => false,
                 'users'     => [],
             ] );
+            if ( empty( $params['grant_access_area'] ) ) {
+                $params['grant_access_area'] = $params['grant_access_area-bottom'];
+            }
+            if ( empty( $params['revoke_access_area'] ) ) {
+                $params['revoke_access_area'] = $params['revoke_access_area-bottom'];
+            }
+
             $params['grant_access_area'] = sanitize_key( $params['grant_access_area'] );
             $params['revoke_access_area'] = sanitize_key( $params['revoke_access_area'] );
             $params['users'] = array_map( 'intval', $params['users'] );

@@ -13,7 +13,7 @@
   "devDependencies": {},
   "scripts": {
     "rollback": "git reset --hard HEAD~ && git push origin +master",
-    "audit": "./vendor/squizlabs/php_codesniffer/bin/phpcs . --report=code --standard=./phpcs.ruleset.xml -s > ./phpcs-report.txt || exit 0",
+    "audit": "./vendor/squizlabs/php_codesniffer/bin/phpcs . --report=code --standard=./phpcs.ruleset.xml -n -s > ./phpcs-report.txt || exit 0",
     "audit-fix": "./vendor/squizlabs/php_codesniffer/bin/phpcbf . --standard=./phpcs.ruleset.xml || exit 0",
     "postinstall": "composer install"
   },
