@@ -23,14 +23,15 @@ if ( ! class_exists( 'WPAA_Core' ) ) :
 
             global $wpdb;
     		$wpdb->global_tables[] = 'disclosure_userlabels';
-            $wpdb->set_prefix($wpdb->prefix);
-
+            $wpdb->set_prefix( $wpdb->prefix ); // force new table names generation
 
             add_action( 'plugins_loaded', array( __CLASS__, 'plugin_loaded' ) );
+
             if ( is_multisite() ) {
                 add_action( 'wpmu_new_blog', array( __CLASS__, 'set_network_roles_for_blog' ), 10, 1 );
                 add_action( 'wpmu_upgrade_site', array( __CLASS__, 'set_network_roles_for_blog' ), 10, 1 );
             }
+
             add_action( 'init', array( __CLASS__, 'admin_register_scripts' ) );
 
             add_option( 'wpaa_default_behavior', '404' );

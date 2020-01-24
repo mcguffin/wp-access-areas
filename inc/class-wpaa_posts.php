@@ -119,7 +119,7 @@ if ( ! class_exists( 'WPAA_Posts' ) ) :
         public static function get_comment_feed_join( $join ) {
             global $wpdb;
             if ( strpos( $join, $wpdb->posts ) === false ) {
-                $join .= " JOIN {$wpdb->posts} ON {$wpdb->posts}.ID = {$wpdb->comments}.comment_post_ID";
+                $join .= $wpdb->prepare( " JOIN {$wpdb->posts} ON {$wpdb->posts}.ID = {$wpdb->comments}.comment_post_ID" );
             }
             return $join;
         }
@@ -353,7 +353,13 @@ if ( ! class_exists( 'WPAA_Posts' ) ) :
             if ( empty( $caps ) ) {
                 return $where;
             }
-            $add_where = " {$table_name}post_view_cap IN ('" . implode( "','", $caps ) . "')";
+
+            $fmt = array_fill( 0, count( $caps ), '%s' );
+
+            $add_where = $wpdb->prepare(
+                " {$table_name}post_view_cap IN (" . implode( ',', $fmt ) . ")",
+                ...$caps
+            );
             // if ( is_single() ) // why did I do this....?
             // $add_where .= " OR (wpaa_postmeta.meta_value IS NOT NULL)";
 

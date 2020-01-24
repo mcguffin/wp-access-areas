@@ -161,35 +161,57 @@ if ( ! class_exists( 'WPAA_EditPost' ) ) :
         // --------------------------------------------------
         // saving posts,
         // --------------------------------------------------
-        public static function set_post_behavior(  $post_ID, $post, $update ) {
+        public static function set_post_behavior(  $post_id, $post, $update ) {
+            if ( $update ) {
+                check_admin_referer( 'update-post_' . $post_id );
+            } else {
+                return;
+            }
             // should only happen if edit_view_cap is true
-            if ( self::can_edit_view_cap( $post->post_type ) && isset( $_POST['_wpaa_enable_custom_behaviour'] ) ) {
-                if ( (bool) $_POST['_wpaa_enable_custom_behaviour'] ) {
-                    if ( isset( $_POST['_wpaa_fallback_page'] ) ) {
-                        update_post_meta( $post_ID, '_wpaa_fallback_page', intval( $_POST['_wpaa_fallback_page'] ) );
+            $input = wp_parse_args( wp_unslash( $_POST ), [
+                '_wpaa_enable_custom_behaviour' => false,
+                '_wpaa_fallback_page'   => 0, // int
+                '_wpaa_post_behavior'   => false, // enum ['','404','page','login']
+            ]);
+            $input['_wpaa_enable_custom_behaviour'] = boolval( $input['_wpaa_enable_custom_behaviour'] );
+            $input['_wpaa_fallback_page'] = intval( $input['_wpaa_fallback_page'] );
+            $input['_wpaa_post_behavior'] = in_array( $input['_wpaa_fallback_page'], [ '', '404', 'page', 'login' ] )
+                ? $input['_wpaa_fallback_page']
+                : false;
+
+            if ( self::can_edit_view_cap( $post->post_type ) && $input['_wpaa_enable_custom_behaviour'] ) {
+                if ( $input['_wpaa_enable_custom_behaviour'] ) {
+                    if ( $input['_wpaa_fallback_page'] ) {
+                        update_post_meta( $post_id, '_wpaa_fallback_page', $input['_wpaa_fallback_page'] );
                     }
 
-                    if ( isset( $_POST['_wpaa_post_behavior'] ) ) {
+                    if ( $input['_wpaa_post_behavior'] !== false ) {
 
-                        $meta = $_POST['_wpaa_post_behavior'];
+                        $meta = $input['_wpaa_post_behavior'];
 
                         if ( $meta === '' ) {
-                            delete_post_meta( $post_ID, '_wpaa_post_behavior' );
+                            delete_post_meta( $post_id, '_wpaa_post_behavior' );
                         } elseif ( in_array( $meta, array( '404', 'page', 'login' ) ) ) {
-                            update_post_meta( $post_ID, '_wpaa_post_behavior', $meta );
+                            update_post_meta( $post_id, '_wpaa_post_behavior', $meta );
                         }
                     }
                 } else {
-                    delete_post_meta( $post_ID, '_wpaa_post_behavior' );
-                    delete_post_meta( $post_ID, '_wpaa_fallback_page' );
+                    delete_post_meta( $post_id, '_wpaa_post_behavior' );
+                    delete_post_meta( $post_id, '_wpaa_fallback_page' );
                 }
             }
         }
 
-        public static function edit_attachment( $attachment_ID ) {
-            $attachment          = get_post( $attachment_ID );
-            $post_edit_cap       = isset( $_POST['post_edit_cap'] ) ? wpaa_sanitize_access_cap( $_POST['post_edit_cap'] ) : $attachment->post_edit_cap;
-            $post_comment_cap    = isset( $_POST['post_comment_cap'] ) ? wpaa_sanitize_access_cap( $_POST['post_comment_cap'] ) : $attachment->post_comment_cap;
+        public static function edit_attachment( $attachment_id ) {
+
+            check_admin_referer( 'update-post_' . $attachment_id );
+            $input = wp_parse_args( wp_unslash( $_POST ), [
+                'post_edit_cap' => false,
+                'post_comment_cap' => false,
+            ] );
+            $attachment          = get_post( $attachment_id );
+            $post_edit_cap       = $input['post_edit_cap'] ? wpaa_sanitize_access_cap( $input['post_edit_cap'] ) : $attachment->post_edit_cap;
+            $post_comment_cap    = $input['post_comment_cap'] ? wpaa_sanitize_access_cap( $input['post_comment_cap'] ) : $attachment->post_comment_cap;
 
             $edit_cap_changed    = $post_edit_cap != $attachment->post_edit_cap;
             $comment_cap_changed = $post_comment_cap != $attachment->post_comment_cap;
@@ -201,7 +223,7 @@ if ( ! class_exists( 'WPAA_EditPost' ) ) :
 					'post_edit_cap' => $post_edit_cap,
 					'post_comment_cap' => $post_comment_cap,
                 );
-                $wpdb->update( $wpdb->posts, $data, array( 'ID' => $attachment_ID ), array( '%s', '%s' ), array( '%d' ) );
+                $wpdb->update( $wpdb->posts, $data, array( 'ID' => $attachment_id ), array( '%s', '%s' ), array( '%d' ) );
             }
         }
 

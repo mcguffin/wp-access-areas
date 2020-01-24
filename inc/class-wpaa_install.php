@@ -223,7 +223,7 @@ if ( ! class_exists( 'WPAA_Install' ) ) :
                     )
                 );
             }
-            
+
             $wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->usermeta WHERE meta_key = %s", WPUND_GLOBAL_USERMETA_KEY ) );
 
         }

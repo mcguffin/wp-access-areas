@@ -33,38 +33,6 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
             add_action( 'load-users_page_user_labels', array( __CLASS__, 'do_userlabel_actions' ) );
         }
 
-        public static function bulk_edit_access_areas() {
-            // Detect when a bulk action is being triggered...
-            if ( ! check_ajax_referer( 'bulk-userlabels', '_wpnonce', false ) ) {
-                return;
-            }
-            $action = $this->current_action();
-
-            $ul_ids = array_map( 'intval', $_REQUEST[ 'userlabels' ] );
-            $ul_ids = array_filter( $ul_ids );
-            if ( -1 !== $action ) {
-                switch ( $action ) {
-                    case 'delete':
-    					foreach ( $ul_ids as $ul_id ) {
-                            $ul = WPAA_AccessArea::get_userlabel( intval( $ul_id ) );
-    						if ( $ul ) {
-    							WPAA_AccessArea::delete_userlabel( intval( $ul_id ) );
-    						}
-    					}
-                        return wp_safe_redirect(
-                            add_query_arg(
-                                array(
-    								'page'    => 'user_labels',
-    								'message' => 3,
-    								'deleted' => count( $ul_ids ),
-    							),
-                                admin_url( 'users.php' )
-                            )
-                        );
-                }
-            }
-        }
-
         private static function get_action() {
             $action = -1;
             if ( isset( $_REQUEST['action'] ) && intval( $_REQUEST['action'] ) !== -1 ) {
@@ -73,6 +41,7 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
             if ( isset( $_REQUEST['action2'] ) && intval( $_REQUEST['action2'] ) !== -1 ) {
                 $action = wp_unslash( $_REQUEST['action2'] );
             }
+            $action = sanitize_key( $action );
             return $action;
         }
 
@@ -102,7 +71,7 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
             $redirect_url = false;
 
             // do actions
-            $data = self::_sanitize_action_input( $_POST );
+            $data = self::_sanitize_action_input( $_REQUEST );
 
             if ( is_multisite() && ! $data['blog_id'] && ! current_user_can( 'manage_network_users' ) ) {
                 wp_die( esc_html__( 'You do not have permission to edit network wide user labels.', 'wp-access-areas' ) );
@@ -110,8 +79,7 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
 
             switch ( $action ) {
                 case 'new':
-					// do create action
-                    
+
                     // integrity check.
                     if ( ! $data['cap_title'] ) {
                         wp_die( esc_html__( 'Please enter a Label.', 'wp-access-areas' ) );
@@ -140,37 +108,44 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
                     }
                     break;
                 case 'edit':
+
+                    // integrity check.
+                    if ( ! $data['cap_title'] ) {
+                        wp_die( esc_html__( 'Please enter a Label.', 'wp-access-areas' ) );
+                    }
+
 					// update and redirect
-					if ( ! empty( $_POST ) ) {
-                        $edit_id = WPAA_AccessArea::update_userlabel( $data );
-						if ( $edit_id ) {
-							$redirect_url = add_query_arg(
-                                array(
-									'id'      => $edit_id,
-									'message' => 2,
-								)
-                            );
-						} else {
-							$redirect_url = add_query_arg(
-                                array(
-									'id'        => $edit_id,
-									'message'   => WPAA_AccessArea::what_went_wrong(),
-									'cap_title' => sanitize_text_field( $data['cap_title'] ),
-								)
-                            );
-						}
-					}
+                    $edit_id = WPAA_AccessArea::update_userlabel( $data );
+                    if ( $edit_id ) {
+                        $redirect_url = add_query_arg(
+                            array(
+                                'id'      => $edit_id,
+                                'message' => 2,
+                            )
+                        );
+                    } else {
+                        $redirect_url = add_query_arg(
+                            array(
+                                'id'        => $edit_id,
+                                'message'   => WPAA_AccessArea::what_went_wrong(),
+                                'cap_title' => sanitize_text_field( $data['cap_title'] ),
+                            )
+                        );
+                    }
 
 					if ( ! isset( $_GET['id'] ) ) {
-						$redirect_url = add_query_arg( array( 'page' => 'user_labels' ), $_SERVER['SCRIPT_NAME'] );
+						$redirect_url = add_query_arg(
+                            array( 'page' => 'user_labels' ),
+                            admin_url( 'users.php' )
+                        );
 					}
 
                     break;
                 case 'delete':
+
 					// delete and redirect
-                    
-					if ( isset( $_REQUEST['id'] ) ) {
-                        $deleted = WPAA_AccessArea::delete_userlabel( intval( $_REQUEST['id'] ) );
+					if ( isset( $data['id'] ) ) {
+                        $deleted = WPAA_AccessArea::delete_userlabel( intval( $data['id'] ) );
 						if ( $deleted ) {
                             $redirect_url = add_query_arg(
                                 array(
@@ -193,9 +168,7 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
 
                     break;
                 case 'bulk-delete':
-                    $ul_ids = array_map( 'intval', $_REQUEST[ 'userlabels' ] );
-                    $ul_ids = array_filter( $ul_ids );
-                    foreach ( $ul_ids as $ul_id ) {
+                    foreach ( $data['userlabels'] as $ul_id ) {
                         $ul = WPAA_AccessArea::get_userlabel( intval( $ul_id ) );
                         if ( $ul ) {
                             WPAA_AccessArea::delete_userlabel( intval( $ul_id ) );
@@ -205,7 +178,7 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
                         array(
                             'page'    => 'user_labels',
                             'message' => 3,
-                            'deleted' => count( $ul_ids ),
+                            'deleted' => count( $data['userlabels'] ),
                         ),
                         admin_url( 'users.php' )
                     );
@@ -221,18 +194,15 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
         }
 
         public static function manage_userlabels_page() {
-            
-            if ( isset( $_REQUEST['action'] ) ) {
-                // do actions
-                // display forms
-                switch ( $_REQUEST['action'] ) {
-                    case 'new':
-                        return self::edit_userlabels_screen();
-                    case 'edit':
-                        return self::edit_userlabels_screen( $_GET['id'] );
-                }
+            switch ( self::get_action() ) {
+                case 'new':
+                    return self::edit_userlabels_screen();
+                case 'edit':
+                    $data = self::_sanitize_action_input( $_GET );
+                    return self::edit_userlabels_screen( $data['id'] );
+                default:
+                    return self::list_userlabels_screen();
             }
-            return self::list_userlabels_screen();
         }
 
         public static function edit_userlabels_screen( $userlabel_id = 0 ) {
@@ -246,9 +216,6 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
                 );
             }
             $cap_title = $userlabel->cap_title;
-            if ( ! $cap_title && isset( $_REQUEST['cap_title'] ) ) {
-                $cap_title = wp_unslash( $_REQUEST['cap_title'] );
-            }
 
             ?><div class="wrap">
                 <div id="icon-undisclosed-userlabel" class="icon32">
@@ -264,7 +231,7 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
                     ?>
                 </h2>
                 <?php self::_put_message(); ?>
-                <form id="create-user-label" method="post" action="<?php echo esc_url( $_SERVER['REQUEST_URI'] ); ?>">
+                <form id="create-user-label" method="post">
                     <!-- Now we can render the completed list table -->
                     <?php if ( $userlabel_id ) { ?>
                         <input type="hidden" name="id" value="<?php echo intval( $userlabel_id ); ?>" />
@@ -315,7 +282,12 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
 					$message = __( 'Access Area updated.', 'wp-access-areas' );
                     break;
                 case 3: // deleted
-					$message = sprintf( _n( 'Access Area deleted.', '%d Access Areas deleted.', $_REQUEST['deleted'], 'wp-access-areas' ), $_REQUEST['deleted'] );
+                    $deleted = 0;
+                    if ( isset( $_REQUEST['deleted'] ) ) {
+                        $deleted = intval( $_REQUEST['deleted'] );
+                    }
+                    /* translators: %d number of deleted items */
+					$message = sprintf( _n( 'Access Area deleted.', '%d Access Areas deleted.', $deleted, 'wp-access-areas' ), $deleted );
                     break;
                 case 4: // exists
 					$message = __( 'An Access Area with that Name already exists.', 'wp-access-areas' );
@@ -328,14 +300,29 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
                     break;
             }
             if ( $message ) {
-                printf( $message_wrap, $message );
+                echo wp_kses(
+                    sprintf( $message_wrap, esc_html( $message ) ),
+                    [
+                        'div' => [
+							'id' => [],
+							'class' => [],
+						],
+                        'p' => [
+							'id' => [],
+							'class' => [],
+						],
+                        'strong' => [],
+                        'em' => [],
+                        'code' => [],
+                    ]
+                );
             }
         }
 
         public static function list_userlabels_screen() {
 
-            $listTable = new AccessAreas_List_Table( array() );
-            $listTable->prepare_items();
+            $list_table = new AccessAreas_List_Table( array() );
+            $list_table->prepare_items();
             $add_new_url = remove_query_arg( 'message', add_query_arg( array( 'action' => 'new' ) ) );
 
             ?>
@@ -351,7 +338,7 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
             <form id="camera-reservations-filter" method="get">
                 <!-- Now we can render the completed list table -->
                 <input type="hidden" name="page" value="user_labels" />
-                <?php $listTable->display(); ?>
+                <?php $list_table->display(); ?>
             </form></div><!-- .wrap -->
             <?php
 
@@ -359,21 +346,37 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
 
         public static function _sanitize_action_input( $data ) {
 
-            $data = wp_parse_args(
-                $data,
-                array(
-					'cap_title' => '',
-					'blog_id'   => 0,
-                    'userlabels' => [],
-                )
-            );
-            $data['cap_title'] = trim( strip_tags( $data['cap_title'] ) );
-            $data['blog_id']   = is_network_admin() ? 0 : get_current_blog_id();
-            $data['userlabels']   = is_network_admin() ? 0 : get_current_blog_id();
+            $action = self::get_action();
+
+            if ( $action === 'bulk-delete' ) {
+                $data = wp_parse_args(
+                    $data,
+                    [ 'userlabels' => [] ]
+                );
+                $data['userlabels'] = array_map( 'intval', $data['userlabels'] );
+                $data['userlabels'] = array_filter( $data['userlabels'] );
+            }
+            if ( in_array( $action, [ 'new', 'edit' ] ) ) {
+                $data = wp_parse_args(
+                    $data,
+                    [
+                        'cap_title' => '',
+                        'blog_id'   => 0,
+                    ]
+                );
+                $data['cap_title'] = trim( strip_tags( $data['cap_title'] ) );
+                $data['blog_id']   = is_network_admin() ? 0 : get_current_blog_id();
+            }
+            if ( in_array( $action, [ 'delete', 'edit' ] ) ) {
+                $data = wp_parse_args(
+                    $data,
+                    [ 'id' => 0 ]
+                );
+                $data['id'] = intval( $data['id'] );
+            }
+
             return $data;
         }
-
-
 
     }
 endif;

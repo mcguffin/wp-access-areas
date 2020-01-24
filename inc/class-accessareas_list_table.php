@@ -138,7 +138,7 @@ if ( ! class_exists( 'AccessAreas_List_Table' ) ) :
 
             // use wpdb here!
             $data = WPAA_AccessArea::get_available_userlabels( $limit, $order_sql );
-            
+
             $this->items = $data;
             /**
              * REQUIRED. We also have to register our pagination options & calculations.

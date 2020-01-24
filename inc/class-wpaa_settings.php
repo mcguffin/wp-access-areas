@@ -107,24 +107,38 @@ if ( ! class_exists( 'WPAA_Settings' ) ) :
                     || ! $admin_role->has_cap( 'wpaa_set_edit_cap' )
                     || ! $admin_role->has_cap( 'wpaa_set_comment_cap' )
                 ) {
-
                     WPAA_Install::install_role_caps();
                 }
             }
         }
         public static function assign_role_cap( $value ) {
+
+            check_admin_referer( "wpaa_settings-options" );
+
             if ( current_user_can( 'promote_users' ) ) {
-                if ( isset( $_POST['grant_cap'] ) && is_array( $_POST['grant_cap'] ) ) {
-                    foreach ( $_POST['grant_cap'] as $role_slug => $cap ) {
-                        if ( 'administrator' != $role_slug && array_key_exists( $cap, self::$role_caps ) && ( $role = get_role( $role_slug ) ) && ! $role->has_cap( $cap ) ) {
-                            $role->add_cap( $cap );
+                $input = wp_unslash( $_POST );
+                $input = wp_parse_args( $input, [
+                    'grant_cap' => [],
+                    'revoke_cap' => [],
+                ] );
+                $input['grant_cap'] = array_map( 'santize_key', $input['grant_cap'] );
+                $input['revoke_cap'] = array_map( 'santize_key', $input['revoke_cap'] );
+                foreach ( $input['grant_cap'] as $role_slug => $cap ) {
+                    if ( 'administrator' != $role_slug && array_key_exists( $cap, self::$role_caps ) ) {
+                        $role = get_role( $role_slug );
+                        if ( ! $role || ! $role->has_cap( $cap ) ) {
+                            continue;
                         }
+                        $role->add_cap( $cap );
                     }
-                } elseif ( isset( $_POST['revoke_cap'] ) && is_array( $_POST['revoke_cap'] ) ) {
-                    foreach ( $_POST['revoke_cap'] as $role_slug => $cap ) {
-                        if ( 'administrator' != $role_slug && array_key_exists( $cap, self::$role_caps ) && ( $role = get_role( $role_slug ) ) && $role->has_cap( $cap ) ) {
-                            $role->remove_cap( $cap );
+                }
+                foreach ( $input['revoke_cap'] as $role_slug => $cap ) {
+                    if ( 'administrator' != $role_slug && array_key_exists( $cap, self::$role_caps ) ) {
+                        $role = get_role( $role_slug );
+                        if ( ! $role || $role->has_cap( $cap ) ) {
+                            continue;
                         }
+                        $role->remove_cap( $cap );
                     }
                 }
             }
@@ -166,19 +180,19 @@ if ( ! class_exists( 'WPAA_Settings' ) ) :
         }
         public static function main_section_intro() {
             ?>
-            <p class="small description"><?php _e( 'You can also set these Options for each post individually.', 'wp-access-areas' ); ?></p>
+            <p class="small description"><?php esc_html_e( 'You can also set these Options for each post individually.', 'wp-access-areas' ); ?></p>
             <?php
         }
         public static function post_access_section_intro() {
             ?>
-            <p class="small description"><?php _e( 'Default settings for newly created posts.', 'wp-access-areas' ); ?></p>
+            <p class="small description"><?php esc_html_e( 'Default settings for newly created posts.', 'wp-access-areas' ); ?></p>
             <?php
         }
         public static function settings_page() {
 
             ?>
             <div class="wrap">
-                <h2><?php _e( 'Access Areas Settings', 'wp-access-areas' ); ?></h2>
+                <h2><?php esc_html_e( 'Access Areas Settings', 'wp-access-areas' ); ?></h2>
                 
                 <form id="wpaa-options" method="post" action="options.php">
                     <?php
@@ -308,7 +322,7 @@ if ( ! class_exists( 'WPAA_Settings' ) ) :
             $enabled = get_option( 'wpaa_enable_assign_cap' );
 
             ?>
-            <input type="hidden" name="wpaa_enable_assign_cap" value="<?php echo $enabled; ?>" />
+            <input type="hidden" name="wpaa_enable_assign_cap" value="<?php echo intval( $enabled ); ?>" />
             <?php
                 if ( $enabled ) {
 				$roles = get_editable_roles();
@@ -350,31 +364,31 @@ if ( ! class_exists( 'WPAA_Settings' ) ) :
 						?>
                                 <tr class="role-select <?php echo $alternate ? 'alternate' : ''; ?>">
                                     <th>
-								<?php
-								echo translate_user_role( $role_details['name'] );
-								?>
+        								<?php
+        								esc_html_e( translate_user_role( $role_details['name'] ) );
+        								?>
                                     </th>
 								<?php
 								foreach ( array_keys( self::$role_caps ) as $cap ) {
 									?>
                                         <td>
-										<?php
-										$attr = $role_slug == 'administrator' ? 'disabled' : '';
-										if ( $role->has_cap( $cap ) ) {
-											?>
-                                                <button <?php echo $attr; ?> name="revoke_cap[<?php esc_attr_e( $role_slug ); ?>]" value="<?php esc_attr_e( $cap ); ?>" type="submit" class="button-secondary" />
-												<?php esc_attr_e( 'Forbid', 'wp-access-areas' ); ?>
-                                                </button>
+    										<?php
+
+    										if ( $role->has_cap( $cap ) ) {
+    											?>
+                                                    <button <?php echo $role_slug == 'administrator' ? 'disabled' : ''; ?> name="revoke_cap[<?php esc_attr_e( $role_slug ); ?>]" value="<?php esc_attr_e( $cap ); ?>" type="submit" class="button-secondary" />
+    												<?php esc_attr_e( 'Forbid', 'wp-access-areas' ); ?>
+                                                    </button>
                                                 <?php
                                             } else {
-											?>
+                                                ?>
                                                 <button name="grant_cap[<?php esc_attr_e( $role_slug ); ?>]" value="<?php esc_attr_e( $cap ); ?>" type="submit" class="button-primary" />
-											<?php esc_html_e( 'Allow', 'wp-access-areas' ); ?>
+                                                    <?php esc_html_e( 'Allow', 'wp-access-areas' ); ?>
                                                 </button>
-											<?php
+                                                <?php
                                             }
 
-										?>
+    										?>
                                         </td>
                                         <?php
                                     }

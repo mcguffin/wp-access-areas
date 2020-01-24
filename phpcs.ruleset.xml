@@ -214,7 +214,9 @@
 		<exclude name="WordPress.XSS.EscapeOutput.UnsafePrintingFunction" />
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
 
-
+		<exclude name="WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase" />
+		<exclude name="PSR2.ControlStructures.SwitchDeclaration.BodyOnNextLineCASE" />
+		<exclude name="Squiz.WhiteSpace.SuperfluousWhitespace.EmptyLines" />
 		<exclude name="Squiz.Commenting.BlockComment.CloserSameLine" />
 		<exclude name="Squiz.PHP.DisallowMultipleAssignments.FoundInControlStructure" />
 		<exclude name="PHPCS_SecurityAudit.BadFunctions.EasyRFI.WarnEasyRFI" />
