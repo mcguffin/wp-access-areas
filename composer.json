@@ -14,11 +14,12 @@
 	"pheromone/phpcs-security-audit":"*"
   },
   "keywords": [
-    "blocks",
-    "editor",
-    "gutenberg",
-    "plugin",
-    "wordpress"
+    "access",
+    "role",
+    "capability",
+    "user",
+    "security",
+    "editor"
   ],
   "scripts": {
     "post-install-cmd": [
