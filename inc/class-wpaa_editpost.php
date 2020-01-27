@@ -162,11 +162,14 @@ if ( ! class_exists( 'WPAA_EditPost' ) ) :
         // saving posts,
         // --------------------------------------------------
         public static function set_post_behavior(  $post_id, $post, $update ) {
-            if ( $update ) {
-                check_admin_referer( 'update-post_' . $post_id );
-            } else {
+            if ( ! $update ) {
                 return;
             }
+            
+            if ( ! check_ajax_referer( 'update-post_' . $post_id, false, false ) ) {
+                return;
+            }
+
             // should only happen if edit_view_cap is true
             $input = wp_parse_args( wp_unslash( $_POST ), [
                 '_wpaa_enable_custom_behaviour' => false,
@@ -204,7 +207,10 @@ if ( ! class_exists( 'WPAA_EditPost' ) ) :
 
         public static function edit_attachment( $attachment_id ) {
 
-            check_admin_referer( 'update-post_' . $attachment_id );
+            if ( ! check_ajax_referer( 'update-post_' . $attachment_id, false, false ) ) {
+                return;
+            }
+
             $input = wp_parse_args( wp_unslash( $_POST ), [
                 'post_edit_cap' => false,
                 'post_comment_cap' => false,
