@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the WordPress Access Areas plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WordPress Access Areas 1.5.8\n"
+"Project-Id-Version: WordPress Access Areas 1.5.9\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-access-areas\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-01-24T09:31:43+00:00\n"
+"POT-Creation-Date: 2020-01-27T10:50:35+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: wp-access-areas\n"
@@ -135,8 +135,8 @@ msgid "Add New"
 msgstr ""
 
 #: inc/class-wpaa_editpost.php:113
-#: inc/class-wpaa_editpost.php:437
-#: inc/class-wpaa_editpost.php:534
+#: inc/class-wpaa_editpost.php:443
+#: inc/class-wpaa_editpost.php:540
 msgid "Access"
 msgstr ""
 
@@ -144,66 +144,66 @@ msgstr ""
 msgid "Behaviour"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:264
+#: inc/class-wpaa_editpost.php:270
 msgid "Who can read:"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:279
+#: inc/class-wpaa_editpost.php:285
 msgid "Who can edit:"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:294
+#: inc/class-wpaa_editpost.php:300
 msgid "Who can comment:"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:353
+#: inc/class-wpaa_editpost.php:359
 msgid "Custom Behaviour"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:359
+#: inc/class-wpaa_editpost.php:365
 #: inc/class-wpaa_settings.php:434
 msgid "If somebody tries to view a restricted post directly:"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:367
+#: inc/class-wpaa_editpost.php:373
 msgid "Fallback Page"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:446
+#: inc/class-wpaa_editpost.php:452
 msgid "Read:"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:450
+#: inc/class-wpaa_editpost.php:456
 msgid "&mdash; No Change &mdash;"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:461
+#: inc/class-wpaa_editpost.php:467
 msgid "Edit:"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:476
+#: inc/class-wpaa_editpost.php:482
 msgid "Comment:"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:549
+#: inc/class-wpaa_editpost.php:555
 #: inc/class-wpaa_template.php:71
 msgid "(Network)"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:552
+#: inc/class-wpaa_editpost.php:558
 msgid "WP Default"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:553
+#: inc/class-wpaa_editpost.php:559
 msgid "Blog users"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:563
-#: inc/class-wpaa_editpost.php:581
+#: inc/class-wpaa_editpost.php:569
+#: inc/class-wpaa_editpost.php:587
 msgid "Who can read"
 msgstr ""
 
-#: inc/class-wpaa_editpost.php:572
+#: inc/class-wpaa_editpost.php:578
 msgid "Who can comment"
 msgstr ""
 

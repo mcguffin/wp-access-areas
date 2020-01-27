@@ -5,7 +5,7 @@ Tags: access, role, capability, user, security, editor
 Requires at least: 4.6
 Requires PHP: 5.6
 Tested up to: 5.3
-Stable tag: 1.5.8
+Stable tag: 1.5.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -118,6 +118,9 @@ I will back up your request with all the authority that a simple plugin develope
 4. Post Access Behaviour
 
 == Changelog ==
+
+= 1.5.9 =
+ - Fix: Pages saved via ajax not working. (Elementor)
 
 = 1.5.8 =
  - Security hardening
