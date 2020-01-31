@@ -23,7 +23,7 @@ if ( ! class_exists( 'WPAA_Core' ) ) :
 
             global $wpdb;
     		$wpdb->global_tables[] = 'disclosure_userlabels';
-            $wpdb->set_prefix( $wpdb->prefix ); // force new table names generation
+            $wpdb->set_prefix( $wpdb->base_prefix ); // force new table names generation
 
             add_action( 'plugins_loaded', array( __CLASS__, 'plugin_loaded' ) );
 
