@@ -22,12 +22,6 @@ class Core extends Plugin {
 		add_action( 'init' , array( $this , 'init' ) );
 		add_action( 'wp_enqueue_scripts' , array( $this , 'wp_enqueue_style' ) );
 
-		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
-		    require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
-		}
-
-
-
 		parent::__construct();
 	}
 
@@ -53,9 +47,26 @@ class Core extends Plugin {
 	 */
 	public function init_compat() {
 
+		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
+		    require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+		}
+
 		if ( is_multisite() && function_exists('is_plugin_active_for_network') && is_plugin_active_for_network( ACCESS_AREAS_PLUGIN ) ) {
 			Compat\WPMU\WPMU::instance();
 		}
+
+		if ( function_exists('ACF') ) {
+			Compat\ACF::instance();
+		}
+
+		if ( function_exists('PLL') ) {
+			Compat\Polylang::instance();
+		}
+
+		if ( class_exists('\Disable_Comments') ) {
+			Compat\DisableComments::instance();
+		}
+
 	}
 
 
