@@ -17,31 +17,8 @@ class AdminPosts extends Core\Singleton {
 	 *	@inheritdoc
 	 */
 	protected function __construct() {
-		// add meta boxes
-		if ( $post_type_settings = get_option( 'wpaa_post_types' ) ) {
-			foreach ( $post_type_settings as $post_type => $settings ) {
-				if ( intval( $settings['access_override'] ) ) {
-					add_action( "add_meta_boxes_{$post_type}", array( $this, 'add_meta_boxes_access') );
 
-					// add post type column
-					if ( $post_type === 'attachment' ) {
-						add_filter( "manage_media_columns", array( $this, 'post_columns') );
-						add_filter( "manage_media_custom_column", array( $this, 'post_column'), 10, 2 );
-					} else {
-						add_filter( "manage_{$post_type}_posts_columns", array( $this, 'post_columns') );
-						add_filter( "manage_{$post_type}_posts_custom_column", array( $this, 'post_column'), 10, 2 );
-					}
-
-				} else {
-					// add action @ save post...
-				}
-				if ( intval( $settings['behavior_override'] ) ) {
-					add_action( "add_meta_boxes_{$post_type}", array( $this, 'add_meta_boxes_behavior') );
-				} else {
-					// add action @ save post...
-				}
-			}
-		}
+		add_action( 'init', array( $this, 'init' ) );
 
 		add_filter( 'wp_insert_attachment_data', array( $this, 'insert_post_data') , 10 , 2 );
 		add_filter( 'wp_insert_post_data', array( $this, 'insert_post_data') , 10 , 2 );
@@ -57,6 +34,49 @@ class AdminPosts extends Core\Singleton {
 	}
 
 
+	/**
+	 *	@action init
+	 */
+	public function init() {
+		// add meta boxes
+		if ( $post_type_settings = get_option( 'wpaa_post_types' ) ) {
+			foreach ( $post_type_settings as $post_type => $settings ) {
+
+				$pto = get_post_type_object( $post_type );
+
+				if ( intval( $settings['access_override'] ) ) {
+
+					add_action( "add_meta_boxes_{$post_type}", array( $this, 'add_meta_boxes_access' ) );
+
+					// add post type column
+					if ( $post_type === 'attachment' ) {
+						add_filter( "manage_media_columns", array( $this, 'post_columns') );
+						add_filter( "manage_media_custom_column", array( $this, 'post_column'), 10, 2 );
+					} else {
+						add_filter( "manage_{$post_type}_posts_columns", array( $this, 'post_columns') );
+						add_filter( "manage_{$post_type}_posts_custom_column", array( $this, 'post_column'), 10, 2 );
+					}
+
+				} else {
+					// add action @ save post...
+				}
+
+				if ( intval( $settings['behavior_override'] ) && $pto->public ) {
+
+					add_action( "add_meta_boxes_{$post_type}", array( $this, 'add_meta_boxes_behavior') );
+
+				} else {
+					// add action @ save post...
+				}
+			}
+		}
+	}
+
+	/**
+	 *	Map post edit access caps
+	 *
+	 *	@filter map_meta_cap
+	 */
 	public function map_meta_cap( $caps, $cap, $user_id, $args ) {
 
 		switch ( $cap ) {
@@ -87,6 +107,8 @@ class AdminPosts extends Core\Singleton {
 
 	/**
 	 *	@param $columns
+	 *
+	 *	@filter manage_media_columns
 	 *	@filter manage_{$post_type}_posts_columns
 	 */
 	public function post_columns( $columns ) {
@@ -94,6 +116,13 @@ class AdminPosts extends Core\Singleton {
 		return $columns;
 	}
 
+	/**
+	 *	@param string $column
+	 *	@param int $post_id
+	 *
+	 *	@action manage_media_custom_column
+	 *	@action manage_{$post_type}_posts_custom_column
+	 */
 	public function post_column( $column, $post_id ) {
 		if ('wpaa' === $column ) {
 			$model = Model\ModelAccessAreas::instance();
@@ -110,6 +139,7 @@ class AdminPosts extends Core\Singleton {
 			}
 		}
 	}
+
 	/**
 	 *	@action load-post.php
 	 *	@action load-post-new.php
