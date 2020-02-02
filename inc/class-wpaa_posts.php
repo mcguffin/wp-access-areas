@@ -119,7 +119,8 @@ if ( ! class_exists( 'WPAA_Posts' ) ) :
         public static function get_comment_feed_join( $join ) {
             global $wpdb;
             if ( strpos( $join, $wpdb->posts ) === false ) {
-                $join .= $wpdb->prepare( " JOIN {$wpdb->posts} ON {$wpdb->posts}.ID = {$wpdb->comments}.comment_post_ID" );
+                //$join .= $wpdb->prepare( " JOIN {$wpdb->posts} ON {$wpdb->posts}.ID = {$wpdb->comments}.comment_post_ID" );
+                $join .= " JOIN {$wpdb->posts} ON {$wpdb->posts}.ID = {$wpdb->comments}.comment_post_ID";
             }
             return $join;
         }
