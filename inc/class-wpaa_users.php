@@ -67,10 +67,11 @@ if ( ! class_exists( 'WPAA_Users' ) ) :
         // --------------------------------------------------
         public static function ajax_add_access_area() {
             // $nonce = isset( $_REQUEST['_wp_ajax_nonce'] ) ?  : '';
-            if ( ! check_ajax_referer( 'userlabel-new' ) ) {
-                esc_html_e( 'CSRF-Token did not verify.', 'wp-access-areas' );
-                die();
-            }
+            check_ajax_referer( 'userlabel-new' );
+            // if ( ! check_ajax_referer( 'userlabel-new' ) ) {
+            //     esc_html_e( 'CSRF-Token did not verify.', 'wp-access-areas' );
+            //     die();
+            // }
             $success    = false;
             $params     = wp_parse_args( $_POST, [
                 'blog_id'           => 0,
@@ -220,6 +221,10 @@ if ( ! class_exists( 'WPAA_Users' ) ) :
         // user editing
         // --------------------------------------------------
         public static function profile_update( $user_id, $old_user_data ) {
+
+            if ( ! isset( $_REQUEST['_wpaa_nonce'] ) ) {
+                return;
+            }
 
             if ( ! check_admin_referer( 'update-userlabels', '_wpaa_nonce' ) ) {
                 wp_die( esc_html__( 'You do not have permission to do this.', 'wp-access-areas' ) );
