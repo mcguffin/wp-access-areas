@@ -121,6 +121,7 @@ I will back up your request with all the authority that a simple plugin develope
 
 = 1.5.13 =
  - Fix: WP deprecation warning
+ - Fix: Chrome DOM warning
 
 = 1.5.12 =
  - Fix: nonce error when adding User in network admin if plugin is not network active
