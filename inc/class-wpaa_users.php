@@ -272,7 +272,7 @@ if ( ! class_exists( 'WPAA_Users' ) ) :
                     foreach ( $blogids as $blog_id ) {
                         if ( is_user_member_of_blog( $user_id, $blog_id ) ) {
                             switch_to_blog( $blog_id );
-                            $user->for_blog( $blog_id );
+                            $user->for_site( $blog_id );
                             self::_set_cap_for_user( $label->capability, $user, $add );
                         }
                     }
@@ -280,7 +280,7 @@ if ( ! class_exists( 'WPAA_Users' ) ) :
                 } else { // local or single page
                     if ( is_multisite() ) {
                         switch_to_blog( $current_blog_id );
-                        $user->for_blog( $current_blog_id );
+                        $user->for_site( $current_blog_id );
                     }
                     self::_set_cap_for_user( $label->capability, $user, $add );
                 }
@@ -288,7 +288,7 @@ if ( ! class_exists( 'WPAA_Users' ) ) :
             if ( is_multisite() ) {
                 update_user_meta( $user_id, WPUND_GLOBAL_USERMETA_KEY, $global_label_data );
                 switch_to_blog( $current_blog_id );
-                $user->for_blog( $current_blog_id );
+                $user->for_site( $current_blog_id );
             }
         }
 

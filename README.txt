@@ -119,6 +119,9 @@ I will back up your request with all the authority that a simple plugin develope
 
 == Changelog ==
 
+= 1.5.13 =
+ - Fix: WP deprecation warning
+
 = 1.5.12 =
  - Fix: nonce error when adding User in network admin if plugin is not network active
 

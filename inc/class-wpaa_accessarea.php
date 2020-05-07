@@ -206,7 +206,7 @@ if ( ! class_exists( 'WPAA_AccessArea' ) ) :
             $users = get_users();
             foreach ( $users as $user ) {
                 if ( is_multisite() ) {
-                    $user->for_blog( $current_blog_id );
+                    $user->for_site( $current_blog_id );
                 }
                 $user->remove_cap( $userlabel->capability );
             }
