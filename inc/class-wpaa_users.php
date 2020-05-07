@@ -409,7 +409,7 @@ if ( ! class_exists( 'WPAA_Users' ) ) :
             <span class="wpaa-label-item <?php echo $enabled ? ' disabled' : ''; ?>">
                 <?php
                 printf(
-                    '<input type="hidden" id="%s" name="%s" value="0" />',
+                    '<input type="hidden" id="%s-hidden" name="%s" value="0" />',
                     esc_attr( $id ),
                     esc_attr( $name )
                 );
