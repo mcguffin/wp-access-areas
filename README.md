@@ -32,13 +32,20 @@ Finally activate it in the GUI.
 
 Development
 -----------
+Install dev
+```
+npm install
+```
+
+
 Run code Audit
 ```
+npm run audit
 ```
 
 Compatibility
 -------------
-- Up to WP 5.3
+- Up to WP 5.4
 - The plugin is still functional in WP < 3.8, but some items may not be displayed correctly.
 
 Plugin API
