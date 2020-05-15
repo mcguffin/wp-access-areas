@@ -23,15 +23,15 @@ You can either restrict access to logged-in uses only, certain WordPress-Roles o
 - Supports bulk editing
 - German, Italian, Polish and Swedish localization (Huge Thankyou @ all translators!)
 
-Latest files on [GitHub](https://github.com/mcguffin/wp-access-areas).
-
-Developers might like to have a look at [the project wiki](https://github.com/mcguffin/wp-access-areas/wiki).
-
 = Known Issues =
 - WordPress calendar Widget still shows dates where restricted posts have been created.
   When clicked on such a date a 404 will occur. There is an open [WordPress Core ticket on that issue](https://core.trac.wordpress.org/ticket/29319).
 - Taxonomy menus (e.g. Tags / Categories) also count restricted posts when the total number of posts in a taxonomy is ascertained.
   See [this post](http://wordpress.org/support/topic/archive-recents-posts-last-comments-show-restricted-content?replies=5#post-5929330) for details.
+
+= Development =
+
+Please head over to the source code [on Github](https://github.com/mcguffin/wp-access-areas).
 
 == Installation ==
 
@@ -78,37 +78,11 @@ Developer documentation can be found in [the project wiki](https://github.com/mc
 
 = I found a bug. Where should I post it? =
 
-I personally prefer GitHub but you can post it in the forum as well. The plugin code is here: [GitHub](https://github.com/mcguffin/wp-access-areas)
-
-= I want to use the latest files. How can I do this? =
-
-Use the GitHub Repo rather than the WordPress Plugin. Do as follows:
-
-1. If you haven't already done: [Install git](https://help.github.com/articles/set-up-git)
-
-2. in the console cd into Your 'wp-content/plugins´ directory
-
-3. type `git clone git@github.com:mcguffin/wp-access-areas.git`
-
-4. If you want to update to the latest files (be careful, might be untested on Your WP-Version) type git pull´.
-
-Please note that the GitHub repository is more likely to contain unstable and untested code. Urgent fixes
-concerning stability or security (like crashes, vulnerabilities and alike) are more likely to be fixed in
-the official WP plugin repository first.
+Please do so in the [GitHub Repository](https://github.com/mcguffin/wp-access-areas).
 
 = I found a bug and fixed it. How can I contribute? =
 
-Either post it on [GitHub](https://github.com/mcguffin/wp-access-areas) or—if you are working on a cloned repository—send me a pull request.
-
-= How can I contribute a localization? =
-
-My goal is to host all translations on [translate.wordpress.org](https://translate.wordpress.org/).
-For German this is already accomplished. For almost every other localization the project is still in
-need of translation editors.
-
-If you want to contribute a translation please let me know by posting a comment to [this thread](https://make.wordpress.org/polyglots/2016/04/30/hi-polyglots-i-am-the-author-of-some/)
-stating the name of this plugin, the locale you would like to maintain and some brief information about you - e.g. if you are a native speaker.
-I will back up your request with all the authority that a simple plugin developer can have.
+Pull request are welcome in the [GitHub Repository](https://github.com/mcguffin/wp-access-areas).
 
 == Screenshots ==
 
