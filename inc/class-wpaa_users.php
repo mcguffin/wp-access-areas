@@ -46,6 +46,7 @@ if ( ! class_exists( 'WPAA_Users' ) ) :
 
                 // js
                 add_action( 'load-profile.php', array( __CLASS__, 'load_edit_script' ) );
+                add_action( 'load-user-edit.php', array( __CLASS__, 'load_edit_script' ) );
 
                 // ajax
                 add_action( 'wp_ajax_add_accessarea', array( __CLASS__, 'ajax_add_access_area' ) );
@@ -56,6 +57,7 @@ if ( ! class_exists( 'WPAA_Users' ) ) :
         }
 
         public static function load_edit_script() {
+
             wp_enqueue_script( 'wpaa-admin-user-ajax' );
         }
         public static function load_style() {
@@ -436,15 +438,15 @@ if ( ! class_exists( 'WPAA_Users' ) ) :
         private static function _ajax_add_area_formitem( $blog_id ) {
             ?>
             <span class="wpaa-label-item ajax-add-item">
-                <?php wp_nonce_field( 'userlabel-new', '_wp_ajax_nonce' ); ?>
+                <?php wp_nonce_field( 'userlabel-new', '_ajax_nonce' ); ?>
                 <input type="hidden" name="blog_id" value="<?php echo intval( $blog_id ); ?>" />
                 <input class="cap-add" type="text" name="cap_title" placeholder="<?php esc_attr_e( 'Add New', 'wp-access-areas' ); ?>" />
-                <a href="#" class="cap-add-submit button" disabled data-nonce="<?php esc_attr_e( wp_create_nonce( 'userlabel-new' ) ); ?>">
+                <button href="#" class="cap-add-submit button" disabled data-nonce="<?php esc_attr_e( wp_create_nonce( 'userlabel-new' ) ); ?>">
                     <span class=" dashicons dashicons-plus"></span>
                     <span class="screen-reader-text">
                         <?php esc_html_e( 'Add New', 'wp-access-areas' ); ?>
                     </span>
-                </a>
+                </button>
             </span>
             <?php
         }

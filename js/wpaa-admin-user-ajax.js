@@ -11,11 +11,10 @@
 					'_ajax_nonce' : $( e.target ).attr( 'data-nonce' )
 				};
 				var $parent = $( this ).closest( '.ajax-add-item' );
-				$( this ).closest( '.ajax-add-item' ).find( 'input' ).each(
-	                function(){
+				$( this ).closest( '.ajax-add-item' ).find( 'input' ).each(function(){
 					data[$( this ).attr( 'name' )] = $( this ).val();
-				}
-	                ); // nonce,
+				}); // nonce,
+
 				$.post(
 					ajaxurl,
 	                data,
@@ -29,31 +28,25 @@
 			}
 		)
 		.on(
-            'keypress' ,
-            '.cap-add:focus' ,
+            'keypress',
+            '.cap-add',
             function(event){
 				if ( event.keyCode == 13 ) {
-						event.preventDefault();
-						event.stopPropagation();
-						$( this ).next( '.cap-add-submit' ).click();
-						return false;
+					event.preventDefault();
+					event.stopPropagation();
+					$( this ).next( '.cap-add-submit' ).click();
+					return false;
 				} else {
-						if ( '' == $( this ).val().replace( /^\s+|\s+$/g,'' ) )
-						$( this ).next( '.cap-add-submit' ).attr( 'disabled','disabled' );
-						else
-						$( this ).next( '.cap-add-submit' ).removeAttr( 'disabled' );
+					$( this ).next( '.cap-add-submit' ).prop( 'disabled', '' == $( this ).val().replace( /^\s+|\s+$/g,'' ) );
 				}
 			}
 		)
 		.on(
-            'keyup' ,
-            '.cap-add:focus' ,
+            'keyup',
+            '.cap-add',
             function(event){
-				if ( '' == $( this ).val().replace( /^\s+|\s+$/g,'' ) ) {
-					$( this ).next( '.cap-add-submit' ).attr( 'disabled','disabled' );
-				} else {
-					$( this ).next( '.cap-add-submit' ).removeAttr( 'disabled' );
-				}
+				console.log(this,event)
+				$( this ).next( '.cap-add-submit' ).prop( 'disabled', '' == $( this ).val().replace( /^\s+|\s+$/g,'' ) );
 			}
 		);
 })( jQuery );
