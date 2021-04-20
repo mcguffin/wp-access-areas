@@ -1,6 +1,6 @@
 {
   "name": "wp-access-areas",
-  "version": "1.5.14",
+  "version": "1.5.15",
   "description": "",
   "private": true,
   "author": "Fine-tune access to WordPress posts and pages.",
@@ -33,6 +33,7 @@
     ],
     "type": "plugin",
     "build": {
+      "versionedFiles": null,
       "prebuild": [
         "wp i18n make-pot . languages/wp-access-areas.pot --domain=wp-access-areas --exclude=tmp"
       ],
