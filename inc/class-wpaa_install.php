@@ -24,8 +24,13 @@ if ( ! class_exists( 'WPAA_Install' ) ) :
                 return;
             }
 
+            if ( is_multisite() ) {
+                switch_to_blog( get_network()->site_id );
+            }
             self::_install_capabilities_table();
-
+            if ( is_multisite() ) {
+                restore_current_blog();
+            }
             if ( is_multisite() && is_network_admin() ) {
                 $blogids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
                 foreach ( $blogids as $blog_id ) {

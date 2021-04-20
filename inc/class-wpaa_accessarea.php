@@ -150,7 +150,7 @@ if ( ! class_exists( 'WPAA_AccessArea' ) ) :
             self::_clear_cache();
 
             return $wpdb->delete(
-                $wpdb->prefix . 'disclosure_userlabels',
+                $wpdb->disclosure_userlabels,
                 [ 'ID' => $id ],
                 '%d'
             );
@@ -245,7 +245,7 @@ if ( ! class_exists( 'WPAA_AccessArea' ) ) :
             $capability .= sanitize_title( $cap_title );
 
             $wpdb->insert(
-                $wpdb->prefix . 'disclosure_userlabels',
+                $wpdb->disclosure_userlabels,
                 [
                     'cap_title' => $cap_title,
                     'capability' => $capability,
@@ -276,7 +276,7 @@ if ( ! class_exists( 'WPAA_AccessArea' ) ) :
             }
 
             $wpdb->update(
-                $wpdb->prefix . 'disclosure_userlabels',
+                $wpdb->disclosure_userlabels,
                 [ 'cap_title' => $cap_title ],
                 [ 'ID' => $id ],
                 '%s',
