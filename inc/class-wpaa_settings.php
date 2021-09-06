@@ -116,29 +116,40 @@ if ( ! class_exists( 'WPAA_Settings' ) ) :
             check_admin_referer( "wpaa_settings-options" );
 
             if ( current_user_can( 'promote_users' ) ) {
+
+                wp_roles()->use_db = true;
+
                 $input = wp_unslash( $_POST );
+
                 $input = wp_parse_args( $input, [
                     'grant_cap' => [],
                     'revoke_cap' => [],
                 ] );
-                $input['grant_cap'] = array_map( 'santize_key', $input['grant_cap'] );
-                $input['revoke_cap'] = array_map( 'santize_key', $input['revoke_cap'] );
+
+                $input['grant_cap'] = array_map( 'sanitize_key', $input['grant_cap'] );
+                $input['revoke_cap'] = array_map( 'sanitize_key', $input['revoke_cap'] );
+
                 foreach ( $input['grant_cap'] as $role_slug => $cap ) {
-                    if ( 'administrator' != $role_slug && array_key_exists( $cap, self::$role_caps ) ) {
-                        $role = get_role( $role_slug );
-                        if ( ! $role || ! $role->has_cap( $cap ) ) {
-                            continue;
-                        }
-                        $role->add_cap( $cap );
-                    }
-                }
-                foreach ( $input['revoke_cap'] as $role_slug => $cap ) {
                     if ( 'administrator' != $role_slug && array_key_exists( $cap, self::$role_caps ) ) {
                         $role = get_role( $role_slug );
                         if ( ! $role || $role->has_cap( $cap ) ) {
                             continue;
                         }
+                        $role->add_cap( $cap );
+                    }
+                }
+
+                foreach ( $input['revoke_cap'] as $role_slug => $cap ) {
+
+                    if ( 'administrator' != $role_slug && array_key_exists( $cap, self::$role_caps ) ) {
+                        $role = get_role( $role_slug );
+
+                        if ( ! $role || ! $role->has_cap( $cap ) ) {
+                            continue;
+                        }
+
                         $role->remove_cap( $cap );
+
                     }
                 }
             }
@@ -402,7 +413,7 @@ if ( ! class_exists( 'WPAA_Settings' ) ) :
                 </table>
                 <p class="description">
 				<?php
-				esc_html_e( 'If you are running a role editor plugin such as <a href="https://wordpress.org/plugins/user-role-editor/">User Role editor by Vladimir Garagulya</a> or <a href="https://wordpress.org/plugins/wpfront-user-role-editor/">WPFront User Role Editor by Syam Mohan</a> you can do the same as here by assigning the custom capabilites <code>wpaa_set_view_cap</code>, <code>wpaa_set_edit_cap</code> and <code>wpaa_set_comment_cap</code>.', 'wp-access-areas' );
+				echo wp_kses_post(__( 'If you are running a role editor plugin such as <a href="https://wordpress.org/plugins/user-role-editor/">User Role editor by Vladimir Garagulya</a> or <a href="https://wordpress.org/plugins/wpfront-user-role-editor/">WPFront User Role Editor by Syam Mohan</a> you can do the same as here by assigning the custom capabilites <code>wpaa_set_view_cap</code>, <code>wpaa_set_edit_cap</code> and <code>wpaa_set_comment_cap</code>.', 'wp-access-areas' ));
 				?>
                 </p>
                 <p class="description">
@@ -418,7 +429,7 @@ if ( ! class_exists( 'WPAA_Settings' ) ) :
 				?>
                 <p class="description">
                     <?php
-						esc_html_e( 'By default everybody who can publish an entry can also edit the access properties such as ‘Who can view’ or ‘Who can edit’.<br /> If this is too generous for you then click on the button below.', 'wp-access-areas' );
+						echo wp_kses_post(__( 'By default everybody who can publish an entry can also edit the access properties such as ‘Who can view’ or ‘Who can edit’.<br /> If this is too generous for you then click on the button below.', 'wp-access-areas' ));
                     ?>
                 </p>
                 <button name="wpaa_enable_assign_cap" value="1" type="submit" class="button-secondary" />

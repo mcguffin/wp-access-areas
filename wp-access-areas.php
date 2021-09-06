@@ -9,7 +9,7 @@ Plugin Name: WordPress Access Areas
 Plugin URI: http://wordpress.org/plugins/wp-access-areas/
 Description: Lets you define Access Areas and assign them to Posts, Pages and Custom Post types. Through Access Areas you can fine-tune who can view, edit or comment on your posts.
 Author: Jörn Lund
-Version: 1.5.15
+Version: 1.5.16
 Author URI: https://github.com/mcguffin/
 Text Domain: wp-access-areas
 Domain Path: /languages
@@ -91,9 +91,13 @@ if ( is_admin() ) {
 	WPAA_Users::init();
 	// access posts editing
 	WPAA_EditPost::init();
-	// access options
-	WPAA_Settings::init();
+
+	// access options – disable in Multisite network admin
+	if ( ! is_multisite() || ( is_multisite() && ! is_network_admin() ) ) {
+		WPAA_Settings::init();
+	}
 }
+
 register_activation_hook( __FILE__, 'accessareas_activate' );
 register_deactivation_hook( __FILE__, 'accessareas_deactivate' );
 register_uninstall_hook( __FILE__, 'accessareas_uninstall' );

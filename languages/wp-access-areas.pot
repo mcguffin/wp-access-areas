@@ -2,16 +2,16 @@
 # This file is distributed under the same license as the WordPress Access Areas plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WordPress Access Areas 1.5.15\n"
+"Project-Id-Version: WordPress Access Areas 1.5.16\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-access-areas\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-04-20T11:03:48+00:00\n"
+"POT-Creation-Date: 2021-09-06T12:43:23+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.4.0\n"
+"X-Generator: WP-CLI 2.5.1-alpha-0d94e07\n"
 "X-Domain: wp-access-areas\n"
 
 #. Plugin Name of the plugin
@@ -161,7 +161,7 @@ msgid "Custom Behaviour"
 msgstr ""
 
 #: inc/class-wpaa_editpost.php:365
-#: inc/class-wpaa_settings.php:434
+#: inc/class-wpaa_settings.php:445
 msgid "If somebody tries to view a restricted post directly:"
 msgstr ""
 
@@ -231,115 +231,115 @@ msgstr ""
 msgid "Please fix it for me"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:158
+#: inc/class-wpaa_settings.php:169
 msgid "Access Settings"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:169
+#: inc/class-wpaa_settings.php:180
 msgid "Restricted Access Behavior"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:171
+#: inc/class-wpaa_settings.php:182
 msgid "Default Behaviour"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:172
+#: inc/class-wpaa_settings.php:183
 msgid "Default Fallback Page"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:174
+#: inc/class-wpaa_settings.php:185
 msgid "Access Defaults for new Posts"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:175
+#: inc/class-wpaa_settings.php:186
 msgid "Default Access:"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:177
+#: inc/class-wpaa_settings.php:188
 msgid "Posts defaults"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:178
+#: inc/class-wpaa_settings.php:189
 msgid "Default Post Status"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:179
+#: inc/class-wpaa_settings.php:190
 msgid "Role Capabilities"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:183
+#: inc/class-wpaa_settings.php:194
 msgid "You can also set these Options for each post individually."
 msgstr ""
 
-#: inc/class-wpaa_settings.php:188
+#: inc/class-wpaa_settings.php:199
 msgid "Default settings for newly created posts."
 msgstr ""
 
-#: inc/class-wpaa_settings.php:195
+#: inc/class-wpaa_settings.php:206
 msgid "Access Areas Settings"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:202
+#: inc/class-wpaa_settings.php:213
 msgid "Save Changes"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:233
+#: inc/class-wpaa_settings.php:244
 msgid "Post Type"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:237
+#: inc/class-wpaa_settings.php:248
 msgid "Reading"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:241
+#: inc/class-wpaa_settings.php:252
 msgid "Edit"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:245
+#: inc/class-wpaa_settings.php:256
 msgid "Post Comment"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:331
+#: inc/class-wpaa_settings.php:342
 msgid "This table shows which Roles are allowed to set the ‘Who can view’, ‘Who can edit’ and ‘Who can comment’ properties."
 msgstr ""
 
-#: inc/class-wpaa_settings.php:337
+#: inc/class-wpaa_settings.php:348
 msgid "Role"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:380
+#: inc/class-wpaa_settings.php:391
 msgid "Forbid"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:386
+#: inc/class-wpaa_settings.php:397
 msgid "Allow"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:405
+#: inc/class-wpaa_settings.php:416
 msgid "If you are running a role editor plugin such as <a href=\"https://wordpress.org/plugins/user-role-editor/\">User Role editor by Vladimir Garagulya</a> or <a href=\"https://wordpress.org/plugins/wpfront-user-role-editor/\">WPFront User Role Editor by Syam Mohan</a> you can do the same as here by assigning the custom capabilites <code>wpaa_set_view_cap</code>, <code>wpaa_set_edit_cap</code> and <code>wpaa_set_comment_cap</code>."
 msgstr ""
 
-#: inc/class-wpaa_settings.php:410
+#: inc/class-wpaa_settings.php:421
 msgid "By disabling the role capabilities feature you will allow everybody who can at least publish a post to edit the access properties as well."
 msgstr ""
 
-#: inc/class-wpaa_settings.php:414
+#: inc/class-wpaa_settings.php:425
 msgid "Disable Role Capabilities"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:421
+#: inc/class-wpaa_settings.php:432
 msgid "By default everybody who can publish an entry can also edit the access properties such as ‘Who can view’ or ‘Who can edit’.<br /> If this is too generous for you then click on the button below."
 msgstr ""
 
-#: inc/class-wpaa_settings.php:425
+#: inc/class-wpaa_settings.php:436
 msgid "Enable Role Capabilities"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:477
+#: inc/class-wpaa_settings.php:488
 msgid "Don‘t change"
 msgstr ""
 
-#: inc/class-wpaa_settings.php:491
+#: inc/class-wpaa_settings.php:502
 msgid "Set post status of assigned posts after an Access Area has been deleted."
 msgstr ""
 

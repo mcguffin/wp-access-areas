@@ -5,7 +5,7 @@ Tags: access, role, capability, user, security, editor
 Requires at least: 4.6
 Requires PHP: 5.6
 Tested up to: 5.6
-Stable tag: 1.5.15
+Stable tag: 1.5.16
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -92,6 +92,10 @@ Pull request are welcome in the [GitHub Repository](https://github.com/mcguffin/
 4. Post Access Behaviour
 
 == Changelog ==
+
+= 1.5.15 =
+ - Fix: could not save website settings in network admin when running on multisite
+ - Fix: role capabilities not saved
 
 = 1.5.14 =
  - Fix: could not add caps on user-edit
