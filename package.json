@@ -19,10 +19,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://bitbucket.org/polyplanet/generic-child.git"
+    "url": "git+https://github.com/mcguffin/wp-access-areas.git"
   },
   "bugs": {
-    "url": "https://bitbucket.org/polyplanet/generic-child/issues"
+    "url": "https://github.com/mcguffin/wp-access-areas/issues"
   },
   "wporg": {
     "steps": [
