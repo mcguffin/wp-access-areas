@@ -67,7 +67,8 @@ if ( ! class_exists( 'WPAA_EditPost' ) ) :
 
         public static function ajax_get_accessarea_values() {
             $result = false;
-            if ( ! check_admin_referer( 'get_accessarea_values' ) ) {
+
+            if ( ! check_ajax_referer( 'get_accessarea_values' ) ) {
                 wp_die( esc_html__( 'You do not have permission to do this.', 'wp-access-areas' ) );
             }
             if ( isset( $_POST['post_ID'] ) && current_user_can( 'edit_post', intval( $_POST['post_ID'] ) ) ) {
