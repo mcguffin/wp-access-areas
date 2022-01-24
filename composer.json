@@ -1,9 +1,9 @@
 {
-  "name": "neliosoftware/wp-beb",
+  "name": "mcguffin/wp-access-areas",
   "type": "wordpress-plugin",
   "license": "GPL-2.0-or-later",
-  "description": "WordPress Block Editor Boilerplate",
-  "homepage": "https://neliosoftware.com/",
+  "description": "WordPress Access Areas",
+  "homepage": "https://github.com/mcguffin/wp-access-areas",
   "require": {
     "composer/installers": "~1.2"
   },
@@ -28,5 +28,10 @@
     "post-update-cmd": [
       "[ -f vendor/bin/phpcs ] && \"vendor/bin/phpcs\" --config-set installed_paths vendor/wp-coding-standards/wpcs,vendor/pheromone/phpcs-security-audit || true"
     ]
+  },
+  "config": {
+    "allow-plugins": {
+      "composer/installers": true
+    }
   }
 }
