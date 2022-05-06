@@ -500,7 +500,14 @@ if ( ! class_exists( 'WPAA_EditPost' ) ) :
 
         public static function add_disclosure_column( $columns ) {
             global $post,$post_type;
+
+            // bail early if post tyype cant be determined
+            if ( is_null( $post ) ) {
+                return $columns;
+            }
+
             $_post_type = $post_type;
+
             if ( is_null( $_post_type ) && $post ) {
                 $_post_type = $post->post_type;
             }
