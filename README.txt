@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: access, role, capability, user, security, editor
 Requires at least: 4.6
 Requires PHP: 5.6
-Tested up to: 5.9
+Tested up to: 6.0
 Stable tag: 1.5.17
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -92,6 +92,9 @@ Pull request are welcome in the [GitHub Repository](https://github.com/mcguffin/
 4. Post Access Behaviour
 
 == Changelog ==
+
+= 1.5.18 =
+ - Fix: PHP Warning when using plugin together with imsanity
 
 = 1.5.17 =
  - Fix: Access settings broken in post quick edit
