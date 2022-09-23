@@ -93,6 +93,9 @@ Pull request are welcome in the [GitHub Repository](https://github.com/mcguffin/
 
 == Changelog ==
 
+= 1.5.19 =
+ - Fix: Nonce Verification fails when using WP password reset 
+
 = 1.5.18 =
  - Fix: PHP Warning when using plugin together with imsanity
 

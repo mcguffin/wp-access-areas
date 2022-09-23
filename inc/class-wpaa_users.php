@@ -224,7 +224,7 @@ if ( ! class_exists( 'WPAA_Users' ) ) :
         // --------------------------------------------------
         public static function profile_update( $user_id, $old_user_data ) {
 
-            if ( ! isset( $_REQUEST['_wpaa_nonce'] ) ) {
+            if ( ! isset( $_POST['_wpaa_nonce'] ) ) {
                 return;
             }
 
