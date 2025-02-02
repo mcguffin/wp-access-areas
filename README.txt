@@ -93,6 +93,9 @@ Pull request are welcome in the [GitHub Repository](https://github.com/mcguffin/
 
 == Changelog ==
 
+= 1.5.20 =
+ - Security Fix: Authenticated XSS in Acceas Areas List Table (discovered by [0xd4rk5id3](https://patchstack.com/database/researcher/4e4561e4-5f79-419b-9832-33d7fd94c5a4))
+
 = 1.5.19 =
  - Fix: Nonce Verification fails when using WP password reset 
 
@@ -319,3 +322,5 @@ Fixing that one: http://wordpress.org/support/topic/plugin-causing-crash-post-wo
  - Initial Release
 
 == Upgrade notice ==
+
+1.5.20 fixed an authenticated XSS Vulnerability in the Acceas Areas List Table. Everybody should upgrade the plugin ASAP.

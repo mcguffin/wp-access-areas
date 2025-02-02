@@ -9,9 +9,7 @@
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "*",
-    "wp-coding-standards/wpcs": "*",
-    "phpcompatibility/php-compatibility": "*",
-	"pheromone/phpcs-security-audit":"*"
+    "wp-coding-standards/wpcs": "*"
   },
   "keywords": [
     "access",
@@ -31,7 +29,8 @@
   },
   "config": {
     "allow-plugins": {
-      "composer/installers": true
+      "composer/installers": true,
+      "dealerdirect/phpcodesniffer-composer-installer": true
     }
   }
 }
