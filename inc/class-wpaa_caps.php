@@ -77,6 +77,16 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
                 wp_die( esc_html__( 'You do not have permission to edit network wide user labels.', 'wp-access-areas' ) );
             }
 
+            $base_url = add_query_arg(
+                array(
+                    'page'   => 'user_labels',
+                ),
+                is_network_admin()
+                    ? network_admin_url('users.php')
+                    : admin_url('users.php')
+            );
+
+
             switch ( $action ) {
                 case 'new':
 
@@ -89,21 +99,19 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
                     if ( $edit_id ) {
                         $redirect_url = add_query_arg(
                             array(
-                                'page'    => 'user_labels',
                                 'action'  => 'new',
                                 'message' => 1,
                             ),
-                            admin_url( 'users.php' )
+                            $base_url
                         );
                     } else {
                         $redirect_url = add_query_arg(
                             array(
-                                'page'      => 'user_labels',
                                 'action'    => 'new',
                                 'message'   => WPAA_AccessArea::what_went_wrong(),
                                 'cap_title' => sanitize_text_field( $data['cap_title'] ),
                             ),
-                            admin_url( 'users.php' )
+                            $base_url
                         );
                     }
                     break;
@@ -121,7 +129,8 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
                             array(
                                 'id'      => $edit_id,
                                 'message' => 2,
-                            )
+                            ),
+                            $base_url
                         );
                     } else {
                         $redirect_url = add_query_arg(
@@ -129,15 +138,13 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
                                 'id'        => $edit_id,
                                 'message'   => WPAA_AccessArea::what_went_wrong(),
                                 'cap_title' => sanitize_text_field( $data['cap_title'] ),
-                            )
+                            ),
+                            $base_url
                         );
                     }
 
 					if ( ! isset( $_GET['id'] ) ) {
-						$redirect_url = add_query_arg(
-                            array( 'page' => 'user_labels' ),
-                            admin_url( 'users.php' )
-                        );
+						$redirect_url = $base_url;
 					}
 
                     break;
@@ -149,19 +156,17 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
 						if ( $deleted ) {
                             $redirect_url = add_query_arg(
                                 array(
-									'page'    => 'user_labels',
 									'message' => 3,
 									'deleted' => $deleted,
 								),
-                                admin_url( 'users.php' )
+                                $base_url
                             );
 						} else {
                             $redirect_url = add_query_arg(
                                 array(
-									'page'    => 'user_labels',
 									'message' => WPAA_AccessArea::what_went_wrong(),
 								),
-                                admin_url( 'users.php' )
+                                $base_url
                             );
 						}
 					}
@@ -176,11 +181,10 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
                     }
                     $redirect_url = add_query_arg(
                         array(
-                            'page'    => 'user_labels',
                             'message' => 3,
                             'deleted' => count( $data['userlabels'] ),
                         ),
-                        admin_url( 'users.php' )
+                        $base_url
                     );
                     break;
                 default:
@@ -321,9 +325,18 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
 
         public static function list_userlabels_screen() {
 
+            $base_url = add_query_arg(
+                array(
+                    'page'   => 'user_labels',
+                ),
+                is_network_admin()
+                    ? network_admin_url('users.php')
+                    : admin_url('users.php')
+            );
+
             $list_table = new AccessAreas_List_Table( array() );
             $list_table->prepare_items();
-            $add_new_url = remove_query_arg( 'message', add_query_arg( array( 'action' => 'new' ) ) );
+            $add_new_url = add_query_arg( array( 'action' => 'new' ), $base_url );
 
             ?>
             <div class="wrap"><h2>

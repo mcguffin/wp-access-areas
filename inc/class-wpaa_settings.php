@@ -78,7 +78,7 @@ if ( ! class_exists( 'WPAA_Settings' ) ) :
                                 )
                             );
                             ?>
-                            <a class="button button-secondary" href="<?php esc_attr_e( $repair_url ); ?>">
+                            <a class="button button-secondary" href="<?php echo esc_attr( $repair_url ); ?>">
                                 <?php esc_html_e( 'Please fix it for me', 'wp-access-areas' ); ?>
                             </a>
                         </p>
@@ -387,7 +387,7 @@ if ( ! class_exists( 'WPAA_Settings' ) ) :
 
     										if ( $role->has_cap( $cap ) ) {
     											?>
-                                                    <button <?php echo $role_slug == 'administrator' ? 'disabled' : ''; ?> name="revoke_cap[<?php esc_attr_e( $role_slug ); ?>]" value="<?php esc_attr_e( $cap ); ?>" type="submit" class="button-secondary" />
+                                                    <button <?php echo $role_slug == 'administrator' ? 'disabled' : ''; ?> name="revoke_cap[<?php echo esc_attr( $role_slug ); ?>]" value="<?php echo esc_attr( $cap ); ?>" type="submit" class="button-secondary" />
     												<?php esc_attr_e( 'Forbid', 'wp-access-areas' ); ?>
                                                     </button>
                                                 <?php

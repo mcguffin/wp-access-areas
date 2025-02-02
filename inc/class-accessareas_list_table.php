@@ -29,8 +29,8 @@ if ( ! class_exists( 'AccessAreas_List_Table' ) ) :
             if ( ( is_network_admin() ^ $item->blog_id ) ) {
                 return sprintf(
                     '<input type="checkbox" name="%1$s[]" value="%2$s" />',
-                    /*$1%s*/ $this->_args['plural'],
-                    /*$2%s*/ $item->ID
+                    /*$1%s*/ esc_attr( $this->_args['plural']),
+                    /*$2%s*/ esc_attr( $item->ID)
                 );
             }
             return '';
@@ -39,13 +39,13 @@ if ( ! class_exists( 'AccessAreas_List_Table' ) ) :
         public function get_columns() {
             $columns = array(
 				'cb'        => '<input type="checkbox" />', // Render a checkbox instead of text
-				'cap_title' => __( 'Name', 'wp-access-areas' ),
+                'cap_title' => esc_html__( 'Name', 'wp-access-areas' ),
             );
             if ( is_multisite() ) {
-                $columns['blog'] = __( 'Scope', 'wp-access-areas' );
+                $columns['blog'] = esc_html__( 'Scope', 'wp-access-areas' );
             }
 
-            $columns['capability'] = __( 'WP Capability', 'wp-access-areas' );
+            $columns['capability'] = esc_html__( 'WP Capability', 'wp-access-areas' );
             return $columns;
         }
         public function get_sortable_columns() {
@@ -84,23 +84,25 @@ if ( ! class_exists( 'AccessAreas_List_Table' ) ) :
 					}
                     return $ret;
                 case 'capability':
-                    return "<code>$output</code>";
+                    return sprintf('<code>%s</code>', esc_html($output));
                 case 'blog':
-                    return $item->blog_id ? get_blog_details( $item->blog_id, true )->siteurl : __( 'Network', 'wp-access-areas' );
+                    return $item->blog_id ? get_blog_details( $item->blog_id, true )->siteurl : esc_html__( 'Network', 'wp-access-areas' );
                 case 'blog_id':
-                    return $output;
+                    return esc_html($output);
                 case 'actions':
 					if ( ( is_network_admin() ^ $item->blog_id ) ) {
 						$url = add_query_arg(
                             array(
 								'action'   => 'delete',
+                                'page'     => 'user_labels',
 								'id'       => $item->ID,
 								'_wpnonce' => wp_create_nonce( 'userlabel-delete' ),
-							)
+							),
+                            admin_url( 'users.php' )
                         );
 						$url = remove_query_arg( 'message', $url );
 						$url = remove_query_arg( 'deleted', $url );
-						return sprintf( '<a href="%s" class="button">%s</button>', $url, __( 'Delete', 'wp-access-areas' ) );
+                        return sprintf( '<a href="%s" class="button">%s</button>', esc_html($url), esc_html__( 'Delete', 'wp-access-areas' ) );
 					}
                     return '';
             }
@@ -158,7 +160,7 @@ if ( ! class_exists( 'AccessAreas_List_Table' ) ) :
 
         public function get_bulk_actions() {
             $actions = array(
-				'bulk-delete' => __( 'Delete', 'wp-access-areas' ),
+                'bulk-delete' => __( 'Delete', 'wp-access-areas' ),
             );
             return $actions;
         }

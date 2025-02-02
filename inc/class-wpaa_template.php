@@ -16,13 +16,13 @@ class WPAA_Template {
             $selected_cap = 'exist';
         }
 
-        ?><select id="<?php echo sanitize_key( $fieldname ); ?>-select" name="<?php esc_attr_e( $fieldname ); ?>">
+        ?><select id="<?php echo sanitize_key( $fieldname ); ?>-select" name="<?php echo esc_attr( $fieldname ); ?>">
             <?php
 
             if ( ! is_null( $first_item_value ) && ! is_null( $first_item_label ) ) {
     			?>
-                <option value="<?php esc_attr_e( $first_item_value ); ?>">
-                    <?php esc_html_e( $first_item_label ); ?>
+                <option value="<?php echo esc_attr( $first_item_value ); ?>">
+                    <?php echo esc_html( $first_item_label ); ?>
                 </option>
     			<?php
             }
@@ -49,7 +49,7 @@ class WPAA_Template {
                     }
         			?>
                     <option value="<?php esc_attr_e( $role ); ?>" <?php selected( $selected_cap, $role ); ?>>
-                        <?php esc_html_e( $rolename ); ?>
+                        <?php echo esc_html( $rolename ); ?>
                     </option>
         			<?php
                 }
@@ -65,7 +65,7 @@ class WPAA_Template {
                             continue;
                         }
                         ?>
-                        <option value="<?php esc_attr_e( $group_cap ); ?>" <?php selected( $selected_cap, $group_cap ); ?>>
+                        <option value="<?php echo esc_attr( $group_cap ); ?>" <?php selected( $selected_cap, $group_cap ); ?>>
                             <?php
                                 esc_html_e( $group['title'], 'wp-access-areas' );
                                 echo $group['global'] ? ' ' . esc_html__( '(Network)', 'wp-access-areas' ) : '';

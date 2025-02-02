@@ -531,7 +531,7 @@ if ( ! class_exists( 'WPAA_Users' ) ) :
         private static function _label_select_options( $labels, $current_label = false ) {
             $ret = '';
             foreach ( $labels as $label ) {
-                $ret .= sprintf( '<option %s value="%s">%s</option>', selected( $current_label, $label->capability, false ), $label->capability, $label->cap_title );
+                $ret .= sprintf( '<option %s value="%s">%s</option>', selected( $current_label, $label->capability, false ), esc_attr($label->capability), $label->cap_title );
             }
             return $ret;
         }
