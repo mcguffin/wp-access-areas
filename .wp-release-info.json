@@ -1,9 +1,9 @@
 {
   "id": "https://github.com/mcguffin/wp-access-areas/raw/master/.wp-release-info.json",
   "slug": "wp-access-areas",
-  "version": "1.5.20",
+  "version": "1.5.21",
   "url": "http://wordpress.org/plugins/wp-access-areas/",
-  "package": "https://github.com/mcguffin/wp-access-areas/releases/download/1.5.20/wp-access-areas.zip",
+  "package": "https://github.com/mcguffin/wp-access-areas/releases/download/1.5.21/wp-access-areas.zip",
   "tested": "6.0",
   "requires_php": "5.6"
 }
