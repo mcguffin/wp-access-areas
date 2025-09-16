@@ -37,7 +37,7 @@ if ( ! class_exists( 'WPAA_Settings' ) ) :
 
             add_action( 'admin_notices', array( __CLASS__, 'selftest' ) );
 
-            if ( isset( $_GET['action'] ) && wp_unslash( $_GET['action'] ) === 'wpaa-selfrepair' ) {
+            if ( isset( $_GET['action'] ) && wp_unslash( $_GET['action'] ) === 'wpaa-selfrepair' ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
                 add_action( 'admin_init', array( __CLASS__, 'selfrepair' ) );
             }
         }
@@ -238,7 +238,7 @@ if ( ! class_exists( 'WPAA_Settings' ) ) :
             <?php
             foreach ( array( 'thead', 'tfoot' ) as $tag ) {
 				?>
-                <<?php echo $tag; ?>>
+                <<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
                     <tr>
                         <th class="manage-column">
                             <?php esc_html_e( 'Post Type', 'wp-access-areas' ); ?>
@@ -256,7 +256,7 @@ if ( ! class_exists( 'WPAA_Settings' ) ) :
                             <?php esc_html_e( 'Post Comment', 'wp-access-areas' ); ?>
                         </th>
                     </tr>
-                </<?php echo $tag; ?>>
+                </<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
                 <?php
             }
             ?>
@@ -277,7 +277,7 @@ if ( ! class_exists( 'WPAA_Settings' ) ) :
     				?>
                     <tr class="post-select <?php echo $alternate ? 'alternate' : ''; ?>">
                         <th>
-    						<?php esc_html_e( $post_type_object->labels->name ); ?>
+                            <?php echo esc_html( $post_type_object->labels->name ); ?>
                         </th>
                         <td>
     						<?php
@@ -351,9 +351,9 @@ if ( ! class_exists( 'WPAA_Settings' ) ) :
 				foreach ( self::$role_caps as $cap => $label ) {
 					?>
                                     <th class="manage-column">
-						<?php esc_html_e( $label ); ?>
+                        <?php echo esc_html( $label ); ?>
                                         <br />
-                                        <code><small><?php esc_html_e( $cap ); ?></small></code>
+                                        <code><small><?php echo esc_html( $cap ); ?></small></code>
                                     </th>
 						<?php
 						}
@@ -375,9 +375,7 @@ if ( ! class_exists( 'WPAA_Settings' ) ) :
 						?>
                                 <tr class="role-select <?php echo $alternate ? 'alternate' : ''; ?>">
                                     <th>
-        								<?php
-        								esc_html_e( translate_user_role( $role_details['name'] ) );
-        								?>
+        								<?php echo esc_html( translate_user_role( $role_details['name'] ) ); ?>
                                     </th>
 								<?php
 								foreach ( array_keys( self::$role_caps ) as $cap ) {
@@ -393,7 +391,7 @@ if ( ! class_exists( 'WPAA_Settings' ) ) :
                                                 <?php
                                             } else {
                                                 ?>
-                                                <button name="grant_cap[<?php esc_attr_e( $role_slug ); ?>]" value="<?php esc_attr_e( $cap ); ?>" type="submit" class="button-primary" />
+                                                <button name="grant_cap[<?php echo esc_attr( $role_slug ); ?>]" value="<?php echo esc_attr( $cap ); ?>" type="submit" class="button-primary" />
                                                     <?php esc_html_e( 'Allow', 'wp-access-areas' ); ?>
                                                 </button>
                                                 <?php
@@ -490,8 +488,8 @@ if ( ! class_exists( 'WPAA_Settings' ) ) :
                 <?php
                 foreach ( self::get_post_stati() as $post_status => $status_obj ) {
                     ?>
-                    <option value="<?php esc_attr_e( $post_status ); ?>" <?php selected( $default_post_status, $post_status, true ); ?>>
-                        <?php esc_html_e( $status_obj->label ); ?>
+                    <option value="<?php echo esc_attr( $post_status ); ?>" <?php selected( $default_post_status, $post_status, true ); ?>>
+                        <?php echo esc_html( $status_obj->label ); ?>
                     </option>
                     <?php
                 }

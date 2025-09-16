@@ -129,13 +129,15 @@ if ( ! class_exists( 'AccessAreas_List_Table' ) ) :
             $order_sql = 'blog_id DESC,cap_title ASC';
 
             if ( isset( $_REQUEST['orderby'] ) ) {
-    			$orderby = wp_unslash( $_REQUEST['orderby'] );
+                // santized later
+                $orderby = wp_unslash( $_REQUEST['orderby'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
     		}
 
     		if ( isset( $_REQUEST['order'] ) ) {
-    			$order = wp_unslash( $_REQUEST['order'] );
+                // santized later
+    			$order = wp_unslash( $_REQUEST['order'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
     		}
-
+            // sanitized here
             $order_sql = sanitize_sql_orderby( "{$orderby} {$order}" );
 
             // use wpdb here!

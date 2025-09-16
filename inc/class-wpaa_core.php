@@ -7,7 +7,7 @@
 
 
 // ----------------------------------------
-// This class initializes the WordPress Access Areas plugin.
+// This class initializes the Access Areas for WordPress plugin.
 // (As of version 1.0 it only loads an apropriate plugin textdomain for translation readyness.)
 // ----------------------------------------
 

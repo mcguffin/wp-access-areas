@@ -16,7 +16,7 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
         public static function init() {
             if ( is_admin() ) {
                 add_action( 'admin_menu', array( __CLASS__, 'user_menu' ) );
-                if ( is_accessareas_active_for_network() ) {
+                if ( wpaa_is_active_for_network() ) {
                     add_action( 'network_admin_menu', array( __CLASS__, 'user_menu' ) );
                 }
             }
@@ -36,12 +36,12 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
         private static function get_action() {
             $action = -1;
             if ( isset( $_REQUEST['action'] ) && intval( $_REQUEST['action'] ) !== -1 ) {
-                $action = wp_unslash( $_REQUEST['action'] );
+                $action = sanitize_key(wp_unslash( $_REQUEST['action'] ));
             }
             if ( isset( $_REQUEST['action2'] ) && intval( $_REQUEST['action2'] ) !== -1 ) {
-                $action = wp_unslash( $_REQUEST['action2'] );
+                $action = sanitize_key(wp_unslash( $_REQUEST['action2'] ));
             }
-            $action = sanitize_key( $action );
+            // $action = sanitize_key( $action );
             return $action;
         }
 
@@ -251,7 +251,7 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
                                     </label>
                                 </th>
                                 <td>
-                                    <input class="regular-text" maxlength="64" type="text" name="cap_title" value="<?php esc_attr_e( $cap_title ); ?>" id="cap_title" placeholder="<?php esc_attr_e( 'New Access Area', 'wp-access-areas' ); ?>" autocomplete="off" />
+                                    <input class="regular-text" maxlength="64" type="text" name="cap_title" value="<?php echo esc_attr( $cap_title ); ?>" id="cap_title" placeholder="<?php esc_attr_e( 'New Access Area', 'wp-access-areas' ); ?>" autocomplete="off" />
                                 </td>
                             </tr>
                         </tbody>
@@ -291,7 +291,7 @@ if ( ! class_exists( 'WPAA_Caps' ) ) :
                         $deleted = intval( $_REQUEST['deleted'] );
                     }
                     /* translators: %d number of deleted items */
-					$message = sprintf( _n( 'Access Area deleted.', '%d Access Areas deleted.', $deleted, 'wp-access-areas' ), $deleted );
+                    $message = sprintf( _n( 'Access Area deleted.', '%d Access Areas deleted.', $deleted, 'wp-access-areas' ), $deleted ); // phpcs:ignore WordPress.WP.I18n.MissingSingularPlaceholder
                     break;
                 case 4: // exists
 					$message = __( 'An Access Area with that Name already exists.', 'wp-access-areas' );

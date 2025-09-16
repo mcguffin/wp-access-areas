@@ -30,7 +30,7 @@ define( 'WPUND_VERSION', "1.5.7" ); // edit-col came with 1.1.0
 define( 'WPUND_USERLABEL_PREFIX', "userlabel_" );
 define( 'WPUND_GLOBAL_USERMETA_KEY', "undisclosed_global_capabilities" );
 
-function is_accessareas_active_for_network() {
+function wpaa_is_active_for_network() {
 	if ( ! is_multisite() ) {
 		return false;
 	}

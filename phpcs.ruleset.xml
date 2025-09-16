@@ -30,6 +30,7 @@
 		<properties>
 			<property name="prefixes" type="array">
 				<element value="WPAA_"/>
+				<element value="WPUND_"/>
 				<element value="accessareas_"/>
 			</property>
 		</properties>

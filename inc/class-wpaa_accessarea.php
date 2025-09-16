@@ -30,7 +30,7 @@ if ( ! class_exists( 'WPAA_AccessArea' ) ) :
             global $wpdb;
 
             $blog_id_in = array();
-            if ( ! is_multisite() || is_accessareas_active_for_network() ) {
+            if ( ! is_multisite() || wpaa_is_active_for_network() ) {
                 $blog_id_in[0] = '%d';
             }
 
@@ -54,7 +54,7 @@ if ( ! class_exists( 'WPAA_AccessArea' ) ) :
             }
             if ( count( $blog_id_in ) ) {
                 $args = array_keys( $blog_id_in );
-                $query = $wpdb->prepare( $query, ...$args );
+                $query = $wpdb->prepare( $query, ...$args ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
             }
 
             return self::_get_cached_result( $query );
@@ -69,7 +69,7 @@ if ( ! class_exists( 'WPAA_AccessArea' ) ) :
             if ( $sql_orderby ) {
                 $query .= " ORDER BY $sql_orderby";
             }
-            $query = $wpdb->prepare( $query, $blog_id );
+            $query = $wpdb->prepare( $query, $blog_id ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
             return self::_get_cached_result( $query );
         }
         public static function get_network_userlabels(  $order_by = 'cap_title', $order = 'ASC' ) {
@@ -130,7 +130,7 @@ if ( ! class_exists( 'WPAA_AccessArea' ) ) :
                     WPUND_GLOBAL_USERMETA_KEY,
                     '%' . $wpdb->esc_like( WPUND_USERLABEL_PREFIX ) . '%'
                 );
-                $usermeta = $wpdb->get_results( $query );
+                $usermeta = $wpdb->get_results( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
                 foreach ( $usermeta as $meta ) {
                     $caps = maybe_unserialize( $meta->meta_value );

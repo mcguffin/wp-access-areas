@@ -102,14 +102,14 @@ if ( ! class_exists( 'WPAA_Install' ) ) :
 				'view_cap'    => 'post_view_cap',
 			);
             foreach ( $cols as $idx => $col ) {
-                $c = $wpdb->get_results( "SHOW COLUMNS FROM $wpdb->posts LIKE '$col'" );
+                $c = $wpdb->get_results( "SHOW COLUMNS FROM $wpdb->posts LIKE '$col'" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
                 if ( empty( $c ) ) {
-                    $wpdb->query( "ALTER TABLE $wpdb->posts ADD COLUMN $col varchar(128) NOT NULL DEFAULT 'exist' AFTER `post_status`;" );
+                    $wpdb->query( "ALTER TABLE $wpdb->posts ADD COLUMN $col varchar(128) NOT NULL DEFAULT 'exist' AFTER `post_status`;" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
                 }
 
-                $i = $wpdb->query( "SHOW INDEX FROM $wpdb->posts WHERE Key_name = '$idx'" );
+                $i = $wpdb->query( "SHOW INDEX FROM $wpdb->posts WHERE Key_name = '$idx'" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
                 if ( empty( $i ) ) {
-                    $wpdb->query( "ALTER TABLE $wpdb->posts ADD INDEX `$idx` (`$col`);" );
+                    $wpdb->query( "ALTER TABLE $wpdb->posts ADD INDEX `$idx` (`$col`);" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
                 }
             }
         }
@@ -122,14 +122,14 @@ if ( ! class_exists( 'WPAA_Install' ) ) :
 				'view_cap'    => 'post_view_cap',
 			);
             foreach ( $cols as $idx => $col ) {
-                $c = $wpdb->get_results( "SHOW COLUMNS FROM $wpdb->posts LIKE '$col'" );
+                $c = $wpdb->get_results( "SHOW COLUMNS FROM $wpdb->posts LIKE '$col'" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
                 if ( ! empty( $c ) ) {
-                    $wpdb->query( "ALTER TABLE $wpdb->posts DROP COLUMN $col;" );
+                    $wpdb->query( "ALTER TABLE $wpdb->posts DROP COLUMN $col;" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
                 }
 
-                $i = $wpdb->query( "SHOW INDEX FROM $wpdb->posts WHERE Key_name = '$idx'" );
+                $i = $wpdb->query( "SHOW INDEX FROM $wpdb->posts WHERE Key_name = '$idx'" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
                 if ( ! empty( $i ) ) {
-                    $wpdb->query( "ALTER TABLE $wpdb->posts DROP INDEX ('$idx');" );
+                    $wpdb->query( "ALTER TABLE $wpdb->posts DROP INDEX ('$idx');" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
                 }
             }
         }
@@ -210,7 +210,9 @@ if ( ! class_exists( 'WPAA_Install' ) ) :
             global $wpdb;
 
             $usermeta = $wpdb->get_results( $wpdb->prepare(
-                "SELECT * FROM $wpdb->usermeta WHERE meta_key LIKE '{$wpdb->base_prefix}%capabilities' AND meta_value LIKE %s",
+                // TODO test escaping
+                "SELECT * FROM $wpdb->usermeta WHERE meta_key LIKE %s AND meta_value LIKE %s", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+                $wpdb->esc_like( WPUND_USERLABEL_PREFIX ) . '%' . $wpdb->esc_like( 'capabilities' ),
                 '%' . $wpdb->esc_like( WPUND_USERLABEL_PREFIX ) . '%'
             ) );
             foreach ( $usermeta as $meta ) {

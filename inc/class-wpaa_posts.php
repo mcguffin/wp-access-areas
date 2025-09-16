@@ -168,7 +168,7 @@ if ( ! class_exists( 'WPAA_Posts' ) ) :
             $where   = $clauses['where'];
 
             // taken from wp_count_comments
-            $count = $wpdb->get_results( "SELECT comment_approved, COUNT( * ) AS num_comments FROM {$wpdb->comments} {$join} {$where} GROUP BY comment_approved", ARRAY_A );
+            $count = $wpdb->get_results( "SELECT comment_approved, COUNT( * ) AS num_comments FROM {$wpdb->comments} {$join} {$where} GROUP BY comment_approved", ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
             $total    = 0;
             $approved = array(
@@ -280,7 +280,7 @@ if ( ! class_exists( 'WPAA_Posts' ) ) :
         // --------------------------------------------------
         public static function skip_undisclosed_items( $items ) {
             // everything's fine - return.
-            if ( current_user_can( 'administrator' ) ) {
+            if ( current_user_can( 'administrator' ) ) { // phpcs:ignore WordPress.WP.Capabilities.RoleFound
                 return $items;
             }
 
@@ -321,7 +321,7 @@ if ( ! class_exists( 'WPAA_Posts' ) ) :
         private static function _get_where( $where, $table_name = 'p' ) {
             global $wpdb, $wp_query;
             // disable filtering: on queries for single posts/pages and for single blog administrators
-            if ( ( isset( $wp_query ) && is_singular() && preg_match( "/{$wpdb->posts}.(post_name|ID)\s?=/", $where ) ) || ( ! is_multisite() && current_user_can( 'administrator' ) ) ) {
+            if ( ( isset( $wp_query ) && is_singular() && preg_match( "/{$wpdb->posts}.(post_name|ID)\s?=/", $where ) ) || ( ! is_multisite() && current_user_can( 'administrator' ) ) ) {  // phpcs:ignore WordPress.WP.Capabilities.RoleFound
                 return $where;
             }
             if ( $table_name && substr( $table_name, -1 ) !== '.' ) {
@@ -358,7 +358,7 @@ if ( ! class_exists( 'WPAA_Posts' ) ) :
             $fmt = array_fill( 0, count( $caps ), '%s' );
 
             $add_where = $wpdb->prepare(
-                " {$table_name}post_view_cap IN (" . implode( ',', $fmt ) . ")",
+                " {$table_name}post_view_cap IN (" . implode( ',', $fmt ) . ")", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
                 ...$caps
             );
             // if ( is_single() ) // why did I do this....?

@@ -15,7 +15,7 @@ if ( ! class_exists( 'WPAA_Users' ) ) :
         public static function init() {
             if ( is_admin() ) {
                 add_action( 'admin_init', array( __CLASS__, 'admin_init' ) );
-                if ( is_accessareas_active_for_network() ) {
+                if ( wpaa_is_active_for_network() ) {
                     add_filter( 'wpmu_users_columns', array( __CLASS__, 'add_userlabels_column' ) );
                 }
                 add_filter( 'manage_users_columns', array( __CLASS__, 'add_userlabels_column' ) );
@@ -331,7 +331,7 @@ if ( ! class_exists( 'WPAA_Users' ) ) :
         }
         public static function personal_options( $profileuser ) {
             // IS_PROFILE_PAGE : self or other
-            if ( ! current_user_can( 'promote_users' ) || ( is_network_admin() && ! is_accessareas_active_for_network() ) ) {
+            if ( ! current_user_can( 'promote_users' ) || ( is_network_admin() && ! wpaa_is_active_for_network() ) ) {
                 return;
             }
 
@@ -352,7 +352,7 @@ if ( ! class_exists( 'WPAA_Users' ) ) :
 					'can_ajax_add' => current_user_can( 'promote_users' ),
 				);
             }
-            if ( ( is_network_admin() || is_super_admin() ) && is_accessareas_active_for_network() ) {
+            if ( ( is_network_admin() || is_super_admin() ) && wpaa_is_active_for_network() ) {
 				$labelrows[ __( 'Grant Network-Wide Access', 'wp-access-areas' ) ] = array(
 					'network'      => true,
 					'labels'       => WPAA_AccessArea::get_network_userlabels(),
@@ -427,7 +427,7 @@ if ( ! class_exists( 'WPAA_Users' ) ) :
                 printf(
                     '<label for="%s">%s</label>',
                     esc_attr( $id ),
-                    esc_html__( $label->cap_title )
+                    esc_html( $label->cap_title )
                 );
 
             ?>
@@ -441,7 +441,7 @@ if ( ! class_exists( 'WPAA_Users' ) ) :
                 <?php wp_nonce_field( 'userlabel-new', '_ajax_nonce' ); ?>
                 <input type="hidden" name="blog_id" value="<?php echo intval( $blog_id ); ?>" />
                 <input class="cap-add" type="text" name="cap_title" placeholder="<?php esc_attr_e( 'Add New', 'wp-access-areas' ); ?>" />
-                <button href="#" class="cap-add-submit button" disabled data-nonce="<?php esc_attr_e( wp_create_nonce( 'userlabel-new' ) ); ?>">
+                <button href="#" class="cap-add-submit button" disabled data-nonce="<?php echo esc_attr( wp_create_nonce( 'userlabel-new' ) ); ?>">
                     <span class=" dashicons dashicons-plus"></span>
                     <span class="screen-reader-text">
                         <?php esc_html_e( 'Add New', 'wp-access-areas' ); ?>
@@ -464,7 +464,7 @@ if ( ! class_exists( 'WPAA_Users' ) ) :
             $current_label = $role;
             $ret  = '';
             $ret .= self::_listtable_label_select( WPAA_AccessArea::get_blog_userlabels(), $current_label );
-            if ( is_accessareas_active_for_network() ) {
+            if ( wpaa_is_active_for_network() ) {
                 $ret .= self::_listtable_label_select( WPAA_AccessArea::get_network_userlabels(), $current_label, true );
             }
             if ( $ret ) {
@@ -491,7 +491,7 @@ if ( ! class_exists( 'WPAA_Users' ) ) :
         }
 
         private static function _label_select_all( $name, $first_element_label = false, $echo = false ) {
-            $network = is_accessareas_active_for_network();
+            $network = wpaa_is_active_for_network();
             $ret     = '';
             $ret    .= '<select name="' . $name . '">';
 

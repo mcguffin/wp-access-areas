@@ -352,7 +352,7 @@ if ( ! class_exists( 'WPAA_EditPost' ) ) :
             $is_custom = $is_custom_fallback || $is_custom_behaviour;
 
             ?>
-            <div class="wpaa-select-behaviour<?php esc_attr_e( $is_custom ? ' custom' : '' ); ?>">
+            <div class="wpaa-select-behaviour<?php echo esc_attr( $is_custom ? ' custom' : '' ); ?>">
                 <div class="misc-pub-section">
                     <label for="wpaa_enable_custom_behaviour">
                         <input name="_wpaa_enable_custom_behaviour" value="0" type="hidden" />
@@ -575,7 +575,7 @@ if ( ! class_exists( 'WPAA_EditPost' ) ) :
 							$val = get_post( $post_ID )->post_view_cap;
 							?>
                             <div class="<?php echo $val == 'exist' ? 'wpaa-default-permission ' : ''; ?> wpaa-permission dashicons-before dashicons-visibility" title="<?php esc_attr_e( 'Who can read', 'wp-access-areas' ); ?>">
-                                <?php esc_html_e( $names[ $val ] ); ?>
+                                <?php echo esc_html( $names[ $val ] ); ?>
                             </div>
 							<?php
                             break;
@@ -584,7 +584,7 @@ if ( ! class_exists( 'WPAA_EditPost' ) ) :
 							$val = get_post( $post_ID )->post_comment_cap;
 							?>
                             <div class="<?php echo $val == 'exist' ? 'wpaa-default-permission ' : ''; ?> wpaa-permission dashicons-before dashicons-admin-comments" title="<?php esc_attr_e( 'Who can comment', 'wp-access-areas' ); ?>">
-                                <?php esc_html_e( $names[ $val ] ); ?>
+                                <?php echo esc_html( $names[ $val ] ); ?>
                             </div>
                             <?php
                             break;
@@ -593,7 +593,7 @@ if ( ! class_exists( 'WPAA_EditPost' ) ) :
 							$val = get_post( $post_ID )->post_edit_cap;
 							?>
                             <div class="<?php echo $val == 'exist' ? 'wpaa-default-permission ' : ''; ?> wpaa-permission dashicons-before dashicons-edit" title="<?php esc_attr_e( 'Who can read', 'wp-access-areas' ); ?>">
-                                <?php esc_html_e( $names[ $val ] ); ?>
+                                <?php echo esc_html( $names[ $val ] ); ?>
                             </div>
 							<?php
                             break;

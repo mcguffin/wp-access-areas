@@ -94,7 +94,7 @@ function wpaa_user_can_accessarea( $cap, $args = array() ) {
     global $wp_roles;
 
     // always true for administrators on local caps
-    if ( wpaa_is_local_cap( $cap ) && current_user_can( 'administrator' ) || is_super_admin() ) {
+    if ( wpaa_is_local_cap( $cap ) && current_user_can( 'administrator' ) || is_super_admin() ) { // phpcs:ignore WordPress.WP.Capabilities.RoleFound
         $can = true;
     } else {
         $can = current_user_can( $cap, $args );

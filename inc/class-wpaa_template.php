@@ -48,7 +48,7 @@ class WPAA_Template {
                         continue;
                     }
         			?>
-                    <option value="<?php esc_attr_e( $role ); ?>" <?php selected( $selected_cap, $role ); ?>>
+                    <option value="<?php echo esc_attr( $role ); ?>" <?php selected( $selected_cap, $role ); ?>>
                         <?php echo esc_html( $rolename ); ?>
                     </option>
         			<?php
@@ -67,7 +67,7 @@ class WPAA_Template {
                         ?>
                         <option value="<?php echo esc_attr( $group_cap ); ?>" <?php selected( $selected_cap, $group_cap ); ?>>
                             <?php
-                                esc_html_e( $group['title'], 'wp-access-areas' );
+                                echo esc_html( $group['title'] );
                                 echo $group['global'] ? ' ' . esc_html__( '(Network)', 'wp-access-areas' ) : '';
                             ?>
                         </option>
@@ -136,8 +136,8 @@ class WPAA_Template {
             $label = $item['label'];
             ?>
             <label for="wpaa-view-post-behavior-<?php echo sanitize_key( $value ); ?>">
-                <input name="<?php esc_attr_e( $fieldname ); ?>" <?php checked( $value, $post_behavior ); ?> class="wpaa-post-behavior" id="wpaa-view-post-behavior-<?php echo sanitize_key( $value ); ?>" value="<?php esc_attr_e( $value ); ?>" type="radio" />
-                <?php esc_html_e( $label ); ?>
+                <input name="<?php echo esc_attr( $fieldname ); ?>" <?php checked( $value, $post_behavior ); ?> class="wpaa-post-behavior" id="wpaa-view-post-behavior-<?php echo sanitize_key( $value ); ?>" value="<?php echo esc_attr( $value ); ?>" type="radio" />
+                <?php echo esc_html( $label ); ?>
                 <br />
             </label>
             <?php
