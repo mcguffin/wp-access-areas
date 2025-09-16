@@ -1,8 +1,8 @@
 # Copyright (C) 2025 Jörn Lund
-# This file is distributed under the same license as the WordPress Access Areas plugin.
+# This file is distributed under the same license as the Access Areas for WordPress plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WordPress Access Areas 1.5.20\n"
+"Project-Id-Version: Access Areas for WordPress 1.5.20\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-access-areas\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 
 #. Plugin Name of the plugin
 #: wp-access-areas.php
-msgid "WordPress Access Areas"
+msgid "Access Areas for WordPress"
 msgstr ""
 
 #. Plugin URI of the plugin

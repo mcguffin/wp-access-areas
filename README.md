@@ -1,7 +1,7 @@
-WordPress Access Areas
-======================
+Access Areas for WordPress
+==========================
 
-This is the official github repository of the [WordPress Access Areas](http://wordpress.org/plugins/wp-access-areas/)
+This is the official github repository of the [Access Areas for WordPress](http://wordpress.org/plugins/wp-access-areas/)
 plugin. This repo might contain untested and possibly unstable or insecure code. So use it on your own risk.
 
 About

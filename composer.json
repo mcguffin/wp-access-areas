@@ -2,7 +2,7 @@
   "name": "mcguffin/wp-access-areas",
   "type": "wordpress-plugin",
   "license": "GPL-2.0-or-later",
-  "description": "WordPress Access Areas",
+  "description": "Access Areas for WordPress",
   "homepage": "https://github.com/mcguffin/wp-access-areas",
   "require": {
     "composer/installers": "~1.2"

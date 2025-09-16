@@ -1,4 +1,4 @@
-=== WordPress Access Areas ===
+=== Access Areas for WordPress ===
 Contributors: podpirate
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WF4Z3HU93XYJA
 Tags: access, role, capability, user, security, editor
@@ -92,6 +92,9 @@ Pull request are welcome in the [GitHub Repository](https://github.com/mcguffin/
 4. Post Access Behaviour
 
 == Changelog ==
+
+= 1.5.21 =
+ - Rename Plugin from "WordPress Access Areas" to "Access Areas for WordPress".
 
 = 1.5.20 =
  - Security Fix: Authenticated XSS in Acceas Areas List Table (discovered by [0xd4rk5id3](https://patchstack.com/database/researcher/4e4561e4-5f79-419b-9832-33d7fd94c5a4))
