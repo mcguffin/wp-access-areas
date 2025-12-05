@@ -14,13 +14,21 @@ if ( ! class_exists( 'WPAA_Settings' ) ) :
 
         private static $role_caps;
 
+        private static function get_role_caps() {
+            if ( ! isset( self::$role_caps ) ) {
+                self::$role_caps = array(
+    				'wpaa_set_view_cap'    => __( 'Change View Access', 'wp-access-areas' ),
+    				'wpaa_set_edit_cap'    => __( 'Change Edit Access', 'wp-access-areas' ),
+    				'wpaa_set_comment_cap' => __( 'Change Comment Access', 'wp-access-areas' ),
+                );
+            }
+            return self::$role_caps;
+        }
+
         public static function init() {
             global $wp_post_statuses;
-            self::$role_caps = array(
-				'wpaa_set_view_cap'    => __( 'Change View Access', 'wp-access-areas' ),
-				'wpaa_set_edit_cap'    => __( 'Change Edit Access', 'wp-access-areas' ),
-				'wpaa_set_comment_cap' => __( 'Change Comment Access', 'wp-access-areas' ),
-            );
+
+
             add_option( 'wpaa_default_behavior', '404' );
             add_option( 'wpaa_fallback_page', 0 );
             add_option( 'wpaa_default_caps', array() );
@@ -130,7 +138,7 @@ if ( ! class_exists( 'WPAA_Settings' ) ) :
                 $input['revoke_cap'] = array_map( 'sanitize_key', $input['revoke_cap'] );
 
                 foreach ( $input['grant_cap'] as $role_slug => $cap ) {
-                    if ( 'administrator' != $role_slug && array_key_exists( $cap, self::$role_caps ) ) {
+                    if ( 'administrator' != $role_slug && array_key_exists( $cap, self::get_role_caps() ) ) {
                         $role = get_role( $role_slug );
                         if ( ! $role || $role->has_cap( $cap ) ) {
                             continue;
@@ -141,7 +149,7 @@ if ( ! class_exists( 'WPAA_Settings' ) ) :
 
                 foreach ( $input['revoke_cap'] as $role_slug => $cap ) {
 
-                    if ( 'administrator' != $role_slug && array_key_exists( $cap, self::$role_caps ) ) {
+                    if ( 'administrator' != $role_slug && array_key_exists( $cap, self::get_role_caps() ) ) {
                         $role = get_role( $role_slug );
 
                         if ( ! $role || ! $role->has_cap( $cap ) ) {
@@ -348,7 +356,7 @@ if ( ! class_exists( 'WPAA_Settings' ) ) :
 				<?php esc_html_e( 'Role', 'wp-access-areas' ); ?>
                                 </th>
 				<?php
-				foreach ( self::$role_caps as $cap => $label ) {
+				foreach ( self::get_role_caps() as $cap => $label ) {
 					?>
                                     <th class="manage-column">
                         <?php echo esc_html( $label ); ?>
@@ -378,7 +386,7 @@ if ( ! class_exists( 'WPAA_Settings' ) ) :
         								<?php echo esc_html( translate_user_role( $role_details['name'] ) ); ?>
                                     </th>
 								<?php
-								foreach ( array_keys( self::$role_caps ) as $cap ) {
+								foreach ( array_keys( self::get_role_caps() ) as $cap ) {
 									?>
                                         <td>
     										<?php
