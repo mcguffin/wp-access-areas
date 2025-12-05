@@ -357,8 +357,8 @@ if ( ! class_exists( 'WPAA_Posts' ) ) :
 
             $fmt = array_fill( 0, count( $caps ), '%s' );
 
-            $add_where = $wpdb->prepare(
-                " {$table_name}post_view_cap IN (" . implode( ',', $fmt ) . ")", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+            $add_where = $wpdb->prepare( 
+                " {$table_name}post_view_cap IN (" . implode( ',', $fmt ) . ")", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
                 ...$caps
             );
             // if ( is_single() ) // why did I do this....?
